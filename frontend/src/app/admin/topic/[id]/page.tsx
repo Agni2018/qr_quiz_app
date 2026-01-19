@@ -29,8 +29,8 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
     const fetchData = async () => {
         try {
             const [topicRes, qRes] = await Promise.all([
-                axios.get(`http://localhost:5000/api/topics/${id}`),
-                axios.get(`http://localhost:5000/api/questions/topic/${id}`)
+                axios.get(`${process.env.NEXT_PUBLIC_API_URL}/topics/${id}`),
+                axios.get(`${process.env.NEXT_PUBLIC_API_URL}/questions/topic/${id}`)
             ]);
             setTopic(topicRes.data);
             setQuestions(qRes.data);
@@ -42,7 +42,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
     const handleToggleStatus = async () => {
         const newStatus = topic.status === 'active' ? 'inactive' : 'active';
         try {
-            await axios.put(`http://localhost:5000/api/topics/${id}`, { status: newStatus });
+            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/topics/${id}`, { status: newStatus });
             fetchData();
         } catch (err) {
             console.error('Failed to update status', err);

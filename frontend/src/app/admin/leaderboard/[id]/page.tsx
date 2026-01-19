@@ -20,7 +20,7 @@ export default function AdminLeaderboard({ params }: { params: Promise<{ id: str
             return;
         }
 
-        axios.get(`http://localhost:5000/api/quiz/leaderboard/${id}`)
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/quiz/leaderboard/${id}`)
             .then(res => {
                 setLeaderboard(res.data);
                 setLoading(false);

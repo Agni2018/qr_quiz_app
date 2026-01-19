@@ -20,11 +20,11 @@ export default function QuizResult({ params }: { params: Promise<{ topicId: stri
         const fetchData = async () => {
             try {
                 if (attemptId) {
-                    const attemptRes = await axios.get(`http://localhost:5000/api/quiz/result/${attemptId}`);
+                    const attemptRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/quiz/result/${attemptId}`);
                     setAttempt(attemptRes.data);
                 }
 
-                const lbRes = await axios.get(`http://localhost:5000/api/quiz/leaderboard/${topicId}`);
+                const lbRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/quiz/leaderboard/${topicId}`);
                 setLeaderboard(lbRes.data);
             } catch (err) {
                 console.error(err);
