@@ -1,70 +1,86 @@
 'use client';
 
 import { useState } from 'react';
-import axios from 'axios';
+import api from '@/lib/api';
 import Button from './Button';
 import Input from './Input';
 import Card from './Card';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 
-export default function QuestionForm({ topicId, onQuestionAdded, onCancel }: { topicId: string, onQuestionAdded: () => void, onCancel: () => void }) {
+export default function QuestionForm({
+    topicId,
+    onQuestionAdded,
+    onCancel
+}: {
+    topicId: string;
+    onQuestionAdded: () => void;
+    onCancel: () => void;
+}) {
     const [type, setType] = useState('single_choice');
     const [content, setContent] = useState('');
     const [marks, setMarks] = useState(1);
-    const [options, setOptions] = useState<string[]>(['', '']); // For single_choice, multi_select
-    const [correctAnswer, setCorrectAnswer] = useState<any>(''); // Can be string or array
-    const [matchPairs, setMatchPairs] = useState<Array<{ left: string, right: string }>>([
+    const [options, setOptions] = useState<string[]>(['', '']);
+    const [correctAnswer, setCorrectAnswer] = useState<any>('');
+    const [matchPairs, setMatchPairs] = useState<Array<{ left: string; right: string }>>([
         { left: '', right: '' },
         { left: '', right: '' }
-    ]); // For match type
+    ]);
 
     const questionTypes = [
         { value: 'single_choice', label: 'Single Choice' },
         { value: 'multi_select', label: 'Multiple Choice (Multi-Select)' },
         { value: 'true_false', label: 'True / False' },
-        { value: 'fill_blank', label: 'Fill in Blank' },
-        { value: 'match', label: 'Match the Following' },
+        { value: 'fill_blank', label: 'Fill in the Blank' },
+        { value: 'match', label: 'Match the Following' }
     ];
 
     const handleAddOption = () => setOptions([...options, '']);
+
     const handleOptionChange = (index: number, value: string) => {
-        const newOpts = [...options];
-        newOpts[index] = value;
-        setOptions(newOpts);
+        const updated = [...options];
+        updated[index] = value;
+        setOptions(updated);
     };
+
     const handleRemoveOption = (index: number) => {
         setOptions(options.filter((_, i) => i !== index));
     };
 
-    const handleAddMatchPair = () => setMatchPairs([...matchPairs, { left: '', right: '' }]);
-    const handleMatchPairChange = (index: number, side: 'left' | 'right', value: string) => {
-        const newPairs = [...matchPairs];
-        newPairs[index][side] = value;
-        setMatchPairs(newPairs);
+    const handleAddMatchPair = () => {
+        setMatchPairs([...matchPairs, { left: '', right: '' }]);
     };
+
+    const handleMatchPairChange = (
+        index: number,
+        side: 'left' | 'right',
+        value: string
+    ) => {
+        const updated = [...matchPairs];
+        updated[index][side] = value;
+        setMatchPairs(updated);
+    };
+
     const handleRemoveMatchPair = (index: number) => {
         setMatchPairs(matchPairs.filter((_, i) => i !== index));
     };
 
-    // Handle checkbox selection for single_choice
     const handleSingleChoiceSelect = (option: string) => {
         setCorrectAnswer(option);
     };
 
-    // Handle checkbox selection for multi_select
     const handleMultiSelectToggle = (option: string) => {
-        const currentAnswers = Array.isArray(correctAnswer) ? correctAnswer : [];
-        if (currentAnswers.includes(option)) {
-            setCorrectAnswer(currentAnswers.filter(ans => ans !== option));
-        } else {
-            setCorrectAnswer([...currentAnswers, option]);
-        }
+        const current = Array.isArray(correctAnswer) ? correctAnswer : [];
+        setCorrectAnswer(
+            current.includes(option)
+                ? current.filter(a => a !== option)
+                : [...current, option]
+        );
     };
 
-    // Reset form when type changes
     const handleTypeChange = (newType: string) => {
         setType(newType);
         setCorrectAnswer('');
+
         if (newType === 'true_false') {
             setOptions(['True', 'False']);
         } else if (newType === 'single_choice' || newType === 'multi_select') {
@@ -73,18 +89,20 @@ export default function QuestionForm({ topicId, onQuestionAdded, onCancel }: { t
     };
 
     const handleSubmit = async () => {
-        if (!content) return alert('Please enter the question text');
+        if (!content.trim()) return alert('Please enter the question text');
 
-        // Validation based on type
         if (type === 'fill_blank' && !correctAnswer) {
             return alert('Please enter the correct answer');
         }
+
         if ((type === 'single_choice' || type === 'true_false') && !correctAnswer) {
             return alert('Please select the correct answer');
         }
+
         if (type === 'multi_select' && (!Array.isArray(correctAnswer) || correctAnswer.length === 0)) {
             return alert('Please select at least one correct answer');
         }
+
         if (type === 'match') {
             const validPairs = matchPairs.filter(p => p.left.trim() && p.right.trim());
             if (validPairs.length < 2) {
@@ -110,167 +128,263 @@ export default function QuestionForm({ topicId, onQuestionAdded, onCancel }: { t
         } else if (type === 'match') {
             const validPairs = matchPairs.filter(p => p.left.trim() && p.right.trim());
             payload.options = validPairs;
-            // For match type, correct answer is the same as options (the correct pairs)
             payload.correctAnswer = validPairs;
         }
 
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/questions`, payload);
+            await api.post('/questions', payload);
             onQuestionAdded();
-        } catch (err) {
-            console.error(err);
+        } catch (error) {
+            console.error(error);
             alert('Failed to add question');
         }
     };
 
     return (
-        <Card style={{ marginTop: '1rem', border: '1px solid var(--primary)' }}>
-            <h3 style={{ marginBottom: '1rem' }}>Add New Question</h3>
+        <Card
+            className="p-10 rounded-[32px] border border-white/10 bg-[#1e293b] shadow-2xl overflow-hidden relative"
+        >
+            {/* Background accent */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-violet-600/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
-            <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#94a3b8' }}>Type</label>
-                <select
-                    value={type}
-                    onChange={(e) => handleTypeChange(e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius)', background: 'rgba(0,0,0,0.2)', color: 'white', border: '1px solid var(--glass-border)' }}
-                >
-                    {questionTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-                </select>
-            </div>
-
-            <Input label="Question Text" value={content} onChange={e => setContent(e.target.value)} />
-            <Input label="Marks" type="number" value={marks} onChange={e => setMarks(Number(e.target.value))} style={{ width: '100px' }} />
-
-            {/* Options for single_choice and multi_select */}
-            {(type === 'single_choice' || type === 'multi_select') && (
-                <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#94a3b8' }}>Options</label>
-                    {options.map((opt, idx) => (
-                        <div key={idx} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', alignItems: 'center' }}>
-                            <Input value={opt} onChange={e => handleOptionChange(idx, e.target.value)} placeholder={`Option ${idx + 1}`} style={{ marginBottom: 0, flex: 1 }} />
-                            <Button variant="danger" onClick={() => handleRemoveOption(idx)} style={{ padding: '0.75rem' }}><FaTrash /></Button>
-                        </div>
-                    ))}
-                    <Button variant="secondary" onClick={handleAddOption} type="button" style={{ fontSize: '0.8rem', padding: '0.5rem' }}><FaPlus /> Add Option</Button>
+            <div className="relative z-10">
+                <div className="flex items-center gap-4 mb-10">
+                    <div className="w-12 h-12 rounded-2xl bg-violet-500/20 flex items-center justify-center text-2xl">
+                        📝
+                    </div>
+                    <div>
+                        <h3 className="text-2xl font-black tracking-tight">Add New Question</h3>
+                        <p className="text-slate-400 text-sm font-medium">Create a new challenge for your participants</p>
+                    </div>
                 </div>
-            )}
 
-            {/* Match the Following pairs */}
-            {type === 'match' && (
-                <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#94a3b8' }}>Match Pairs</label>
-                    {matchPairs.map((pair, idx) => (
-                        <div key={idx} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                            <Input
-                                value={pair.left}
-                                onChange={e => handleMatchPairChange(idx, 'left', e.target.value)}
-                                placeholder={`Left ${idx + 1}`}
-                                style={{ marginBottom: 0, flex: 1 }}
-                            />
-                            <span style={{ display: 'flex', alignItems: 'center', color: '#94a3b8' }}>↔</span>
-                            <Input
-                                value={pair.right}
-                                onChange={e => handleMatchPairChange(idx, 'right', e.target.value)}
-                                placeholder={`Right ${idx + 1}`}
-                                style={{ marginBottom: 0, flex: 1 }}
-                            />
-                            <Button variant="danger" onClick={() => handleRemoveMatchPair(idx)} style={{ padding: '0.75rem' }}><FaTrash /></Button>
-                        </div>
-                    ))}
-                    <Button variant="secondary" onClick={handleAddMatchPair} type="button" style={{ fontSize: '0.8rem', padding: '0.5rem' }}><FaPlus /> Add Pair</Button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    {/* Question Type */}
+                    <div className="flex flex-col gap-3">
+                        <label className="text-xs font-black uppercase tracking-widest text-slate-500 px-1">
+                            Question Type
+                        </label>
+                        <select
+                            value={type}
+                            onChange={e => handleTypeChange(e.target.value)}
+                            className="w-full p-4 rounded-2xl bg-black/20 border-2 border-white/5 text-slate-200 focus:border-violet-500/50 transition-all outline-none appearance-none cursor-pointer"
+                        >
+                            {questionTypes.map(t => (
+                                <option key={t.value} value={t.value} className="bg-[#1e293b]">
+                                    {t.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                        <label className="text-xs font-black uppercase tracking-widest text-slate-500 px-1">
+                            Difficulty/Marks
+                        </label>
+                        <Input
+                            type="number"
+                            value={marks}
+                            onChange={e => setMarks(Number(e.target.value))}
+                            className="!mb-0"
+                            placeholder="Points"
+                        />
+                    </div>
                 </div>
-            )}
 
-            {/* Correct Answer Section */}
-            <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#94a3b8' }}>Correct Answer</label>
-
-                {/* Fill in the blank - text input */}
-                {type === 'fill_blank' && (
-                    <Input
-                        value={correctAnswer}
-                        onChange={e => setCorrectAnswer(e.target.value)}
-                        placeholder="Enter the correct answer"
+                <div className="mb-10">
+                    <label className="text-xs font-black uppercase tracking-widest text-slate-500 px-1 mb-3 block">
+                        Question Content
+                    </label>
+                    <textarea
+                        value={content}
+                        onChange={e => setContent(e.target.value)}
+                        placeholder="Write your question here..."
+                        className="w-full p-6 rounded-2xl bg-black/20 border-2 border-white/5 text-slate-200 focus:border-violet-500/50 transition-all outline-none min-h-[120px] resize-none"
                     />
-                )}
+                </div>
 
-                {/* True/False - radio buttons */}
-                {type === 'true_false' && (
-                    <div style={{ display: 'flex', gap: '1rem' }}>
-                        {['True', 'False'].map(option => (
-                            <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                                <input
-                                    type="radio"
-                                    name="trueFalse"
-                                    checked={correctAnswer === option}
-                                    onChange={() => handleSingleChoiceSelect(option)}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                                <span>{option}</span>
+                {/* Options Section */}
+                {(type === 'single_choice' || type === 'multi_select') && (
+                    <div className="mb-10 p-8 rounded-[24px] bg-black/10 border border-white/5">
+                        <div className="flex justify-between items-center mb-6">
+                            <label className="text-xs font-black uppercase tracking-widest text-slate-500 px-1">
+                                Answer Options
                             </label>
-                        ))}
+                            <Button
+                                variant="secondary"
+                                onClick={handleAddOption}
+                                type="button"
+                                className="py-2 px-4 text-xs bg-violet-500/10 text-violet-400 border border-violet-500/20 hover:bg-violet-500 hover:text-white"
+                            >
+                                <FaPlus className="mr-2" /> Add Choice
+                            </Button>
+                        </div>
+
+                        <div className="flex flex-col gap-4">
+                            {options.map((opt, idx) => (
+                                <div
+                                    key={idx}
+                                    className="flex gap-4 items-center group"
+                                >
+                                    <div className="flex-1 relative">
+                                        <Input
+                                            value={opt}
+                                            onChange={e => handleOptionChange(idx, e.target.value)}
+                                            placeholder={`Choice ${idx + 1}`}
+                                            className="!mb-0 !p-4"
+                                        />
+                                    </div>
+                                    <Button
+                                        variant="danger"
+                                        onClick={() => handleRemoveOption(idx)}
+                                        className="p-4 rounded-xl opacity-40 group-hover:opacity-100 transition-opacity bg-red-500/10 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white"
+                                    >
+                                        <FaTrash size={14} />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 )}
 
-                {/* Single Choice - radio buttons */}
-                {type === 'single_choice' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        {options.filter(o => o.trim()).length === 0 ? (
-                            <p style={{ color: '#94a3b8', fontSize: '0.85rem', fontStyle: 'italic' }}>
-                                Please add options above first
-                            </p>
-                        ) : (
-                            options.filter(o => o.trim()).map((option, idx) => (
-                                <label key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                                    <input
-                                        type="radio"
-                                        name="singleChoice"
-                                        checked={correctAnswer === option}
-                                        onChange={() => handleSingleChoiceSelect(option)}
-                                        style={{ cursor: 'pointer' }}
-                                    />
-                                    <span>{option}</span>
-                                </label>
-                            ))
-                        )}
-                    </div>
-                )}
-
-                {/* Multi Select - checkboxes */}
-                {type === 'multi_select' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        {options.filter(o => o.trim()).length === 0 ? (
-                            <p style={{ color: '#94a3b8', fontSize: '0.85rem', fontStyle: 'italic' }}>
-                                Please add options above first
-                            </p>
-                        ) : (
-                            options.filter(o => o.trim()).map((option, idx) => (
-                                <label key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                                    <input
-                                        type="checkbox"
-                                        checked={Array.isArray(correctAnswer) && correctAnswer.includes(option)}
-                                        onChange={() => handleMultiSelectToggle(option)}
-                                        style={{ cursor: 'pointer' }}
-                                    />
-                                    <span>{option}</span>
-                                </label>
-                            ))
-                        )}
-                    </div>
-                )}
-
-                {/* Match - auto-populated from pairs */}
+                {/* Match Pairs Section */}
                 {type === 'match' && (
-                    <p style={{ color: '#94a3b8', fontSize: '0.85rem', fontStyle: 'italic' }}>
-                        Correct matches are automatically set from the pairs you created above.
-                    </p>
-                )}
-            </div>
+                    <div className="mb-10 p-8 rounded-[24px] bg-black/10 border border-white/5">
+                        <div className="flex justify-between items-center mb-6">
+                            <label className="text-xs font-black uppercase tracking-widest text-slate-500 px-1">
+                                Matching Pairs
+                            </label>
+                            <Button
+                                variant="secondary"
+                                onClick={handleAddMatchPair}
+                                type="button"
+                                className="py-2 px-4 text-xs bg-violet-500/10 text-violet-400 border border-violet-500/20 hover:bg-violet-500 hover:text-white"
+                            >
+                                <FaPlus className="mr-2" /> Add Pair
+                            </Button>
+                        </div>
 
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-                <Button onClick={handleSubmit} style={{ flex: 1 }}>Save Question</Button>
-                <Button variant="outline" onClick={onCancel} style={{ flex: 1 }}>Cancel</Button>
+                        <div className="flex flex-col gap-4">
+                            {matchPairs.map((pair, idx) => (
+                                <div
+                                    key={idx}
+                                    className="flex gap-4 items-center group"
+                                >
+                                    <Input
+                                        value={pair.left}
+                                        onChange={e => handleMatchPairChange(idx, 'left', e.target.value)}
+                                        placeholder="Term"
+                                        className="!mb-0 flex-1"
+                                    />
+                                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                                        <span className="text-slate-500 text-sm">↔</span>
+                                    </div>
+                                    <Input
+                                        value={pair.right}
+                                        onChange={e => handleMatchPairChange(idx, 'right', e.target.value)}
+                                        placeholder="Definition"
+                                        className="!mb-0 flex-1"
+                                    />
+                                    <Button
+                                        variant="danger"
+                                        onClick={() => handleRemoveMatchPair(idx)}
+                                        className="p-4 rounded-xl opacity-40 group-hover:opacity-100 transition-opacity bg-red-500/10 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white"
+                                    >
+                                        <FaTrash size={14} />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Correct Answer Section */}
+                <div className="mb-12 p-8 rounded-[24px] bg-violet-500/5 border border-violet-500/10 shadow-inner">
+                    <label className="text-xs font-black uppercase tracking-widest text-violet-400/70 px-1 mb-5 block">
+                        Set Correct Answer
+                    </label>
+
+                    <div className="px-2">
+                        {type === 'fill_blank' && (
+                            <Input
+                                value={correctAnswer}
+                                onChange={e => setCorrectAnswer(e.target.value)}
+                                placeholder="Enter the exact correct answer"
+                                className="!p-5 bg-black/40 border-violet-500/20"
+                            />
+                        )}
+
+                        {type === 'true_false' && (
+                            <div className="flex gap-6">
+                                {['True', 'False'].map(option => (
+                                    <button
+                                        key={option}
+                                        onClick={() => handleSingleChoiceSelect(option)}
+                                        className={`flex-1 py-4 rounded-2xl font-bold transition-all border-2 ${correctAnswer === option
+                                            ? 'bg-violet-500 border-violet-400 text-white shadow-lg shadow-violet-500/30'
+                                            : 'bg-black/20 border-white/5 text-slate-400 hover:border-violet-500/30'
+                                            }`}
+                                    >
+                                        {option}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {(type === 'single_choice' || type === 'multi_select') && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {options.filter(o => o.trim()).map((option, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() =>
+                                            type === 'single_choice'
+                                                ? handleSingleChoiceSelect(option)
+                                                : handleMultiSelectToggle(option)
+                                        }
+                                        className={`p-4 rounded-2xl flex items-center gap-4 transition-all border-2 text-left ${(type === 'single_choice' && correctAnswer === option) ||
+                                            (type === 'multi_select' && Array.isArray(correctAnswer) && correctAnswer.includes(option))
+                                            ? 'bg-violet-500/20 border-violet-500 text-white'
+                                            : 'bg-black/20 border-white/5 text-slate-400 hover:border-violet-500/20'
+                                            }`}
+                                    >
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${(type === 'single_choice' && correctAnswer === option) ||
+                                            (type === 'multi_select' && Array.isArray(correctAnswer) && correctAnswer.includes(option))
+                                            ? 'border-white bg-white'
+                                            : 'border-slate-600'
+                                            }`}>
+                                            {((type === 'single_choice' && correctAnswer === option) ||
+                                                (type === 'multi_select' && Array.isArray(correctAnswer) && correctAnswer.includes(option))) && (
+                                                    <div className="w-2 h-2 rounded-full bg-violet-600"></div>
+                                                )}
+                                        </div>
+                                        <span className="font-medium truncate">{option}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {type === 'match' && (
+                            <div className="flex items-center gap-3 text-violet-400/60 bg-violet-500/5 p-4 rounded-xl border border-violet-500/10">
+                                <span className="text-xl">ℹ️</span>
+                                <p className="text-xs font-bold uppercase tracking-wider">
+                                    Correct pairs are mapped automatically.
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Footer Actions */}
+                <div className="flex flex-col md:flex-row gap-4 pt-6 mt-6 border-t border-white/5">
+                    <Button onClick={handleSubmit} className="flex-[2] py-5 rounded-[20px] text-lg font-black shadow-xl shadow-violet-500/20">
+                        ✨ Save Question
+                    </Button>
+                    <Button variant="outline" onClick={onCancel} className="flex-1 py-5 rounded-[20px] border-white/10 text-slate-400 hover:bg-white/5 font-bold">
+                        Discard
+                    </Button>
+                </div>
             </div>
         </Card>
     );
 }
+

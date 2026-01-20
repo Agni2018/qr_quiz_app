@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
-import axios from 'axios';
+import api from '@/lib/api';
 import { useSearchParams } from 'next/navigation';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
@@ -20,11 +20,11 @@ export default function QuizResult({ params }: { params: Promise<{ topicId: stri
         const fetchData = async () => {
             try {
                 if (attemptId) {
-                    const attemptRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/quiz/result/${attemptId}`);
+                    const attemptRes = await api.get(`/quiz/result/${attemptId}`);
                     setAttempt(attemptRes.data);
                 }
 
-                const lbRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/quiz/leaderboard/${topicId}`);
+                const lbRes = await api.get(`/quiz/leaderboard/${topicId}`);
                 setLeaderboard(lbRes.data);
             } catch (err) {
                 console.error(err);
@@ -38,81 +38,78 @@ export default function QuizResult({ params }: { params: Promise<{ topicId: stri
     if (loading) return <div className="container">Loading Results...</div>;
 
     return (
-        <main className="container" style={{ paddingBottom: '4rem' }}>
+        <main className="container py-16 flex flex-col gap-12">
 
             {/* Score Card */}
             {attempt && (
-                <Card style={{ textAlign: 'center', marginBottom: '3rem', padding: '3rem', border: '2px solid var(--primary)', background: 'linear-gradient(180deg, rgba(139, 92, 246, 0.1), rgba(0,0,0,0))' }}>
-                    <h1 style={{ fontSize: '1.2rem', color: '#cbd5e1', marginBottom: '1rem' }}>Quiz Completed</h1>
-                    <div style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--primary)', lineHeight: 1 }}>
-                        {attempt.score}
-                    </div>
-                    <p style={{ marginTop: '0.5rem', fontSize: '1.1rem' }}>Total Score</p>
+                <Card className="text-center p-16 border border-violet-500/30 bg-slate-900/40 backdrop-blur-3xl rounded-[40px] shadow-3xl relative overflow-hidden">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-violet-600/10 rounded-full blur-3xl -mt-32"></div>
 
-                    <div style={{ marginTop: '2rem' }}>
-                        <h3 style={{ fontSize: '1.5rem' }}>Great job, {attempt.user.name}!</h3>
+                    <div className="relative z-10">
+                        <h1 className="text-sm font-black uppercase tracking-[0.3em] text-slate-500 mb-6">Quiz Final Score</h1>
+                        <div className="text-[6rem] font-black text-violet-400 leading-none mb-4 tabular-nums">
+                            {attempt.score}
+                        </div>
+                        <p className="text-slate-400 font-bold text-lg uppercase tracking-widest mb-10">Challenge Completed</p>
+
+                        <div className="py-8 px-10 rounded-3xl bg-white/5 border border-white/5 inline-block">
+                            <h3 className="text-3xl font-black text-white/90 mb-2">✨ Great job, {attempt.user.name}!</h3>
+                            <p className="text-slate-400 font-medium">Your performance was recorded on the global records.</p>
+                        </div>
                     </div>
                 </Card>
             )}
 
-            {/* Leaderboard */}
-            <Card>
-                <h2 style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '1rem' }}>Leaderboard</h2>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    {leaderboard.length === 0 && <p>No attempts yet.</p>}
-                    {leaderboard.map((entry, index) => (
-                        <div
-                            key={index}
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                padding: '1rem',
-                                borderRadius: 'var(--radius)',
-                                background: entry._id === attempt?._id ? 'rgba(139, 92, 246, 0.2)' : 'rgba(255,255,255,0.03)',
-                                border: entry._id === attempt?._id ? '1px solid var(--primary)' : 'none'
-                            }}
-                        >
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                <span style={{
-                                    width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    borderRadius: '50%', background: index < 3 ? 'var(--primary)' : 'rgba(255,255,255,0.1)', fontWeight: 600
-                                }}>
-                                    {index + 1}
-                                </span>
-                                <span style={{ fontWeight: 500 }}>{entry.user.name}</span>
-                            </div>
-                            <span style={{ fontWeight: 700, color: 'var(--secondary)' }}>{entry.score} pts</span>
-                        </div>
-                    ))}
+            {/* Leaderboard Section */}
+            <section className="flex flex-col gap-8">
+                <div className="flex items-center gap-4 px-4">
+                    <div className="w-1.5 h-8 bg-amber-500 rounded-full"></div>
+                    <h2 className="text-3xl font-black tracking-tight text-white/95">Global Leaderboard</h2>
                 </div>
-            </Card>
 
-            <div
-                style={{
-                    marginTop: '3rem',
-                    textAlign: 'center',
-                    padding: '1.5rem',
-                    borderRadius: 'var(--radius)',
-                    background: 'linear-gradient(180deg, rgba(139, 92, 246, 0.12), rgba(255,255,255,0.02))',
-                    border: '1px solid var(--glass-border)',
-                    color: '#cbd5e1'
-                }}
-            >
-                <h3
-                    style={{
-                        fontSize: '1.4rem',
-                        fontWeight: 600,
-                        color: 'var(--primary)',
-                        marginBottom: '0.5rem'
-                    }}
-                >
-                    🎉 Thanks for attempting the quiz!
+                <Card className="p-10 border border-white/5 bg-slate-900/40 backdrop-blur-xl rounded-[32px]">
+                    <div className="flex flex-col gap-5">
+                        {leaderboard.length === 0 && (
+                            <div className="py-12 text-center text-slate-500 font-medium">No records found.</div>
+                        )}
+                        {leaderboard.map((entry, index) => (
+                            <div
+                                key={index}
+                                className={`flex justify-between items-center p-6 rounded-2xl transition-all duration-300 ${entry._id === attempt?._id
+                                    ? 'bg-violet-500/20 border-2 border-violet-500 shadow-lg shadow-violet-500/10'
+                                    : 'bg-white/[0.03] border-2 border-transparent hover:bg-white/[0.05]'
+                                    }`}
+                            >
+                                <div className="flex gap-6 items-center">
+                                    <span className={`w-10 h-10 flex items-center justify-center rounded-xl font-black text-sm ${index === 0 ? 'bg-amber-500 text-black' :
+                                        index === 1 ? 'bg-slate-300 text-black' :
+                                            index === 2 ? 'bg-orange-600 text-white' :
+                                                'bg-white/10 text-slate-400'
+                                        }`}>
+                                        {index + 1}
+                                    </span>
+                                    <span className={`text-lg font-bold ${entry._id === attempt?._id ? 'text-white' : 'text-white/80'}`}>
+                                        {entry.user.name} {entry._id === attempt?._id && <span className="ml-2 text-xs font-black uppercase tracking-widest text-violet-400">(You)</span>}
+                                    </span>
+                                </div>
+                                <div className="flex items-baseline gap-2">
+                                    <span className={`text-2xl font-black tabular-nums ${entry._id === attempt?._id ? 'text-violet-400' : 'text-slate-300'}`}>
+                                        {entry.score}
+                                    </span>
+                                    <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Pts</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </section>
+
+            <footer className="text-center py-12 px-10 rounded-[40px] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5">
+                <h3 className="text-2xl font-black text-violet-400 mb-3">
+                    🎉 Thank you for participating!
                 </h3>
-                <p style={{ fontSize: '0.95rem', opacity: 0.85 }}>
-                    Your response has been recorded successfully.
-                </p>
-            </div>
+
+            </footer>
 
 
         </main>

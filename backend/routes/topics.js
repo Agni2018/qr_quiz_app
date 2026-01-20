@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const topicsController = require('../controllers/topicsController');
+const { protect } = require('../middleware/authMiddleware');
 
 // GET all topics
 router.get('/', topicsController.getAllTopics);
@@ -9,12 +10,12 @@ router.get('/', topicsController.getAllTopics);
 router.get('/:id', topicsController.getTopicById);
 
 // POST create topic
-router.post('/', topicsController.createTopic);
+router.post('/', protect, topicsController.createTopic);
 
 // PUT update topic
-router.put('/:id', topicsController.updateTopic);
+router.put('/:id', protect, topicsController.updateTopic);
 
 // DELETE topic
-router.delete('/:id', topicsController.deleteTopic);
+router.delete('/:id', protect, topicsController.deleteTopic);
 
 module.exports = router;

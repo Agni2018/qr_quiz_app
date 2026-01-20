@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import api from "@/lib/api";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -21,18 +21,15 @@ export default function Home() {
         setError('');
 
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+            const res = await api.post('/auth/login', {
                 username,
                 password
             });
 
-            localStorage.setItem('token', res.data.token);
             localStorage.setItem('username', res.data.username);
+            localStorage.setItem('role', res.data.role);
 
-            // Set cookie for middleware
-            document.cookie = `token=${res.data.token}; path=/; max-age=86400; SameSite=Lax`;
-
-            router.push('/admin');
+            router.push('/users');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
         } finally {
@@ -41,97 +38,85 @@ export default function Home() {
     };
 
     return (
-        <main className="container" style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '90vh'
-        }}>
-            <div style={{ width: '100%', maxWidth: '450px', animation: 'fadeIn 0.5s ease-out' }}>
-                <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                    <h1 style={{
-                        fontSize: '3.5rem',
-                        fontWeight: 800,
-                        background: 'linear-gradient(135deg, #c084fc 0%, #6366f1 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        marginBottom: '0.5rem',
-                        letterSpacing: '-1px'
-                    }}>
+        <main className="container flex items-center justify-center min-h-screen p-6 md:p-12">
+            <div className="w-full max-w-[540px] animate-fade-in py-12">
+                {/* ---------- HEADER ---------- */}
+                <div className="text-center mb-16">
+                    <h1 className="text-[3.75rem] font-extrabold bg-gradient-to-r from-violet-400 to-indigo-500 bg-clip-text text-transparent tracking-tight mb-6 leading-tight">
                         Quiz Platform
                     </h1>
-                    <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Admin Dashboard Login</p>
+
+                    <p className="text-slate-400 text-lg font-medium opacity-80">
+                        Dashboard Access
+                    </p>
                 </div>
 
-                <Card className="glass" style={{
-                    padding: '2.5rem',
-                    borderRadius: '24px',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}>
-                    <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {/* ---------- CARD ---------- */}
+                <Card className="glass pt-16 pb-12 px-8 md:pt-24 md:pb-16 md:px-16 rounded-[40px] border border-white/10 shadow-2xl backdrop-blur-xl">
+                    <form onSubmit={handleLogin} className="flex flex-col gap-12">
+                        {/* ---------- ERROR ---------- */}
                         {error && (
-                            <div style={{
-                                padding: '0.75rem 1rem',
-                                background: 'rgba(239, 68, 68, 0.1)',
-                                borderLeft: '4px solid #ef4444',
-                                color: '#f87171',
-                                fontSize: '0.9rem',
-                                borderRadius: '4px'
-                            }}>
+                            <div className="px-6 py-4 bg-red-500/10 border-l-4 border-red-500 text-red-400 text-sm rounded-xl animate-shake">
                                 {error}
                             </div>
                         )}
 
-                        <div style={{ position: 'relative' }}>
-                            <div style={{ position: 'absolute', left: '1rem', top: '2.6rem', color: '#64748b' }}>
-                                <FaUser />
+                        <div className="space-y-10">
+                            {/* ---------- USERNAME ---------- */}
+                            <div className="relative group">
+                                <label className="block mb-4 text-[0.75rem] font-bold text-slate-400 uppercase tracking-widest ml-1">
+                                    Username
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        className="w-full pr-12 pl-6 py-6 rounded-2xl border border-white/5 bg-white/5 text-white outline-none text-[1rem] transition-all focus:border-violet-500/50 focus:bg-white/10 placeholder:text-slate-600"
+                                        type="text"
+                                        placeholder="Enter your username"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        required
+                                    />
+                                    <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-violet-400 transition-colors pointer-events-none z-10">
+                                        <FaUser className="w-[18px] h-[18px]" />
+                                    </div>
+                                </div>
                             </div>
-                            <Input
-                                label="Username"
-                                type="text"
-                                placeholder="Enter admin username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                style={{ paddingLeft: '2.8rem' }}
-                                required
-                            />
+
+                            {/* ---------- PASSWORD ---------- */}
+                            <div className="relative group">
+                                <label className="block mb-4 text-[0.75rem] font-bold text-slate-400 uppercase tracking-widest ml-1">
+                                    Password
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        className="w-full pr-12 pl-6 py-6 rounded-2xl border border-white/5 bg-white/5 text-white outline-none text-[1rem] transition-all focus:border-violet-500/50 focus:bg-white/10 placeholder:text-slate-600"
+                                        type="password"
+                                        placeholder="Enter your password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                    <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-violet-400 transition-colors pointer-events-none z-10">
+                                        <FaLock className="w-[18px] h-[18px]" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div style={{ position: 'relative' }}>
-                            <div style={{ position: 'absolute', left: '1rem', top: '2.6rem', color: '#64748b' }}>
-                                <FaLock />
-                            </div>
-                            <Input
-                                label="Password"
-                                type="password"
-                                placeholder="Enter your password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                style={{ paddingLeft: '2.8rem' }}
-                                required
-                            />
-                        </div>
-
+                        {/* ---------- BUTTON ---------- */}
                         <Button
                             type="submit"
                             disabled={loading}
-                            style={{
-                                marginTop: '1rem',
-                                padding: '1rem',
-                                fontSize: '1.1rem',
-                                fontWeight: 600,
-                                background: 'linear-gradient(to right, #8b5cf6, #3b82f6)',
-                                boxShadow: '0 10px 15px -3px rgba(139, 92, 246, 0.3)'
-                            }}
+                            className="mt-8 px-10 py-6 text-lg font-extrabold rounded-[20px] shadow-2xl shadow-violet-500/30 active:scale-[0.98] hover:scale-[1.02] transition-all duration-300"
                         >
                             {loading ? 'Authenticating...' : 'Sign In to Dashboard'}
                         </Button>
                     </form>
                 </Card>
 
-                <p style={{ textAlign: 'center', marginTop: '2rem', color: '#64748b', fontSize: '0.9rem' }}>
-                    &copy; 2026 Quiz Platform Pro. All rights reserved.
+                {/* ---------- FOOTER ---------- */}
+                <p className="text-center mt-16 text-slate-500 text-sm font-medium opacity-60">
+                    &copy; 2026 Quiz Platform Pro. Secure Dashboard Portal.
                 </p>
             </div>
         </main>

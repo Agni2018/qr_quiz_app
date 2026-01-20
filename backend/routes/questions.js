@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const questionsController = require('../controllers/questionsController');
+const { protect } = require('../middleware/authMiddleware');
 
 // GET questions for a topic
 router.get('/topic/:topicId', questionsController.getQuestionsByTopic);
 
 // POST create question
-router.post('/', questionsController.createQuestion);
+router.post('/', protect, questionsController.createQuestion);
 
 // PUT update question
-router.put('/:id', questionsController.updateQuestion);
+router.put('/:id', protect, questionsController.updateQuestion);
 
 // DELETE question
-router.delete('/:id', questionsController.deleteQuestion);
+router.delete('/:id', protect, questionsController.deleteQuestion);
 
 module.exports = router;

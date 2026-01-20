@@ -1,6 +1,10 @@
-export default function Card({ children, className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+    noGlass?: boolean;
+}
+
+export default function Card({ children, className = '', noGlass = false, ...props }: CardProps) {
     return (
-        <div className={`glass ${className}`} style={{ padding: '1.5rem', borderRadius: 'var(--radius)', color: 'var(--foreground)' }} {...props}>
+        <div className={`${noGlass ? '' : 'glass'} p-6 rounded-[var(--radius)] text-[var(--foreground)] ${className}`} {...props}>
             {children}
         </div>
     );

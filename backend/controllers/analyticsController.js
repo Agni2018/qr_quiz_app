@@ -6,6 +6,7 @@ exports.getOverview = async (req, res) => {
     try {
         // Get total topics count
         const totalTopics = await Topic.countDocuments();
+        const activeTopics = await Topic.countDocuments({ status: 'active' });
 
         // Aggregate user attempts by topic
         const topicStats = await UserAttempt.aggregate([
@@ -41,6 +42,7 @@ exports.getOverview = async (req, res) => {
 
         res.json({
             totalTopics,
+            activeTopics,
             topicStats
         });
     } catch (err) {

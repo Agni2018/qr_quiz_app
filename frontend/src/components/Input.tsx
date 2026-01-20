@@ -1,23 +1,14 @@
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
+    className?: string;
 }
 
-export default function Input({ label, style, ...props }: InputProps) {
+export default function Input({ label, className, ...props }: InputProps) {
     return (
-        <div style={{ marginBottom: '1rem', width: '100%' }}>
-            {label && <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#94a3b8' }}>{label}</label>}
+        <div className="mb-4 w-full">
+            {label && <label className="block mb-2 text-xs text-slate-400 uppercase tracking-wider">{label}</label>}
             <input
-                style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    borderRadius: 'var(--radius)',
-                    border: '1px solid var(--glass-border)',
-                    background: 'rgba(0, 0, 0, 0.2)',
-                    color: 'white',
-                    outline: 'none',
-                    fontSize: '1rem',
-                    ...style
-                }}
+                className={`w-full px-3 py-3 rounded-[12px] border border-white/10 bg-black/20 text-white outline-none text-base ${className || ''}`}
                 {...props}
             />
         </div>

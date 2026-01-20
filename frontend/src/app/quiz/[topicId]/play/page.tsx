@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, use, useMemo } from 'react';
-import axios from 'axios';
+import api from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
@@ -27,7 +27,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
         setUser(JSON.parse(storedUser));
 
         // 2. Fetch Questions
-        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/questions/topic/${topicId}`)
+        api.get(`/questions/topic/${topicId}`)
             .then(res => {
                 setQuestions(res.data);
                 setLoading(false);
@@ -76,7 +76,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     const submitQuiz = async () => {
         setSubmitting(true);
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/quiz/submit`, {
+            const res = await api.post('/quiz/submit', {
                 topicId: topicId,
                 user,
                 answers
@@ -118,56 +118,59 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     const currentAnswer = answers.find(a => a.questionId === currentQ._id)?.submittedAnswer;
 
     return (
-        <main className="container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <main className="container min-h-screen flex flex-col justify-center">
 
             {/* Progress Bar */}
-            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '4px', background: 'rgba(255,255,255,0.1)' }}>
-                <div style={{
-                    height: '100%',
-                    width: `${((currentQIndex + 1) / questions.length) * 100}%`,
-                    background: 'var(--primary)',
-                    transition: 'width 0.3s ease'
+            <div className="fixed top-0 left-0 right-0 h-1 bg-white/10">
+                <div className="h-full bg-[var(--primary)] transition-[width] duration-300 ease-in-out" style={{
+                    width: `${((currentQIndex + 1) / questions.length) * 100}%`
                 }} />
             </div>
 
             <AnimatePresence mode='wait'>
                 <motion.div
                     key={currentQIndex}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
+                    initial={{ opacity: 0, scale: 0.98, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.98, y: -10 }}
+                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
                 >
-                    <Card style={{ padding: '2rem', minHeight: '400px', display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1rem' }}>
-                            Question {currentQIndex + 1} of {questions.length}
-                        </span>
+                    <Card className="p-10 md:p-14 min-h-[500px] flex flex-col border border-white/5 bg-slate-900/60 backdrop-blur-2xl rounded-[40px] shadow-3xl">
+                        <div className="flex justify-between items-center mb-10">
+                            <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-white/5 text-slate-400 border border-white/5">
+                                Question {currentQIndex + 1} of {questions.length}
+                            </span>
+                            <div className="flex gap-1">
+                                {questions.map((_, i) => (
+                                    <div key={i} className={`h-1 rounded-full transition-all duration-500 ${i === currentQIndex ? 'w-6 bg-violet-500' : 'w-2 bg-white/10'}`} />
+                                ))}
+                            </div>
+                        </div>
 
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '2rem' }}>
+                        <h2 className="text-2xl md:text-3xl font-black text-white/95 leading-tight mb-16">
                             {currentQ.content.text}
                         </h2>
 
                         {/* Render Input based on type */}
-                        <div style={{ flex: 1 }}>
+                        <div className="flex-1 mb-12">
                             {/* Single Choice and True/False */}
                             {(currentQ.type === 'single_choice' || currentQ.type === 'true_false') && (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div className="flex flex-col gap-5">
                                     {(currentQ.type === 'true_false' ? ['True', 'False'] : currentQ.options).map((opt: string) => (
                                         <button
                                             key={opt}
                                             onClick={() => handleAnswer(opt)}
-                                            style={{
-                                                padding: '1rem',
-                                                borderRadius: 'var(--radius)',
-                                                border: currentAnswer === opt ? '2px solid var(--primary)' : '1px solid var(--glass-border)',
-                                                background: currentAnswer === opt ? 'rgba(139, 92, 246, 0.2)' : 'rgba(0,0,0,0.2)',
-                                                color: 'white',
-                                                textAlign: 'left',
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s'
-                                            }}
+                                            className={`group p-6 rounded-2xl text-left cursor-pointer transition-all duration-300 border-2 flex items-center justify-between ${currentAnswer === opt
+                                                ? 'border-violet-500 bg-violet-500/10 shadow-lg shadow-violet-500/10'
+                                                : 'border-white/5 bg-black/20 hover:border-white/20 hover:bg-black/30'
+                                                }`}
                                         >
-                                            {opt}
+                                            <span className={`text-lg font-bold transition-colors ${currentAnswer === opt ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                                {opt}
+                                            </span>
+                                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${currentAnswer === opt ? 'border-violet-400 bg-violet-400' : 'border-slate-700'}`}>
+                                                {currentAnswer === opt && <div className="w-2.5 h-2.5 rounded-full bg-violet-900" />}
+                                            </div>
                                         </button>
                                     ))}
                                 </div>
@@ -175,7 +178,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
 
                             {/* Multi Select - Checkboxes */}
                             {currentQ.type === 'multi_select' && (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div className="flex flex-col gap-5">
                                     {currentQ.options.map((opt: string) => {
                                         const selected = Array.isArray(currentAnswer) && currentAnswer.includes(opt);
                                         return (
@@ -189,86 +192,62 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                                                         handleAnswer([...current, opt]);
                                                     }
                                                 }}
-                                                style={{
-                                                    padding: '1rem',
-                                                    borderRadius: 'var(--radius)',
-                                                    border: selected ? '2px solid var(--primary)' : '1px solid var(--glass-border)',
-                                                    background: selected ? 'rgba(139, 92, 246, 0.2)' : 'rgba(0,0,0,0.2)',
-                                                    color: 'white',
-                                                    textAlign: 'left',
-                                                    cursor: 'pointer',
-                                                    transition: 'all 0.2s',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.75rem'
-                                                }}
+                                                className={`group p-6 rounded-2xl text-left cursor-pointer transition-all duration-300 border-2 flex items-center gap-5 ${selected
+                                                    ? 'border-violet-500 bg-violet-500/10 shadow-lg shadow-violet-500/10'
+                                                    : 'border-white/5 bg-black/20 hover:border-white/20 hover:bg-black/30'
+                                                    }`}
                                             >
-                                                <div style={{
-                                                    width: '20px',
-                                                    height: '20px',
-                                                    borderRadius: '4px',
-                                                    border: '2px solid ' + (selected ? 'var(--primary)' : '#94a3b8'),
-                                                    background: selected ? 'var(--primary)' : 'transparent',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    fontSize: '0.75rem'
-                                                }}>
-                                                    {selected && '✓'}
+                                                <div className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center transition-all ${selected ? 'border-violet-400 bg-violet-400' : 'border-slate-700'}`}>
+                                                    {selected && <span className="text-violet-900 font-bold">✓</span>}
                                                 </div>
-                                                {opt}
+                                                <span className={`text-lg font-bold transition-colors ${selected ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                                    {opt}
+                                                </span>
                                             </button>
                                         );
                                     })}
-                                    <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.5rem' }}>
+                                    <div className="mt-6 flex items-center gap-3 text-slate-500 px-2 font-bold text-[0.65rem] uppercase tracking-widest">
+                                        <div className="w-2 h-2 rounded-full bg-violet-500/50" />
                                         Select all that apply
-                                    </p>
+                                    </div>
                                 </div>
                             )}
 
                             {/* Match the Following */}
                             {currentQ.type === 'match' && (
-                                <div>
-                                    <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                <div className="flex flex-col gap-6">
+                                    <div className="flex items-center gap-3 text-slate-500 px-2 font-bold text-[0.65rem] uppercase tracking-widest mb-4">
+                                        <div className="w-2 h-2 rounded-full bg-violet-500/50" />
                                         Match the items from left to right:
-                                    </p>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    </div>
+                                    <div className="flex flex-col gap-4">
                                         {currentQ.options.map((pair: any, idx: number) => {
                                             const currentMatches = currentAnswer || [];
                                             const userMatch = currentMatches[idx];
                                             return (
-                                                <div key={idx} style={{
-                                                    background: 'rgba(0,0,0,0.2)',
-                                                    border: '1px solid var(--glass-border)',
-                                                    borderRadius: 'var(--radius)',
-                                                    padding: '1rem',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '1rem'
-                                                }}>
-                                                    <span style={{ flex: 1, fontWeight: 500 }}>{pair.left}</span>
-                                                    <span style={{ color: '#94a3b8' }}>→</span>
-                                                    <select
-                                                        value={userMatch?.right || ''}
-                                                        onChange={(e) => {
-                                                            const newMatches = [...(currentAnswer || [])];
-                                                            newMatches[idx] = { left: pair.left, right: e.target.value };
-                                                            handleAnswer(newMatches);
-                                                        }}
-                                                        style={{
-                                                            flex: 1,
-                                                            padding: '0.5rem',
-                                                            borderRadius: 'var(--radius)',
-                                                            background: 'rgba(0,0,0,0.3)',
-                                                            color: 'white',
-                                                            border: '1px solid var(--glass-border)'
-                                                        }}
-                                                    >
-                                                        <option value="">Select match...</option>
-                                                        {shuffledMatchOptions.map((rightValue: string, i: number) => (
-                                                            <option key={i} value={rightValue}>{rightValue}</option>
-                                                        ))}
-                                                    </select>
+                                                <div key={idx} className="bg-black/20 border-2 border-white/5 rounded-2xl p-5 flex flex-col md:flex-row items-center gap-6">
+                                                    <div className="flex-1 text-center md:text-left">
+                                                        <span className="text-xl font-bold text-white/90">{pair.left}</span>
+                                                    </div>
+                                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                                                        <span className="text-slate-500 text-lg">↔</span>
+                                                    </div>
+                                                    <div className="flex-1 w-full">
+                                                        <select
+                                                            value={userMatch?.right || ''}
+                                                            onChange={(e) => {
+                                                                const newMatches = [...(currentAnswer || [])];
+                                                                newMatches[idx] = { left: pair.left, right: e.target.value };
+                                                                handleAnswer(newMatches);
+                                                            }}
+                                                            className="w-full p-4 rounded-xl bg-black/30 text-white border-2 border-white/10 focus:border-violet-500/50 outline-none transition-all cursor-pointer font-bold text-sm"
+                                                        >
+                                                            <option value="" className="bg-slate-900">Select match...</option>
+                                                            {shuffledMatchOptions.map((rightValue: string, i: number) => (
+                                                                <option key={i} value={rightValue} className="bg-slate-900">{rightValue}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             );
                                         })}
@@ -278,29 +257,27 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
 
                             {/* Fill in the Blank - Text Input */}
                             {currentQ.type === 'fill_blank' && (
-                                <textarea
-                                    value={currentAnswer || ''}
-                                    onChange={(e) => handleAnswer(e.target.value)}
-                                    placeholder="Type your answer here..."
-                                    style={{
-                                        width: '100%',
-                                        minHeight: '150px',
-                                        padding: '1rem',
-                                        borderRadius: 'var(--radius)',
-                                        background: 'rgba(0,0,0,0.2)',
-                                        border: '1px solid var(--glass-border)',
-                                        color: 'white',
-                                        fontSize: '1rem'
-                                    }}
-                                />
+                                <div className="flex flex-col gap-6">
+                                    <div className="flex items-center gap-3 text-slate-500 px-2 font-bold text-[0.65rem] uppercase tracking-widest">
+                                        <div className="w-2 h-2 rounded-full bg-violet-500/50" />
+                                        Type your answer here:
+                                    </div>
+                                    <textarea
+                                        value={currentAnswer || ''}
+                                        onChange={(e) => handleAnswer(e.target.value)}
+                                        placeholder="Enter response..."
+                                        className="w-full min-h-[150px] p-6 rounded-2xl bg-black/20 border-2 border-white/5 focus:border-violet-500/50 outline-none transition-all text-white text-xl font-bold placeholder:text-slate-700"
+                                    />
+                                </div>
                             )}
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
+                        <div className="flex justify-between items-center mt-12 pt-10 border-t border-white/5">
                             <Button
                                 variant="outline"
                                 disabled={currentQIndex === 0}
                                 onClick={() => setCurrentQIndex(currentQIndex - 1)}
+                                className="px-8 py-4 rounded-2xl border-white/10 text-slate-400 font-bold hover:bg-white/5"
                             >
                                 Previous
                             </Button>
@@ -310,11 +287,11 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                                     !currentAnswer ||
                                     (Array.isArray(currentAnswer) && currentAnswer.length === 0)
                                 }
+                                className="px-10 py-5 rounded-3xl bg-violet-500 text-white font-black text-lg shadow-xl shadow-violet-500/20 hover:scale-105 transition-transform"
                             >
-                                {currentQIndex === questions.length - 1 ? (submitting ? 'Submitting...' : 'Submit Quiz') : 'Next Question'}
+                                {currentQIndex === questions.length - 1 ? (submitting ? 'Submitting...' : '✨ Submit Quiz') : 'Next Question →'}
                             </Button>
                         </div>
-
                     </Card>
                 </motion.div>
             </AnimatePresence>
