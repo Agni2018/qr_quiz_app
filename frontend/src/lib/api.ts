@@ -9,8 +9,8 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            // Only redirect if we are in the browser
-            if (typeof window !== 'undefined') {
+            // Only redirect if we are in the browser AND not on the login page already
+            if (typeof window !== 'undefined' && window.location.pathname !== '/') {
                 window.location.href = '/';
             }
         }

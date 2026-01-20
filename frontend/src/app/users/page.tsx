@@ -15,12 +15,14 @@ export default function UserDashboard() {
     const [showModal, setShowModal] = useState(false);
     const [newTopic, setNewTopic] = useState({ name: '', description: '' });
     const [analytics, setAnalytics] = useState<any>(null);
+    const [authLoading, setAuthLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         const checkAuth = async () => {
             try {
                 await api.get('/auth/status');
+                setAuthLoading(false);
             } catch (err) {
                 // Interceptor will handle redirect
             }
@@ -78,6 +80,15 @@ export default function UserDashboard() {
             console.error(error);
         }
     };
+
+    if (authLoading) {
+        return (
+            <div className="container min-h-screen flex flex-col items-center justify-center gap-6">
+                <div className="w-12 h-12 border-4 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
+                <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Verifying Session...</p>
+            </div>
+        );
+    }
 
     return (
         <main className="container py-24 px-6 flex flex-col gap-32">

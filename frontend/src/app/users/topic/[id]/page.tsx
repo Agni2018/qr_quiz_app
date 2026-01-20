@@ -14,12 +14,14 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
     const [topic, setTopic] = useState<any>(null);
     const [questions, setQuestions] = useState<any[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [authLoading, setAuthLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         const checkAuth = async () => {
             try {
                 await api.get('/auth/status');
+                setAuthLoading(false);
             } catch (err) {
                 // Interceptor will handle redirect
             }
@@ -55,7 +57,16 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
         }
     };
 
-    if (!topic) return <div className="container">Loading...</div>;
+    if (authLoading) {
+        return (
+            <div className="container min-h-screen flex flex-col items-center justify-center gap-6">
+                <div className="w-12 h-12 border-4 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
+                <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Verifying Session...</p>
+            </div>
+        );
+    }
+
+    if (!topic) return <div className="container min-h-screen flex items-center justify-center">Loading Data...</div>;
 
     const quizLink = `http://localhost:3000/quiz/${id}`;
 
