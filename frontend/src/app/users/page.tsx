@@ -83,7 +83,7 @@ export default function UserDashboard() {
         <main className="container py-24 px-6 flex flex-col gap-32">
 
             {/* HEADER */}
-            <header className="flex justify-between items-center px-2">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center px-2 gap-8">
                 <div>
                     <h1 className="text-4xl font-extrabold tracking-tight mb-2">
                         Dashboard
@@ -93,17 +93,17 @@ export default function UserDashboard() {
                     </p>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-4 w-full md:w-auto">
                     <Button
                         onClick={() => setShowModal(true)}
-                        className="shadow-lg shadow-violet-500/20"
+                        className="shadow-lg shadow-violet-500/20 flex-1 md:flex-none justify-center"
                     >
                         <FaPlus /> Create Topic
                     </Button>
 
                     <Button
                         variant="outline"
-                        className="border-white/10 hover:bg-white/5"
+                        className="border-white/10 hover:bg-white/5 flex-1 md:flex-none justify-center"
                         onClick={async () => {
                             try {
                                 await api.post('/auth/logout');

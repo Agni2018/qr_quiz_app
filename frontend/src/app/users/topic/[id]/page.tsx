@@ -61,9 +61,13 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
     return (
         <main className="container">
-            <div className="mb-8">
-                <Link href="/users" className="text-[#94a3b8] text-sm">&larr; Back to Dashboard</Link>
-                <h1 className="text-5xl font-bold mt-2">{topic.name}</h1>
+            <div className="mb-12">
+                <Link href="/users" className="text-slate-500 hover:text-violet-400 text-sm flex items-center gap-2 transition-colors mb-6">
+                    &larr; Back to Dashboard
+                </Link>
+                <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                    {topic.name}
+                </h1>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
