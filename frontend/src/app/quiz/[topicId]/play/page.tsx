@@ -147,7 +147,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                             </div>
                         </div>
 
-                        <h2 className="text-2xl md:text-3xl font-black text-white/95 leading-tight mb-16">
+                        <h2 className="text-xl md:text-2xl font-black text-white/95 leading-tight mb-14">
                             {currentQ.content.text}
                         </h2>
 
