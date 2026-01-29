@@ -18,353 +18,260 @@ import { useRouter } from 'next/navigation';
 
 export default function UserDashboard() {
     const [topics, setTopics] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [showModal, setShowModal] = useState(false);
-    const [newTopic, setNewTopic] = useState({ name: '', description: '' });
     const [analytics, setAnalytics] = useState<any>(null);
     const [authLoading, setAuthLoading] = useState(true);
-    const [activeView, setActiveView] =
-        useState<'analytics' | 'manage'>('analytics');
+    const [activeView, setActiveView] = useState<'analytics' | 'manage'>('analytics');
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [newTopic, setNewTopic] = useState({ name: '', description: '' });
 
     const router = useRouter();
 
-    /* ================= AUTH + INITIAL LOAD ================= */
     useEffect(() => {
-        const checkAuth = async () => {
+        const init = async () => {
             try {
                 await api.get('/auth/status');
-                setAuthLoading(false);
+                const [t, a] = await Promise.all([
+                    api.get('/topics'),
+                    api.get('/analytics/overview')
+                ]);
+                setTopics(t.data);
+                setAnalytics(a.data);
             } catch {
                 router.replace('/');
+            } finally {
+                setAuthLoading(false);
             }
         };
-
-        checkAuth();
-        fetchTopics();
-        fetchAnalytics();
-
-        window.addEventListener('focus', checkAuth);
-        return () => window.removeEventListener('focus', checkAuth);
+        init();
     }, []);
 
-    /* ================= DATA FETCHERS ================= */
-    const fetchAnalytics = async () => {
-        try {
-            const res = await api.get('/analytics/overview');
-            setAnalytics(res.data);
-        } catch (err) {
-            console.error(err);
-        }
+    const refreshData = async () => {
+        const [t, a] = await Promise.all([api.get('/topics'), api.get('/analytics/overview')]);
+        setTopics(t.data);
+        setAnalytics(a.data);
     };
 
-    const fetchTopics = async () => {
-        try {
-            const res = await api.get('/topics');
-            setTopics(res.data);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    /* ================= CRUD ================= */
     const createTopic = async () => {
-        if (!newTopic.name) return;
-        try {
-            await api.post('/topics', newTopic);
-            setShowModal(false);
-            setNewTopic({ name: '', description: '' });
-            fetchTopics();
-            fetchAnalytics();
-        } catch (err) {
-            console.error(err);
-        }
+        if (!newTopic.name.trim()) return;
+        await api.post('/topics', newTopic);
+        setShowModal(false);
+        setNewTopic({ name: '', description: '' });
+        refreshData();
     };
 
     const deleteTopic = async (id: string) => {
-        if (!confirm('Are you sure?')) return;
-        try {
-            await api.delete(`/topics/${id}`);
-            fetchTopics();
-            fetchAnalytics();
-        } catch (err) {
-            console.error(err);
-        }
+        const ok = confirm('Are you sure you want to delete this topic?');
+        if (!ok) return;
+        await api.delete(`/topics/${id}`);
+        refreshData();
     };
 
-    /* ================= AUTH LOADER ================= */
     if (authLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[#020617]">
-                <div className="flex flex-col items-center gap-6">
-                    <div className="w-12 h-12 border-4 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
-                    <p className="text-slate-400 font-bold uppercase tracking-[0.25em] text-xs">
-                        Verifying Session
-                    </p>
-                </div>
+                <div className="w-12 h-12 border-4 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#020617] text-white flex flex-col lg:flex-row">
+        <div className="min-h-screen bg-[#020617] text-white">
 
-            {/* ================= MOBILE HEADER ================= */}
-            <header className="lg:hidden flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/60 backdrop-blur-xl sticky top-0 z-50">
+            {/* MOBILE HEADER */}
+            <header className="lg:hidden sticky top-0 z-40 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/70 backdrop-blur">
                 <h1 className="text-xl font-black">Dashboard</h1>
-                <button
-                    onClick={() => setSidebarOpen(true)}
-                    className="text-xl"
-                >
+                <button onClick={() => setSidebarOpen(true)}>
                     <FaBars />
                 </button>
             </header>
 
-            {/* ================= MOBILE SIDEBAR OVERLAY ================= */}
             {sidebarOpen && (
                 <div
-                    className="fixed inset-0 bg-black/70 z-50 lg:hidden"
+                    className="fixed inset-0 bg-black/60 z-40 lg:hidden"
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
 
-            {/* ================= SIDEBAR ================= */}
-            <aside
-                className={`
-                    fixed lg:sticky top-0
-                    h-screen w-[280px]
-                    px-8 py-24
-                    flex flex-col gap-8
-                    bg-black/80 backdrop-blur-xl
-                    border-r border-white/10
-                    z-50
-                    transform transition-transform duration-300
-                    ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-                    lg:translate-x-0
-                `}
-            >
-                <button
-                    className="absolute top-6 right-6 lg:hidden"
-                    onClick={() => setSidebarOpen(false)}
+            {/* GRID */}
+            <div className="lg:grid lg:grid-cols-[300px_1fr] lg:gap-14">
+
+                {/* SIDEBAR */}
+                <aside
+                    className={`
+                        fixed lg:static top-0 left-0 z-50
+                        h-screen w-[300px]
+                        bg-black/90 backdrop-blur-xl
+                        border-r border-white/10
+                        px-10 py-14
+                        transform transition-transform
+                        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+                        lg:translate-x-0
+                    `}
                 >
-                    <FaTimes />
-                </button>
-
-                <div>
-                    <h1 className="text-3xl font-black tracking-tight">
-                        Dashboard
-                    </h1>
-                    <p className="text-slate-400 text-sm mt-1">
-                        Manage your quiz ecosystem
-                    </p>
-                </div>
-
-                <div className="flex flex-col gap-3 mt-6">
-                    <Button
-                        variant={activeView === 'analytics' ? 'secondary' : 'outline'}
-                        className="justify-start"
-                        onClick={() => {
-                            setActiveView('analytics');
-                            setSidebarOpen(false);
-                        }}
+                    <button
+                        className="absolute top-6 right-6 lg:hidden"
+                        onClick={() => setSidebarOpen(false)}
                     >
-                        📊 Analytics
-                    </Button>
+                        <FaTimes />
+                    </button>
 
-                    <Button
-                        variant={activeView === 'manage' ? 'secondary' : 'outline'}
-                        className="justify-start"
-                        onClick={() => {
-                            setActiveView('manage');
-                            setSidebarOpen(false);
-                        }}
-                    >
-                        🎓 Manage Topics
-                    </Button>
-                </div>
+                    <h1 className="text-3xl font-black mb-3">Dashboard</h1>
+                    <p className="text-slate-400 text-sm mb-16">Manage your quiz ecosystem</p>
 
-                <div className="mt-auto flex flex-col gap-3">
-                    <Button
-                        onClick={() => {
-                            setShowModal(true);
-                            setSidebarOpen(false);
-                        }}
-                        className="shadow-lg shadow-violet-500/30"
-                    >
-                        <FaPlus /> Create Topic
-                    </Button>
+                    <div className="flex flex-col gap-5">
+                        <Button
+                            variant={activeView === 'analytics' ? 'secondary' : 'outline'}
+                            className="justify-start"
+                            onClick={() => setActiveView('analytics')}
+                        >
+                            📊 Analytics
+                        </Button>
 
-                    <Button
-                        variant="outline"
-                        className="border-white/10 hover:bg-white/5"
-                        onClick={async () => {
-                            try {
-                                await api.post('/auth/logout');
-                            } catch { }
-                            localStorage.clear();
-                            router.replace('/');
-                        }}
-                    >
-                        <FaSignOutAlt /> Logout
-                    </Button>
-                </div>
-            </aside>
+                        <Button
+                            variant={activeView === 'manage' ? 'secondary' : 'outline'}
+                            className="justify-start"
+                            onClick={() => setActiveView('manage')}
+                        >
+                            🎓 Manage Topics
+                        </Button>
+                    </div>
+                </aside>
 
-            {/* ================= MAIN ================= */}
-            <main className="flex-1 px-6 sm:px-10 lg:px-20 py-10 lg:py-24 flex flex-col gap-24 overflow-x-hidden">
+                {/* MAIN */}
+                <main className="px-8 lg:px-0 py-24">
+                    <div className="max-w-[1400px] flex flex-col gap-16">
 
-                {/* ================= ANALYTICS ================= */}
-                {activeView === 'analytics' && analytics && !loading && (
-                    <>
-                        <section className="flex flex-col gap-10">
-                            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
-                                📊 Analytics Overview
-                            </h2>
-
-                            {analytics.totalTopics === 0 ? (
-                                <div className="border-2 border-dashed border-white/10 rounded-[32px] py-20 text-center bg-white/[0.02]">
-                                    <div className="text-6xl mb-4 opacity-40">📭</div>
-                                    <h3 className="text-2xl font-extrabold mb-2">
-                                        No Topics Yet
-                                    </h3>
-                                    <p className="text-slate-400 max-w-md mx-auto">
-                                        Create a topic to unlock real-time analytics.
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="relative rounded-[36px] p-8 sm:p-12 lg:p-16 bg-gradient-to-br from-violet-900/50 to-slate-950 border border-white/10 shadow-2xl overflow-hidden">
-                                    <div className="absolute -top-24 -right-24 w-[360px] h-[360px] bg-violet-600/40 rounded-full blur-3xl" />
-
-                                    <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
-                                        <div>
-
-                                            <h3 className="text-3xl sm:text-4xl font-black mt-4">
-                                                Active Topics
-                                            </h3>
-                                        </div>
-
-                                        <div className="text-6xl sm:text-7xl lg:text-9xl font-black text-violet-400">
-                                            {analytics.activeTopics}
-                                        </div>
-                                    </div>
-                                </div>
+                        {/* TOP BAR */}
+                        <div className="flex justify-end gap-4">
+                            {activeView === 'manage' && (
+                                <Button onClick={() => setShowModal(true)}>
+                                    <FaPlus /> Create Topic
+                                </Button>
                             )}
-                        </section>
+                            <Button
+                                variant="outline"
+                                onClick={async () => {
+                                    await api.post('/auth/logout');
+                                    router.replace('/');
+                                }}
+                            >
+                                <FaSignOutAlt /> Logout
+                            </Button>
+                        </div>
 
-                        {analytics.totalTopics > 0 && (
-                            <section className="flex flex-col gap-10">
-                                <h2 className="text-2xl sm:text-3xl font-black">
-                                    Topic Performance
+                        {/* ANALYTICS VIEW */}
+                        {activeView === 'analytics' && analytics && (
+                            <section className="flex flex-col gap-14">
+
+                                {/* Analytics Heading */}
+                                <h2 className="text-5xl font-extrabold text-purple-400 tracking-tight bg-gradient-to-r from-purple-400 via-indigo-500 to-purple-400 bg-clip-text text-transparent">
+                                    Analytics Overview
                                 </h2>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                                    {analytics.topicStats.map((stat: any) => (
-                                        <div
-                                            key={stat.topicId}
-                                            className="rounded-[28px] p-8 flex flex-col justify-between bg-gradient-to-br from-white/[0.10] to-white/[0.02] border border-white/10 shadow-xl hover:shadow-violet-500/30 transition"
-                                        >
-                                            <h4 className="text-lg font-bold leading-snug">
-                                                {stat.topicName}
-                                            </h4>
+                                {/* Active Topics Card */}
+                                <Card className="p-16 rounded-3xl bg-gradient-to-br from-purple-900/80 via-indigo-900/70 to-slate-950 border border-white/20 shadow-2xl hover:shadow-purple-500/50 transition-shadow transform hover:-translate-y-1">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-xl text-slate-300 font-semibold">Active Topics</span>
+                                        <span className="text-7xl font-extrabold text-purple-300 drop-shadow-lg">
+                                            {topics.length === 0 ? 'No topics created yet' : analytics.activeTopics}
+                                        </span>
+                                    </div>
+                                </Card>
 
-                                            <div>
-                                                <p className="text-4xl font-black text-violet-400">
-                                                    {stat.participantCount}
-                                                </p>
-                                                <p className="text-xs uppercase tracking-widest text-slate-400 mt-2">
-                                                    Participants
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
+                                {/* Topic Performance */}
+                                <div className="flex flex-col gap-8">
+                                    <h3 className="text-3xl font-bold text-indigo-400 tracking-wide">
+                                        Topic Performance
+                                    </h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                                        {analytics.topicStats.map((stat: any) => (
+                                            <Card
+                                                key={stat.topicId}
+                                                className="p-10 rounded-3xl bg-gradient-to-br from-violet-900/30 via-purple-900/20 to-black border border-white/10 shadow-lg hover:scale-105 hover:shadow-purple-400/50 transition-all transform"
+                                            >
+                                                <h4 className="font-semibold text-lg mb-4 text-purple-200">{stat.topicName}</h4>
+                                                <p className="text-4xl font-extrabold text-purple-300 mb-2 drop-shadow-md">{stat.participantCount}</p>
+                                                <p className="text-xs uppercase tracking-wide text-slate-400">Participants</p>
+                                            </Card>
+                                        ))}
+                                    </div>
                                 </div>
                             </section>
                         )}
-                    </>
-                )}
 
-                {/* ================= MANAGE ================= */}
-                {activeView === 'manage' && (
-                    <section className="flex flex-col gap-10">
-                        <h2 className="text-3xl sm:text-4xl font-black">
-                            Manage Topics
-                        </h2>
+                        {/* MANAGE VIEW */}
+                        {activeView === 'manage' && (
+                            <section className="flex flex-col gap-12">
+                                <h2 className="text-5xl font-black">Manage Topics</h2>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                                    {topics.map(topic => {
+                                        const isActive = topic.status === 'active';
 
-                        {loading ? (
-                            <div className="flex justify-center py-20">
-                                <div className="w-12 h-12 border-b-2 border-violet-500 rounded-full animate-spin" />
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {topics.map(topic => (
-                                    <Card
-                                        key={topic._id}
-                                        className="p-8 rounded-[28px] border border-white/10 flex flex-col gap-6"
-                                    >
-                                        <div className="flex justify-between gap-4">
-                                            <h3 className="text-lg font-bold">
-                                                {topic.name}
-                                            </h3>
-
-                                            <span
-                                                className={`px-3 py-1 rounded-full text-[0.6rem] font-black uppercase tracking-widest border ${topic.status === 'active'
-                                                    ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10'
-                                                    : 'text-red-400 border-red-500/30 bg-red-500/10'
-                                                    }`}
+                                        return (
+                                            <Card
+                                                key={topic._id}
+                                                className={`
+                                                    p-8 rounded-3xl border flex flex-col
+                                                    ${isActive
+                                                        ? 'bg-white/[0.05] border-white/10 shadow-lg hover:shadow-purple-500/40 transform hover:-translate-y-1 transition-all'
+                                                        : 'bg-red-500/5 border-red-500/30 opacity-90 shadow-sm'}
+                                                `}
                                             >
-                                                {topic.status}
-                                            </span>
-                                        </div>
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <h3 className="font-semibold text-lg">{topic.name}</h3>
+                                                    <span
+                                                        className={`
+                                                            text-xs px-3 py-1 rounded-full
+                                                            ${isActive
+                                                                ? 'bg-emerald-500/10 text-emerald-400'
+                                                                : 'bg-red-500/10 text-red-400'}
+                                                        `}
+                                                    >
+                                                        {isActive ? 'Active' : 'Inactive'}
+                                                    </span>
+                                                </div>
 
-                                        <p className="text-slate-400 text-sm leading-relaxed">
-                                            {topic.description}
-                                        </p>
+                                                <p className="text-slate-400 text-sm leading-relaxed mb-6">{topic.description}</p>
 
-                                        <div className="flex gap-3 mt-auto">
-                                            <Link href={`/users/topic/${topic._id}`} className="flex-1">
-                                                <Button className="w-full">
-                                                    Manage <FaArrowRight />
-                                                </Button>
-                                            </Link>
+                                                <div className="flex gap-3 mt-auto">
+                                                    <Link href={`/users/topic/${topic._id}`} className="flex-1">
+                                                        <Button className="w-full">
+                                                            Manage <FaArrowRight />
+                                                        </Button>
+                                                    </Link>
 
-                                            <Button
-                                                variant="danger"
-                                                onClick={() => deleteTopic(topic._id)}
-                                            >
-                                                <FaTrash />
-                                            </Button>
-                                        </div>
-                                    </Card>
-                                ))}
-                            </div>
+                                                    <Button variant="danger" onClick={() => deleteTopic(topic._id)}>
+                                                        <FaTrash />
+                                                    </Button>
+                                                </div>
+                                            </Card>
+                                        );
+                                    })}
+                                </div>
+                            </section>
                         )}
-                    </section>
-                )}
-            </main>
+                    </div>
+                </main>
+            </div>
 
-            {/* ================= CREATE MODAL ================= */}
+            {/* CREATE TOPIC MODAL */}
             {showModal && (
                 <div
-                    className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center px-6"
+                    className="fixed inset-0 z-50 bg-black/80 backdrop-blur flex items-center justify-center px-6"
                     onClick={() => setShowModal(false)}
                 >
                     <Card
                         noGlass
-                        className="w-full max-w-[480px] p-8 rounded-[32px] bg-[#020617]"
+                        className="w-full max-w-md p-8 rounded-3xl bg-[#020617]"
                         onClick={e => e.stopPropagation()}
                     >
-                        <h2 className="text-2xl font-black mb-6">
-                            New Topic
-                        </h2>
+                        <h2 className="text-2xl font-black mb-6">New Topic</h2>
 
                         <Input
                             label="Topic Name"
                             value={newTopic.name}
-                            onChange={e =>
-                                setNewTopic({ ...newTopic, name: e.target.value })
-                            }
+                            onChange={e => setNewTopic({ ...newTopic, name: e.target.value })}
                         />
 
                         <Input
@@ -375,15 +282,11 @@ export default function UserDashboard() {
                             }
                         />
 
-                        <div className="flex gap-4 mt-6">
+                        <div className="flex gap-4 mt-8">
                             <Button className="flex-1" onClick={createTopic}>
                                 Create
                             </Button>
-                            <Button
-                                variant="outline"
-                                className="flex-1"
-                                onClick={() => setShowModal(false)}
-                            >
+                            <Button variant="outline" className="flex-1" onClick={() => setShowModal(false)}>
                                 Cancel
                             </Button>
                         </div>
@@ -393,8 +296,3 @@ export default function UserDashboard() {
         </div>
     );
 }
-
-
-
-
-

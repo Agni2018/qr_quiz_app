@@ -26,8 +26,8 @@ export default function Home() {
                 password
             });
 
-            localStorage.setItem('username', res.data.username);
-            localStorage.setItem('role', res.data.role);
+            //localStorage.setItem('username', res.data.username);
+            //localStorage.setItem('role', res.data.role);
 
             router.push('/users');
         } catch (err: any) {
