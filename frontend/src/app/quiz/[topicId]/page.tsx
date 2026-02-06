@@ -26,6 +26,7 @@ export default function QuizLanding({
     const [error, setError] = useState('');
 
     useEffect(() => {
+        // Fetch topic and question count
         api.get(`/topics/${topicId}`)
             .then(res => setTopic(res.data))
             .catch(err => console.error(err));
@@ -36,6 +37,22 @@ export default function QuizLanding({
                 console.error(err);
                 setQuestionCount(0);
             });
+
+        // Check if user is logged in to pre-fill the form
+        api.get('/auth/status')
+            .then(res => {
+                // ONLY pre-fill if the user is a student
+                if (res.data.user && res.data.user.role === 'student') {
+                    setUser({
+                        name: res.data.user.username || '',
+                        email: res.data.user.email || '',
+                        phone: ''
+                    });
+                }
+            })
+            .catch(() => {
+                // Not logged in, no problem
+            });
     }, [topicId]);
 
     const handleStart = async (e: React.FormEvent) => {
@@ -43,6 +60,13 @@ export default function QuizLanding({
 
         if (!user.name || !user.email || !user.phone) {
             setError('All fields are required');
+            return;
+        }
+
+        // Phone number validation: 10 digits only
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(user.phone)) {
+            setError('Phone number must be exactly 10 digits (e.g., 9876543210)');
             return;
         }
 
@@ -61,8 +85,11 @@ export default function QuizLanding({
             }
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to start quiz');
-            if (err.response?.status === 403) {
-                // already attempted
+            if (err.response?.status === 400) {
+                // already attempted - now handled by 400 to avoid redirect
+            }
+            if (err.response?.status === 404) {
+                // User not found
             }
         } finally {
             setLoading(false);

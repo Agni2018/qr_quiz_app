@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema({
-    topicId: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic', required: true },
+    topicId: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic' }, // Optional for reusable questions
+    isReusable: { type: Boolean, default: false },
     type: {
         type: String,
         enum: ['fill_blank', 'match', 'true_false', 'multi_select', 'single_choice', 'reorder', 'sort'],

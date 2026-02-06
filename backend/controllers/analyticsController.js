@@ -1,14 +1,13 @@
 const Topic = require('../models/Topic');
 const UserAttempt = require('../models/UserAttempt');
+const User = require('../models/User');
 
 // GET analytics overview
 exports.getOverview = async (req, res) => {
     try {
-        // Get total topics count
         const totalTopics = await Topic.countDocuments();
         const activeTopics = await Topic.countDocuments({ status: 'active' });
 
-        // Aggregate user attempts by topic
         const topicStats = await UserAttempt.aggregate([
             {
                 $group: {
@@ -45,6 +44,69 @@ exports.getOverview = async (req, res) => {
             activeTopics,
             topicStats
         });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// GET global leaderboard
+exports.getGlobalLeaderboard = async (req, res) => {
+    try {
+        const topScorers = await User.find({ role: 'student' })
+            .sort({ points: -1 })
+            .limit(10)
+            .select('username points loginStreak badges');
+
+        // Referrals leaderboard
+        const referralStats = await User.aggregate([
+            { $match: { role: 'student' } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: 'referredBy',
+                    as: 'referrals'
+                }
+            },
+            {
+                $project: {
+                    username: 1,
+                    referralCount: { $size: '$referrals' }
+                }
+            },
+            { $sort: { referralCount: -1 } },
+            { $limit: 10 }
+        ]);
+
+        res.json({
+            topScorers,
+            referralStats
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// GET participants for a specific topic
+exports.getTopicParticipants = async (req, res) => {
+    try {
+        const { topicId } = req.params;
+
+        // Find all attempts for this topic
+        const attempts = await UserAttempt.find({ topicId })
+            .select('user score completedAt answers')
+            .sort({ score: -1, completedAt: 1 });
+
+        const participants = attempts.map(attempt => ({
+            name: attempt.user.name,
+            email: attempt.user.email,
+            phone: attempt.user.phone,
+            score: attempt.score,
+            completedAt: attempt.completedAt,
+            answersCount: attempt.answers?.length || 0
+        }));
+
+        res.json(participants);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

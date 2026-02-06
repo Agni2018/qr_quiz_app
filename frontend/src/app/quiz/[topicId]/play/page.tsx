@@ -16,6 +16,11 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [user, setUser] = useState<any>(null);
+    const [topic, setTopic] = useState<any>(null);
+    const [timeLeft, setTimeLeft] = useState<number | null>(null);
+    const [startTime, setStartTime] = useState<number>(Date.now());
+    const [isTimeOut, setIsTimeOut] = useState(false);
+    const [duplicateDetected, setDuplicateDetected] = useState(false);
 
     useEffect(() => {
         // 1. Get User
@@ -26,16 +31,22 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
         }
         setUser(JSON.parse(storedUser));
 
-        // 2. Fetch Questions
-        api.get(`/questions/topic/${topicId}`)
-            .then(res => {
-                setQuestions(res.data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error(err);
-                setLoading(false);
-            });
+        // 2. Fetch Questions and Topic
+        Promise.all([
+            api.get(`/questions/topic/${topicId}`),
+            api.get(`/topics/${topicId}`)
+        ]).then(([qRes, tRes]) => {
+            setQuestions(qRes.data);
+            setTopic(tRes.data);
+            if (tRes.data.timeLimit > 0) {
+                setTimeLeft(tRes.data.timeLimit);
+            }
+            setStartTime(Date.now());
+            setLoading(false);
+        }).catch(err => {
+            console.error(err);
+            setLoading(false);
+        });
 
         // 3. Disable Back Button
         const handlePopState = (e: PopStateEvent) => {
@@ -50,6 +61,25 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
             window.removeEventListener('popstate', handlePopState);
         };
     }, [topicId, router]);
+
+    // Timer Effect
+    useEffect(() => {
+        if (timeLeft === null || timeLeft <= 0 || submitting) return;
+
+        const timer = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev !== null && prev <= 1) {
+                    clearInterval(timer);
+                    setIsTimeOut(true);
+                    submitQuiz(true); // Auto-submit
+                    return 0;
+                }
+                return prev !== null ? prev - 1 : null;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [timeLeft, submitting]);
 
     const handleAnswer = (value: any) => {
         const newAnswers = [...answers];
@@ -73,21 +103,55 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
         }
     };
 
-    const submitQuiz = async () => {
+    const submitQuiz = async (isAuto = false) => {
+        if (submitting) return;
         setSubmitting(true);
+
+        // If auto-submit (timeout), wait for 2 seconds to show the red message
+        if (isAuto) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+
+        const userId = localStorage.getItem('userId');
+        const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+
         try {
             const res = await api.post('/quiz/submit', {
                 topicId: topicId,
+                userId,
                 user,
-                answers
+                answers,
+                timeTaken
             });
-            // Clear user session or keep it for result view?
+
+            // Check for duplicate submission message
+            if (res.data.message && (res.data.message.includes('already attempted') || res.data.message.includes('duplicate'))) {
+                setDuplicateDetected(true);
+                // Wait to show the message
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+
             // Redirect to result using replace to prevent going back to quiz
-            router.replace(`/quiz/${topicId}/result?attemptId=${res.data.attemptId}`);
-        } catch (err) {
+            router.replace(`/quiz/${topicId}/result?attemptId=${res.data.attemptId || ''}`);
+        } catch (err: any) {
             console.error(err);
-            alert('Submission failed! Please try again.');
-            setSubmitting(false);
+
+            // Check if error response handles duplicate
+            if (err.response?.data?.message?.includes('already attempted')) {
+                setDuplicateDetected(true);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                router.replace(`/quiz/${topicId}`); // Or result if available
+                return;
+            }
+
+            if (!isAuto) {
+                alert('Submission failed! Please try again.');
+                setSubmitting(false);
+            } else {
+                // If auto-submit fails, try to force redirect or show a different message
+                // For now, we'll just log it to avoid blocking the user with an alert loop
+                console.error("Auto-submit failed, potentially due to connection.");
+            }
         }
     };
 
@@ -120,12 +184,30 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     return (
         <main className="container min-h-screen flex flex-col justify-center">
 
-            {/* Progress Bar */}
-            <div className="fixed top-0 left-0 right-0 h-1 bg-white/10">
+            <div className="fixed top-0 left-0 right-0 h-1 bg-white/10 z-50">
                 <div className="h-full bg-[var(--primary)] transition-[width] duration-300 ease-in-out" style={{
                     width: `${((currentQIndex + 1) / questions.length) * 100}%`
                 }} />
             </div>
+
+            {/* Timer Floating Bar */}
+            {timeLeft !== null && (
+                <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-2xl border-2 backdrop-blur-xl flex items-center gap-4 transition-all ${timeLeft < 30 ? 'bg-red-500/20 border-red-500 text-red-500 animate-pulse' : 'bg-emerald-600 border-white/20 text-white shadow-lg shadow-emerald-500/20'}`}>
+                    <div className="flex flex-col items-end">
+                        <span className="text-[10px] font-black uppercase tracking-widest opacity-80">Time Remaining</span>
+                        <span className="text-2xl font-black tabular-nums">
+                            {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+                        </span>
+                    </div>
+                    {timeLeft < 30 ? (
+                        <div className="w-10 h-10 rounded-full border-4 border-current border-t-transparent animate-spin" />
+                    ) : (
+                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl">
+                            ⏱️
+                        </div>
+                    )}
+                </div>
+            )}
 
             <AnimatePresence mode='wait'>
                 <motion.div
@@ -147,9 +229,42 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                             </div>
                         </div>
 
+                        {isTimeOut && !duplicateDetected && (
+                            <div className="mb-8 p-6 rounded-2xl bg-red-500/10 border-2 border-red-500 flex flex-col items-center justify-center text-center animate-pulse gap-2">
+                                <span className="text-3xl">⏰</span>
+                                <h3 className="text-xl font-black text-red-500 uppercase tracking-widest">Time Out!</h3>
+                                <p className="text-red-400 font-bold">Autosubmitting your quiz...</p>
+                            </div>
+                        )}
+
+                        {duplicateDetected && (
+                            <div className="mb-8 p-6 rounded-2xl bg-orange-500/10 border-2 border-orange-500 flex flex-col items-center justify-center text-center gap-2">
+                                <span className="text-3xl">⚠️</span>
+                                <h3 className="text-xl font-black text-orange-500 uppercase tracking-widest">Already Attempted</h3>
+                                <p className="text-orange-400 font-bold">You have already submitted this quiz.</p>
+                            </div>
+                        )}
+
                         <h2 className="text-xl md:text-2xl font-black text-white/95 leading-tight mb-14">
                             {currentQ.content.text}
                         </h2>
+
+                        {/* Rules Indicator */}
+                        <div className="flex gap-4 mb-10">
+                            {topic?.negativeMarking > 0 && (
+                                <div className="px-4 py-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-widest">
+                                    ⚠️ Negative: -{topic.negativeMarking} pts
+                                </div>
+                            )}
+                            {topic?.timeBasedScoring && (
+                                <div className="px-4 py-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[10px] font-black uppercase tracking-widest animate-pulse">
+                                    ⚡ Faster = Bonus Pts
+                                </div>
+                            )}
+                            <div className="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest ml-auto">
+                                Goal: +{currentQ.marks || 1} pts
+                            </div>
+                        </div>
 
                         {/* Render Input based on type */}
                         <div className="flex-1 mb-12">

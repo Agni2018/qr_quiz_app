@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const quizController = require('../controllers/quizController');
+const { protect } = require('../middleware/authMiddleware');
+
+// Student Attempts
+router.get('/student-attempts', protect, quizController.getStudentAttempts);
 
 // Check eligibility to start quiz
 router.post('/start', quizController.startQuiz);

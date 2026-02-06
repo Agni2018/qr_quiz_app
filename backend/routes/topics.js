@@ -12,6 +12,9 @@ router.get('/:id', topicsController.getTopicById);
 // POST create topic
 router.post('/', protect, topicsController.createTopic);
 
+// POST copy topic
+router.post('/:id/copy', protect, topicsController.copyTopic);
+
 // PUT update topic
 router.put('/:id', protect, topicsController.updateTopic);
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const userAttemptSchema = new mongoose.Schema({
     topicId: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic', required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     user: {
         name: { type: String, required: true },
         email: { type: String, required: true },

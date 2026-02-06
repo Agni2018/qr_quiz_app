@@ -50,8 +50,8 @@ export default function UserLeaderboard({ params }: { params: Promise<{ id: stri
 
     return (
         <main className="container py-12 px-6">
-            <div className="mb-12">
-                <Link href={`/users/topic/${id}`} className="text-slate-500 hover:text-white transition-colors text-sm font-medium flex items-center gap-2 mb-6">
+            <div className="mb-16">
+                <Link href={`/users/topic/${id}`} className="text-slate-500 hover:text-white transition-colors text-sm font-medium flex items-center gap-2 mb-10">
                     &larr; Back to Topic Details
                 </Link>
                 <div className="flex items-center gap-4">

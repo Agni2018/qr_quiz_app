@@ -7,14 +7,43 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    email: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
     password: {
         type: String,
         required: true
     },
     role: {
         type: String,
-        default: 'admin'
-    }
+        default: 'student'
+    },
+    points: {
+        type: Number,
+        default: 0
+    },
+    lastLoginDate: {
+        type: Date
+    },
+    referralCode: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    referredBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    loginStreak: {
+        type: Number,
+        default: 0
+    },
+    badges: [{
+        badgeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Badge' },
+        awardedAt: { type: Date, default: Date.now }
+    }]
 }, { timestamps: true });
 
 // Hash password before saving

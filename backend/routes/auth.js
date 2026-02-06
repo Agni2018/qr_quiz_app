@@ -1,16 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, optionalProtect } = require('../middleware/authMiddleware');
+
+// Register Route
+router.post('/register', authController.register);
 
 // Login Route
 router.post('/login', authController.login);
 
 // Logout Route
-router.post('/logout', protect, authController.logout);
+router.post('/logout', authController.logout);
 
 // Status Route
-router.get('/status', protect, authController.getStatus);
+router.get('/status', optionalProtect, authController.getStatus);
 
 // Seed Route (Temporary for setup)
 router.post('/seed', authController.seed);

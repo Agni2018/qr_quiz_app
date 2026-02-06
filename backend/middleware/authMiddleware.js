@@ -20,3 +20,29 @@ exports.protect = (req, res, next) => {
         res.status(401).json({ message: 'Not authorized, token failed' });
     }
 };
+
+exports.optionalProtect = (req, res, next) => {
+    let token = req.cookies?.token;
+
+    if (!token && req.headers.authorization?.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
+    }
+
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            req.user = decoded;
+        } catch (error) {
+            console.error('Optional token verification failed');
+        }
+    }
+    next();
+};
+
+exports.admin = (req, res, next) => {
+    if (req.user && req.user.role === 'admin') {
+        next();
+    } else {
+        res.status(403).json({ message: 'Not authorized as admin' });
+    }
+};

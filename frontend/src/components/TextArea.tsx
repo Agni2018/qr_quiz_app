@@ -1,13 +1,13 @@
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     label?: string;
     className?: string;
     containerClassName?: string;
 }
 
-export default function Input({ label, className, containerClassName, style, ...props }: InputProps) {
-    const inputStyle: React.CSSProperties = {
+export default function TextArea({ label, className, containerClassName, style, ...props }: TextAreaProps) {
+    const textAreaStyle: React.CSSProperties = {
         width: '100%',
-        padding: '0.875rem 1.5rem',
+        padding: '1.5rem 2.5rem', // Matched !px-10 (2.5rem) from working Input component
         borderRadius: 'var(--radius)',
         border: '1px solid var(--border-color)',
         background: 'var(--glass-bg)',
@@ -15,6 +15,9 @@ export default function Input({ label, className, containerClassName, style, ...
         fontSize: '1rem',
         outline: 'none',
         transition: 'var(--transition)',
+        minHeight: '120px',
+        resize: 'none',
+        lineHeight: '1.6',
         ...style
     };
 
@@ -31,9 +34,9 @@ export default function Input({ label, className, containerClassName, style, ...
     return (
         <div className={`${containerClassName || 'mb-4'} w-full`}>
             {label && <label style={labelStyle}>{label}</label>}
-            <input
+            <textarea
                 className={`focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:ring-opacity-20 ${className || ''}`}
-                style={inputStyle}
+                style={textAreaStyle}
                 {...props}
             />
         </div>

@@ -1,4 +1,5 @@
 const Topic = require('../models/Topic');
+const Question = require('../models/Question');
 
 // GET all topics
 exports.getAllTopics = async (req, res) => {
@@ -23,12 +24,15 @@ exports.getTopicById = async (req, res) => {
 
 // POST create topic
 exports.createTopic = async (req, res) => {
-    const { name, description } = req.body;
+    const { name, description, timeLimit, negativeMarking, timeBasedScoring } = req.body;
     if (!name) return res.status(400).json({ message: 'Name is required' });
 
     const topic = new Topic({
         name,
-        description
+        description,
+        timeLimit: timeLimit || 0,
+        negativeMarking: negativeMarking || 0,
+        timeBasedScoring: timeBasedScoring || false
     });
 
     try {
@@ -45,9 +49,12 @@ exports.updateTopic = async (req, res) => {
         const topic = await Topic.findById(req.params.id);
         if (!topic) return res.status(404).json({ message: 'Topic not found' });
 
-        if (req.body.name) topic.name = req.body.name;
-        if (req.body.description) topic.description = req.body.description;
-        if (req.body.status) topic.status = req.body.status;
+        const fields = ['name', 'description', 'status', 'timeLimit', 'negativeMarking', 'timeBasedScoring'];
+        fields.forEach(field => {
+            if (req.body[field] !== undefined) {
+                topic[field] = req.body[field];
+            }
+        });
 
         const updatedTopic = await topic.save();
         res.json(updatedTopic);
@@ -64,6 +71,44 @@ exports.deleteTopic = async (req, res) => {
 
         await topic.deleteOne();
         res.json({ message: 'Topic deleted' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// POST copy topic
+exports.copyTopic = async (req, res) => {
+    try {
+        const sourceTopic = await Topic.findById(req.params.id);
+        if (!sourceTopic) return res.status(404).json({ message: 'Topic not found' });
+
+        // 1. Create new topic
+        const newTopic = new Topic({
+            name: `${sourceTopic.name} copy`,
+            description: sourceTopic.description,
+            status: 'active',
+            timeLimit: sourceTopic.timeLimit,
+            negativeMarking: sourceTopic.negativeMarking,
+            timeBasedScoring: sourceTopic.timeBasedScoring
+        });
+        await newTopic.save();
+
+        // 2. Find and duplicate questions
+        const questions = await Question.find({ topicId: sourceTopic._id });
+
+        if (questions.length > 0) {
+            const newQuestions = questions.map(q => ({
+                topicId: newTopic._id, // Link to new topic
+                type: q.type,
+                content: q.content,
+                options: q.options,
+                correctAnswer: q.correctAnswer,
+                marks: q.marks
+            }));
+            await Question.insertMany(newQuestions);
+        }
+
+        res.status(201).json(newTopic);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

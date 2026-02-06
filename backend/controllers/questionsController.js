@@ -10,24 +10,35 @@ exports.getQuestionsByTopic = async (req, res) => {
     }
 };
 
+// GET reusable questions
+exports.getReusableQuestions = async (req, res) => {
+    try {
+        const questions = await Question.find({ isReusable: true });
+        res.json(questions);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
 // POST create question
 exports.createQuestion = async (req, res) => {
-    const { topicId, type, content, options, correctAnswer, marks } = req.body;
+    const { topicId, type, content, options, correctAnswer, marks, isReusable } = req.body;
 
-    if (!topicId || !type || !correctAnswer) {
+    if ((!topicId && !isReusable) || !type || !correctAnswer) {
         return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    const question = new Question({
-        topicId,
-        type,
-        content,
-        options,
-        correctAnswer,
-        marks
-    });
-
     try {
+        const question = new Question({
+            topicId: topicId || null,
+            type,
+            content,
+            options,
+            correctAnswer,
+            marks,
+            isReusable: isReusable || false
+        });
+
         const newQuestion = await question.save();
         res.status(201).json(newQuestion);
     } catch (err) {

@@ -20,23 +20,39 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
+// Prevent caching for all API routes
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  next();
+});
+
 // Routes
 const topicRoutes = require('./routes/topics');
 const questionRoutes = require('./routes/questions');
 const quizRoutes = require('./routes/quiz');
 const authRoutes = require('./routes/auth');
 const analyticsRoutes = require('./routes/analytics');
+const badgeRoutes = require('./routes/badges');
 
 app.use('/api/topics', topicRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/badges', badgeRoutes);
 
 app.get('/', (req, res) => {
   res.send('QR Quiz Platform API Running');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Export app for testing
+module.exports = app;
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
