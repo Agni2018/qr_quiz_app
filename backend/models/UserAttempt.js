@@ -15,7 +15,9 @@ const userAttemptSchema = new mongoose.Schema({
         marksObtained: { type: Number }
     }],
     score: { type: Number, default: 0 },
-    completedAt: { type: Date, default: Date.now }
+    completedAt: { type: Date, default: Date.now },
+    isCertified: { type: Boolean, default: false },
+    certifiedAt: { type: Date }
 });
 
 // Ensure unique attempt per user per topic

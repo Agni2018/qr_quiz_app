@@ -16,13 +16,18 @@ import {
     FaSignOutAlt,
     FaBars,
     FaTimes,
-    FaCopy
+    FaCopy,
+    FaChartPie,
+    FaGraduationCap,
+    FaBook,
+    FaAward
 } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 
 export default function UserDashboard() {
     const [topics, setTopics] = useState<any[]>([]);
     const [analytics, setAnalytics] = useState<any>(null);
+    const [user, setUser] = useState<any>(null);
     const [authLoading, setAuthLoading] = useState(true);
     const [activeView, setActiveView] = useState<'analytics' | 'manage' | 'reusable' | 'badges'>('analytics');
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -37,16 +42,21 @@ export default function UserDashboard() {
 
     // Participants Modal State
     const [showParticipantsModal, setShowParticipantsModal] = useState(false);
+    const [showCertifyModal, setShowCertifyModal] = useState(false);
+    const [selectedTopicId, setSelectedTopicId] = useState('');
     const [selectedTopicName, setSelectedTopicName] = useState('');
     const [participants, setParticipants] = useState<any[]>([]);
     const [loadingParticipants, setLoadingParticipants] = useState(false);
+    const [certifying, setCertifying] = useState(false);
 
     const router = useRouter();
 
     useEffect(() => {
         const init = async () => {
             try {
-                await api.get('/auth/status');
+                const statusRes = await api.get('/auth/status');
+                setUser(statusRes.data.user);
+
                 const [t, a] = await Promise.all([
                     api.get('/topics'),
                     api.get('/analytics/overview')
@@ -101,6 +111,7 @@ export default function UserDashboard() {
     };
 
     const handleViewParticipants = async (topicId: string, topicName: string) => {
+        setSelectedTopicId(topicId);
         setSelectedTopicName(topicName);
         setShowParticipantsModal(true);
         setLoadingParticipants(true);
@@ -112,6 +123,36 @@ export default function UserDashboard() {
             alert('Failed to load participants');
         } finally {
             setLoadingParticipants(false);
+        }
+    };
+
+    const handleOpenCertify = async (topicId: string, topicName: string) => {
+        setSelectedTopicId(topicId);
+        setSelectedTopicName(topicName);
+        setShowCertifyModal(true);
+        setLoadingParticipants(true);
+        try {
+            const res = await api.get(`/analytics/topic/${topicId}/participants`);
+            setParticipants(res.data);
+        } catch (err) {
+            console.error(err);
+            alert('Failed to load participants');
+        } finally {
+            setLoadingParticipants(false);
+        }
+    };
+
+    const handleGenerateCertificates = async () => {
+        setCertifying(true);
+        try {
+            await api.post(`/quiz/certify/${selectedTopicId}`);
+            alert('Certificates generated successfully!');
+            setShowCertifyModal(false);
+            refreshData();
+        } catch (err: any) {
+            alert(err.response?.data?.message || 'Failed to generate certificates');
+        } finally {
+            setCertifying(false);
         }
     };
 
@@ -154,18 +195,19 @@ export default function UserDashboard() {
             )}
 
             {/* GRID */}
-            <div className="lg:grid lg:grid-cols-[300px_1fr] lg:gap-14">
+            <div className="lg:grid lg:grid-cols-[280px_1fr] lg:gap-10">
 
                 {/* SIDEBAR */}
                 <aside
                     className={`
                         fixed lg:static top-0 left-0 z-50
-                        h-screen w-[300px]
+                        h-screen w-[280px]
                         border-r
-                        px-10 md:px-12 py-14 lg:py-12 lg:pt-12
+                        px-8 py-12
                         transform transition-transform
                         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
                         lg:translate-x-0
+                        flex flex-col
                     `}
                     style={{
                         background: 'var(--glass-bg)',
@@ -181,78 +223,102 @@ export default function UserDashboard() {
                         <FaTimes />
                     </button>
 
-                    {/* Dashboard heading - show on mobile, show on desktop too */}
-                    <h1 className="text-3xl font-black mb-3">Dashboard</h1>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '4rem' }}>Manage your quiz ecosystem</p>
+                    {/* Dashboard heading */}
+                    <div className="mb-2 pl-2">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-12 h-[3px] bg-gradient-to-r from-primary to-indigo-400 rounded-full" />
+                            <p className="text-slate-500 text-[0.7rem] font-black uppercase tracking-[0.3em] opacity-60">Admin Portal</p>
+                        </div>
+                        <div className="text-3xl font-light text-slate-400 mb-2">Welcome,</div>
+                        <div className="text-4xl font-black bg-gradient-to-r from-white via-indigo-400 to-primary bg-clip-text text-transparent transform -tracking-wide leading-tight">
+                            {user?.username || 'Admin'}
+                        </div>
+                    </div>
 
-                    <div className="flex flex-col gap-5">
+                    <div className="h-14 lg:h-16" /> {/* Large spacer between header and options */}
+
+                    <nav className="flex flex-col gap-4 flex-grow">
                         <Button
-                            variant={activeView === 'analytics' ? 'secondary' : 'outline'}
-                            className="justify-start"
-                            onClick={() => setActiveView('analytics')}
+                            variant={activeView === 'analytics' ? 'secondary' : 'ghost'}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'analytics' ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            onClick={() => { setActiveView('analytics'); setSidebarOpen(false); }}
                         >
-                            📊 Analytics
+                            <FaChartPie className={activeView === 'analytics' ? 'text-primary' : 'text-slate-400'} /> Analytics
                         </Button>
 
                         <Button
-                            variant={activeView === 'manage' ? 'secondary' : 'outline'}
-                            className="justify-start"
-                            onClick={() => setActiveView('manage')}
+                            variant={activeView === 'manage' ? 'secondary' : 'ghost'}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'manage' ? 'bg-indigo-500/10 text-indigo-400' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            onClick={() => { setActiveView('manage'); setSidebarOpen(false); }}
                         >
-                            🎓 Manage Topics
+                            <FaGraduationCap className={activeView === 'manage' ? 'text-indigo-400' : 'text-slate-400'} /> Manage Topics
                         </Button>
 
                         <Button
-                            variant={activeView === 'reusable' ? 'secondary' : 'outline'}
-                            className="justify-start"
-                            onClick={() => setActiveView('reusable')}
+                            variant={activeView === 'reusable' ? 'secondary' : 'ghost'}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'reusable' ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            onClick={() => { setActiveView('reusable'); setSidebarOpen(false); }}
                         >
-                            📚 Reusable Questions
+                            <FaBook className={activeView === 'reusable' ? 'text-emerald-400' : 'text-slate-400'} /> Question Bank
                         </Button>
 
                         <Button
-                            variant={activeView === 'badges' ? 'secondary' : 'outline'}
-                            className="justify-start"
-                            onClick={() => setActiveView('badges')}
+                            variant={activeView === 'badges' ? 'secondary' : 'ghost'}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'badges' ? 'bg-amber-500/10 text-amber-400' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            onClick={() => { setActiveView('badges'); setSidebarOpen(false); }}
                         >
-                            🏆 Badge Management
+                            <FaAward className={activeView === 'badges' ? 'text-amber-400' : 'text-slate-400'} /> Badge Rewards
+                        </Button>
+                    </nav>
+
+                    {/* Logout at bottom */}
+                    <div className="mt-auto pt-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start gap-3 h-12 text-slate-400 hover:text-white hover:bg-white/5 border-none"
+                            onClick={async () => {
+                                try {
+                                    await api.post('/auth/logout');
+                                } catch (err) {
+                                    console.error('Logout error:', err);
+                                }
+                                localStorage.clear();
+                                window.location.href = '/';
+                            }}
+                        >
+                            <FaSignOutAlt /> Logout
                         </Button>
                     </div>
                 </aside>
 
                 {/* MAIN */}
-                <main className="px-6 lg:pl-32 lg:pr-32 py-8 lg:py-0 lg:pt-16">
-                    <div className="max-w-[1400px] flex flex-col gap-10 md:gap-20">
+                <main className="px-8 lg:px-16 py-8 lg:pt-20 lg:pb-12 overflow-y-auto max-h-screen w-full">
+                    <div className="max-w-[1400px] mx-auto">
 
                         {/* TOP BAR */}
-                        <div className="flex justify-end gap-4 mb-10 md:mb-20">
-                            <ThemeToggle />
-                            {activeView === 'manage' && (
-                                <Button onClick={() => setShowModal(true)}>
-                                    <FaPlus /> Create Topic
-                                </Button>
-                            )}
-                            <Button
-                                variant="outline"
-                                onClick={async () => {
-                                    try {
-                                        await api.post('/auth/logout');
-                                    } catch (err) {
-                                        console.error('Logout error:', err);
-                                    }
-                                    localStorage.clear();
-                                    // Force a full page reload to clear memory and BFCache
-                                    window.location.href = '/';
-                                }}
-                            >
-                                <FaSignOutAlt /> Logout
-                            </Button>
+                        <div className="flex justify-between items-center mb-12">
+                            {/* Current View Heading in Top Bar */}
+                            <div>
+                                {/* Headings removed from top bar to avoid duplication with page content headers */}
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                <ThemeToggle />
+                                <div className="h-6 w-[1px] bg-white/10 mx-2" />
+                                {activeView === 'manage' && (
+                                    <Button onClick={() => setShowModal(true)} className="rounded-xl px-6 h-11 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">
+                                        <FaPlus className="mr-2" /> Create Topic
+                                    </Button>
+                                )}
+                            </div>
                         </div>
 
                         {/* ANALYTICS VIEW */}
                         {activeView === 'analytics' && analytics && (
                             <section className="flex flex-col gap-10 md:gap-16">
 
+                                {/* Analytics Heading */}
+                                {/* Analytics Heading */}
                                 {/* Analytics Heading */}
                                 <h2 style={{
                                     fontSize: '2.75rem',
@@ -271,29 +337,22 @@ export default function UserDashboard() {
                                         WebkitTextFillColor: 'transparent',
                                         backgroundClip: 'text',
                                     }}>
-                                        Analytics Overview
+                                        Analytics
                                     </span>
                                 </h2>
 
                                 {/* Active Topics Card */}
-                                <Card className="relative overflow-hidden p-10 rounded-3xl border shadow-2xl hover:shadow-primary/30 transition-all transform hover:-translate-y-2 group" style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)' }}>
-                                    {/* Decorator Gradient */}
-                                    <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary opacity-10 blur-[100px] group-hover:opacity-20 transition-opacity" />
-
-                                    <div className="flex justify-between items-center relative z-10">
+                                <Card className="p-10 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, var(--card-bg), rgba(99, 102, 241, 0.1))' }}>
+                                    <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:opacity-20 transition-opacity transform rotate-12 translate-x-4 -translate-y-4">
+                                        <FaBars size={180} />
+                                    </div>
+                                    <div className="flex items-center justify-between relative z-10">
                                         <div className="flex flex-col gap-2">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-xl shadow-inner border border-primary/20">
-                                                    <FaBars />
-                                                </div>
-                                                <span style={{ fontSize: '1.5rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '-0.02em' }}>
-                                                    Active Topics
-                                                </span>
-                                            </div>
-                                            <p className="text-sm text-muted opacity-70">Currently published quiz categories</p>
+                                            <span className="text-lg font-bold uppercase tracking-widest text-[#6366f1] opacity-90">Active Topics</span>
+                                            <span className="text-sm font-medium text-slate-400">Currently live quizzes</span>
                                         </div>
-                                        <div className="text-right">
-                                            <span style={{ fontSize: '5rem', fontWeight: 900, background: 'linear-gradient(135deg, var(--primary), var(--accent))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }} className="drop-shadow-2xl">
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 drop-shadow-sm">
                                                 {topics.length === 0 ? '0' : analytics.activeTopics}
                                             </span>
                                         </div>
@@ -378,12 +437,20 @@ export default function UserDashboard() {
                                                         </span>
                                                         <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Total Participants</span>
                                                     </div>
-                                                    <button
-                                                        onClick={() => handleViewParticipants(stat.topicId, stat.topicName)}
-                                                        className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm shadow-lg group-hover:scale-110 transition-transform cursor-pointer hover:bg-primary/80"
-                                                    >
-                                                        <FaArrowRight />
-                                                    </button>
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={() => handleOpenCertify(stat.topicId, stat.topicName)}
+                                                            className="px-3 py-2 rounded-xl bg-green-500/10 hover:bg-green-500/20 text-green-500 text-xs font-bold transition-all border border-green-500/20"
+                                                        >
+                                                            Certify
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleViewParticipants(stat.topicId, stat.topicName)}
+                                                            className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm shadow-lg group-hover:scale-110 transition-transform cursor-pointer hover:bg-primary/80"
+                                                        >
+                                                            <FaArrowRight />
+                                                        </button>
+                                                    </div>
                                                 </div>
 
                                             </Card>
@@ -416,26 +483,20 @@ export default function UserDashboard() {
                                         Manage Topics
                                     </span>
                                 </h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                                     {topics.map(topic => {
                                         const isActive = topic.status === 'active';
 
                                         return (
                                             <Card
                                                 key={topic._id}
-                                                className={`
-                                                    p-8 rounded-3xl border flex flex-col shadow-lg hover:shadow-purple-500/40 transform hover:-translate-y-1 transition-all
-                                                    ${isActive ? '' : 'opacity-90'}
-                                                `}
-                                                style={{
-                                                    borderColor: isActive ? 'var(--border-color)' : 'var(--danger)',
-                                                    background: isActive ? 'var(--card-bg)' : 'rgba(239, 68, 68, 0.05)'
-                                                }}
+                                                className="p-7 rounded-[2.5rem] border-none shadow-lg hover:shadow-primary/10 transition-all group flex flex-col gap-5"
+                                                style={{ background: 'var(--card-bg)' }}
                                             >
-                                                <div className="flex justify-between items-start mb-4">
-                                                    <h3 className="font-semibold text-lg">{topic.name}</h3>
+                                                <div className="flex justify-between items-start">
+                                                    <h3 className="font-bold text-2xl tracking-tight">{topic.name}</h3>
                                                     <span
-                                                        className="text-xs px-3 py-1 rounded-full"
+                                                        className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
                                                         style={{
                                                             background: isActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
                                                             color: isActive ? '#10b981' : '#ef4444'
@@ -445,28 +506,48 @@ export default function UserDashboard() {
                                                     </span>
                                                 </div>
 
-                                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>{topic.description}</p>
+                                                <p className="text-slate-400 text-sm leading-relaxed line-clamp-2">
+                                                    {topic.description || "No description provided for this quiz topic."}
+                                                </p>
 
-                                                {/* Advanced Stats */}
-                                                <div className="flex gap-4 mb-6 text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                                                    {topic.timeLimit > 0 && <span>⏱️ {topic.timeLimit}s</span>}
-                                                    {topic.negativeMarking > 0 && <span>❌ -{topic.negativeMarking} pts</span>}
-                                                    {topic.timeBasedScoring && <span>⚡ Bonus ON</span>}
+                                                <div className="flex gap-4 items-center mb-2">
+                                                    {topic.timeLimit > 0 && (
+                                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 bg-white/5 px-2.5 py-1 rounded-lg">
+                                                            ⏱️ {topic.timeLimit}s
+                                                        </div>
+                                                    )}
+                                                    {topic.negativeMarking > 0 && (
+                                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 bg-white/5 px-2.5 py-1 rounded-lg">
+                                                            ❌ -{topic.negativeMarking}
+                                                        </div>
+                                                    )}
                                                 </div>
 
-                                                <div className="flex gap-3 mt-auto">
-                                                    <Link href={`/users/topic/${topic._id}`} className="flex-1">
-                                                        <Button className="w-full">
+                                                <div className="flex items-center gap-3 mt-auto w-full">
+                                                    <Link href={`/users/topic/${topic._id}`} className="flex-grow min-w-0">
+                                                        <Button className="w-full justify-between h-12 px-6 rounded-2xl bg-[#6366f1] hover:bg-[#4f46e5] text-white font-bold transition-all shadow-lg shadow-indigo-500/20">
                                                             Manage <FaArrowRight />
                                                         </Button>
                                                     </Link>
 
-                                                    <Button variant="outline" onClick={() => copyTopic(topic._id)} title="Duplicate Topic">
-                                                        <FaCopy />
+                                                    <Button
+                                                        variant="ghost"
+                                                        className="h-12 px-4 rounded-2xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center shrink-0 gap-2"
+                                                        onClick={() => copyTopic(topic._id)}
+                                                        title="Duplicate Topic"
+                                                    >
+                                                        <FaCopy className="text-slate-400 group-hover:text-white transition-colors" />
+                                                        <span className="text-xs font-bold text-slate-400">Copy</span>
                                                     </Button>
 
-                                                    <Button variant="danger" onClick={() => deleteTopic(topic._id)} title="Delete Topic">
-                                                        <FaTrash />
+                                                    <Button
+                                                        variant="ghost"
+                                                        className="h-12 px-4 rounded-2xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center shrink-0 gap-2"
+                                                        onClick={() => deleteTopic(topic._id)}
+                                                        title="Delete Topic"
+                                                    >
+                                                        <FaTrash className="text-red-500 group-hover:text-red-400 transition-colors" />
+                                                        <span className="text-xs font-bold text-red-500">Del</span>
                                                     </Button>
                                                 </div>
                                             </Card>
@@ -649,69 +730,164 @@ export default function UserDashboard() {
                         onClick={() => setShowParticipantsModal(false)}
                     >
                         <Card
+                            className="w-full max-w-4xl p-0 rounded-3xl overflow-hidden flex flex-col max-h-[85vh] shadow-2xl"
+                            style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="p-8 border-b border-white/5 flex justify-between items-center bg-slate-900/40">
+                                <div>
+                                    <h3 className="text-2xl font-black tracking-tight">{selectedTopicName}</h3>
+                                    <p className="text-slate-500 font-medium">Participants Review</p>
+                                </div>
+                                <button
+                                    onClick={() => setShowParticipantsModal(false)}
+                                    className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+                                >
+                                    <FaTimes />
+                                </button>
+                            </div>
+
+                            <div className="overflow-y-auto p-8 custom-scrollbar">
+                                {loadingParticipants ? (
+                                    <div className="text-center py-20 text-slate-500 flex flex-col items-center gap-4">
+                                        <div className="w-8 h-8 border-2 border-slate-700 border-t-primary rounded-full animate-spin" />
+                                        <p className="font-bold">Loading participants...</p>
+                                    </div>
+                                ) : participants.length === 0 ? (
+                                    <div className="text-center py-20 text-slate-500 italic">No participants yet for this topic.</div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {participants.map((p, idx) => (
+                                            <div key={idx} className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg shadow-inner">
+                                                        {p.name.charAt(0).toUpperCase()}
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="font-bold text-white">{p.name}</span>
+                                                        <span className="text-xs text-slate-500 font-mono italic">{p.email || p.phone}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col items-end">
+                                                    <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{p.score}</span>
+                                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Points</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </Card>
+                    </div>
+                )
+            }
+
+            {/* CERTIFY MODAL */}
+            {
+                showCertifyModal && (
+                    <div
+                        className="fixed inset-0 z-[100] backdrop-blur-md flex items-start md:items-center justify-center px-4 pt-20 md:pt-0"
+                        style={{ background: 'rgba(0, 0, 0, 0.7)' }}
+                        onClick={() => setShowCertifyModal(false)}
+                    >
+                        <Card
                             noGlass
-                            className="w-full max-w-3xl p-0 rounded-[2rem] overflow-hidden flex flex-col max-h-[80vh] shadow-2xl animate-in zoom-in-95 duration-200"
+                            className="w-full max-w-4xl p-0 rounded-[2.5rem] overflow-hidden flex flex-col max-h-[85vh] shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-200"
                             style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
                             onClick={e => e.stopPropagation()}
                         >
                             {/* Header */}
-                            <div className="p-8 pb-4 border-b border-white/5 bg-gradient-to-r from-primary/5 to-transparent">
-                                <div className="flex justify-between items-center mb-2">
-                                    <h3 className="text-3xl font-black tracking-tight flex items-center gap-3 text-white">
-                                        <span className="text-primary">👥</span>
-                                        {selectedTopicName}
-                                    </h3>
-                                    <button onClick={() => setShowParticipantsModal(false)} className="text-slate-400 hover:text-white transition-colors">
-                                        <FaTimes size={24} />
+                            <div className="p-10 pb-6 border-b border-white/5 bg-gradient-to-r from-green-500/10 to-transparent">
+                                <div className="flex justify-between items-center mb-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center text-3xl shadow-lg border border-green-500/30">
+                                            📜
+                                        </div>
+                                        <div>
+                                            <h3 className="text-3xl font-black tracking-tight text-white leading-tight">
+                                                Certify Students
+                                            </h3>
+                                            <p className="text-slate-400 font-medium">{selectedTopicName}</p>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => setShowCertifyModal(false)} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all">
+                                        <FaTimes size={20} />
                                     </button>
                                 </div>
-                                <p className="text-slate-400 font-medium ml-1">
-                                    Recent Participant History
-                                </p>
                             </div>
 
-                            {/* List */}
-                            <div className="overflow-y-auto p-8 flex flex-col gap-4 custom-scrollbar">
-                                {loadingParticipants ? (
-                                    <div className="text-center py-20 text-slate-500 animate-pulse">Loading participants...</div>
-                                ) : participants.length === 0 ? (
-                                    <div className="text-center py-20 text-slate-500 flex flex-col items-center gap-4 opacity-50">
-                                        <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-3xl">📭</div>
-                                        <p>No participants found yet.</p>
-                                    </div>
-                                ) : (
-                                    participants.map((p, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="group p-5 rounded-2xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-between"
-                                        >
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                                                    {p.name.charAt(0).toUpperCase()}
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="font-bold text-lg text-white">{p.name}</span>
-                                                    <span className="text-xs text-slate-400 font-mono opacity-70">{p.email}</span>
-                                                    <span className="text-[10px] text-slate-500 mt-1">
-                                                        {new Date(p.completedAt).toLocaleDateString()} • {new Date(p.completedAt).toLocaleTimeString()}
-                                                    </span>
-                                                </div>
-                                            </div>
+                            {/* Content */}
+                            <div className="flex-grow overflow-hidden flex flex-col">
+                                <div className="p-10 py-6 bg-white/5 border-b border-white/5">
+                                    <p className="text-lg text-slate-300 font-medium">
+                                        {participants.filter(p => !p.isCertified && p.correctAnswersCount > 0).length > 0
+                                            ? `Are you sure you want to generate certificates for these students? (Only those with at least 1 correct answer)`
+                                            : `All students who attempted this quiz and qualified have already been certified.`}
+                                    </p>
+                                </div>
 
-                                            <div className="flex flex-col items-end gap-1">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">
-                                                        {p.score}
-                                                    </span>
-                                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">pts</span>
-                                                </div>
-                                                <div className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-slate-300">
-                                                    {p.answersCount} answers
-                                                </div>
+                                <div className="overflow-y-auto p-10 flex flex-col gap-6 custom-scrollbar">
+                                    {loadingParticipants ? (
+                                        <div className="text-center py-24 text-slate-500 flex flex-col items-center gap-6">
+                                            <div className="w-12 h-12 border-4 border-slate-700 border-t-green-500 rounded-full animate-spin" />
+                                            <p className="text-xl font-bold tracking-tight">Fetching participant data...</p>
+                                        </div>
+                                    ) : participants.filter(p => !p.isCertified).length === 0 ? (
+                                        <div className="text-center py-24 text-slate-500 flex flex-col items-center gap-6 opacity-60">
+                                            <div className="w-20 h-20 rounded-[2rem] bg-slate-800 flex items-center justify-center text-5xl shadow-inner">✅</div>
+                                            <div className="flex flex-col gap-2">
+                                                <p className="text-2xl font-black text-white">All Caught Up!</p>
+                                                <p className="text-slate-400">All students who attempted the quiz have been certified.</p>
                                             </div>
                                         </div>
-                                    ))
-                                )}
+                                    ) : (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {participants.filter(p => !p.isCertified).map((p, idx) => {
+                                                const isQualified = p.correctAnswersCount > 0;
+                                                return (
+                                                    <div
+                                                        key={idx}
+                                                        className={`p-6 rounded-2xl border transition-all flex items-center justify-between ${isQualified ? 'bg-green-500/5 border-green-500/20' : 'bg-slate-500/5 border-white/5 opacity-60'}`}
+                                                    >
+                                                        <div className="flex items-center gap-4">
+                                                            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg bg-gradient-to-br ${isQualified ? 'from-green-400 to-emerald-600' : 'from-slate-500 to-slate-700'}`}>
+                                                                {p.name.charAt(0).toUpperCase()}
+                                                            </div>
+                                                            <div className="flex flex-col">
+                                                                <span className="font-bold text-lg text-white">{p.name}</span>
+                                                                <span className="text-xs text-slate-400 font-mono italic">{isQualified ? 'Qualified' : 'Not Qualified (0 correct)'}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col items-end">
+                                                            <span className={`text-2xl font-black ${isQualified ? 'text-green-400' : 'text-slate-500'}`}>
+                                                                {p.correctAnswersCount}
+                                                            </span>
+                                                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Correct</span>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Footer */}
+                            <div className="p-10 pt-6 border-t border-white/5 bg-slate-900/50 flex gap-4">
+                                <Button
+                                    className="flex-1 h-14 text-lg bg-green-600 hover:bg-green-500 shadow-xl shadow-green-900/20 rounded-2xl disabled:opacity-50"
+                                    onClick={handleGenerateCertificates}
+                                    disabled={certifying || participants.filter(p => !p.isCertified && p.correctAnswersCount > 0).length === 0}
+                                >
+                                    {certifying ? 'Generating...' : 'Generate Certificates'}
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="flex-1 h-14 text-lg border-white/10 hover:bg-white/5 rounded-2xl"
+                                    onClick={() => setShowCertifyModal(false)}
+                                >
+                                    Cancel
+                                </Button>
                             </div>
                         </Card>
                     </div>

@@ -72,21 +72,25 @@ export default function ReusableLibrary() {
                     </Card>
                 ) : (
                     questions.map(q => (
-                        <Card key={q._id} className="p-8 border-white/5 bg-slate-900/40 relative overflow-hidden group">
+                        <Card key={q._id} className="p-10 border-white/5 bg-slate-900/40 relative group transition-all hover:bg-slate-900/60">
                             {/* Accent line */}
-                            <div className="absolute top-0 left-0 w-1 h-full bg-primary/20" />
+                            <div className="absolute top-0 left-0 w-1.5 h-full bg-primary/30" />
 
-                            <div className="flex justify-between items-start mb-6">
-                                <div className="flex items-center gap-3">
-                                    <div className="px-3 py-1 rounded-lg bg-primary text-white text-xs font-black uppercase tracking-widest shadow-lg shadow-primary/20">
+                            <div className="flex justify-between items-start mb-8 px-1">
+                                <div className="flex items-center gap-4">
+                                    <div className="px-4 py-1.5 rounded-lg bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20">
                                         {q.type.replace('_', ' ')}
                                     </div>
-                                    <div className="px-3 py-1 rounded-lg bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-widest border border-white/5">
+                                    <div className="px-4 py-1.5 rounded-lg bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] border border-white/5">
                                         {q.marks} pts
                                     </div>
                                 </div>
-                                <button onClick={() => deleteQuestion(q._id)} className="text-slate-500 hover:text-red-500 transition-colors p-2">
-                                    <FaTrash size={14} />
+                                <button
+                                    onClick={() => deleteQuestion(q._id)}
+                                    className="text-slate-500 hover:text-red-500 hover:bg-red-500/10 transition-all p-3 rounded-xl -mr-2 -mt-2"
+                                    title="Delete from library"
+                                >
+                                    <FaTrash size={16} />
                                 </button>
                             </div>
 

@@ -94,16 +94,19 @@ exports.getTopicParticipants = async (req, res) => {
 
         // Find all attempts for this topic
         const attempts = await UserAttempt.find({ topicId })
-            .select('user score completedAt answers')
+            .select('user score completedAt answers isCertified')
             .sort({ score: -1, completedAt: 1 });
 
         const participants = attempts.map(attempt => ({
+            id: attempt._id,
             name: attempt.user.name,
             email: attempt.user.email,
             phone: attempt.user.phone,
             score: attempt.score,
             completedAt: attempt.completedAt,
-            answersCount: attempt.answers?.length || 0
+            answersCount: attempt.answers?.length || 0,
+            correctAnswersCount: attempt.answers?.filter(a => a.isCorrect).length || 0,
+            isCertified: attempt.isCertified || false
         }));
 
         res.json(participants);

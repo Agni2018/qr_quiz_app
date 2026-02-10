@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MdTimer, MdPersonOutline, MdChevronRight, MdChevronLeft, MdSend } from 'react-icons/md';
+import { HiOutlineQuestionMarkCircle } from 'react-icons/hi';
 
 export default function QuizPlay({ params }: { params: Promise<{ topicId: string }> }) {
     const { topicId } = use(params);
@@ -23,7 +25,6 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     const [duplicateDetected, setDuplicateDetected] = useState(false);
 
     useEffect(() => {
-        // 1. Get User
         const storedUser = localStorage.getItem('quizUser');
         if (!storedUser) {
             router.push(`/quiz/${topicId}`);
@@ -31,7 +32,6 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
         }
         setUser(JSON.parse(storedUser));
 
-        // 2. Fetch Questions and Topic
         Promise.all([
             api.get(`/questions/topic/${topicId}`),
             api.get(`/topics/${topicId}`)
@@ -48,7 +48,6 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
             setLoading(false);
         });
 
-        // 3. Disable Back Button
         const handlePopState = (e: PopStateEvent) => {
             window.history.pushState(null, '', window.location.href);
             alert('You cannot go back during the quiz!');
@@ -62,7 +61,6 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
         };
     }, [topicId, router]);
 
-    // Timer Effect
     useEffect(() => {
         if (timeLeft === null || timeLeft <= 0 || submitting) return;
 
@@ -71,7 +69,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                 if (prev !== null && prev <= 1) {
                     clearInterval(timer);
                     setIsTimeOut(true);
-                    submitQuiz(true); // Auto-submit
+                    submitQuiz(true);
                     return 0;
                 }
                 return prev !== null ? prev - 1 : null;
@@ -84,8 +82,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     const handleAnswer = (value: any) => {
         const newAnswers = [...answers];
         const currentQ = questions[currentQIndex];
-
-        // Update or Add answer
+        if (!currentQ) return;
         const existingIdx = newAnswers.findIndex(a => a.questionId === currentQ._id);
         if (existingIdx >= 0) {
             newAnswers[existingIdx].submittedAnswer = value;
@@ -105,9 +102,14 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
 
     const submitQuiz = async (isAuto = false) => {
         if (submitting) return;
+
+        if (!isAuto) {
+            const confirmed = window.confirm('Are you sure you want to submit your assessment?');
+            if (!confirmed) return;
+        }
+
         setSubmitting(true);
 
-        // If auto-submit (timeout), wait for 2 seconds to show the red message
         if (isAuto) {
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
@@ -124,38 +126,27 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                 timeTaken
             });
 
-            // Check for duplicate submission message
             if (res.data.message && (res.data.message.includes('already attempted') || res.data.message.includes('duplicate'))) {
                 setDuplicateDetected(true);
-                // Wait to show the message
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }
 
-            // Redirect to result using replace to prevent going back to quiz
             router.replace(`/quiz/${topicId}/result?attemptId=${res.data.attemptId || ''}`);
         } catch (err: any) {
             console.error(err);
-
-            // Check if error response handles duplicate
             if (err.response?.data?.message?.includes('already attempted')) {
                 setDuplicateDetected(true);
                 await new Promise(resolve => setTimeout(resolve, 2000));
-                router.replace(`/quiz/${topicId}`); // Or result if available
+                router.replace(`/quiz/${topicId}`);
                 return;
             }
-
             if (!isAuto) {
                 alert('Submission failed! Please try again.');
                 setSubmitting(false);
-            } else {
-                // If auto-submit fails, try to force redirect or show a different message
-                // For now, we'll just log it to avoid blocking the user with an alert loop
-                console.error("Auto-submit failed, potentially due to connection.");
             }
         }
     };
 
-    // Shuffle function for randomizing match options
     const shuffleArray = (array: any[]) => {
         const shuffled = [...array];
         for (let i = shuffled.length - 1; i > 0; i--) {
@@ -165,10 +156,8 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
         return shuffled;
     };
 
-    // Define currentQ before early returns to avoid hook order issues
     const currentQ = questions[currentQIndex];
 
-    // Shuffle match options once per question (memoized)
     const shuffledMatchOptions = useMemo(() => {
         if (currentQ?.type === 'match' && currentQ?.options) {
             return shuffleArray(currentQ.options.map((p: any) => p.right));
@@ -176,125 +165,120 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
         return [];
     }, [currentQ?._id, currentQ?.type]);
 
-    if (loading) return <div className="container">Loading Questions...</div>;
-    if (!questions.length) return <div className="container">No questions found for this quiz.</div>;
+    const isAnswered = (qId: string) => {
+        const ans = answers.find(a => a.questionId === qId)?.submittedAnswer;
+        if (Array.isArray(ans)) return ans.length > 0;
+        return ans !== undefined && ans !== null && ans !== '';
+    };
 
-    const currentAnswer = answers.find(a => a.questionId === currentQ._id)?.submittedAnswer;
+    if (loading) return (
+        <div className="min-h-screen bg-[#070514] flex items-center justify-center">
+            <div className="flex flex-col items-center gap-6">
+                <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin shadow-2xl shadow-violet-500/20" />
+                <span className="text-violet-400 font-black uppercase tracking-[0.4em] text-[10px]">Initializing Assessment</span>
+            </div>
+        </div>
+    );
+
+    if (!questions.length) return <div className="container p-12 text-center text-slate-400 font-bold">No questions found for this topic.</div>;
+
+    const currentAnswer = answers.find(a => a.questionId === currentQ?._id)?.submittedAnswer;
 
     return (
-        <main className="container min-h-screen flex flex-col justify-center">
-
-            <div className="fixed top-0 left-0 right-0 h-1 bg-white/10 z-50">
-                <div className="h-full bg-[var(--primary)] transition-[width] duration-300 ease-in-out" style={{
-                    width: `${((currentQIndex + 1) / questions.length) * 100}%`
-                }} />
-            </div>
-
-            {/* Timer Floating Bar */}
-            {timeLeft !== null && (
-                <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-2xl border-2 backdrop-blur-xl flex items-center gap-4 transition-all ${timeLeft < 30 ? 'bg-red-500/20 border-red-500 text-red-500 animate-pulse' : 'bg-emerald-600 border-white/20 text-white shadow-lg shadow-emerald-500/20'}`}>
-                    <div className="flex flex-col items-end">
-                        <span className="text-[10px] font-black uppercase tracking-widest opacity-80">Time Remaining</span>
-                        <span className="text-2xl font-black tabular-nums">
-                            {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
-                        </span>
+        <main className="min-h-screen bg-[#070514] text-slate-200 font-sans selection:bg-violet-500/30">
+            {/* Header */}
+            <header className="fixed top-0 left-0 right-0 h-24 bg-[#120f26]/90 backdrop-blur-xl border-b border-white/5 z-[100] px-6 md:px-12 flex items-center justify-between">
+                <div className="flex items-center gap-5 h-full">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-xl shadow-violet-500/30 ring-1 ring-white/10 shrink-0">
+                        <HiOutlineQuestionMarkCircle className="text-3xl text-white" />
                     </div>
-                    {timeLeft < 30 ? (
-                        <div className="w-10 h-10 rounded-full border-4 border-current border-t-transparent animate-spin" />
-                    ) : (
-                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl">
-                            ⏱️
-                        </div>
-                    )}
+                    <div className="h-10 w-[1px] bg-white/10 hidden sm:block mx-1" />
+                    <div className="flex flex-col">
+                        <h1 className="text-xl md:text-2xl font-black uppercase tracking-widest text-white leading-tight">Quizmaster Pro</h1>
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">{topic?.category || 'General Knowledge'} Assessment</span>
+                    </div>
                 </div>
-            )}
 
-            <AnimatePresence mode='wait'>
-                <motion.div
-                    key={currentQIndex}
-                    initial={{ opacity: 0, scale: 0.98, y: 10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.98, y: -10 }}
-                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                >
-                    <Card className="p-10 md:p-14 min-h-[500px] flex flex-col border border-white/5 bg-slate-900/60 backdrop-blur-2xl rounded-[40px] shadow-3xl">
-                        <div className="flex justify-between items-center mb-10">
-                            <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-white/5 text-slate-400 border border-white/5">
-                                Question {currentQIndex + 1} of {questions.length}
+                {/* Timer In Header */}
+                {timeLeft !== null && (
+                    <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center top-[18px]">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-2 opacity-80 whitespace-nowrap uppercase">Time Remaining</span>
+                        <div className="flex items-center gap-3">
+                            <MdTimer className={`text-2xl ${timeLeft < 60 ? 'text-red-500 animate-pulse' : 'text-emerald-400'}`} />
+                            <span className={`text-3xl font-black tabular-nums tracking-widest leading-none ${timeLeft < 60 ? 'text-red-400' : 'text-white'}`}>
+                                {Math.floor(timeLeft / 60).toString().padStart(2, '0')}:{(timeLeft % 60).toString().padStart(2, '0')}
                             </span>
-                            <div className="flex gap-1">
-                                {questions.map((_, i) => (
-                                    <div key={i} className={`h-1 rounded-full transition-all duration-500 ${i === currentQIndex ? 'w-6 bg-violet-500' : 'w-2 bg-white/10'}`} />
-                                ))}
-                            </div>
                         </div>
+                    </div>
+                )}
 
-                        {isTimeOut && !duplicateDetected && (
-                            <div className="mb-8 p-6 rounded-2xl bg-red-500/10 border-2 border-red-500 flex flex-col items-center justify-center text-center animate-pulse gap-2">
-                                <span className="text-3xl">⏰</span>
-                                <h3 className="text-xl font-black text-red-500 uppercase tracking-widest">Time Out!</h3>
-                                <p className="text-red-400 font-bold">Autosubmitting your quiz...</p>
-                            </div>
-                        )}
-
-                        {duplicateDetected && (
-                            <div className="mb-8 p-6 rounded-2xl bg-orange-500/10 border-2 border-orange-500 flex flex-col items-center justify-center text-center gap-2">
-                                <span className="text-3xl">⚠️</span>
-                                <h3 className="text-xl font-black text-orange-500 uppercase tracking-widest">Already Attempted</h3>
-                                <p className="text-orange-400 font-bold">You have already submitted this quiz.</p>
-                            </div>
-                        )}
-
-                        <h2 className="text-xl md:text-2xl font-black text-white/95 leading-tight mb-14">
-                            {currentQ.content.text}
-                        </h2>
-
-                        {/* Rules Indicator */}
-                        <div className="flex gap-4 mb-10">
-                            {topic?.negativeMarking > 0 && (
-                                <div className="px-4 py-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-widest">
-                                    ⚠️ Negative: -{topic.negativeMarking} pts
-                                </div>
-                            )}
-                            {topic?.timeBasedScoring && (
-                                <div className="px-4 py-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[10px] font-black uppercase tracking-widest animate-pulse">
-                                    ⚡ Faster = Bonus Pts
-                                </div>
-                            )}
-                            <div className="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest ml-auto">
-                                Goal: +{currentQ.marks || 1} pts
-                            </div>
+                <div className="flex items-center gap-4">
+                    <button className="flex items-center gap-4 bg-white/5 px-6 py-2.5 rounded-full border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
+                        <div className="w-8 h-8 rounded-full bg-slate-700/50 flex items-center justify-center ring-1 ring-white/10">
+                            <MdPersonOutline className="text-xl text-slate-200" />
                         </div>
+                        <span className="text-sm font-bold text-slate-100 hidden lg:inline tracking-wide">{user?.name || 'Student Name'}</span>
+                    </button>
+                </div>
+            </header>
 
-                        {/* Render Input based on type */}
-                        <div className="flex-1 mb-12">
-                            {/* Single Choice and True/False */}
-                            {(currentQ.type === 'single_choice' || currentQ.type === 'true_false') && (
-                                <div className="flex flex-col gap-5">
-                                    {(currentQ.type === 'true_false' ? ['True', 'False'] : currentQ.options).map((opt: string) => (
-                                        <button
-                                            key={opt}
-                                            onClick={() => handleAnswer(opt)}
-                                            className={`group p-6 rounded-2xl text-left cursor-pointer transition-all duration-300 border-2 flex items-center justify-between ${currentAnswer === opt
-                                                ? 'border-violet-500 bg-violet-500/10 shadow-lg shadow-violet-500/10'
-                                                : 'border-white/5 bg-black/20 hover:border-white/20 hover:bg-black/30'
-                                                }`}
-                                        >
-                                            <span className={`text-lg font-bold transition-colors ${currentAnswer === opt ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
-                                                {opt}
-                                            </span>
-                                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${currentAnswer === opt ? 'border-violet-400 bg-violet-400' : 'border-slate-700'}`}>
-                                                {currentAnswer === opt && <div className="w-2.5 h-2.5 rounded-full bg-violet-900" />}
-                                            </div>
-                                        </button>
-                                    ))}
+            <div className="pt-[220px] pb-12 px-6 md:px-12 max-w-[1700px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10" style={{ paddingTop: '220px' }}>
+
+                {/* Main Content Area */}
+                <div className="lg:col-span-8 flex flex-col gap-20">
+
+
+                    {/* Question Card */}
+                    <AnimatePresence mode='wait'>
+                        <motion.div
+                            key={currentQIndex}
+                            initial={{ opacity: 0, scale: 0.99, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.99, y: -10 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <Card className="p-10 md:p-12 bg-[#1a1631]/80 backdrop-blur-sm border-white/5 rounded-[48px] shadow-3xl relative overflow-hidden flex flex-col min-h-[450px]">
+                                <div className="flex items-start justify-between mb-8 relative z-10">
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_5px_rgba(139,92,246,0.5)]" />
+                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Choose the Correct Answer</span>
+                                        </div>
+                                    </div>
+                                    <div className="px-5 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
+                                        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">+{currentQ?.marks || 1}.0 Points</span>
+                                    </div>
                                 </div>
-                            )}
 
-                            {/* Multi Select - Checkboxes */}
-                            {currentQ.type === 'multi_select' && (
-                                <div className="flex flex-col gap-5">
-                                    {currentQ.options.map((opt: string) => {
+                                <h3 className="relative z-10 text-3xl font-black text-white leading-tight mb-[100px] tracking-tight" style={{ marginBottom: '100px' }}>
+                                    {currentQ?.content.text}
+                                </h3>
+
+                                {/* Options Container: Tighten spacing to question */}
+                                <div className="relative z-10 flex flex-col gap-4 mb-[100px]" style={{ marginBottom: '100px' }}>
+                                    {(currentQ?.type === 'single_choice' || currentQ?.type === 'true_false' ? (currentQ.type === 'true_false' ? ['True', 'False'] : currentQ.options) : []).map((opt: string) => {
+                                        const selected = currentAnswer === opt;
+                                        return (
+                                            <button
+                                                key={opt}
+                                                onClick={() => handleAnswer(opt)}
+                                                className={`group relative p-6 rounded-[24px] text-left border-2 transition-all duration-300 flex items-center gap-6 ${selected
+                                                    ? 'bg-violet-600/5 border-violet-500/40'
+                                                    : 'bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/[0.04]'
+                                                    }`}
+                                            >
+                                                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-300 ${selected ? 'border-violet-500 bg-transparent' : 'border-slate-800'
+                                                    }`}>
+                                                    {selected && <div className="w-2.5 h-2.5 rounded-full bg-violet-500" />}
+                                                </div>
+                                                <span className={`text-xl font-bold transition-colors tracking-wide ${selected ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                                    {opt}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+
+                                    {currentQ?.type === 'multi_select' && currentQ.options.map((opt: string) => {
                                         const selected = Array.isArray(currentAnswer) && currentAnswer.includes(opt);
                                         return (
                                             <button
@@ -307,109 +291,197 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                                                         handleAnswer([...current, opt]);
                                                     }
                                                 }}
-                                                className={`group p-6 rounded-2xl text-left cursor-pointer transition-all duration-300 border-2 flex items-center gap-5 ${selected
-                                                    ? 'border-violet-500 bg-violet-500/10 shadow-lg shadow-violet-500/10'
-                                                    : 'border-white/5 bg-black/20 hover:border-white/20 hover:bg-black/30'
+                                                className={`group p-6 rounded-[24px] text-left border-2 transition-all duration-300 flex items-center gap-6 ${selected
+                                                    ? 'bg-violet-600/5 border-violet-500/40'
+                                                    : 'bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/[0.04]'
                                                     }`}
                                             >
-                                                <div className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center transition-all ${selected ? 'border-violet-400 bg-violet-400' : 'border-slate-700'}`}>
-                                                    {selected && <span className="text-violet-900 font-bold">✓</span>}
+                                                <div className={`w-6 h-6 rounded-xl border-2 flex items-center justify-center shrink-0 transition-all duration-300 ${selected ? 'border-violet-500 bg-violet-500' : 'border-slate-800'
+                                                    }`}>
+                                                    {selected && <span className="text-white text-xs font-black">✓</span>}
                                                 </div>
-                                                <span className={`text-lg font-bold transition-colors ${selected ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                                <span className={`text-xl font-bold transition-colors tracking-wide ${selected ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
                                                     {opt}
                                                 </span>
                                             </button>
                                         );
                                     })}
-                                    <div className="mt-6 flex items-center gap-3 text-slate-500 px-2 font-bold text-[0.65rem] uppercase tracking-widest">
-                                        <div className="w-2 h-2 rounded-full bg-violet-500/50" />
-                                        Select all that apply
-                                    </div>
-                                </div>
-                            )}
 
-                            {/* Match the Following */}
-                            {currentQ.type === 'match' && (
-                                <div className="flex flex-col gap-6">
-                                    <div className="flex items-center gap-3 text-slate-500 px-2 font-bold text-[0.65rem] uppercase tracking-widest mb-4">
-                                        <div className="w-2 h-2 rounded-full bg-violet-500/50" />
-                                        Match the items from left to right:
-                                    </div>
-                                    <div className="flex flex-col gap-4">
-                                        {currentQ.options.map((pair: any, idx: number) => {
-                                            const currentMatches = currentAnswer || [];
-                                            const userMatch = currentMatches[idx];
-                                            return (
-                                                <div key={idx} className="bg-black/20 border-2 border-white/5 rounded-2xl p-5 flex flex-col md:flex-row items-center gap-6">
-                                                    <div className="flex-1 text-center md:text-left">
-                                                        <span className="text-xl font-bold text-white/90">{pair.left}</span>
+                                    {currentQ?.type === 'match' && (
+                                        <div className="flex flex-col gap-4">
+                                            {currentQ.options.map((pair: any, idx: number) => {
+                                                const currentMatches = currentAnswer || [];
+                                                const userMatch = currentMatches[idx];
+                                                return (
+                                                    <div key={idx} className="bg-white/5 border border-white/10 rounded-[24px] p-6 flex flex-col md:flex-row items-center gap-6">
+                                                        <div className="flex-1 text-center md:text-left">
+                                                            <span className="text-lg font-bold text-white tracking-wide">{pair.left}</span>
+                                                        </div>
+                                                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                                                            <span className="text-slate-500 text-lg">↔</span>
+                                                        </div>
+                                                        <div className="flex-1 w-full">
+                                                            <select
+                                                                value={userMatch?.right || ''}
+                                                                onChange={(e) => {
+                                                                    const newMatches = [...(currentAnswer || [])];
+                                                                    newMatches[idx] = { left: pair.left, right: e.target.value };
+                                                                    handleAnswer(newMatches);
+                                                                }}
+                                                                className="w-full p-4 rounded-xl bg-[#0a0817] text-white border-2 border-white/10 focus:border-violet-500 transition-all cursor-pointer font-bold text-sm"
+                                                            >
+                                                                <option value="">Select match...</option>
+                                                                {shuffledMatchOptions.map((rightValue: string, i: number) => (
+                                                                    <option key={i} value={rightValue}>{rightValue}</option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center shrink-0">
-                                                        <span className="text-slate-500 text-lg">↔</span>
-                                                    </div>
-                                                    <div className="flex-1 w-full">
-                                                        <select
-                                                            value={userMatch?.right || ''}
-                                                            onChange={(e) => {
-                                                                const newMatches = [...(currentAnswer || [])];
-                                                                newMatches[idx] = { left: pair.left, right: e.target.value };
-                                                                handleAnswer(newMatches);
-                                                            }}
-                                                            className="w-full p-4 rounded-xl bg-black/30 text-white border-2 border-white/10 focus:border-violet-500/50 outline-none transition-all cursor-pointer font-bold text-sm"
-                                                        >
-                                                            <option value="" className="bg-slate-900">Select match...</option>
-                                                            {shuffledMatchOptions.map((rightValue: string, i: number) => (
-                                                                <option key={i} value={rightValue} className="bg-slate-900">{rightValue}</option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            )}
+                                                );
+                                            })}
+                                        </div>
+                                    )}
 
-                            {/* Fill in the Blank - Text Input */}
-                            {currentQ.type === 'fill_blank' && (
-                                <div className="flex flex-col gap-6">
-                                    <div className="flex items-center gap-3 text-slate-500 px-2 font-bold text-[0.65rem] uppercase tracking-widest">
-                                        <div className="w-2 h-2 rounded-full bg-violet-500/50" />
-                                        Type your answer here:
-                                    </div>
-                                    <textarea
-                                        value={currentAnswer || ''}
-                                        onChange={(e) => handleAnswer(e.target.value)}
-                                        placeholder="Enter response..."
-                                        className="w-full min-h-[150px] p-6 rounded-2xl bg-black/20 border-2 border-white/5 focus:border-violet-500/50 outline-none transition-all text-white text-xl font-bold placeholder:text-slate-700"
-                                    />
+                                    {currentQ?.type === 'fill_blank' && (
+                                        <textarea
+                                            value={currentAnswer || ''}
+                                            onChange={(e) => handleAnswer(e.target.value)}
+                                            placeholder="Type your response here..."
+                                            className="w-full min-h-[220px] p-10 px-12 rounded-[24px] bg-black/40 border-2 border-white/10 focus:border-violet-500/50 outline-none transition-all text-xl font-bold placeholder:text-slate-800 resize-none shadow-inner"
+                                            style={{ lineHeight: '1.6' }}
+                                        />
+                                    )}
                                 </div>
-                            )}
+
+                                {/* Integrated Navigation Buttons - Now INSIDE the question box at the bottom */}
+                                <div className="mt-auto pt-32 border-t border-white/5 flex justify-between items-center relative z-10" style={{ paddingTop: '60px' }}>
+                                    <button
+                                        disabled={currentQIndex === 0}
+                                        onClick={() => setCurrentQIndex(currentQIndex - 1)}
+                                        className="group flex items-center gap-2 bg-white/5 border border-white/5 text-slate-500 px-8 py-4 rounded-2xl hover:border-white/20 hover:text-white transition-all disabled:opacity-30 disabled:pointer-events-none"
+                                    >
+                                        <MdChevronLeft className="text-xl group-hover:-translate-x-1 transition-transform" />
+                                        <span className="font-black uppercase tracking-[0.2em] text-[10px]">Previous</span>
+                                    </button>
+                                    <button
+                                        onClick={nextQuestion}
+                                        className="group flex items-center gap-2 bg-violet-600 text-white px-10 py-4 rounded-2xl shadow-xl shadow-violet-600/20 hover:scale-105 active:scale-95 transition-all"
+                                    >
+                                        <span className="font-black uppercase tracking-[0.3em] text-[10px]">
+                                            {currentQIndex === questions.length - 1 ? (submitting ? 'Submitting...' : 'Next Question') : 'Next Question'}
+                                        </span>
+                                        <MdChevronRight className="text-xl group-hover:translate-x-1 transition-transform" />
+                                    </button>
+                                </div>
+                            </Card>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+
+                {/* Sidebar Palette Area */}
+                <div className="lg:col-span-4 flex flex-col gap-14">
+                    <Card className="p-8 bg-[#1a1631]/50 border-white/5 rounded-[48px] shadow-3xl flex flex-col min-h-[500px]">
+                        <div className="flex justify-between items-center mb-10">
+                            <div>
+                                <h3 className="text-base font-black uppercase tracking-[0.4em] text-white leading-none mb-2">Question Palette</h3>
+                                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Quick navigation grid</span>
+                            </div>
+                            <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{questions.length} Total</span>
+                            </div>
                         </div>
 
-                        <div className="flex justify-between items-center mt-12 pt-10 border-t border-white/5">
-                            <Button
-                                variant="outline"
-                                disabled={currentQIndex === 0}
-                                onClick={() => setCurrentQIndex(currentQIndex - 1)}
-                                className="px-8 py-4 rounded-2xl border-white/10 text-slate-400 font-bold hover:bg-white/5"
-                            >
-                                Previous
-                            </Button>
-                            <Button
-                                onClick={nextQuestion}
-                                disabled={
-                                    !currentAnswer ||
-                                    (Array.isArray(currentAnswer) && currentAnswer.length === 0)
-                                }
-                                className="px-10 py-5 rounded-3xl bg-violet-500 text-white font-black text-lg shadow-xl shadow-violet-500/20 hover:scale-105 transition-transform"
-                            >
-                                {currentQIndex === questions.length - 1 ? (submitting ? 'Submitting...' : '✨ Submit Quiz') : 'Next Question →'}
-                            </Button>
+                        <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 mb-10">
+                            {questions.map((q, i) => {
+                                const active = i === currentQIndex;
+                                const answered = isAnswered(q._id);
+                                return (
+                                    <button
+                                        key={q._id}
+                                        onClick={() => setCurrentQIndex(i)}
+                                        className={`aspect-square rounded-[14px] flex items-center justify-center text-lg font-black transition-all duration-300 border-2 ${active
+                                            ? 'bg-transparent border-violet-500 text-white shadow-[0_0_15px_rgba(139,92,246,0.2)]'
+                                            : answered
+                                                ? 'bg-emerald-500/90 text-white border-emerald-400'
+                                                : 'bg-white/10 border-white/10 text-slate-600 hover:border-white/20 hover:text-slate-300'
+                                            }`}
+                                    >
+                                        {i + 1}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Legend */}
+                        <div className="mt-auto flex flex-col gap-6">
+                            <div className="h-[1px] w-full bg-white/5" />
+                            <div className="flex flex-col gap-4">
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 opacity-60">Legend</span>
+                                <div className="flex flex-col gap-4">
+                                    <div className="flex items-center gap-4 group">
+                                        <div className="w-1.5 h-4 rounded-full bg-violet-600 border border-violet-400" />
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Active Selection</span>
+                                    </div>
+                                    <div className="flex items-center gap-4 group">
+                                        <div className="w-5 h-5 rounded-md bg-emerald-500 border border-emerald-400 shadow-lg shadow-emerald-500/10" />
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Question Answered</span>
+                                    </div>
+                                    <div className="flex items-center gap-4 group">
+                                        <div className="w-1 h-4 rounded-full bg-white/10" />
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Remaining</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </Card>
-                </motion.div>
-            </AnimatePresence>
+
+                    {/* Quick Submit Assessment */}
+                    <button
+                        onClick={() => submitQuiz()}
+                        disabled={submitting}
+                        className="group w-full p-6 bg-[#1a1631]/80 hover:bg-violet-600 border border-white/10 rounded-[28px] flex items-center justify-center gap-4 transition-all duration-500 hover:shadow-2xl hover:shadow-violet-600/20"
+                    >
+                        <MdSend className="text-xl text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                        <span className="text-sm font-black uppercase tracking-[0.4em] text-white">Submit Assessment</span>
+                    </button>
+                    <div className="text-center pt-2">
+                        <span className="text-[10px] text-slate-600 font-bold uppercase tracking-[0.3em]">© 2024 Quizmaster Edition</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Overlays */}
+            {isTimeOut && !duplicateDetected && (
+                <div className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-3xl flex items-center justify-center p-8">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="max-w-xl w-full bg-[#1a1631] p-16 rounded-[60px] border border-red-500/40 flex flex-col items-center text-center gap-10 shadow-[0_0_100px_rgba(239,68,68,0.2)]"
+                    >
+                        <div className="w-32 h-32 rounded-full bg-red-500/10 flex items-center justify-center text-8xl shadow-2xl shadow-red-500/20">⏰</div>
+                        <div>
+                            <h2 className="text-4xl font-black text-white uppercase tracking-[0.3em] mb-6">Time Limit Reached</h2>
+                            <p className="text-lg text-slate-400 font-bold leading-relaxed max-w-sm mx-auto">Your assessment is being finalized and submitted.</p>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
+
+            {duplicateDetected && (
+                <div className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-3xl flex items-center justify-center p-8">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="max-w-xl w-full bg-[#1a1631] p-16 rounded-[60px] border border-orange-500/40 flex flex-col items-center text-center gap-10 shadow-[0_0_100px_rgba(249,115,22,0.2)]"
+                    >
+                        <div className="w-32 h-32 rounded-full bg-orange-500/10 flex items-center justify-center text-8xl shadow-2xl shadow-orange-500/20">⚠️</div>
+                        <div>
+                            <h2 className="text-3xl font-black text-white uppercase tracking-[0.2em] mb-6">Already Submitted</h2>
+                            <p className="text-lg text-slate-400 font-bold leading-relaxed max-w-sm mx-auto">This assessment has already been completed by your account.</p>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
         </main>
     );
 }

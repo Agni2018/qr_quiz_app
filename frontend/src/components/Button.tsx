@@ -1,5 +1,5 @@
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: 'primary' | 'secondary' | 'danger' | 'outline';
+    variant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost';
 }
 
 export default function Button({ children, variant = 'primary', className = '', style, disabled, ...props }: ButtonProps) {
@@ -35,6 +35,9 @@ export default function Button({ children, variant = 'primary', className = '', 
         baseStyle.background = 'transparent';
         baseStyle.border = '1px solid var(--border-color)';
         baseStyle.color = 'var(--text-primary)';
+    } else if (variant === 'ghost') {
+        baseStyle.background = 'transparent';
+        baseStyle.color = 'inherit';
     }
 
     return (

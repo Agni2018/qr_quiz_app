@@ -181,11 +181,12 @@ export default function Home() {
                                     <label style={{
                                         display: 'block',
                                         marginBottom: '0.75rem',
-                                        fontSize: '0.7rem',
+                                        fontSize: '0.75rem',
                                         fontWeight: 800,
                                         color: 'var(--text-muted)',
                                         textTransform: 'uppercase',
-                                        letterSpacing: '0.2em'
+                                        letterSpacing: '0.1em',
+                                        paddingLeft: '1.5rem'
                                     }}>
                                         Username
                                     </label>
@@ -235,11 +236,12 @@ export default function Home() {
                                         <label style={{
                                             display: 'block',
                                             marginBottom: '0.75rem',
-                                            fontSize: '0.7rem',
+                                            fontSize: '0.75rem',
                                             fontWeight: 800,
                                             color: 'var(--text-muted)',
                                             textTransform: 'uppercase',
-                                            letterSpacing: '0.2em'
+                                            letterSpacing: '0.1em',
+                                            paddingLeft: '1.5rem'
                                         }}>
                                             Email
                                         </label>
@@ -287,11 +289,12 @@ export default function Home() {
                                     <label style={{
                                         display: 'block',
                                         marginBottom: '0.75rem',
-                                        fontSize: '0.7rem',
+                                        fontSize: '0.75rem',
                                         fontWeight: 800,
                                         color: 'var(--text-muted)',
                                         textTransform: 'uppercase',
-                                        letterSpacing: '0.2em'
+                                        letterSpacing: '0.1em',
+                                        paddingLeft: '1.5rem'
                                     }}>
                                         Password
                                     </label>

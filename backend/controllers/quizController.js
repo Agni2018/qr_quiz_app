@@ -346,3 +346,78 @@ exports.getStudentAttempts = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+// Certify Students for a topic
+exports.certifyStudents = async (req, res) => {
+    try {
+        const { topicId } = req.params;
+
+        // Find all attempts for this topic that are NOT certified and have score > 1
+        // (Assuming 1 mark per question, score > 1 means more than one correct answers)
+        // Wait, the requirement is "only for the students who have gotten more than one correct answer"
+        // Let's filter based on isCorrect: true in the answers array
+
+        const attempts = await UserAttempt.find({
+            topicId,
+            isCertified: { $ne: true }
+        });
+
+        const qualifiedAttempts = attempts.filter(attempt => {
+            const correctCount = (attempt.answers || []).filter(ans => ans.isCorrect).length;
+            return correctCount > 0;
+        });
+
+        if (qualifiedAttempts.length === 0) {
+            return res.json({ message: 'No new students to certify', count: 0 });
+        }
+
+        const attemptIds = qualifiedAttempts.map(a => a._id);
+
+        await UserAttempt.updateMany(
+            { _id: { $in: attemptIds } },
+            {
+                $set: {
+                    isCertified: true,
+                    certifiedAt: new Date()
+                }
+            }
+        );
+
+        res.json({
+            message: `Successfully certified ${qualifiedAttempts.length} students`,
+            count: qualifiedAttempts.length
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Get certificates for logged-in student
+exports.getStudentCertificates = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const certificates = await UserAttempt.find({
+            $or: [
+                { userId: req.user.id },
+                {
+                    $and: [
+                        { "user.email": user.email },
+                        { "user.name": user.username }
+                    ]
+                }
+            ],
+            isCertified: true
+        })
+            .populate('topicId', 'name description')
+            .sort({ certifiedAt: -1 });
+
+        // Filter out cases where topic might be deleted
+        const validCertificates = certificates.filter(c => c.topicId);
+
+        res.json(validCertificates);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
