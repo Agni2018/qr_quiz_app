@@ -19,6 +19,10 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+app.use('/api/uploads', express.static('uploads'));
+
+
 
 // Prevent caching for all API routes
 app.use((req, res, next) => {
@@ -35,6 +39,8 @@ const quizRoutes = require('./routes/quiz');
 const authRoutes = require('./routes/auth');
 const analyticsRoutes = require('./routes/analytics');
 const badgeRoutes = require('./routes/badges');
+const studyMaterialRoutes = require('./routes/studyMaterials');
+
 
 app.use('/api/topics', topicRoutes);
 app.use('/api/questions', questionRoutes);
@@ -42,6 +48,8 @@ app.use('/api/quiz', quizRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/badges', badgeRoutes);
+app.use('/api/study-materials', studyMaterialRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('QR Quiz Platform API Running');

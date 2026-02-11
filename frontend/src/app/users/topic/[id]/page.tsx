@@ -6,7 +6,9 @@ import QRCode from 'react-qr-code';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import QuestionForm from '@/components/QuestionForm';
+import UploadMaterialModal from '@/components/UploadMaterialModal';
 import Link from 'next/link';
+
 import { useRouter } from 'next/navigation';
 
 export default function TopicDetails({ params }: { params: Promise<{ id: string }> }) {
@@ -14,7 +16,9 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
     const [topic, setTopic] = useState<any>(null);
     const [questions, setQuestions] = useState<any[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [showUploadModal, setShowUploadModal] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
+
     const router = useRouter();
 
     useEffect(() => {
@@ -169,9 +173,36 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                             </Link>
                         </div>
                     </Card>
+
+                    <Card className="flex flex-col gap-6 p-8 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full translate-x-8 -translate-y-8 group-hover:bg-primary/10 transition-colors" />
+                        <h3 className="text-xl font-bold mb-2">Study Materials</h3>
+                        <p className="text-slate-400 text-sm leading-relaxed">
+                            Upload PDFs, videos, or documents to help students prepare for this quiz.
+                        </p>
+                        <Button
+                            onClick={() => setShowUploadModal(true)}
+                            className="w-full py-4 rounded-2xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 font-bold flex items-center justify-center gap-2"
+                        >
+                            <span className="text-xl">📤</span> Upload Materials
+                        </Button>
+                    </Card>
                 </div>
 
             </div>
+
+            {showUploadModal && (
+                <UploadMaterialModal
+                    topicId={id}
+                    topicName={topic.name}
+                    onClose={() => setShowUploadModal(false)}
+                    onSuccess={() => {
+                        setShowUploadModal(false);
+                        alert('Material uploaded successfully!');
+                    }}
+                />
+            )}
         </main>
+
     );
 }

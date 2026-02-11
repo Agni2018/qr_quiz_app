@@ -20,8 +20,16 @@ import {
     FaChartPie,
     FaGraduationCap,
     FaBook,
-    FaAward
+    FaAward,
+    FaUpload,
+    FaFileAlt,
+    FaBookOpen,
+    FaDownload,
+    FaVideo
 } from 'react-icons/fa';
+
+
+
 import { useRouter } from 'next/navigation';
 
 export default function UserDashboard() {
@@ -29,7 +37,8 @@ export default function UserDashboard() {
     const [analytics, setAnalytics] = useState<any>(null);
     const [user, setUser] = useState<any>(null);
     const [authLoading, setAuthLoading] = useState(true);
-    const [activeView, setActiveView] = useState<'analytics' | 'manage' | 'reusable' | 'badges'>('analytics');
+    const [activeView, setActiveView] = useState<'analytics' | 'manage' | 'reusable' | 'badges' | 'materials'>('analytics');
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [newTopic, setNewTopic] = useState({
@@ -39,6 +48,9 @@ export default function UserDashboard() {
         negativeMarking: 0,
         timeBasedScoring: false
     });
+    const [materials, setMaterials] = useState<any[]>([]);
+    const [loadingMaterials, setLoadingMaterials] = useState(false);
+
 
     // Participants Modal State
     const [showParticipantsModal, setShowParticipantsModal] = useState(false);
@@ -48,6 +60,9 @@ export default function UserDashboard() {
     const [participants, setParticipants] = useState<any[]>([]);
     const [loadingParticipants, setLoadingParticipants] = useState(false);
     const [certifying, setCertifying] = useState(false);
+    const [showAdminMaterialsModal, setShowAdminMaterialsModal] = useState(false);
+    const [selectedTopicMaterials, setSelectedTopicMaterials] = useState<any[]>([]);
+
 
     const router = useRouter();
 
@@ -63,6 +78,12 @@ export default function UserDashboard() {
                 ]);
                 setTopics(t.data);
                 setAnalytics(a.data);
+
+                if (statusRes.data.user) {
+                    const mRes = await api.get('/study-materials');
+                    setMaterials(mRes.data);
+                }
+
             } catch {
                 router.replace('/');
             } finally {
@@ -73,9 +94,18 @@ export default function UserDashboard() {
     }, []);
 
     const refreshData = async () => {
-        const [t, a] = await Promise.all([api.get('/topics'), api.get('/analytics/overview')]);
-        setTopics(t.data);
-        setAnalytics(a.data);
+        try {
+            const [t, a, m] = await Promise.all([
+                api.get('/topics'),
+                api.get('/analytics/overview'),
+                api.get('/study-materials')
+            ]);
+            setTopics(t.data);
+            setAnalytics(a.data);
+            setMaterials(m.data);
+        } catch (err) {
+            console.error('Refresh error:', err);
+        }
     };
 
     const createTopic = async () => {
@@ -155,6 +185,32 @@ export default function UserDashboard() {
             setCertifying(false);
         }
     };
+
+    const handleViewMaterials = (topicId: string, topicName: string) => {
+
+        const topicMaterials = materials.filter(m => (m.topicId?._id || m.topicId) === topicId);
+        setSelectedTopicMaterials(topicMaterials);
+        setSelectedTopicName(topicName);
+        setShowAdminMaterialsModal(true);
+    };
+
+    const getFileUrl = (url: string) => {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        return `${baseUrl}${url}`;
+    };
+
+    const deleteMaterial = async (id: string) => {
+
+        if (!confirm('Are you sure you want to delete this material?')) return;
+        try {
+            await api.delete(`/study-materials/${id}`);
+            refreshData();
+        } catch (err) {
+            console.error(err);
+            alert('Failed to delete material');
+        }
+    };
+
 
     if (authLoading) {
         return (
@@ -269,6 +325,15 @@ export default function UserDashboard() {
                         >
                             <FaAward className={activeView === 'badges' ? 'text-amber-400' : 'text-slate-400'} /> Badge Rewards
                         </Button>
+
+                        <Button
+                            variant={activeView === 'materials' ? 'secondary' : 'ghost'}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'materials' ? 'bg-rose-500/10 text-rose-400' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            onClick={() => { setActiveView('materials'); setSidebarOpen(false); }}
+                        >
+                            <FaUpload className={activeView === 'materials' ? 'text-rose-400' : 'text-slate-400'} /> Uploaded Files
+                        </Button>
+
                     </nav>
 
                     {/* Logout at bottom */}
@@ -636,7 +701,84 @@ export default function UserDashboard() {
                                 <BadgeManagement />
                             </section>
                         )}
+
+                        {/* STUDY MATERIALS VIEW */}
+                        {activeView === 'materials' && (
+                            <section className="flex flex-col gap-10 md:gap-16">
+                                <h2 style={{
+                                    fontSize: '2.75rem',
+                                    fontWeight: 900,
+                                    letterSpacing: '-0.03em',
+                                    marginBottom: '0.75rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '1.5rem',
+                                    color: 'var(--text-primary)'
+                                }}>
+                                    <span style={{
+                                        width: '4rem',
+                                        height: '4rem',
+                                        borderRadius: '1.25rem',
+                                        background: 'linear-gradient(135deg, #f43f5e, #fb7185)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: '1.75rem',
+                                        boxShadow: '0 8px 30px rgba(244, 63, 94, 0.4)',
+                                        border: '1px solid rgba(255, 255, 255, 0.1)'
+                                    }}>
+                                        📁
+                                    </span>
+                                    <span style={{
+                                        backgroundImage: 'linear-gradient(to right, #f43f5e, #fb7185)',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        backgroundClip: 'text',
+                                    }}>
+                                        Uploaded Study Materials
+                                    </span>
+                                </h2>
+
+                                {materials.length === 0 ? (
+                                    <Card className="p-20 text-center bg-slate-950/40 border-dashed border-2 border-white/5 rounded-[40px]">
+                                        <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl">📂</div>
+                                        <h3 className="text-3xl font-black mb-4">No materials uploaded yet</h3>
+                                        <p className="text-slate-500 mb-8 max-w-md mx-auto">Upload materials through individual topic settings to help your students.</p>
+                                        <Button onClick={() => setActiveView('manage')} className="px-10 py-4 rounded-2xl bg-primary">Go to Manage Topics</Button>
+                                    </Card>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                                        {topics.filter(t => materials.some(m => (m.topicId?._id || m.topicId) === t._id)).map((topic) => (
+                                            <Card
+                                                key={topic._id}
+                                                className="p-10 group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl overflow-hidden relative"
+                                            >
+                                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-primary/20 transition-all duration-700" />
+                                                <div className="flex justify-between items-start mb-8 relative z-10">
+                                                    <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-3xl text-rose-500 border border-rose-500/20 group-hover:rotate-12 transition-all">
+                                                        <FaBookOpen />
+                                                    </div>
+                                                    <span className="bg-rose-500/10 text-rose-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-rose-500/10">
+                                                        {materials.filter(m => (m.topicId?._id || m.topicId) === topic._id).length} Items
+                                                    </span>
+                                                </div>
+                                                <h3 className="text-3xl font-black mb-4 group-hover:text-rose-400 transition-colors relative z-10">{topic.name}</h3>
+                                                <p className="text-slate-500 text-lg mb-10 line-clamp-2 leading-relaxed flex-1 relative z-10">{topic.description || "Manage the study resources for this specific topic."}</p>
+                                                <Button
+                                                    onClick={() => handleViewMaterials(topic._id, topic.name)}
+                                                    className="w-full py-5 rounded-2xl bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white font-black uppercase tracking-widest text-xs transition-all border border-rose-500/20 relative z-10"
+                                                >
+                                                    View & Manage
+                                                </Button>
+                                            </Card>
+                                        ))}
+                                    </div>
+                                )}
+
+                            </section>
+                        )}
                     </div>
+
                 </main>
             </div >
 
@@ -894,6 +1036,63 @@ export default function UserDashboard() {
                 )
             }
 
-        </div >
+            {/* ADMIN STUDY MATERIALS MODAL */}
+            {showAdminMaterialsModal && (
+                <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)}>
+                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                        <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center">
+                            <div>
+                                <h3 className="text-3xl font-black text-white">{selectedTopicName}</h3>
+                                <p className="text-rose-400 font-bold text-sm mt-1 uppercase tracking-widest">Study Resource Management</p>
+                            </div>
+                            <button onClick={() => setShowAdminMaterialsModal(false)} className="p-3 bg-white/5 hover:bg-red-500/20 hover:text-red-500 rounded-2xl transition-all text-slate-400">
+                                <FaTimes size={20} />
+                            </button>
+                        </div>
+                        <div className="p-10 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6">
+                            {selectedTopicMaterials.length === 0 ? (
+                                <p className="text-center py-20 text-slate-500 font-bold italic">No materials found for this topic.</p>
+                            ) : (
+                                selectedTopicMaterials.map((m) => (
+                                    <div key={m._id} className="p-6 rounded-3xl bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group">
+                                        <div className="flex items-center gap-6">
+                                            <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-3xl border border-rose-500/20">
+                                                {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
+                                            </div>
+                                            <div className="flex flex-col gap-1">
+                                                <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight">{m.name}</h4>
+                                                {m.description && <p className="text-slate-400 text-sm italic">"{m.description}"</p>}
+                                                <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-600 mt-2">
+                                                    {m.fileType?.split('/')[1]?.toUpperCase() || 'FILE'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-4 w-full md:w-auto">
+                                            <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none">
+                                                <Button className="w-full md:px-10 py-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-black border-none flex items-center gap-3">
+                                                    View Material
+                                                </Button>
+                                            </a>
+                                            <Button
+                                                onClick={() => deleteMaterial(m._id)}
+                                                className="w-full md:px-6 py-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black border-none"
+                                            >
+                                                <FaTrash />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                        <div className="p-8 bg-slate-900/20 border-t border-white/5 flex justify-center">
+                            <p className="text-slate-500 text-xs font-medium uppercase tracking-widest text-center">
+                                Admins can manage and delete materials. Students can download these for learning.
+                            </p>
+                        </div>
+                    </Card>
+                </div>
+            )}
+        </div>
     );
 }
+

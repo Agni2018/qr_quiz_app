@@ -7,7 +7,8 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 export default function TextArea({ label, className, containerClassName, style, ...props }: TextAreaProps) {
     const textAreaStyle: React.CSSProperties = {
         width: '100%',
-        padding: '1.5rem 2.5rem', // Matched !px-10 (2.5rem) from working Input component
+        padding: '0.875rem 1.5rem',
+
         borderRadius: 'var(--radius)',
         border: '1px solid var(--border-color)',
         background: 'var(--glass-bg)',

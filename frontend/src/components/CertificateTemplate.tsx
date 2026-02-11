@@ -78,9 +78,9 @@ const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 {/* Footer Area - Increased padding bottom to avoid clipping */}
                 <div className="w-full flex justify-between items-end px-20 pb-12">
                     {/* Left: Date */}
-                    <div className="flex flex-col items-center gap-2">
-                        <div className="w-40 h-[3px]" style={{ backgroundColor: '#000000' }}></div>
-                        <span className="text-xs font-black uppercase tracking-widest" style={{ color: '#000000' }}>Date Issued</span>
+                    <div className="flex flex-col items-center">
+                        <div className="w-40 h-[3px] mb-2" style={{ backgroundColor: '#000000' }}></div>
+                        <span className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: '#000000' }}>Date Issued</span>
                         <span className="text-base font-black" style={{ color: '#000000' }}>{date}</span>
                     </div>
 
@@ -93,14 +93,14 @@ const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                     </div>
 
                     {/* Right: Signature & Verification */}
-                    <div className="flex flex-col items-center gap-2">
-                        <div className="mb-[-10px] z-20">
+                    <div className="flex flex-col items-center">
+                        <div className="z-20" style={{ paddingBottom: '24px' }}>
                             <span className="text-4xl font-serif italic" style={{ fontFamily: "'Dancing Script', cursive", color: 'rgba(0,0,0,0.9)' }}>
                                 Admin. QR
                             </span>
                         </div>
-                        <div className="w-40 h-[3px]" style={{ backgroundColor: '#000000' }}></div>
-                        <span className="text-xs font-black uppercase tracking-widest" style={{ color: '#000000' }}>Verified By</span>
+                        <div className="w-40 h-[3px] mb-2" style={{ backgroundColor: '#000000' }}></div>
+                        <span className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: '#000000' }}>Verified By</span>
                         <span className="text-base font-black uppercase" style={{ color: '#000000' }}>QR Quiz Platform</span>
                     </div>
                 </div>

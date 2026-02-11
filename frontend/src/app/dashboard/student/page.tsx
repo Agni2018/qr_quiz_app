@@ -20,8 +20,12 @@ import {
     FaStar,
     FaBolt,
     FaUsers,
-    FaDownload
+    FaDownload,
+    FaBookOpen,
+    FaFileAlt,
+    FaVideo
 } from 'react-icons/fa';
+
 import { useRouter } from 'next/navigation';
 import CertificateTemplate from '@/components/CertificateTemplate';
 
@@ -30,7 +34,8 @@ export default function StudentDashboard() {
     const [availableQuizzes, setAvailableQuizzes] = useState<any[]>([]);
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [activeView, setActiveView] = useState<'progress' | 'available' | 'lb' | 'badges' | 'certificates'>('progress');
+    const [activeView, setActiveView] = useState<'progress' | 'available' | 'lb' | 'badges' | 'certificates' | 'materials'>('progress');
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [leaderboard, setLeaderboard] = useState<any>(null);
     const [showDailyModal, setShowDailyModal] = useState(false);
@@ -43,6 +48,11 @@ export default function StudentDashboard() {
     const [selectedCertificate, setSelectedCertificate] = useState<any>(null);
     const [showCertificateModal, setShowCertificateModal] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [materials, setMaterials] = useState<any[]>([]);
+    const [selectedTopicMaterials, setSelectedTopicMaterials] = useState<any[]>([]);
+    const [viewingTopicName, setViewingTopicName] = useState('');
+    const [showMaterialsModal, setShowMaterialsModal] = useState(false);
+
 
     const router = useRouter();
 
@@ -52,17 +62,22 @@ export default function StudentDashboard() {
                 const statusRes = await api.get('/auth/status');
                 setUser(statusRes.data.user);
 
-                const [attemptsRes, quizzesRes, lbRes, certsRes] = await Promise.all([
+                const [attemptsRes, quizzesRes, lbRes, certsRes, materialsRes] = await Promise.all([
                     api.get('/quiz/student-attempts'),
                     api.get('/topics'),
                     api.get('/analytics/global-leaderboard'),
-                    api.get('/quiz/my-certificates')
+                    api.get('/quiz/my-certificates'),
+                    api.get('/study-materials')
                 ]);
+
+
 
                 setAttempts(attemptsRes.data);
                 setAvailableQuizzes(quizzesRes.data.filter((q: any) => q.status === 'active'));
                 setLeaderboard(lbRes.data);
                 setCertificates(certsRes.data);
+                setMaterials(materialsRes.data || []);
+
 
                 // Check for daily login reward
                 const dailyPointsFlag = localStorage.getItem('dailyPointsAwarded');
@@ -218,6 +233,23 @@ export default function StudentDashboard() {
         }
     };
 
+    const getFileUrl = (url: string) => {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        return `${baseUrl}${url}`;
+    };
+
+    const handleViewMaterials = (topicId: string, topicName: string) => {
+
+        const topicMaterials = materials.filter(m => (m.topicId?._id || m.topicId) === topicId);
+        setSelectedTopicMaterials(topicMaterials);
+        setViewingTopicName(topicName);
+        setShowMaterialsModal(true);
+    };
+
+    const topicsWithMaterials = availableQuizzes.filter(q =>
+        materials.some(m => (m.topicId?._id || m.topicId) === q._id)
+    );
+
     if (loading) {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--background)' }}>
@@ -307,6 +339,14 @@ export default function StudentDashboard() {
                         >
                             <FaGraduationCap className={activeView === 'certificates' ? 'text-indigo-600' : 'text-slate-400'} /> Certificates
                         </Button>
+                        <Button
+                            variant={activeView === 'materials' ? 'secondary' : 'ghost'}
+                            className={`justify-start gap-4 h-12 rounded-xl text-lg font-medium transition-all ${activeView === 'materials' ? 'bg-rose-500/10 text-rose-600 border-none shadow-none' : 'text-slate-400 hover:text-rose-600 hover:bg-rose-500/5 border-none'}`}
+                            onClick={() => { setActiveView('materials'); setSidebarOpen(false); }}
+                        >
+                            <FaBookOpen className={activeView === 'materials' ? 'text-rose-600' : 'text-slate-400'} /> Study Materials
+                        </Button>
+
                     </nav>
 
                     <div className="mt-8 pt-8 border-t border-slate-200/10 dark:border-white/5 flex flex-col gap-4">
@@ -352,7 +392,9 @@ export default function StudentDashboard() {
                                     activeView === 'available' ? 'linear-gradient(135deg, #8b5cf6, #6366f1)' :
                                         activeView === 'lb' ? 'linear-gradient(135deg, #f59e0b, #f97316)' :
                                             activeView === 'certificates' ? 'linear-gradient(135deg, #6366f1, #a855f7)' :
-                                                'linear-gradient(135deg, #ec4899, #f43f5e)',
+                                                activeView === 'materials' ? 'linear-gradient(135deg, #f43f5e, #fb7185)' :
+                                                    'linear-gradient(135deg, #ec4899, #f43f5e)',
+
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -361,14 +403,18 @@ export default function StudentDashboard() {
                                     activeView === 'available' ? '0 10px 40px rgba(139, 92, 246, 0.4)' :
                                         activeView === 'lb' ? '0 10px 40px rgba(245, 158, 11, 0.4)' :
                                             activeView === 'certificates' ? '0 10px 40px rgba(99, 102, 241, 0.4)' :
-                                                '0 10px 40px rgba(236, 72, 153, 0.4)',
+                                                activeView === 'materials' ? '0 10px 40px rgba(244, 63, 94, 0.4)' :
+                                                    '0 10px 40px rgba(236, 72, 153, 0.4)',
+
                                 border: '1px solid rgba(255, 255, 255, 0.1)',
                                 transform: 'rotate(-3deg)'
                             }} className="group-hover:rotate-0 transition-transform duration-500">
                                 {activeView === 'progress' ? '📝' :
                                     activeView === 'available' ? '💡' :
                                         activeView === 'lb' ? '🏅' :
-                                            activeView === 'certificates' ? '📜' : '🏆'}
+                                            activeView === 'certificates' ? '📜' :
+                                                activeView === 'materials' ? '📚' : '🏆'}
+
                             </div>
                             <div className="flex flex-col">
                                 <h2
@@ -378,7 +424,9 @@ export default function StudentDashboard() {
                                             activeView === 'available' ? 'linear-gradient(to right, #8b5cf6, #6366f1)' :
                                                 activeView === 'lb' ? 'linear-gradient(to right, #f59e0b, #f97316)' :
                                                     activeView === 'certificates' ? 'linear-gradient(to right, #6366f1, #a855f7)' :
-                                                        'linear-gradient(to right, #ec4899, #f43f5e)',
+                                                        activeView === 'materials' ? 'linear-gradient(to right, #f43f5e, #fb7185)' :
+                                                            'linear-gradient(to right, #ec4899, #f43f5e)',
+
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
                                         backgroundClip: 'text',
@@ -387,14 +435,18 @@ export default function StudentDashboard() {
                                     {activeView === 'progress' ? 'Manage Topics' :
                                         activeView === 'available' ? 'Explore Topics' :
                                             activeView === 'lb' ? 'Leaderboard' :
-                                                activeView === 'certificates' ? 'Certificates' : 'My Badges'}
+                                                activeView === 'certificates' ? 'Certificates' :
+                                                    activeView === 'materials' ? 'Study Materials' : 'My Badges'}
+
                                 </h2>
                                 <div className="h-2 w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r" style={{
                                     backgroundImage: activeView === 'progress' ? 'linear-gradient(to right, #3b82f6, transparent)' :
                                         activeView === 'available' ? 'linear-gradient(to right, #8b5cf6, transparent)' :
                                             activeView === 'lb' ? 'linear-gradient(to right, #f59e0b, transparent)' :
                                                 activeView === 'certificates' ? 'linear-gradient(to right, #6366f1, transparent)' :
-                                                    'linear-gradient(to right, #ec4899, transparent)'
+                                                    activeView === 'materials' ? 'linear-gradient(to right, #f43f5e, transparent)' :
+                                                        'linear-gradient(to right, #ec4899, transparent)'
+
                                 }} />
                             </div>
                         </div>
@@ -599,7 +651,44 @@ export default function StudentDashboard() {
                             </div>
                         )}
 
-                        {/* BADGES VIEW */}
+                        {/* STUDY MATERIALS VIEW */}
+                        {activeView === 'materials' && (
+                            <div className="animate-fade-in mb-32">
+                                <div className="h-10" />
+                                {topicsWithMaterials.length === 0 ? (
+                                    <Card className="p-32 text-center bg-slate-950/40 border-dashed border-2 border-white/5 rounded-[40px]">
+                                        <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl">📚</div>
+                                        <h3 className="text-4xl font-black mb-4">No materials available</h3>
+                                        <p className="text-slate-500 mb-12 text-xl max-w-md mx-auto leading-relaxed">Check back later for study resources uploaded by your instructors.</p>
+                                    </Card>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+                                        {topicsWithMaterials.map((topic) => (
+                                            <Card
+                                                key={topic._id}
+                                                className="p-10 group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl overflow-hidden relative"
+                                            >
+                                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-primary/20 transition-all duration-700" />
+                                                <div className="flex justify-between items-start mb-8 relative z-10">
+                                                    <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-3xl text-rose-500 border border-rose-500/20 group-hover:rotate-12 transition-all">
+                                                        <FaBookOpen />
+                                                    </div>
+                                                </div>
+                                                <h3 className="text-3xl font-black mb-4 group-hover:text-rose-400 transition-colors relative z-10">{topic.name}</h3>
+                                                <p className="text-slate-500 text-lg mb-10 line-clamp-2 leading-relaxed flex-1 relative z-10">{topic.description}</p>
+                                                <Button
+                                                    onClick={() => handleViewMaterials(topic._id, topic.name)}
+                                                    className="w-full py-5 rounded-2xl bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white font-black uppercase tracking-widest text-xs transition-all border border-rose-500/20 relative z-10"
+                                                >
+                                                    View Materials
+                                                </Button>
+                                            </Card>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {activeView === 'badges' && (
                             <div className="animate-fade-in mb-24 flex flex-col gap-24">
                                 <div className="h-10" />
@@ -808,6 +897,56 @@ export default function StudentDashboard() {
                     </div>
                 </div>
             )}
+            {/* STUDY MATERIALS MODAL */}
+            {showMaterialsModal && (
+                <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowMaterialsModal(false)}>
+                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                        <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center">
+                            <div>
+                                <h3 className="text-3xl font-black text-white">{viewingTopicName}</h3>
+                                <p className="text-rose-400 font-bold text-sm mt-1 uppercase tracking-widest">Available Study Resources</p>
+                            </div>
+                            <button onClick={() => setShowMaterialsModal(false)} className="p-3 bg-white/5 hover:bg-red-500/20 hover:text-red-500 rounded-2xl transition-all text-slate-400">
+                                <FaTimes size={20} />
+                            </button>
+                        </div>
+                        <div className="p-10 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6">
+                            {selectedTopicMaterials.length === 0 ? (
+                                <p className="text-center py-20 text-slate-500 font-bold italic">No materials found for this topic.</p>
+                            ) : (
+                                selectedTopicMaterials.map((m) => (
+                                    <div key={m._id} className="p-6 rounded-3xl bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group">
+                                        <div className="flex items-center gap-6">
+                                            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-3xl border border-primary/20">
+                                                {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
+                                            </div>
+                                            <div className="flex flex-col gap-1">
+                                                <h4 className="text-xl font-black text-white group-hover:text-primary transition-colors">{m.name}</h4>
+                                                {m.description && <p className="text-slate-400 text-sm italic">"{m.description}"</p>}
+                                                <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-600 mt-2">
+                                                    {m.fileType?.split('/')[1]?.toUpperCase() || 'FILE'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
+                                            <Button className="w-full md:px-10 py-4 rounded-2xl bg-primary font-black flex items-center gap-3">
+                                                <FaDownload /> Download / View
+                                            </Button>
+                                        </a>
+                                    </div>
+
+                                ))
+                            )}
+                        </div>
+                        <div className="p-8 bg-slate-900/20 border-t border-white/5 flex justify-center">
+                            <p className="text-slate-500 text-xs font-medium uppercase tracking-widest text-center">
+                                All materials are provided by your instructor for learning purposes only.
+                            </p>
+                        </div>
+                    </Card>
+                </div>
+            )}
         </div>
     );
 }
+
