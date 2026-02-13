@@ -40,6 +40,7 @@ const authRoutes = require('./routes/auth');
 const analyticsRoutes = require('./routes/analytics');
 const badgeRoutes = require('./routes/badges');
 const studyMaterialRoutes = require('./routes/studyMaterials');
+const messageRoutes = require('./routes/messages');
 
 
 app.use('/api/topics', topicRoutes);
@@ -49,6 +50,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/badges', badgeRoutes);
 app.use('/api/study-materials', studyMaterialRoutes);
+app.use('/api/messages', messageRoutes);
 
 
 app.get('/', (req, res) => {

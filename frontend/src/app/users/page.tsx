@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Link from 'next/link';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import TextArea from '@/components/TextArea';
 import ThemeToggle from '@/components/ThemeToggle';
 import BadgeManagement from '@/components/BadgeManagement';
 import ReusableLibrary from '@/components/ReusableLibrary';
@@ -25,7 +26,8 @@ import {
     FaFileAlt,
     FaBookOpen,
     FaDownload,
-    FaVideo
+    FaVideo,
+    FaEnvelope
 } from 'react-icons/fa';
 
 
@@ -62,6 +64,9 @@ export default function UserDashboard() {
     const [certifying, setCertifying] = useState(false);
     const [showAdminMaterialsModal, setShowAdminMaterialsModal] = useState(false);
     const [selectedTopicMaterials, setSelectedTopicMaterials] = useState<any[]>([]);
+    const [sendingMessageTo, setSendingMessageTo] = useState<string | null>(null);
+    const [messageText, setMessageText] = useState('');
+    const [isSendingMessage, setIsSendingMessage] = useState(false);
 
 
     const router = useRouter();
@@ -145,6 +150,8 @@ export default function UserDashboard() {
         setSelectedTopicName(topicName);
         setShowParticipantsModal(true);
         setLoadingParticipants(true);
+        setSendingMessageTo(null);
+        setMessageText('');
         try {
             const res = await api.get(`/analytics/topic/${topicId}/participants`);
             setParticipants(res.data);
@@ -208,6 +215,21 @@ export default function UserDashboard() {
         } catch (err) {
             console.error(err);
             alert('Failed to delete material');
+        }
+    };
+
+    const handleSendMessage = async (recipientId: string) => {
+        if (!messageText.trim()) return;
+        setIsSendingMessage(true);
+        try {
+            await api.post('/messages', { recipientId, text: messageText });
+            alert('Message sent successfully!');
+            setSendingMessageTo(null);
+            setMessageText('');
+        } catch (err: any) {
+            alert(err.response?.data?.message || 'Failed to send message');
+        } finally {
+            setIsSendingMessage(false);
         }
     };
 
@@ -900,27 +922,69 @@ export default function UserDashboard() {
                                 ) : (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {participants.map((p, idx) => (
-                                            <div key={idx} className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg shadow-inner">
-                                                        {p.name.charAt(0).toUpperCase()}
+                                            <React.Fragment key={idx}>
+                                                <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg shadow-inner">
+                                                            {p.name.charAt(0).toUpperCase()}
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="font-bold text-white">{p.name}</span>
+                                                            <span className="text-xs text-slate-500 font-mono italic">{p.email || p.phone}</span>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex flex-col">
-                                                        <span className="font-bold text-white">{p.name}</span>
-                                                        <span className="text-xs text-slate-500 font-mono italic">{p.email || p.phone}</span>
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="flex flex-col items-end">
+                                                            <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{p.score}</span>
+                                                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Points</span>
+                                                        </div>
+                                                        {p.userId && (
+                                                            <button
+                                                                onClick={() => setSendingMessageTo(sendingMessageTo === p.userId ? null : p.userId)}
+                                                                className="w-10 h-10 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary flex items-center justify-center transition-all ml-2"
+                                                                title="Send Message"
+                                                            >
+                                                                <FaEnvelope />
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </div>
-                                                <div className="flex flex-col items-end">
-                                                    <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{p.score}</span>
-                                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Points</span>
-                                                </div>
-                                            </div>
+                                                {p.userId && sendingMessageTo === p.userId && (
+                                                    <div
+                                                        className="md:col-span-2 p-6 rounded-2xl bg-primary/5 border border-primary/20 animate-in slide-in-from-top-4 duration-300"
+                                                        onClick={e => e.stopPropagation()}
+                                                    >
+                                                        <TextArea
+                                                            className="!p-8 !px-10 !rounded-[2rem] bg-black/30 border-2 border-white/5 !min-h-[160px] hover:border-white/10"
+                                                            placeholder={`Write a message to ${p.name}...`}
+                                                            value={messageText}
+                                                            onChange={e => setMessageText(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-end gap-3 mt-4">
+                                                            <Button
+                                                                variant="ghost"
+                                                                className="h-10 px-6 rounded-xl text-slate-400 hover:text-white"
+                                                                onClick={(e) => { e.stopPropagation(); setSendingMessageTo(null); }}
+                                                            >
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                className="h-10 px-8 rounded-xl bg-primary"
+                                                                onClick={(e) => { e.stopPropagation(); handleSendMessage(p.userId); }}
+                                                                disabled={isSendingMessage || !messageText.trim()}
+                                                            >
+                                                                {isSendingMessage ? 'Sending...' : 'Send Message'}
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </React.Fragment>
                                         ))}
                                     </div>
                                 )}
                             </div>
                         </Card>
-                    </div>
+                    </div >
                 )
             }
 
@@ -1037,62 +1101,64 @@ export default function UserDashboard() {
             }
 
             {/* ADMIN STUDY MATERIALS MODAL */}
-            {showAdminMaterialsModal && (
-                <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)}>
-                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={(e) => e.stopPropagation()}>
-                        <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center">
-                            <div>
-                                <h3 className="text-3xl font-black text-white">{selectedTopicName}</h3>
-                                <p className="text-rose-400 font-bold text-sm mt-1 uppercase tracking-widest">Study Resource Management</p>
+            {
+                showAdminMaterialsModal && (
+                    <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)}>
+                        <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                            <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center">
+                                <div>
+                                    <h3 className="text-3xl font-black text-white">{selectedTopicName}</h3>
+                                    <p className="text-rose-400 font-bold text-sm mt-1 uppercase tracking-widest">Study Resource Management</p>
+                                </div>
+                                <button onClick={() => setShowAdminMaterialsModal(false)} className="p-3 bg-white/5 hover:bg-red-500/20 hover:text-red-500 rounded-2xl transition-all text-slate-400">
+                                    <FaTimes size={20} />
+                                </button>
                             </div>
-                            <button onClick={() => setShowAdminMaterialsModal(false)} className="p-3 bg-white/5 hover:bg-red-500/20 hover:text-red-500 rounded-2xl transition-all text-slate-400">
-                                <FaTimes size={20} />
-                            </button>
-                        </div>
-                        <div className="p-10 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6">
-                            {selectedTopicMaterials.length === 0 ? (
-                                <p className="text-center py-20 text-slate-500 font-bold italic">No materials found for this topic.</p>
-                            ) : (
-                                selectedTopicMaterials.map((m) => (
-                                    <div key={m._id} className="p-6 rounded-3xl bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group">
-                                        <div className="flex items-center gap-6">
-                                            <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-3xl border border-rose-500/20">
-                                                {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
+                            <div className="p-10 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6">
+                                {selectedTopicMaterials.length === 0 ? (
+                                    <p className="text-center py-20 text-slate-500 font-bold italic">No materials found for this topic.</p>
+                                ) : (
+                                    selectedTopicMaterials.map((m) => (
+                                        <div key={m._id} className="p-6 rounded-3xl bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group">
+                                            <div className="flex items-center gap-6">
+                                                <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-3xl border border-rose-500/20">
+                                                    {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight">{m.name}</h4>
+                                                    {m.description && <p className="text-slate-400 text-sm italic">"{m.description}"</p>}
+                                                    <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-600 mt-2">
+                                                        {m.fileType?.split('/')[1]?.toUpperCase() || 'FILE'}
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <div className="flex flex-col gap-1">
-                                                <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight">{m.name}</h4>
-                                                {m.description && <p className="text-slate-400 text-sm italic">"{m.description}"</p>}
-                                                <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-600 mt-2">
-                                                    {m.fileType?.split('/')[1]?.toUpperCase() || 'FILE'}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-4 w-full md:w-auto">
-                                            <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none">
-                                                <Button className="w-full md:px-10 py-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-black border-none flex items-center gap-3">
-                                                    View Material
+                                            <div className="flex gap-4 w-full md:w-auto">
+                                                <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none">
+                                                    <Button className="w-full md:px-10 py-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-black border-none flex items-center gap-3">
+                                                        View Material
+                                                    </Button>
+                                                </a>
+                                                <Button
+                                                    onClick={() => deleteMaterial(m._id)}
+                                                    className="w-full md:px-6 py-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black border-none"
+                                                >
+                                                    <FaTrash />
                                                 </Button>
-                                            </a>
-                                            <Button
-                                                onClick={() => deleteMaterial(m._id)}
-                                                className="w-full md:px-6 py-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black border-none"
-                                            >
-                                                <FaTrash />
-                                            </Button>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                        <div className="p-8 bg-slate-900/20 border-t border-white/5 flex justify-center">
-                            <p className="text-slate-500 text-xs font-medium uppercase tracking-widest text-center">
-                                Admins can manage and delete materials. Students can download these for learning.
-                            </p>
-                        </div>
-                    </Card>
-                </div>
-            )}
-        </div>
+                                    ))
+                                )}
+                            </div>
+                            <div className="p-8 bg-slate-900/20 border-t border-white/5 flex justify-center">
+                                <p className="text-slate-500 text-xs font-medium uppercase tracking-widest text-center">
+                                    Admins can manage and delete materials. Students can download these for learning.
+                                </p>
+                            </div>
+                        </Card>
+                    </div>
+                )
+            }
+        </div >
     );
 }
 

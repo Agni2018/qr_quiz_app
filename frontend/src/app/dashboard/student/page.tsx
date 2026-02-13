@@ -23,7 +23,8 @@ import {
     FaDownload,
     FaBookOpen,
     FaFileAlt,
-    FaVideo
+    FaVideo,
+    FaBell
 } from 'react-icons/fa';
 
 import { useRouter } from 'next/navigation';
@@ -34,7 +35,9 @@ export default function StudentDashboard() {
     const [availableQuizzes, setAvailableQuizzes] = useState<any[]>([]);
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [activeView, setActiveView] = useState<'progress' | 'available' | 'lb' | 'badges' | 'certificates' | 'materials'>('progress');
+    const [activeView, setActiveView] = useState<'progress' | 'available' | 'lb' | 'badges' | 'certificates' | 'materials' | 'notifications'>('progress');
+    const [messages, setMessages] = useState<any[]>([]);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [leaderboard, setLeaderboard] = useState<any>(null);
@@ -78,6 +81,10 @@ export default function StudentDashboard() {
                 setCertificates(certsRes.data);
                 setMaterials(materialsRes.data || []);
 
+                // Fetch unread count
+                const unreadRes = await api.get('/messages/unread-count');
+                setUnreadCount(unreadRes.data.count);
+
 
                 // Check for daily login reward
                 const dailyPointsFlag = localStorage.getItem('dailyPointsAwarded');
@@ -110,6 +117,9 @@ export default function StudentDashboard() {
         if (activeView === 'badges' && user) {
             fetchBadgesData();
         }
+        if (activeView === 'notifications' && user) {
+            fetchMessages();
+        }
     }, [activeView, user]);
 
     const fetchBadgesData = async () => {
@@ -125,6 +135,19 @@ export default function StudentDashboard() {
             console.error('Error fetching badges:', err);
         } finally {
             setBadgesLoading(false);
+        }
+    };
+
+    const fetchMessages = async () => {
+        try {
+            const res = await api.get('/messages');
+            setMessages(res.data);
+            if (unreadCount > 0) {
+                await api.patch('/messages/read');
+                setUnreadCount(0);
+            }
+        } catch (err) {
+            console.error('Error fetching messages:', err);
         }
     };
 
@@ -347,6 +370,22 @@ export default function StudentDashboard() {
                             <FaBookOpen className={activeView === 'materials' ? 'text-rose-600' : 'text-slate-400'} /> Study Materials
                         </Button>
 
+                        <Button
+                            variant={activeView === 'notifications' ? 'secondary' : 'ghost'}
+                            className={`justify-start gap-4 h-12 rounded-xl text-lg font-medium transition-all relative ${activeView === 'notifications' ? 'bg-blue-500/10 text-blue-600 border-none shadow-none' : 'text-slate-400 hover:text-blue-600 hover:bg-blue-500/5 border-none'}`}
+                            onClick={() => { setActiveView('notifications'); setSidebarOpen(false); }}
+                        >
+                            <div className="relative">
+                                <FaBell className={activeView === 'notifications' ? 'text-blue-600' : 'text-slate-400'} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-pulse">
+                                        {unreadCount}
+                                    </span>
+                                )}
+                            </div>
+                            Notifications
+                        </Button>
+
                     </nav>
 
                     <div className="mt-8 pt-8 border-t border-slate-200/10 dark:border-white/5 flex flex-col gap-4">
@@ -393,7 +432,8 @@ export default function StudentDashboard() {
                                         activeView === 'lb' ? 'linear-gradient(135deg, #f59e0b, #f97316)' :
                                             activeView === 'certificates' ? 'linear-gradient(135deg, #6366f1, #a855f7)' :
                                                 activeView === 'materials' ? 'linear-gradient(135deg, #f43f5e, #fb7185)' :
-                                                    'linear-gradient(135deg, #ec4899, #f43f5e)',
+                                                    activeView === 'notifications' ? 'linear-gradient(135deg, #3b82f6, #60a5fa)' :
+                                                        'linear-gradient(135deg, #ec4899, #f43f5e)',
 
                                 display: 'flex',
                                 alignItems: 'center',
@@ -404,7 +444,8 @@ export default function StudentDashboard() {
                                         activeView === 'lb' ? '0 10px 40px rgba(245, 158, 11, 0.4)' :
                                             activeView === 'certificates' ? '0 10px 40px rgba(99, 102, 241, 0.4)' :
                                                 activeView === 'materials' ? '0 10px 40px rgba(244, 63, 94, 0.4)' :
-                                                    '0 10px 40px rgba(236, 72, 153, 0.4)',
+                                                    activeView === 'notifications' ? '0 10px 40px rgba(59, 130, 246, 0.4)' :
+                                                        '0 10px 40px rgba(236, 72, 153, 0.4)',
 
                                 border: '1px solid rgba(255, 255, 255, 0.1)',
                                 transform: 'rotate(-3deg)'
@@ -413,7 +454,8 @@ export default function StudentDashboard() {
                                     activeView === 'available' ? '💡' :
                                         activeView === 'lb' ? '🏅' :
                                             activeView === 'certificates' ? '📜' :
-                                                activeView === 'materials' ? '📚' : '🏆'}
+                                                activeView === 'materials' ? '📚' :
+                                                    activeView === 'notifications' ? '🔔' : '🏆'}
 
                             </div>
                             <div className="flex flex-col">
@@ -425,7 +467,8 @@ export default function StudentDashboard() {
                                                 activeView === 'lb' ? 'linear-gradient(to right, #f59e0b, #f97316)' :
                                                     activeView === 'certificates' ? 'linear-gradient(to right, #6366f1, #a855f7)' :
                                                         activeView === 'materials' ? 'linear-gradient(to right, #f43f5e, #fb7185)' :
-                                                            'linear-gradient(to right, #ec4899, #f43f5e)',
+                                                            activeView === 'notifications' ? 'linear-gradient(to right, #3b82f6, #60a5fa)' :
+                                                                'linear-gradient(to right, #ec4899, #f43f5e)',
 
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
@@ -436,7 +479,8 @@ export default function StudentDashboard() {
                                         activeView === 'available' ? 'Explore Topics' :
                                             activeView === 'lb' ? 'Leaderboard' :
                                                 activeView === 'certificates' ? 'Certificates' :
-                                                    activeView === 'materials' ? 'Study Materials' : 'My Badges'}
+                                                    activeView === 'materials' ? 'Study Materials' :
+                                                        activeView === 'notifications' ? 'Notifications' : 'My Badges'}
 
                                 </h2>
                                 <div className="h-2 w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r" style={{
@@ -445,7 +489,8 @@ export default function StudentDashboard() {
                                             activeView === 'lb' ? 'linear-gradient(to right, #f59e0b, transparent)' :
                                                 activeView === 'certificates' ? 'linear-gradient(to right, #6366f1, transparent)' :
                                                     activeView === 'materials' ? 'linear-gradient(to right, #f43f5e, transparent)' :
-                                                        'linear-gradient(to right, #ec4899, transparent)'
+                                                        activeView === 'notifications' ? 'linear-gradient(to right, #3b82f6, transparent)' :
+                                                            'linear-gradient(to right, #ec4899, transparent)'
 
                                 }} />
                             </div>
@@ -743,6 +788,54 @@ export default function StudentDashboard() {
                                             )}
                                         </div>
                                     </>
+                                )}
+                            </div>
+                        )}
+
+                        {activeView === 'notifications' && (
+                            <div className="animate-fade-in mb-32">
+                                <div className="h-10" />
+                                {messages.length === 0 ? (
+                                    <Card className="p-32 text-center bg-slate-950/40 border-dashed border-2 border-white/5 rounded-[40px]">
+                                        <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl">🔔</div>
+                                        <h3 className="text-4xl font-black mb-4">No notifications yet</h3>
+                                        <p className="text-slate-500 mb-12 text-xl max-w-md mx-auto leading-relaxed">Important updates from your instructors will appear here.</p>
+                                    </Card>
+                                ) : (
+                                    <div className="flex flex-col gap-6 max-w-4xl">
+                                        {messages.map((msg) => (
+                                            <Card
+                                                key={msg._id}
+                                                className={`transition-all duration-300 rounded-[2.5rem] flex flex-col gap-6 relative overflow-hidden ${msg.isRead ? 'bg-slate-950/20 opacity-80' : 'bg-slate-950/60 border-blue-500/20 shadow-xl shadow-blue-500/5'}`}
+                                                style={{ padding: '2.5rem 3rem', paddingLeft: '4rem' }}
+                                            >
+                                                {!msg.isRead && <div className="absolute top-0 left-0 w-2 h-full bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.5)]" />}
+                                                <div className="flex justify-between items-start">
+                                                    <div className="flex items-center gap-6">
+                                                        <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 text-2xl font-bold border border-blue-500/20 shadow-inner">
+                                                            {msg.sender?.username?.charAt(0).toUpperCase() || 'A'}
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-2xl font-black text-white">{msg.sender?.username || 'Instructor'}</span>
+                                                            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest opacity-60">
+                                                                {new Date(msg.createdAt).toLocaleString()}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    {!msg.isRead && (
+                                                        <span className="bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-blue-500/30 shadow-lg shadow-blue-500/5 animate-pulse">
+                                                            New Message
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="pl-20">
+                                                    <p className="text-slate-300 text-xl leading-[1.8] font-medium tracking-wide">
+                                                        {msg.text}
+                                                    </p>
+                                                </div>
+                                            </Card>
+                                        ))}
+                                    </div>
                                 )}
                             </div>
                         )}

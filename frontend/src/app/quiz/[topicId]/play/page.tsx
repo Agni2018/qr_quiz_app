@@ -5,6 +5,7 @@ import api from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
+import TextArea from '@/components/TextArea';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdTimer, MdPersonOutline, MdChevronRight, MdChevronLeft, MdSend } from 'react-icons/md';
 import { HiOutlineQuestionMarkCircle } from 'react-icons/hi';
@@ -343,12 +344,12 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                                     )}
 
                                     {currentQ?.type === 'fill_blank' && (
-                                        <textarea
+                                        <TextArea
                                             value={currentAnswer || ''}
                                             onChange={(e) => handleAnswer(e.target.value)}
                                             placeholder="Type your response here..."
-                                            className="w-full min-h-[220px] p-10 px-12 rounded-[24px] bg-black/40 border-2 border-white/10 focus:border-violet-500/50 outline-none transition-all text-xl font-bold placeholder:text-slate-800 resize-none shadow-inner"
-                                            style={{ lineHeight: '1.6' }}
+                                            className="!p-10 !px-12 !rounded-[2rem] bg-black/40 border-2 border-white/10 focus:!border-violet-500/50 outline-none transition-all !text-xl font-bold placeholder:text-slate-800 !min-h-[220px] shadow-inner"
+                                            style={{ lineHeight: '1.8' }}
                                         />
                                     )}
                                 </div>
