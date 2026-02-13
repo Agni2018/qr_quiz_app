@@ -352,10 +352,9 @@ exports.certifyStudents = async (req, res) => {
     try {
         const { topicId } = req.params;
 
-        // Find all attempts for this topic that are NOT certified and have score > 1
-        // (Assuming 1 mark per question, score > 1 means more than one correct answers)
-        // Wait, the requirement is "only for the students who have gotten more than one correct answer"
-        // Let's filter based on isCorrect: true in the answers array
+        const Topic = require('../models/Topic');
+        const topic = await Topic.findById(topicId);
+        const passingMarks = topic?.passingMarks || 0;
 
         const attempts = await UserAttempt.find({
             topicId,
@@ -363,6 +362,9 @@ exports.certifyStudents = async (req, res) => {
         });
 
         const qualifiedAttempts = attempts.filter(attempt => {
+            if (passingMarks > 0) {
+                return attempt.score >= passingMarks;
+            }
             const correctCount = (attempt.answers || []).filter(ans => ans.isCorrect).length;
             return correctCount > 0;
         });

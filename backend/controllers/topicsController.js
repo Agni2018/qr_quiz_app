@@ -24,7 +24,7 @@ exports.getTopicById = async (req, res) => {
 
 // POST create topic
 exports.createTopic = async (req, res) => {
-    const { name, description, timeLimit, negativeMarking, timeBasedScoring } = req.body;
+    const { name, description, timeLimit, negativeMarking, timeBasedScoring, passingMarks } = req.body;
     if (!name) return res.status(400).json({ message: 'Name is required' });
 
     const topic = new Topic({
@@ -32,7 +32,8 @@ exports.createTopic = async (req, res) => {
         description,
         timeLimit: timeLimit || 0,
         negativeMarking: negativeMarking || 0,
-        timeBasedScoring: timeBasedScoring || false
+        timeBasedScoring: timeBasedScoring || false,
+        passingMarks: passingMarks || 0
     });
 
     try {
@@ -49,7 +50,7 @@ exports.updateTopic = async (req, res) => {
         const topic = await Topic.findById(req.params.id);
         if (!topic) return res.status(404).json({ message: 'Topic not found' });
 
-        const fields = ['name', 'description', 'status', 'timeLimit', 'negativeMarking', 'timeBasedScoring'];
+        const fields = ['name', 'description', 'status', 'timeLimit', 'negativeMarking', 'timeBasedScoring', 'passingMarks'];
         fields.forEach(field => {
             if (req.body[field] !== undefined) {
                 topic[field] = req.body[field];
@@ -89,7 +90,8 @@ exports.copyTopic = async (req, res) => {
             status: 'active',
             timeLimit: sourceTopic.timeLimit,
             negativeMarking: sourceTopic.negativeMarking,
-            timeBasedScoring: sourceTopic.timeBasedScoring
+            timeBasedScoring: sourceTopic.timeBasedScoring,
+            passingMarks: sourceTopic.passingMarks
         });
         await newTopic.save();
 

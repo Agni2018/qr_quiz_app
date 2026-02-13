@@ -194,7 +194,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                         <HiOutlineQuestionMarkCircle className="text-3xl text-white" />
                     </div>
                     <div className="h-10 w-[1px] bg-white/10 hidden sm:block mx-1" />
-                    <div className="flex flex-col">
+                    <div className="flex flex-col hidden sm:flex">
                         <h1 className="text-xl md:text-2xl font-black uppercase tracking-widest text-white leading-tight">Quizmaster Pro</h1>
                         <span className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">{topic?.category || 'General Knowledge'} Assessment</span>
                     </div>

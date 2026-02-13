@@ -48,7 +48,8 @@ export default function UserDashboard() {
         description: '',
         timeLimit: 0,
         negativeMarking: 0,
-        timeBasedScoring: false
+        timeBasedScoring: false,
+        passingMarks: 0
     });
     const [materials, setMaterials] = useState<any[]>([]);
     const [loadingMaterials, setLoadingMaterials] = useState(false);
@@ -60,6 +61,7 @@ export default function UserDashboard() {
     const [selectedTopicId, setSelectedTopicId] = useState('');
     const [selectedTopicName, setSelectedTopicName] = useState('');
     const [participants, setParticipants] = useState<any[]>([]);
+    const [passingMarks, setPassingMarks] = useState(0);
     const [loadingParticipants, setLoadingParticipants] = useState(false);
     const [certifying, setCertifying] = useState(false);
     const [showAdminMaterialsModal, setShowAdminMaterialsModal] = useState(false);
@@ -122,7 +124,8 @@ export default function UserDashboard() {
             description: '',
             timeLimit: 0,
             negativeMarking: 0,
-            timeBasedScoring: false
+            timeBasedScoring: false,
+            passingMarks: 0
         });
         refreshData();
     };
@@ -154,7 +157,8 @@ export default function UserDashboard() {
         setMessageText('');
         try {
             const res = await api.get(`/analytics/topic/${topicId}/participants`);
-            setParticipants(res.data);
+            setParticipants(res.data.participants);
+            setPassingMarks(res.data.passingMarks);
         } catch (err) {
             console.error(err);
             alert('Failed to load participants');
@@ -170,7 +174,8 @@ export default function UserDashboard() {
         setLoadingParticipants(true);
         try {
             const res = await api.get(`/analytics/topic/${topicId}/participants`);
-            setParticipants(res.data);
+            setParticipants(res.data.participants);
+            setPassingMarks(res.data.passingMarks);
         } catch (err) {
             console.error(err);
             alert('Failed to load participants');
@@ -608,6 +613,11 @@ export default function UserDashboard() {
                                                             ❌ -{topic.negativeMarking}
                                                         </div>
                                                     )}
+                                                    {topic.passingMarks > 0 && (
+                                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-green-500/80 bg-green-500/5 px-2.5 py-1 rounded-lg border border-green-500/10">
+                                                            ✅ {topic.passingMarks} Marks
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="flex items-center gap-3 mt-auto w-full">
@@ -852,6 +862,14 @@ export default function UserDashboard() {
                                     />
                                 </div>
 
+                                <Input
+                                    label="Passing Marks (Cert.)"
+                                    type="number"
+                                    placeholder="Min. correct answers"
+                                    value={newTopic.passingMarks}
+                                    onChange={e => setNewTopic({ ...newTopic, passingMarks: Number(e.target.value) })}
+                                />
+
                                 <div
                                     onClick={() => setNewTopic({ ...newTopic, timeBasedScoring: !newTopic.timeBasedScoring })}
                                     className={`
@@ -1026,9 +1044,9 @@ export default function UserDashboard() {
                             <div className="flex-grow overflow-hidden flex flex-col">
                                 <div className="p-10 py-6 bg-white/5 border-b border-white/5">
                                     <p className="text-lg text-slate-300 font-medium">
-                                        {participants.filter(p => !p.isCertified && p.correctAnswersCount > 0).length > 0
-                                            ? `Are you sure you want to generate certificates for these students? (Only those with at least 1 correct answer)`
-                                            : `All students who attempted this quiz and qualified have already been certified.`}
+                                        {participants.filter(p => !p.isCertified && p.isQualified).length > 0
+                                            ? `Are you sure you want to generate certificates for these students? (Min. Required: ${passingMarks || 1} ${passingMarks > 0 ? 'marks' : 'correct'})`
+                                            : `All qualified students who attempted this quiz have already been certified.`}
                                     </p>
                                 </div>
 
@@ -1049,7 +1067,7 @@ export default function UserDashboard() {
                                     ) : (
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             {participants.filter(p => !p.isCertified).map((p, idx) => {
-                                                const isQualified = p.correctAnswersCount > 0;
+                                                const isQualified = p.isQualified;
                                                 return (
                                                     <div
                                                         key={idx}
@@ -1061,14 +1079,14 @@ export default function UserDashboard() {
                                                             </div>
                                                             <div className="flex flex-col">
                                                                 <span className="font-bold text-lg text-white">{p.name}</span>
-                                                                <span className="text-xs text-slate-400 font-mono italic">{isQualified ? 'Qualified' : 'Not Qualified (0 correct)'}</span>
+                                                                <span className="text-xs text-slate-400 font-mono italic">{isQualified ? `Qualified (${p.score}/${passingMarks || 1})` : `Not Qualified (Req: ${passingMarks || 1})`}</span>
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col items-end">
                                                             <span className={`text-2xl font-black ${isQualified ? 'text-green-400' : 'text-slate-500'}`}>
-                                                                {p.correctAnswersCount}
+                                                                {p.score}
                                                             </span>
-                                                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Correct</span>
+                                                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Marks</span>
                                                         </div>
                                                     </div>
                                                 );
@@ -1083,7 +1101,7 @@ export default function UserDashboard() {
                                 <Button
                                     className="flex-1 h-14 text-lg bg-green-600 hover:bg-green-500 shadow-xl shadow-green-900/20 rounded-2xl disabled:opacity-50"
                                     onClick={handleGenerateCertificates}
-                                    disabled={certifying || participants.filter(p => !p.isCertified && p.correctAnswersCount > 0).length === 0}
+                                    disabled={certifying || participants.filter(p => !p.isCertified && p.isQualified).length === 0}
                                 >
                                     {certifying ? 'Generating...' : 'Generate Certificates'}
                                 </Button>
