@@ -230,27 +230,6 @@ exports.submitQuiz = async (req, res) => {
                     console.log(`[DEBUG] Awarded +1 point. New Balance: ${userDoc.points}`);
                 }
 
-                // Check for "Quiz Master" badge (100% score)
-                const maxPossibleScore = questions.reduce((sum, q) => sum + (q.marks || 1), 0);
-                if (rawScore >= maxPossibleScore && maxPossibleScore > 0) {
-                    let badge = await Badge.findOne({ name: 'Quiz Master' });
-                    if (!badge) {
-                        badge = new Badge({
-                            name: 'Quiz Master',
-                            description: 'Scored 100% on a quiz',
-                            type: 'quiz_perfect',
-                            threshold: 100
-                        });
-                        await badge.save();
-                    }
-
-                    const alreadyHas = userDoc.badges.find(b => b.badgeId.toString() === badge._id.toString());
-                    if (!alreadyHas) {
-                        userDoc.badges.push({ badgeId: badge._id });
-                        badgesAwarded.push(badge.name);
-                        console.log(`[DEBUG] Badge earned: Quiz Master`);
-                    }
-                }
 
                 await userDoc.save();
                 console.log(`[DEBUG] userDoc saved successfully for ${userDoc.username}`);
