@@ -3,22 +3,14 @@ import axios from 'axios';
 const isServer = typeof window === 'undefined';
 const isDev = process.env.NODE_ENV === 'development';
 
-const getBaseURL = () => {
-    const url = process.env.NEXT_PUBLIC_API_URL || '';
-    if (url) {
-        return url.endsWith('/api') ? url : `${url}/api`;
-    }
-    return '/api'; // Fallback if no URL set
-};
-
 const api = axios.create({
-    baseURL: getBaseURL(),
+    baseURL: isServer || isDev
+        ? ((process.env.NEXT_PUBLIC_API_URL || '').endsWith('/api')
+            ? process.env.NEXT_PUBLIC_API_URL
+            : `${process.env.NEXT_PUBLIC_API_URL}/api`)
+        : '/api', // In Production Browser, hit the Next.js proxy at /api for cookies
     withCredentials: true,
 });
-
-if (typeof window !== 'undefined') {
-    console.log('API Client Initialized with baseURL:', api.defaults.baseURL);
-}
 
 api.interceptors.response.use(
     (response) => response,

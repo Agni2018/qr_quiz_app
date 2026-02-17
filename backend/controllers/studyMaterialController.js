@@ -32,6 +32,9 @@ const upload = multer({
 exports.uploadMiddleware = upload.single('file');
 
 exports.uploadMaterial = async (req, res) => {
+    req.on('aborted', () => console.log('[UPLOAD] Request aborted by client/proxy'));
+    req.on('error', (err) => console.error('[UPLOAD] Request stream error:', err));
+
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file received by server' });
