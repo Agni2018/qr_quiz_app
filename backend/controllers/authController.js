@@ -186,3 +186,19 @@ exports.seed = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+// Temporary: Reset Admin Password
+exports.resetAdmin = async (req, res) => {
+    try {
+        const { password } = req.body;
+        const user = await User.findOne({ username: 'admin' });
+        if (!user) {
+            return res.status(404).json({ message: 'Admin user not found' });
+        }
+        user.password = password;
+        await user.save();
+        res.json({ message: 'Admin password updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
