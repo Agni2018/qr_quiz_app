@@ -72,7 +72,13 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
     if (!topic) return <div className="container min-h-screen flex items-center justify-center">Loading Data...</div>;
 
-    const quizLink = `http://localhost:3000/quiz/${id}`;
+    const [quizLink, setQuizLink] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setQuizLink(`${window.location.origin}/quiz/${id}`);
+        }
+    }, [id]);
 
     return (
         <main className="container">
