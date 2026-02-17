@@ -8,21 +8,34 @@ const fs = require('fs');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         try {
-            const uploadDir = path.join(process.cwd(), 'uploads');
-            console.log('Resolving Upload Directory (CWD):', uploadDir);
+            const uploadDir = path.resolve(process.cwd(), 'uploads');
+            console.log('[UPLOAD] Resolving Destination:', uploadDir);
+
             if (!fs.existsSync(uploadDir)) {
-                console.log('Creating Upload Directory (CWD):', uploadDir);
+                console.log('[UPLOAD] Directory missing, creating:', uploadDir);
                 fs.mkdirSync(uploadDir, { recursive: true });
             }
+
+            // Check if directory is writable
+            fs.accessSync(uploadDir, fs.constants.W_OK);
+            console.log('[UPLOAD] Destination is writable.');
+
             cb(null, uploadDir);
         } catch (err) {
-            console.error('Multer Destination Error:', err);
+            console.error('[UPLOAD] Multer Destination CRASH:', err);
             cb(err);
         }
     },
     filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+        try {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const fname = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
+            console.log('[UPLOAD] Generated filename:', fname);
+            cb(null, fname);
+        } catch (err) {
+            console.error('[UPLOAD] Multer Filename Error:', err);
+            cb(err);
+        }
     }
 });
 
@@ -34,28 +47,32 @@ const upload = multer({
 exports.uploadMiddleware = upload.single('file');
 
 exports.uploadMaterial = async (req, res) => {
-    console.log('Upload Request Received:', {
-        body: req.body,
-        file: req.file ? {
-            name: req.file.originalname,
-            size: req.file.size,
-            mimetype: req.file.mimetype
-        } : 'No File'
-    });
+    console.log('[UPLOAD] Controller reached. File info:', req.file ? {
+        originalName: req.file.originalname,
+        filename: req.file.filename,
+        size: req.file.size
+    } : 'MISSING');
+
+    console.log('[UPLOAD] Request body:', req.body);
+
     try {
         if (!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
+            console.error('[UPLOAD] Error: req.file is null');
+            return res.status(400).json({ message: 'No file received by server' });
         }
 
         const { name, description, topicId } = req.body;
 
         if (!name || !topicId) {
+            console.error('[UPLOAD] Error: Missing required fields', { name, topicId });
             return res.status(400).json({ message: 'Name and Topic ID are required' });
         }
 
+        console.log('[UPLOAD] Verifying topic existence:', topicId);
         const topic = await Topic.findById(topicId);
         if (!topic) {
-            return res.status(404).json({ message: 'Topic not found' });
+            console.error('[UPLOAD] Error: Topic not found in database');
+            return res.status(404).json({ message: 'The selected topic no longer exists' });
         }
 
         const studyMaterial = new StudyMaterial({
@@ -65,19 +82,20 @@ exports.uploadMaterial = async (req, res) => {
             fileUrl: `/uploads/${req.file.filename}`,
             fileType: req.file.mimetype,
             topicId,
-            uploadedBy: req.user.id
+            uploadedBy: req.user?.id
         });
 
-        console.log('Attempting to save StudyMaterial to DB...');
+        console.log('[UPLOAD] Attempting to save StudyMaterial record to MongoDB...');
         await studyMaterial.save();
-        console.log('StudyMaterial saved successfully');
+        console.log('[UPLOAD] Success! StudyMaterial saved.');
+
         res.status(201).json(studyMaterial);
     } catch (err) {
-        console.error('Final Upload Catch Error:', err);
+        console.error('[UPLOAD] FATAL ERROR in controller:', err);
         res.status(500).json({
-            message: `Server error during upload: ${err.message}`,
-            error: err.toString(),
-            stack: process.env.NODE_ENV === 'production' ? null : err.stack
+            message: `Server failed to process upload. Error: ${err.message}`,
+            details: err.toString(),
+            code: err.code
         });
     }
 };

@@ -87,23 +87,26 @@ app.use('/api/study-materials', studyMaterialRoutes);
 app.use('/api/messages', messageRoutes);
 
 // Ensure uploads directory exists on startup
-const uploadPath = path.join(process.cwd(), 'uploads');
+const uploadPath = path.resolve(process.cwd(), 'uploads');
+console.log('[STARTUP] Checking upload directory:', uploadPath);
+
 if (!fs.existsSync(uploadPath)) {
   try {
     fs.mkdirSync(uploadPath, { recursive: true });
-    console.log('Created uploads directory:', uploadPath);
+    console.log('[STARTUP] Created uploads directory successfully.');
   } catch (err) {
-    console.error('Startup Error: Could not create uploads directory:', err.message);
+    console.error('[STARTUP] CRITICAL: Could not create uploads directory:', err.message);
   }
 }
 
 // Global Error Handler
 app.use((err, req, res, next) => {
-  console.error('Unhandled Error:', err);
-  res.status(500).json({
-    message: 'Internal Server Error',
+  console.error('[GLOBAL ERROR]:', err);
+  const status = err.status || 500;
+  res.status(status).json({
+    message: 'A server error occurred. Please check logs.',
     error: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack
+    status: status
   });
 });
 
