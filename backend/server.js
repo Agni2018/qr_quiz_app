@@ -118,8 +118,13 @@ app.get('/', (req, res) => {
 module.exports = app;
 
 if (require.main === module) {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
+
+  // Increase timeouts for large file uploads
+  server.timeout = 600000; // 10 minutes
+  server.keepAliveTimeout = 61000; // slightly more than default (60s)
+  server.headersTimeout = 65000; // slightly more than keepAliveTimeout
 }
 
