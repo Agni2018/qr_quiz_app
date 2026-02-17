@@ -257,6 +257,9 @@ export default function StudentDashboard() {
     };
 
     const getFileUrl = (url: string) => {
+        if (process.env.NODE_ENV === 'production') {
+            return url; // Use relative path to hit Next.js proxy
+        }
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
         return `${baseUrl}${url}`;
     };

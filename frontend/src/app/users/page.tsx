@@ -207,6 +207,9 @@ export default function UserDashboard() {
     };
 
     const getFileUrl = (url: string) => {
+        if (process.env.NODE_ENV === 'production') {
+            return url;
+        }
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
         return `${baseUrl}${url}`;
     };
