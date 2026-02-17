@@ -49,7 +49,8 @@ app.use(cors({
   credentials: true
 }));
 app.use(cookieParser());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use('/uploads', express.static('uploads'));
 app.use('/api/uploads', express.static('uploads'));
 
@@ -83,8 +84,15 @@ app.use('/api/badges', badgeRoutes);
 app.use('/api/study-materials', studyMaterialRoutes);
 app.use('/api/messages', messageRoutes);
 
-
-app.get('/', (req, res) => {
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled Error:', err);
+  res.status(500).json({
+    message: 'Internal Server Error',
+    error: err.message,
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack
+  });
+}); app.get('/', (req, res) => {
   res.send('QR Quiz Platform API Running');
 });
 

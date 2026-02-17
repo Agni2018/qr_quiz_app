@@ -7,11 +7,18 @@ const fs = require('fs');
 // Configure multer storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, '../uploads');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
+        try {
+            const uploadDir = path.join(__dirname, '../uploads');
+            console.log('Resolving Upload Directory:', uploadDir);
+            if (!fs.existsSync(uploadDir)) {
+                console.log('Creating Upload Directory:', uploadDir);
+                fs.mkdirSync(uploadDir, { recursive: true });
+            }
+            cb(null, uploadDir);
+        } catch (err) {
+            console.error('Multer Destination Error:', err);
+            cb(err);
         }
-        cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -27,6 +34,14 @@ const upload = multer({
 exports.uploadMiddleware = upload.single('file');
 
 exports.uploadMaterial = async (req, res) => {
+    console.log('Upload Request Received:', {
+        body: req.body,
+        file: req.file ? {
+            name: req.file.originalname,
+            size: req.file.size,
+            mimetype: req.file.mimetype
+        } : 'No File'
+    });
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
@@ -56,8 +71,8 @@ exports.uploadMaterial = async (req, res) => {
         await studyMaterial.save();
         res.status(201).json(studyMaterial);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error during upload' });
+        console.error('Upload Error:', err);
+        res.status(500).json({ message: `Server error during upload: ${err.message}` });
     }
 };
 
