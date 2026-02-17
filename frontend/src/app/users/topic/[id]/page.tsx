@@ -18,6 +18,13 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
     const [showAddForm, setShowAddForm] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
+    const [quizLink, setQuizLink] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setQuizLink(`${window.location.origin}/quiz/${id}`);
+        }
+    }, [id]);
 
     const router = useRouter();
 
@@ -72,13 +79,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
     if (!topic) return <div className="container min-h-screen flex items-center justify-center">Loading Data...</div>;
 
-    const [quizLink, setQuizLink] = useState('');
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            setQuizLink(`${window.location.origin}/quiz/${id}`);
-        }
-    }, [id]);
 
     return (
         <main className="container">
