@@ -1,9 +1,12 @@
 import axios from 'axios';
 
+const isServer = typeof window === 'undefined';
 const api = axios.create({
-    baseURL: (process.env.NEXT_PUBLIC_API_URL || '').endsWith('/api')
-        ? process.env.NEXT_PUBLIC_API_URL
-        : `${process.env.NEXT_PUBLIC_API_URL}/api`,
+    baseURL: isServer
+        ? ((process.env.NEXT_PUBLIC_API_URL || '').endsWith('/api')
+            ? process.env.NEXT_PUBLIC_API_URL
+            : `${process.env.NEXT_PUBLIC_API_URL}/api`)
+        : '/api', // Browser always hits the Next.js proxy at /api
     withCredentials: true,
 });
 
