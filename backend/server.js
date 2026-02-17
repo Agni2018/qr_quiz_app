@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
+const path = require('path');
+const fs = require('fs');
 const connectDB = require('./config/db');
 
 dotenv.config();
@@ -83,6 +85,17 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/badges', badgeRoutes);
 app.use('/api/study-materials', studyMaterialRoutes);
 app.use('/api/messages', messageRoutes);
+
+// Ensure uploads directory exists on startup
+const uploadPath = path.join(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadPath)) {
+  try {
+    fs.mkdirSync(uploadPath, { recursive: true });
+    console.log('Created uploads directory:', uploadPath);
+  } catch (err) {
+    console.error('Startup Error: Could not create uploads directory:', err.message);
+  }
+}
 
 // Global Error Handler
 app.use((err, req, res, next) => {

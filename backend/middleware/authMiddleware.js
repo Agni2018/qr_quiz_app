@@ -14,9 +14,11 @@ exports.protect = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log('Token Verified Successfully:', { userId: decoded.id, role: decoded.role });
         req.user = decoded;
         next();
     } catch (error) {
+        console.error('Token Verification Failed:', error.message);
         res.status(401).json({ message: 'Not authorized, token failed' });
     }
 };
