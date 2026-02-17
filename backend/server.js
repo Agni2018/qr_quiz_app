@@ -7,7 +7,33 @@ const connectDB = require('./config/db');
 dotenv.config();
 
 // Connect Database
-connectDB();
+const User = require('./models/User');
+
+// Connect Database
+connectDB().then(async () => {
+  try {
+    const adminExists = await User.findOne({ role: 'admin' });
+    if (!adminExists) {
+      const username = process.env.ADMIN_USERNAME || 'admin';
+      const password = process.env.ADMIN_PASSWORD || 'adminpassword';
+      const email = process.env.ADMIN_EMAIL || 'admin@example.com';
+
+      const admin = new User({
+        username,
+        email,
+        password,
+        role: 'admin'
+      });
+
+      await admin.save();
+      console.log(`Admin user created: ${username}`);
+    } else {
+      console.log('Admin user already exists');
+    }
+  } catch (error) {
+    console.error('Error creating admin user:', error);
+  }
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
