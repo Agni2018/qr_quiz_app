@@ -8,10 +8,10 @@ const fs = require('fs');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         try {
-            const uploadDir = path.join(__dirname, '../uploads');
-            console.log('Resolving Upload Directory:', uploadDir);
+            const uploadDir = path.join(process.cwd(), 'uploads');
+            console.log('Resolving Upload Directory (CWD):', uploadDir);
             if (!fs.existsSync(uploadDir)) {
-                console.log('Creating Upload Directory:', uploadDir);
+                console.log('Creating Upload Directory (CWD):', uploadDir);
                 fs.mkdirSync(uploadDir, { recursive: true });
             }
             cb(null, uploadDir);
@@ -68,11 +68,17 @@ exports.uploadMaterial = async (req, res) => {
             uploadedBy: req.user.id
         });
 
+        console.log('Attempting to save StudyMaterial to DB...');
         await studyMaterial.save();
+        console.log('StudyMaterial saved successfully');
         res.status(201).json(studyMaterial);
     } catch (err) {
-        console.error('Upload Error:', err);
-        res.status(500).json({ message: `Server error during upload: ${err.message}` });
+        console.error('Final Upload Catch Error:', err);
+        res.status(500).json({
+            message: `Server error during upload: ${err.message}`,
+            error: err.toString(),
+            stack: process.env.NODE_ENV === 'production' ? null : err.stack
+        });
     }
 };
 
@@ -107,7 +113,7 @@ exports.deleteMaterial = async (req, res) => {
         }
 
         // Delete file from filesystem
-        const filePath = path.join(__dirname, '..', material.fileUrl);
+        const filePath = path.join(process.cwd(), material.fileUrl);
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }

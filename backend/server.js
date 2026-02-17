@@ -92,7 +92,9 @@ app.use((err, req, res, next) => {
     error: err.message,
     stack: process.env.NODE_ENV === 'production' ? null : err.stack
   });
-}); app.get('/', (req, res) => {
+});
+
+app.get('/', (req, res) => {
   res.send('QR Quiz Platform API Running');
 });
 
