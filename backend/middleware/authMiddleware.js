@@ -42,9 +42,11 @@ exports.optionalProtect = (req, res, next) => {
 };
 
 exports.admin = (req, res, next) => {
+    console.log('Admin Check - User:', req.user ? { id: req.user.id, role: req.user.role } : 'None');
     if (req.user && req.user.role === 'admin') {
         next();
     } else {
+        console.warn('Admin Check FAILED for user:', req.user);
         res.status(403).json({ message: 'Not authorized as admin' });
     }
 };
