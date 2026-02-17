@@ -12,26 +12,31 @@ const User = require('./models/User');
 // Connect Database
 connectDB().then(async () => {
   try {
-    const adminExists = await User.findOne({ role: 'admin' });
-    if (!adminExists) {
-      const username = process.env.ADMIN_USERNAME || 'admin';
-      const password = process.env.ADMIN_PASSWORD || 'adminpassword';
-      const email = process.env.ADMIN_EMAIL || 'admin@example.com';
+    const username = process.env.ADMIN_USERNAME || 'admin';
+    const password = process.env.ADMIN_PASSWORD || 'admin123';
+    const email = process.env.ADMIN_EMAIL || 'admin@example.com';
 
-      const admin = new User({
+    let adminUser = await User.findOne({ username });
+
+    if (adminUser) {
+      // Update existing admin
+      adminUser.password = password;
+      adminUser.role = 'admin'; // Ensure role is admin
+      await adminUser.save();
+      console.log(`Admin user updated: ${username}`);
+    } else {
+      // Create new admin
+      adminUser = new User({
         username,
         email,
         password,
         role: 'admin'
       });
-
-      await admin.save();
+      await adminUser.save();
       console.log(`Admin user created: ${username}`);
-    } else {
-      console.log('Admin user already exists');
     }
   } catch (error) {
-    console.error('Error creating admin user:', error);
+    console.error('Error seeding admin user:', error);
   }
 });
 
