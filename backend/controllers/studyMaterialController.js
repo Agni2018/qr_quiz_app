@@ -4,25 +4,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Configure multer storage
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        try {
-            const uploadDir = path.resolve(process.cwd(), 'uploads');
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, { recursive: true });
-            }
-            cb(null, uploadDir);
-        } catch (err) {
-            console.error('Multer Destination Error:', err);
-            cb(err);
-        }
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
-});
+// Configure multer storage for test
+const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,
@@ -36,8 +19,9 @@ exports.uploadMaterial = async (req, res) => {
     req.on('error', (err) => console.error('[UPLOAD] Request stream error:', err));
 
     try {
-        if (!req.file) {
-            return res.status(400).json({ message: 'No file received by server' });
+        if (!req.file || !req.file.buffer) {
+            console.error('[UPLOAD] Error: req.file or buffer is missing');
+            return res.status(400).json({ message: 'No file buffer received' });
         }
 
         const { name, description, topicId } = req.body;
@@ -51,11 +35,19 @@ exports.uploadMaterial = async (req, res) => {
             return res.status(404).json({ message: 'Topic not found' });
         }
 
+        // Manual disk write to test if disk storage was the issue
+        const fileName = `file-${Date.now()}-${req.file.originalname}`;
+        const uploadPath = path.resolve(process.cwd(), 'uploads', fileName);
+
+        console.log('[UPLOAD] Manual write started:', uploadPath);
+        fs.writeFileSync(uploadPath, req.file.buffer);
+        console.log('[UPLOAD] Manual write finished successfully.');
+
         const studyMaterial = new StudyMaterial({
             name,
             originalName: req.file.originalname,
             description,
-            fileUrl: `/uploads/${req.file.filename}`,
+            fileUrl: `/uploads/${fileName}`,
             fileType: req.file.mimetype,
             topicId,
             uploadedBy: req.user?.id
@@ -64,10 +56,10 @@ exports.uploadMaterial = async (req, res) => {
         await studyMaterial.save();
         res.status(201).json(studyMaterial);
     } catch (err) {
-        console.error('Upload Error:', err);
+        console.error('Upload Process Error:', err);
         res.status(500).json({
-            message: `Server error during upload: ${err.message}`,
-            error: err.toString()
+            message: `Manual upload error: ${err.message}`,
+            details: err.toString()
         });
     }
 };

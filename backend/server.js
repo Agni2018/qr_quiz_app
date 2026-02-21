@@ -6,6 +6,14 @@ const path = require('path');
 const fs = require('fs');
 const connectDB = require('./config/db');
 
+// Global Crash Handlers for Debugging
+process.on('uncaughtException', (err) => {
+  console.error('[CRITICAL] Uncaught Exception:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[CRITICAL] Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 dotenv.config();
 
 // Connect Database
@@ -99,9 +107,19 @@ if (!fs.existsSync(uploadPath)) {
   }
 }
 
+const multer = require('multer');
+
 // Global Error Handler
 app.use((err, req, res, next) => {
   console.error('[GLOBAL ERROR]:', err);
+
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({
+      message: `File upload error: ${err.message}`,
+      code: err.code
+    });
+  }
+
   const status = err.status || 500;
   res.status(status).json({
     message: 'A server error occurred. Please check logs.',

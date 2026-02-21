@@ -52,3 +52,23 @@ The frontend is a Next.js application.
 
 - **Frontend:** Open [http://localhost:3000](http://localhost:3000) in your browser.
 - **Backend API:** The API will be running at `http://localhost:5000` (check terminal output for exact port).
+
+## Running with Docker Compose (Recommended for Easy Setup)
+
+If you have Docker installed, you can start the entire stack (Frontend, Backend, and MongoDB) with a single command:
+
+1.  **Start all services:**
+    ```bash
+    docker-compose up --build
+    ```
+
+2.  **Stop all services:**
+    ```bash
+    docker-compose down
+    ```
+
+This will automatically:
+- Start a MongoDB container.
+- Build and start the backend.
+- Build and start the frontend.
+- Connect everything together using internal networking.
