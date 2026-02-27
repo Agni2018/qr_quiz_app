@@ -1,0 +1,152 @@
+[
+  {
+    "_id": "698eba5e52adb1b1fb9cf555",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "69842cd567c1ea46282d97e2",
+    "text": "hey max did a good job in football you are officially certified now,if u have any doubts u can meet me in school",
+    "isRead": true,
+    "createdAt": "2026-02-13T05:45:02.953Z",
+    "updatedAt": "2026-02-13T05:45:17.357Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a118437b0b2c2329cc5e96",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "6982ed536d300cf027503dd7",
+    "text": "good job gautam for completing random quiz",
+    "isRead": true,
+    "createdAt": "2026-02-27T04:06:27.955Z",
+    "updatedAt": "2026-02-27T04:15:34.417Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11a577b0b2c2329cc60a4",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "696f5560dfe655751f72e904",
+    "text": "great work in civics",
+    "isRead": false,
+    "createdAt": "2026-02-27T04:15:19.299Z",
+    "updatedAt": "2026-02-27T04:15:19.299Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11a947b0b2c2329cc6135",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "696f5560dfe655751f72e904",
+    "text": "great job in civics",
+    "isRead": false,
+    "createdAt": "2026-02-27T04:16:20.688Z",
+    "updatedAt": "2026-02-27T04:16:20.688Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11af25aa71259628993cb",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "6982f69ad1e7ed6a24aec4d2",
+    "text": "good job sam",
+    "isRead": true,
+    "createdAt": "2026-02-27T04:17:54.332Z",
+    "updatedAt": "2026-02-27T04:18:07.305Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11b585aa712596289946a",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "6982f69ad1e7ed6a24aec4d2",
+    "text": "good jod sam",
+    "isRead": true,
+    "createdAt": "2026-02-27T04:19:36.552Z",
+    "updatedAt": "2026-02-27T04:19:47.767Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11b845aa7125962899517",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "696f5560dfe655751f72e904",
+    "text": "you did great in civics gautam",
+    "isRead": false,
+    "createdAt": "2026-02-27T04:20:20.747Z",
+    "updatedAt": "2026-02-27T04:20:20.747Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11bda5aa7125962899610",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "6982f69ad1e7ed6a24aec4d2",
+    "text": "you did great in aaa sam",
+    "isRead": true,
+    "createdAt": "2026-02-27T04:21:46.650Z",
+    "updatedAt": "2026-02-27T04:21:57.264Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11c2e5aa712596289972e",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "6982f29e7f40863cc2269c66",
+    "text": "very good rishabh keep it up",
+    "isRead": true,
+    "createdAt": "2026-02-27T04:23:10.199Z",
+    "updatedAt": "2026-02-27T04:23:53.629Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11c445aa7125962899741",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "696f5560dfe655751f72e904",
+    "text": "your history is great rishabh",
+    "isRead": false,
+    "createdAt": "2026-02-27T04:23:32.100Z",
+    "updatedAt": "2026-02-27T04:23:32.100Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11e4555596c5689466db8",
+    "sender": "6982ed536d300cf027503dd7",
+    "recipient": "6982ed536d300cf027503dd7",
+    "text": "Msg 1",
+    "isRead": true,
+    "createdAt": "2026-02-27T04:32:05.996Z",
+    "updatedAt": "2026-02-27T04:35:38.085Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11e4655596c5689466dba",
+    "sender": "6982ed536d300cf027503dd7",
+    "recipient": "6982ed536d300cf027503dd7",
+    "text": "Msg 2",
+    "isRead": true,
+    "createdAt": "2026-02-27T04:32:06.009Z",
+    "updatedAt": "2026-02-27T04:35:38.085Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11f0d5aa712596289980a",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "696f5560dfe655751f72e904",
+    "text": "great job you topped the quiz on civics",
+    "isRead": false,
+    "createdAt": "2026-02-27T04:35:25.577Z",
+    "updatedAt": "2026-02-27T04:35:25.577Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11f4b5aa71259628998e6",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "696f5560dfe655751f72e904",
+    "text": "great job gautam",
+    "isRead": false,
+    "createdAt": "2026-02-27T04:36:27.359Z",
+    "updatedAt": "2026-02-27T04:36:27.359Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a11f795aa71259628999c4",
+    "sender": "696f5560dfe655751f72e904",
+    "recipient": "6982f69ad1e7ed6a24aec4d2",
+    "text": "good work sam",
+    "isRead": true,
+    "createdAt": "2026-02-27T04:37:13.561Z",
+    "updatedAt": "2026-02-27T04:37:24.055Z",
+    "__v": 0
+  }
+]

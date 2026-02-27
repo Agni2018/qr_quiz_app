@@ -27,7 +27,8 @@ import {
     FaBookOpen,
     FaDownload,
     FaVideo,
-    FaEnvelope
+    FaEnvelope,
+    FaCheckCircle
 } from 'react-icons/fa';
 
 
@@ -67,6 +68,7 @@ export default function UserDashboard() {
     const [showAdminMaterialsModal, setShowAdminMaterialsModal] = useState(false);
     const [selectedTopicMaterials, setSelectedTopicMaterials] = useState<any[]>([]);
     const [sendingMessageTo, setSendingMessageTo] = useState<string | null>(null);
+    const [messageSuccessTo, setMessageSuccessTo] = useState<string | null>(null);
     const [messageText, setMessageText] = useState('');
     const [isSendingMessage, setIsSendingMessage] = useState(false);
 
@@ -226,15 +228,24 @@ export default function UserDashboard() {
         }
     };
 
-    const handleSendMessage = async (recipientId: string) => {
+    const handleSendMessage = async (recipientId: string, pId: string) => {
         if (!messageText.trim()) return;
         setIsSendingMessage(true);
         try {
             await api.post('/messages', { recipientId, text: messageText });
-            alert('Message sent successfully!');
+            // Alert removed to prevent browser from blocking consecutive dialogs and crashing state
             setSendingMessageTo(null);
             setMessageText('');
+
+            // Show success tick for 3 seconds
+            setMessageSuccessTo(pId);
+            setTimeout(() => {
+                setMessageSuccessTo(null);
+            }, 3000);
+
         } catch (err: any) {
+            console.error('Failed to send message:', err);
+            // Replace catch alert with a non-blocking console error to prevent double-crash
             alert(err.response?.data?.message || 'Failed to send message');
         } finally {
             setIsSendingMessage(false);
@@ -943,7 +954,7 @@ export default function UserDashboard() {
                                 ) : (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {participants.map((p, idx) => (
-                                            <React.Fragment key={idx}>
+                                            <React.Fragment key={p.id || idx}>
                                                 <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
                                                     <div className="flex items-center gap-4">
                                                         <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg shadow-inner">
@@ -960,13 +971,20 @@ export default function UserDashboard() {
                                                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Points</span>
                                                         </div>
                                                         {p.userId && (
-                                                            <button
-                                                                onClick={() => setSendingMessageTo(sendingMessageTo === p.id ? null : p.id)}
-                                                                className="w-10 h-10 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary flex items-center justify-center transition-all ml-2"
-                                                                title="Send Message"
-                                                            >
-                                                                <FaEnvelope />
-                                                            </button>
+                                                            messageSuccessTo === p.id ? (
+                                                                <div className="w-10 h-10 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center ml-2 relative" title="Message sent successfully">
+                                                                    <div className="absolute inset-0 bg-green-500/20 rounded-xl animate-ping opacity-75"></div>
+                                                                    <FaCheckCircle size={20} className="relative z-10" />
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => setSendingMessageTo(sendingMessageTo === p.id ? null : p.id)}
+                                                                    className="w-10 h-10 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary flex items-center justify-center transition-all ml-2"
+                                                                    title="Send Message"
+                                                                >
+                                                                    <FaEnvelope />
+                                                                </button>
+                                                            )
                                                         )}
                                                     </div>
                                                 </div>
@@ -991,7 +1009,7 @@ export default function UserDashboard() {
                                                             </Button>
                                                             <Button
                                                                 className="h-10 px-8 rounded-xl bg-primary"
-                                                                onClick={(e) => { e.stopPropagation(); handleSendMessage(String(p.userId)); }}
+                                                                onClick={(e) => { e.stopPropagation(); handleSendMessage(String(p.userId), String(p.id)); }}
                                                                 disabled={isSendingMessage || !messageText.trim()}
                                                             >
                                                                 {isSendingMessage ? 'Sending...' : 'Send Message'}
