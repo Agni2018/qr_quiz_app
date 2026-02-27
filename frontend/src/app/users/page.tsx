@@ -961,7 +961,7 @@ export default function UserDashboard() {
                                                         </div>
                                                         {p.userId && (
                                                             <button
-                                                                onClick={() => setSendingMessageTo(sendingMessageTo === p.userId ? null : p.userId)}
+                                                                onClick={() => setSendingMessageTo(sendingMessageTo === p.id ? null : p.id)}
                                                                 className="w-10 h-10 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary flex items-center justify-center transition-all ml-2"
                                                                 title="Send Message"
                                                             >
@@ -970,7 +970,7 @@ export default function UserDashboard() {
                                                         )}
                                                     </div>
                                                 </div>
-                                                {p.userId && sendingMessageTo === p.userId && (
+                                                {p.userId && sendingMessageTo === p.id && (
                                                     <div
                                                         className="md:col-span-2 p-6 rounded-2xl bg-primary/5 border border-primary/20 animate-in slide-in-from-top-4 duration-300"
                                                         onClick={e => e.stopPropagation()}
@@ -991,7 +991,7 @@ export default function UserDashboard() {
                                                             </Button>
                                                             <Button
                                                                 className="h-10 px-8 rounded-xl bg-primary"
-                                                                onClick={(e) => { e.stopPropagation(); handleSendMessage(p.userId); }}
+                                                                onClick={(e) => { e.stopPropagation(); handleSendMessage(String(p.userId)); }}
                                                                 disabled={isSendingMessage || !messageText.trim()}
                                                             >
                                                                 {isSendingMessage ? 'Sending...' : 'Send Message'}
