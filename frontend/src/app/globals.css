@@ -14,18 +14,18 @@
   --glass-border: rgba(15, 23, 42, 0.15);
 
   /* Primary Colors */
-  --primary: #6366f1;
-  --primary-hover: #4f46e5;
-  --primary-light: #818cf8;
-  --primary-dark: #3730a3;
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: #34d399;
+  --primary-dark: #065f46;
 
   /* Secondary Colors */
   --secondary: #0ea5e9;
   --secondary-hover: #0284c7;
 
   /* Accent Colors */
-  --accent: #8b5cf6;
-  --accent-hover: #7c3aed;
+  --accent: #10b981;
+  --accent-hover: #34d399;
 
   /* Neutral Colors */
   --text-primary: #0f172a;
@@ -64,16 +64,16 @@
   --glass-bg: rgba(15, 23, 42, 0.4);
   --glass-border: rgba(255, 255, 255, 0.1);
 
-  --primary: #6366f1;
-  --primary-hover: #818cf8;
-  --primary-light: #a5b4fc;
-  --primary-dark: #4f46e5;
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: #34d399;
+  --primary-dark: #047857;
 
-  --secondary: #0ea5e9;
-  --secondary-hover: #38bdf8;
+  --secondary: #3b82f6;
+  --secondary-hover: #60a5fa;
 
-  --accent: #8b5cf6;
-  --accent-hover: #a78bfa;
+  --accent: #10b981;
+  --accent-hover: #34d399;
 
   --text-primary: #f8fafc;
   --text-secondary: #cbd5e1;
@@ -92,41 +92,41 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
 }
 
-/* Purple Theme */
+/* Modern Dark Theme (Replacing legacy purple) */
 [data-theme='purple'] {
-  --background: #0f0a1f;
+  --background: #0a0e1a;
   --foreground: #f8fafc;
-  --card-bg: rgba(30, 20, 50, 0.6);
-  --card-border: rgba(139, 92, 246, 0.2);
-  --glass-bg: rgba(30, 20, 50, 0.4);
-  --glass-border: rgba(139, 92, 246, 0.2);
+  --card-bg: rgba(15, 23, 42, 0.6);
+  --card-border: rgba(16, 185, 129, 0.2);
+  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-border: rgba(16, 185, 129, 0.2);
 
-  --primary: #8b5cf6;
-  --primary-hover: #a78bfa;
-  --primary-light: #c4b5fd;
-  --primary-dark: #7c3aed;
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: #34d399;
+  --primary-dark: #047857;
 
-  --secondary: #6366f1;
-  --secondary-hover: #818cf8;
+  --secondary: #3b82f6;
+  --secondary-hover: #60a5fa;
 
-  --accent: #d946ef;
-  --accent-hover: #e879f9;
+  --accent: #10b981;
+  --accent-hover: #34d399;
 
   --text-primary: #f8fafc;
-  --text-secondary: #e0d5f5;
-  --text-muted: #9ca3af;
-  --border-color: rgba(139, 92, 246, 0.2);
-  --hover-bg: rgba(139, 92, 246, 0.1);
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+  --border-color: rgba(16, 185, 129, 0.2);
+  --hover-bg: rgba(16, 185, 129, 0.1);
 
   --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
-  --info: #8b5cf6;
+  --info: #3b82f6;
 
-  --shadow-sm: 0 1px 2px 0 rgba(139, 92, 246, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(139, 92, 246, 0.3);
-  --shadow-lg: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
-  --shadow-xl: 0 20px 25px -5px rgba(139, 92, 246, 0.5);
+  --shadow-sm: 0 1px 2px 0 rgba(16, 185, 129, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(16, 185, 129, 0.5);
 }
 
 /* ============================================
@@ -166,17 +166,17 @@ body {
 /* Dark theme gradient background */
 [data-theme='dark'] body {
   background-image:
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
 }
 
-/* Purple theme gradient background */
+/* Modern Dark theme gradient background */
 [data-theme='purple'] body {
   background-image:
-    radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.2) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.2) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(217, 70, 239, 0.15) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.2) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.2) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
 }
 
 a {

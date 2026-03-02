@@ -325,11 +325,11 @@ export default function StudentDashboard() {
 
                     <div className="mb-2 pl-2">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-[3px] bg-gradient-to-r from-primary to-secondary rounded-full" />
+                            <div className="w-12 h-[3px] bg-gradient-to-r from-[#10b981] to-[#3b82f6] rounded-full" />
                             <p className="text-slate-500 text-[0.7rem] font-black uppercase tracking-[0.3em] opacity-60">Student Portal</p>
                         </div>
                         <div className="text-3xl font-light text-slate-400 mb-2">Welcome,</div>
-                        <div className="text-4xl font-black bg-gradient-to-r from-white via-primary/80 to-primary bg-clip-text text-transparent transform -tracking-wide leading-tight">
+                        <div className="text-4xl font-black bg-gradient-to-r from-white via-[#10b981]/80 to-[#10b981] bg-clip-text text-transparent transform -tracking-wide leading-tight">
                             {user?.username}
                         </div>
                     </div>
@@ -465,13 +465,13 @@ export default function StudentDashboard() {
                                 <h2
                                     className="text-7xl font-black tracking-tighter"
                                     style={{
-                                        backgroundImage: activeView === 'progress' ? 'linear-gradient(to right, #3b82f6, #10b981)' :
-                                            activeView === 'available' ? 'linear-gradient(to right, #8b5cf6, #6366f1)' :
+                                        backgroundImage: activeView === 'progress' ? 'linear-gradient(to right, #10b981, #3b82f6)' :
+                                            activeView === 'available' ? 'linear-gradient(to right, #10b981, #3b82f6)' :
                                                 activeView === 'lb' ? 'linear-gradient(to right, #f59e0b, #f97316)' :
-                                                    activeView === 'certificates' ? 'linear-gradient(to right, #6366f1, #a855f7)' :
+                                                    activeView === 'certificates' ? 'linear-gradient(to right, #3b82f6, #10b981)' :
                                                         activeView === 'materials' ? 'linear-gradient(to right, #f43f5e, #fb7185)' :
                                                             activeView === 'notifications' ? 'linear-gradient(to right, #3b82f6, #60a5fa)' :
-                                                                'linear-gradient(to right, #ec4899, #f43f5e)',
+                                                                'linear-gradient(to right, #10b981, #3b82f6)',
 
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
@@ -487,13 +487,13 @@ export default function StudentDashboard() {
 
                                 </h2>
                                 <div className="h-2 w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r" style={{
-                                    backgroundImage: activeView === 'progress' ? 'linear-gradient(to right, #3b82f6, transparent)' :
-                                        activeView === 'available' ? 'linear-gradient(to right, #8b5cf6, transparent)' :
+                                    backgroundImage: activeView === 'progress' ? 'linear-gradient(to right, #10b981, transparent)' :
+                                        activeView === 'available' ? 'linear-gradient(to right, #10b981, transparent)' :
                                             activeView === 'lb' ? 'linear-gradient(to right, #f59e0b, transparent)' :
-                                                activeView === 'certificates' ? 'linear-gradient(to right, #6366f1, transparent)' :
+                                                activeView === 'certificates' ? 'linear-gradient(to right, #3b82f6, transparent)' :
                                                     activeView === 'materials' ? 'linear-gradient(to right, #f43f5e, transparent)' :
                                                         activeView === 'notifications' ? 'linear-gradient(to right, #3b82f6, transparent)' :
-                                                            'linear-gradient(to right, #ec4899, transparent)'
+                                                            'linear-gradient(to right, #10b981, transparent)'
 
                                 }} />
                             </div>
@@ -714,22 +714,34 @@ export default function StudentDashboard() {
                                         {topicsWithMaterials.map((topic) => (
                                             <Card
                                                 key={topic._id}
-                                                className="p-10 group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl overflow-hidden relative"
+                                                className="group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl overflow-hidden relative"
+                                                style={{ padding: '2.5rem' }}
                                             >
                                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-primary/20 transition-all duration-700" />
-                                                <div className="flex justify-between items-start mb-8 relative z-10">
-                                                    <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-3xl text-rose-500 border border-rose-500/20 group-hover:rotate-12 transition-all">
-                                                        <FaBookOpen />
+                                                <div className="flex flex-col gap-8 flex-1">
+                                                    <div className="flex justify-between items-start relative z-10">
+                                                        <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-3xl text-rose-500 border border-rose-500/20 group-hover:rotate-12 transition-all">
+                                                            <FaBookOpen />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex flex-col gap-8 relative z-10">
+                                                        <h3 className="text-3xl font-black group-hover:text-rose-400 transition-colors">{topic.name}</h3>
+                                                        <p className="text-slate-500 text-lg line-clamp-2 leading-relaxed">{topic.description}</p>
                                                     </div>
                                                 </div>
-                                                <h3 className="text-3xl font-black mb-4 group-hover:text-rose-400 transition-colors relative z-10">{topic.name}</h3>
-                                                <p className="text-slate-500 text-lg mb-10 line-clamp-2 leading-relaxed flex-1 relative z-10">{topic.description}</p>
-                                                <Button
-                                                    onClick={() => handleViewMaterials(topic._id, topic.name)}
-                                                    className="w-full py-5 rounded-2xl bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white font-black uppercase tracking-widest text-xs transition-all border border-rose-500/20 relative z-10"
-                                                >
-                                                    View Materials
-                                                </Button>
+
+                                                {/* Consistent Spacer */}
+                                                <div className="h-10" />
+
+                                                <div className="pt-10 border-t border-white/5 mt-auto">
+                                                    <Button
+                                                        onClick={() => handleViewMaterials(topic._id, topic.name)}
+                                                        className="w-full py-5 rounded-2xl bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white font-black uppercase tracking-widest text-xs transition-all border border-rose-500/20 relative z-10"
+                                                    >
+                                                        View Materials
+                                                    </Button>
+                                                </div>
                                             </Card>
                                         ))}
                                     </div>

@@ -20,10 +20,10 @@ export default function ThemeToggle() {
             <button
                 onClick={() => setTheme('purple')}
                 className={`theme-toggle-btn ${theme === 'purple' ? 'active' : ''}`}
-                title="Purple Mode"
-                aria-label="Switch to purple mode"
+                title="Modern Dark"
+                aria-label="Switch to modern dark mode"
             >
-                <FaPalette />
+                <FaPalette className="text-[#10b981]" />
             </button>
         </div>
     );

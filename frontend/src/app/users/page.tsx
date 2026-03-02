@@ -323,11 +323,11 @@ export default function UserDashboard() {
                     {/* Dashboard heading */}
                     <div className="mb-2 pl-2">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-[3px] bg-gradient-to-r from-primary to-indigo-400 rounded-full" />
+                            <div className="w-12 h-[3px] bg-gradient-to-r from-[#10b981] to-[#3b82f6] rounded-full" />
                             <p className="text-slate-500 text-[0.7rem] font-black uppercase tracking-[0.3em] opacity-60">Admin Portal</p>
                         </div>
                         <div className="text-3xl font-light text-slate-400 mb-2">Welcome,</div>
-                        <div className="text-4xl font-black bg-gradient-to-r from-white via-indigo-400 to-primary bg-clip-text text-transparent transform -tracking-wide leading-tight">
+                        <div className="text-4xl font-black bg-gradient-to-r from-white via-[#10b981]/80 to-[#10b981] bg-clip-text text-transparent transform -tracking-wide leading-tight">
                             {user?.username || 'Admin'}
                         </div>
                     </div>
@@ -337,18 +337,18 @@ export default function UserDashboard() {
                     <nav className="flex flex-col gap-4 flex-grow">
                         <Button
                             variant={activeView === 'analytics' ? 'secondary' : 'ghost'}
-                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'analytics' ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'analytics' ? 'bg-[#10b981]/10 text-[#10b981]' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
                             onClick={() => { setActiveView('analytics'); setSidebarOpen(false); }}
                         >
-                            <FaChartPie className={activeView === 'analytics' ? 'text-primary' : 'text-slate-400'} /> Analytics
+                            <FaChartPie className={activeView === 'analytics' ? 'text-[#10b981]' : 'text-slate-400'} /> Analytics
                         </Button>
 
                         <Button
                             variant={activeView === 'manage' ? 'secondary' : 'ghost'}
-                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'manage' ? 'bg-indigo-500/10 text-indigo-400' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'manage' ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
                             onClick={() => { setActiveView('manage'); setSidebarOpen(false); }}
                         >
-                            <FaGraduationCap className={activeView === 'manage' ? 'text-indigo-400' : 'text-slate-400'} /> Manage Topics
+                            <FaGraduationCap className={activeView === 'manage' ? 'text-emerald-400' : 'text-slate-400'} /> Manage Topics
                         </Button>
 
                         <Button
@@ -438,7 +438,7 @@ export default function UserDashboard() {
                                 }}>
                                     <span style={{ fontSize: '1.5rem', opacity: 0.8 }}>📊</span>
                                     <span style={{
-                                        backgroundImage: 'linear-gradient(to right, var(--primary), var(--accent), var(--secondary))',
+                                        backgroundImage: 'linear-gradient(to right, #10b981, #3b82f6)',
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
                                         backgroundClip: 'text',
@@ -448,13 +448,13 @@ export default function UserDashboard() {
                                 </h2>
 
                                 {/* Active Topics Card */}
-                                <Card className="p-10 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, var(--card-bg), rgba(99, 102, 241, 0.1))' }}>
+                                <Card className="p-10 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, var(--card-bg), rgba(16, 185, 129, 0.1))' }}>
                                     <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:opacity-20 transition-opacity transform rotate-12 translate-x-4 -translate-y-4">
                                         <FaBars size={180} />
                                     </div>
                                     <div className="flex items-center justify-between relative z-10">
                                         <div className="flex flex-col gap-2">
-                                            <span className="text-lg font-bold uppercase tracking-widest text-[#6366f1] opacity-90">Active Topics</span>
+                                            <span className="text-lg font-bold uppercase tracking-widest text-[#10b981] opacity-90">Active Topics</span>
                                             <span className="text-sm font-medium text-slate-400">Currently live quizzes</span>
                                         </div>
                                         <div className="flex items-baseline gap-2">
@@ -512,7 +512,7 @@ export default function UserDashboard() {
                                         {analytics.topicStats.map((stat: any) => (
                                             <Card
                                                 key={stat.topicId}
-                                                className="group p-8 rounded-[2rem] border shadow-lg hover:shadow-primary/20 transition-all transform hover:-translate-y-2 relative overflow-hidden flex flex-col gap-6"
+                                                className="group p-12 rounded-[2rem] border shadow-lg hover:shadow-primary/20 transition-all transform hover:-translate-y-2 relative overflow-hidden flex flex-col gap-8"
                                                 style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)' }}
                                             >
                                                 {/* Card Accent */}
@@ -596,13 +596,13 @@ export default function UserDashboard() {
                                         return (
                                             <Card
                                                 key={topic._id}
-                                                className="p-7 rounded-[2.5rem] border-none shadow-lg hover:shadow-primary/10 transition-all group flex flex-col gap-5"
-                                                style={{ background: 'var(--card-bg)' }}
+                                                className="rounded-[2.5rem] border-none shadow-lg hover:shadow-primary/10 transition-all group flex flex-col gap-6"
+                                                style={{ background: 'var(--card-bg)', padding: '2.5rem' }}
                                             >
-                                                <div className="flex justify-between items-start">
-                                                    <h3 className="font-bold text-2xl tracking-tight">{topic.name}</h3>
+                                                <div className="flex justify-between items-start pt-1">
+                                                    <h3 className="font-bold text-2xl tracking-tight leading-tight">{topic.name}</h3>
                                                     <span
-                                                        className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
+                                                        className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shrink-0"
                                                         style={{
                                                             background: isActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
                                                             color: isActive ? '#10b981' : '#ef4444'
@@ -616,27 +616,27 @@ export default function UserDashboard() {
                                                     {topic.description || "No description provided for this quiz topic."}
                                                 </p>
 
-                                                <div className="flex gap-4 items-center mb-2">
+                                                <div className="flex gap-4 items-center mb-4">
                                                     {topic.timeLimit > 0 && (
-                                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 bg-white/5 px-2.5 py-1 rounded-lg">
+                                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 bg-white/5 px-2.5 py-1.5 rounded-lg">
                                                             ⏱️ {topic.timeLimit}s
                                                         </div>
                                                     )}
                                                     {topic.negativeMarking > 0 && (
-                                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 bg-white/5 px-2.5 py-1 rounded-lg">
+                                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 bg-white/5 px-2.5 py-1.5 rounded-lg">
                                                             ❌ -{topic.negativeMarking}
                                                         </div>
                                                     )}
                                                     {topic.passingMarks > 0 && (
-                                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-green-500/80 bg-green-500/5 px-2.5 py-1 rounded-lg border border-green-500/10">
+                                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-green-500/80 bg-green-500/5 px-2.5 py-1.5 rounded-lg border border-green-500/10">
                                                             ✅ {topic.passingMarks} Marks
                                                         </div>
                                                     )}
                                                 </div>
 
-                                                <div className="flex items-center gap-3 mt-auto w-full">
+                                                <div className="flex items-center gap-3 mt-auto pt-6 w-full">
                                                     <Link href={`/users/topic/${topic._id}`} className="flex-grow min-w-0">
-                                                        <Button className="w-full justify-between h-12 px-6 rounded-2xl bg-[#6366f1] hover:bg-[#4f46e5] text-white font-bold transition-all shadow-lg shadow-indigo-500/20">
+                                                        <Button className="w-full justify-between h-12 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-white font-black transition-all shadow-lg shadow-emerald-500/20">
                                                             Manage <FaArrowRight />
                                                         </Button>
                                                     </Link>
@@ -797,25 +797,37 @@ export default function UserDashboard() {
                                         {topics.filter(t => materials.some(m => (m.topicId?._id || m.topicId) === t._id)).map((topic) => (
                                             <Card
                                                 key={topic._id}
-                                                className="p-10 group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl overflow-hidden relative"
+                                                className="group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl overflow-hidden relative"
+                                                style={{ padding: '2.5rem' }}
                                             >
                                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-primary/20 transition-all duration-700" />
-                                                <div className="flex justify-between items-start mb-8 relative z-10">
-                                                    <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-3xl text-rose-500 border border-rose-500/20 group-hover:rotate-12 transition-all">
-                                                        <FaBookOpen />
+                                                <div className="flex flex-col gap-8 flex-1">
+                                                    <div className="flex justify-between items-start relative z-10">
+                                                        <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-3xl text-rose-500 border border-rose-500/20 group-hover:rotate-12 transition-all">
+                                                            <FaBookOpen />
+                                                        </div>
+                                                        <span className="bg-rose-500/10 text-rose-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-rose-500/10">
+                                                            {materials.filter(m => (m.topicId?._id || m.topicId) === topic._id).length} Items
+                                                        </span>
                                                     </div>
-                                                    <span className="bg-rose-500/10 text-rose-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-rose-500/10">
-                                                        {materials.filter(m => (m.topicId?._id || m.topicId) === topic._id).length} Items
-                                                    </span>
+
+                                                    <div className="flex flex-col gap-8 relative z-10">
+                                                        <h3 className="text-3xl font-black group-hover:text-rose-400 transition-colors">{topic.name}</h3>
+                                                        <p className="text-slate-500 text-lg line-clamp-2 leading-relaxed">{topic.description || "Manage the study resources for this specific topic."}</p>
+                                                    </div>
                                                 </div>
-                                                <h3 className="text-3xl font-black mb-4 group-hover:text-rose-400 transition-colors relative z-10">{topic.name}</h3>
-                                                <p className="text-slate-500 text-lg mb-10 line-clamp-2 leading-relaxed flex-1 relative z-10">{topic.description || "Manage the study resources for this specific topic."}</p>
-                                                <Button
-                                                    onClick={() => handleViewMaterials(topic._id, topic.name)}
-                                                    className="w-full py-5 rounded-2xl bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white font-black uppercase tracking-widest text-xs transition-all border border-rose-500/20 relative z-10"
-                                                >
-                                                    View & Manage
-                                                </Button>
+
+                                                {/* Consistent Spacer */}
+                                                <div className="h-10" />
+
+                                                <div className="pt-10 border-t border-white/5 mt-auto">
+                                                    <Button
+                                                        onClick={() => handleViewMaterials(topic._id, topic.name)}
+                                                        className="w-full py-5 rounded-2xl bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white font-black uppercase tracking-widest text-xs transition-all border border-rose-500/20 relative z-10"
+                                                    >
+                                                        View & Manage
+                                                    </Button>
+                                                </div>
                                             </Card>
                                         ))}
                                     </div>
@@ -838,7 +850,7 @@ export default function UserDashboard() {
                     >
                         <Card
                             noGlass
-                            className="w-full max-w-md p-8 rounded-3xl"
+                            className="w-full max-w-md p-12 rounded-3xl"
                             style={{ background: 'var(--background)' }}
                             onClick={e => e.stopPropagation()}
                         >
@@ -926,7 +938,7 @@ export default function UserDashboard() {
                         onClick={() => setShowParticipantsModal(false)}
                     >
                         <Card
-                            className="w-full max-w-4xl p-0 rounded-3xl overflow-hidden flex flex-col max-h-[85vh] shadow-2xl"
+                            className="w-full max-w-4xl p-0 rounded-3xl overflow-hidden flex flex-col max-h-[85vh] shadow-2xl pb-10"
                             style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
                             onClick={e => e.stopPropagation()}
                         >
@@ -994,7 +1006,7 @@ export default function UserDashboard() {
                                                         onClick={e => e.stopPropagation()}
                                                     >
                                                         <TextArea
-                                                            className="!p-8 !px-10 !rounded-[2rem] bg-black/30 border-2 border-white/5 !min-h-[160px] hover:border-white/10"
+                                                            className="!p-10 !px-12 !rounded-[2rem] bg-black/30 border-2 border-white/5 !min-h-[160px] hover:border-white/10"
                                                             placeholder={`Write a message to ${p.name}...`}
                                                             value={messageText}
                                                             onChange={e => setMessageText(e.target.value)}
@@ -1158,28 +1170,28 @@ export default function UserDashboard() {
                                     <p className="text-center py-20 text-slate-500 font-bold italic">No materials found for this topic.</p>
                                 ) : (
                                     selectedTopicMaterials.map((m) => (
-                                        <div key={m._id} className="p-6 rounded-3xl bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group">
-                                            <div className="flex items-center gap-6">
-                                                <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-3xl border border-rose-500/20">
+                                        <div key={m._id} className="rounded-[2rem] bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group" style={{ padding: '3rem' }}>
+                                            <div className="flex items-center gap-8">
+                                                <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-3xl border border-rose-500/20 shrink-0">
                                                     {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-3">
                                                     <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight">{m.name}</h4>
-                                                    {m.description && <p className="text-slate-400 text-sm italic">"{m.description}"</p>}
-                                                    <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-600 mt-2">
+                                                    {m.description && <p className="text-slate-400 text-sm italic leading-relaxed">"{m.description}"</p>}
+                                                    <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-600 mt-1">
                                                         {m.fileType?.split('/')[1]?.toUpperCase() || 'FILE'}
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div className="flex gap-4 w-full md:w-auto">
+                                            <div className="flex gap-4 w-full md:w-auto pt-4 md:pt-0">
                                                 <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none">
-                                                    <Button className="w-full md:px-10 py-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-black border-none flex items-center gap-3">
+                                                    <Button className="w-full md:px-10 py-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-black border-none flex items-center gap-3">
                                                         View Material
                                                     </Button>
                                                 </a>
                                                 <Button
                                                     onClick={() => deleteMaterial(m._id)}
-                                                    className="w-full md:px-6 py-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black border-none"
+                                                    className="w-full md:px-6 py-5 rounded-2xl bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black border-none"
                                                 >
                                                     <FaTrash />
                                                 </Button>

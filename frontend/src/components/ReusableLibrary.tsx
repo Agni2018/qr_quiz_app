@@ -72,38 +72,44 @@ export default function ReusableLibrary() {
                     </Card>
                 ) : (
                     questions.map(q => (
-                        <Card key={q._id} className="p-10 border-white/5 bg-slate-900/40 relative group transition-all hover:bg-slate-900/60">
+                        <Card key={q._id} className="group hover:-translate-y-2 transition-all duration-300 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2rem] flex flex-col shadow-xl overflow-hidden relative" style={{ padding: '2.5rem' }}>
                             {/* Accent line */}
                             <div className="absolute top-0 left-0 w-1.5 h-full bg-primary/30" />
 
-                            <div className="flex justify-between items-start mb-8 px-1">
-                                <div className="flex items-center gap-4">
-                                    <div className="px-4 py-1.5 rounded-lg bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20">
-                                        {q.type.replace('_', ' ')}
+                            <div className="flex flex-col gap-10 flex-1">
+                                <div className="flex justify-between items-start relative z-10">
+                                    <div className="flex items-center gap-4">
+                                        <div className="px-4 py-2 rounded-lg bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">
+                                            {q.type.replace('_', ' ')}
+                                        </div>
+                                        <div className="px-4 py-2 rounded-lg bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-widest border border-white/10">
+                                            {q.marks} pts
+                                        </div>
                                     </div>
-                                    <div className="px-4 py-1.5 rounded-lg bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] border border-white/5">
-                                        {q.marks} pts
-                                    </div>
+                                    <button
+                                        onClick={() => deleteQuestion(q._id)}
+                                        className="text-slate-600 hover:text-red-500 hover:bg-red-500/10 transition-all p-3 rounded-xl -mr-2 -mt-2"
+                                        title="Delete from library"
+                                    >
+                                        <FaTrash size={16} />
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={() => deleteQuestion(q._id)}
-                                    className="text-slate-500 hover:text-red-500 hover:bg-red-500/10 transition-all p-3 rounded-xl -mr-2 -mt-2"
-                                    title="Delete from library"
-                                >
-                                    <FaTrash size={16} />
-                                </button>
-                            </div>
 
-                            <p className="text-lg font-medium text-slate-200 mb-6 leading-relaxed">
-                                {q.content?.text}
-                            </p>
+                                <div className="flex-1 relative z-10">
+                                    <p className="text-2xl font-bold text-white leading-relaxed">
+                                        {q.content?.text}
+                                    </p>
+                                </div>
 
-                            <div className="flex flex-wrap gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                                {Array.isArray(q.options) && q.options.length > 0 && (
-                                    <span>{q.options.length} Options</span>
-                                )}
-                                <span>•</span>
-                                <span>Shared Library</span>
+                                <div className="flex items-center gap-3 text-xs font-black text-slate-600 uppercase tracking-widest mt-auto relative z-10 opacity-60">
+                                    {Array.isArray(q.options) && q.options.length > 0 && (
+                                        <>
+                                            <span>{q.options.length} Options</span>
+                                            <span className="text-slate-800">•</span>
+                                        </>
+                                    )}
+                                    <span>Global Library</span>
+                                </div>
                             </div>
                         </Card>
                     ))

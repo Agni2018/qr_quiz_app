@@ -81,7 +81,7 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
                     </button>
                 </div>
 
-                <div className="p-8 flex flex-col gap-8">
+                <div className="p-10 flex flex-col gap-10">
                     {/* File Dropzone */}
                     {!file ? (
                         <label
@@ -116,7 +116,7 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-8">
                         <Input
                             label="Display Name"
                             placeholder="Enter material title..."
@@ -124,24 +124,22 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
                             onChange={(e) => setName(e.target.value)}
                         />
                         <div className="w-full">
-                            <label className="block mb-2 text-sm font-semibold text-slate-400 uppercase tracking-wider">Description</label>
+                            <label className="block mb-3 text-sm font-semibold text-slate-400 uppercase tracking-wider">Description</label>
                             <textarea
                                 placeholder="What's in this material?"
                                 style={{
-                                    padding: '0.875rem 1.5rem',
-                                    borderRadius: 'var(--radius)',
+                                    padding: '1rem 1.5rem',
+                                    borderRadius: '1.25rem',
                                     background: 'var(--glass-bg)',
                                     border: '1px solid var(--border-color)',
                                     fontSize: '1rem',
-                                    minHeight: '120px'
+                                    minHeight: '140px'
                                 }}
-                                className="w-full text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                                className="w-full text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none shadow-inner"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
-
-
                     </div>
 
                     {error && <p className="text-red-500 text-sm font-bold text-center bg-red-500/10 p-4 rounded-xl">{error}</p>}

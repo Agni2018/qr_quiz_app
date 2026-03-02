@@ -42,7 +42,7 @@ export default function UserLeaderboard({ params }: { params: Promise<{ id: stri
     if (authLoading) {
         return (
             <div className="container min-h-screen flex flex-col items-center justify-center gap-6">
-                <div className="w-12 h-12 border-4 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
+                <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
                 <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Verifying Session...</p>
             </div>
         );

@@ -121,7 +121,7 @@ export default function Home() {
                         <h1
                             className="text-[2.5rem] md:text-[3.75rem] font-extrabold mb-4 leading-[1.1]"
                             style={{
-                                background: 'linear-gradient(to right, var(--primary), var(--secondary))',
+                                background: 'linear-gradient(to right, #10b981, #3b82f6)',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 backgroundClip: 'text',
@@ -139,8 +139,8 @@ export default function Home() {
                     </div>
 
                     {/* ---------- CARD ---------- */}
-                    <Card className="p-8 md:p-12" style={{ borderRadius: '2.5rem' }}>
-                        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                    <Card className="p-8 md:p-12 overflow-hidden" style={{ borderRadius: '2.5rem' }}>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-10 pt-10">
 
                             {/* ---------- MESSAGE ---------- */}
                             {error && (
@@ -181,6 +181,7 @@ export default function Home() {
                                     <label style={{
                                         display: 'block',
                                         marginBottom: '0.75rem',
+                                        marginTop: '1.5rem',
                                         fontSize: '0.75rem',
                                         fontWeight: 800,
                                         color: 'var(--text-muted)',
@@ -347,7 +348,9 @@ export default function Home() {
                                     padding: '1.25rem',
                                     fontSize: '1.125rem',
                                     fontWeight: 800,
-                                    borderRadius: 'var(--radius-lg)'
+                                    borderRadius: 'var(--radius-lg)',
+                                    background: '#10b981', // Explicitly using the theme green
+                                    boxShadow: '0 10px 30px rgba(16, 185, 129, 0.3)'
                                 }}
                             >
                                 {loading ? 'Processing...' : (mode === 'login' ? 'Sign In to Dashboard' : 'Create Account')}
@@ -366,7 +369,7 @@ export default function Home() {
                                         setError('');
                                         setSuccess('');
                                     }}
-                                    style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'underline' }}
+                                    style={{ color: '#10b981', fontWeight: 700, textDecoration: 'underline' }}
                                 >
                                     {mode === 'login' ? 'Register here' : 'Login here'}
                                 </button>

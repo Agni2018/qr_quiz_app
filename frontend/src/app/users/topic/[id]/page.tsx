@@ -71,7 +71,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
     if (authLoading) {
         return (
             <div className="container min-h-screen flex flex-col items-center justify-center gap-6">
-                <div className="w-12 h-12 border-4 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
+                <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
                 <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Verifying Session...</p>
             </div>
         );
@@ -84,7 +84,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
     return (
         <main className="container">
             <div className="mb-12">
-                <Link href="/users" className="text-slate-500 hover:text-violet-400 text-sm flex items-center gap-2 transition-colors mb-6">
+                <Link href="/users" className="text-slate-500 hover:text-emerald-400 text-sm flex items-center gap-2 transition-colors mb-6">
                     &larr; Back to Dashboard
                 </Link>
                 <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
@@ -119,10 +119,10 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                             <p className="text-slate-400 text-sm">No questions created yet.</p>
                         ) : (
                             questions.map((q, i) => (
-                                <Card key={q._id} className="p-6 border border-white/5 hover:border-violet-500/20 transition-all">
+                                <Card key={q._id} className="p-6 border border-white/5 hover:border-emerald-500/20 transition-all flex flex-col gap-4">
                                     <div className="flex justify-between items-start mb-4">
                                         <h4 className="text-xl font-bold text-white/90">Q{i + 1}. {q.content.text}</h4>
-                                        <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-violet-500/10 text-violet-400 px-3 py-1 rounded-full">{q.marks} Marks</span>
+                                        <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full">{q.marks} Marks</span>
                                     </div>
                                     <div className="flex gap-6">
                                         <div className="flex flex-col gap-1">
@@ -143,7 +143,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
                 {/* Right Column: QR & Info */}
                 <div className="flex flex-col gap-10">
-                    <Card className="flex flex-col items-center text-center p-8">
+                    <Card className="flex flex-col items-center text-center p-9">
                         <h3 className="text-xl font-bold mb-6">Share Quiz</h3>
                         {questions.length === 0 ? (
                             <p className="text-slate-400 text-sm">Create questions to receive the quiz link and QR code.</p>
@@ -154,7 +154,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                                 </div>
                                 <div className="w-full flex flex-col gap-3">
                                     <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Direct Link</p>
-                                    <div className="bg-black/20 p-4 rounded-xl break-all text-[0.85rem] text-violet-300 font-mono border border-white/5">
+                                    <div className="bg-black/20 p-4 rounded-xl break-all text-[0.85rem] text-emerald-300 font-mono border border-white/5">
                                         <a href={quizLink} target="_blank" className="hover:underline">{quizLink}</a>
                                     </div>
                                 </div>
@@ -162,7 +162,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                         )}
                     </Card>
 
-                    <Card className="flex flex-col gap-6 p-8">
+                    <Card className="flex flex-col gap-6 p-9">
                         <h3 className="text-xl font-bold mb-2">Quiz Settings</h3>
 
                         <div className="flex items-center justify-between py-3 border-b border-white/5">
@@ -176,12 +176,12 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
                         <div className="flex flex-col gap-4 mt-4">
                             <Link href={`/users/leaderboard/${id}`} className="w-full">
-                                <Button variant="secondary" className="w-full py-4 rounded-2xl border-2 border-white/5 font-bold">View Leaderboard</Button>
+                                <Button variant="primary" className="w-full py-4 rounded-2xl border-2 border-white/5 font-bold">View Leaderboard</Button>
                             </Link>
                         </div>
                     </Card>
 
-                    <Card className="flex flex-col gap-6 p-8 relative overflow-hidden group">
+                    <Card className="flex flex-col gap-6 p-9 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full translate-x-8 -translate-y-8 group-hover:bg-primary/10 transition-colors" />
                         <h3 className="text-xl font-bold mb-2">Study Materials</h3>
                         <p className="text-slate-400 text-sm leading-relaxed">

@@ -42,12 +42,12 @@ export default function QuizResult({ params }: { params: Promise<{ topicId: stri
 
             {/* Score Card */}
             {attempt && (
-                <Card className="text-center p-16 border border-violet-500/30 bg-slate-900/40 backdrop-blur-3xl rounded-[40px] shadow-3xl relative overflow-hidden">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-violet-600/10 rounded-full blur-3xl -mt-32"></div>
+                <Card className="text-center p-16 border border-emerald-500/30 bg-slate-900/40 backdrop-blur-3xl rounded-[40px] shadow-3xl relative overflow-hidden">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-emerald-600/10 rounded-full blur-3xl -mt-32"></div>
 
                     <div className="relative z-10">
                         <h1 className="text-sm font-black uppercase tracking-[0.3em] text-slate-500 mb-6">Quiz Final Score</h1>
-                        <div className="text-[6rem] font-black text-violet-400 leading-none mb-4 tabular-nums">
+                        <div className="text-[6rem] font-black text-emerald-400 leading-none mb-4 tabular-nums">
                             {attempt.score}
                         </div>
                         <p className="text-slate-400 font-bold text-lg uppercase tracking-widest mb-10">Challenge Completed</p>
@@ -76,7 +76,7 @@ export default function QuizResult({ params }: { params: Promise<{ topicId: stri
                             <div
                                 key={index}
                                 className={`flex justify-between items-center p-6 rounded-2xl transition-all duration-300 ${entry._id === attempt?._id
-                                    ? 'bg-violet-500/20 border-2 border-violet-500 shadow-lg shadow-violet-500/10'
+                                    ? 'bg-emerald-500/20 border-2 border-emerald-500 shadow-lg shadow-emerald-500/10'
                                     : 'bg-white/[0.03] border-2 border-transparent hover:bg-white/[0.05]'
                                     }`}
                             >
@@ -89,11 +89,11 @@ export default function QuizResult({ params }: { params: Promise<{ topicId: stri
                                         {index + 1}
                                     </span>
                                     <span className={`text-lg font-bold ${entry._id === attempt?._id ? 'text-white' : 'text-white/80'}`}>
-                                        {entry.user.name} {entry._id === attempt?._id && <span className="ml-2 text-xs font-black uppercase tracking-widest text-violet-400">(You)</span>}
+                                        {entry.user.name} {entry._id === attempt?._id && <span className="ml-2 text-xs font-black uppercase tracking-widest text-emerald-400">(You)</span>}
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-2">
-                                    <span className={`text-2xl font-black tabular-nums ${entry._id === attempt?._id ? 'text-violet-400' : 'text-slate-300'}`}>
+                                    <span className={`text-2xl font-black tabular-nums ${entry._id === attempt?._id ? 'text-emerald-400' : 'text-slate-300'}`}>
                                         {entry.score}
                                     </span>
                                     <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Pts</span>
@@ -105,7 +105,7 @@ export default function QuizResult({ params }: { params: Promise<{ topicId: stri
             </section>
 
             <footer className="text-center py-12 px-10 rounded-[40px] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5">
-                <h3 className="text-2xl font-black text-violet-400 mb-3">
+                <h3 className="text-2xl font-black text-emerald-400 mb-3">
                     🎉 Thank you for participating!
                 </h3>
 

@@ -8,14 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#0f172a',
+        background: '#0a0e1a',
         foreground: '#f8fafc',
         primary: {
-          DEFAULT: '#8b5cf6',
-          hover: '#7c3aed',
+          DEFAULT: '#10b981',
+          hover: '#059669',
         },
         secondary: '#3b82f6',
-        'card-bg': 'rgba(30, 41, 59, 0.7)',
+        'card-bg': 'rgba(15, 23, 42, 0.7)',
         'card-border': 'rgba(255, 255, 255, 0.1)',
         'glass-bg': 'rgba(255, 255, 255, 0.05)',
         'glass-border': 'rgba(255, 255, 255, 0.1)',
@@ -39,7 +39,7 @@ module.exports = {
         DEFAULT: 'ease',
       },
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%)',
+        'gradient-radial': 'radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%)',
       },
       keyframes: {
         fadeIn: {
