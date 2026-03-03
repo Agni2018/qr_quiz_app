@@ -321,13 +321,13 @@ export default function UserDashboard() {
                     </button>
 
                     {/* Dashboard heading */}
-                    <div className="mb-2 pl-2">
-                        <div className="flex items-center gap-3 mb-6">
+                    <div className="mb-2">
+                        <div className="flex items-center gap-3 mb-10">
                             <div className="w-12 h-[3px] bg-gradient-to-r from-[#10b981] to-[#3b82f6] rounded-full" />
                             <p className="text-slate-500 text-[0.7rem] font-black uppercase tracking-[0.3em] opacity-60">Admin Portal</p>
                         </div>
-                        <div className="text-3xl font-light text-slate-400 mb-2">Welcome,</div>
-                        <div className="text-4xl font-black bg-gradient-to-r from-white via-[#10b981]/80 to-[#10b981] bg-clip-text text-transparent transform -tracking-wide leading-tight">
+                        <div className="text-3xl font-light text-slate-400 mb-2" style={{ paddingLeft: '1rem' }}>Welcome,</div>
+                        <div className="text-4xl font-black bg-gradient-to-r from-white via-[#10b981]/80 to-[#10b981] bg-clip-text text-transparent transform -tracking-wide leading-tight" style={{ paddingLeft: '1rem' }}>
                             {user?.username || 'Admin'}
                         </div>
                     </div>
@@ -793,7 +793,7 @@ export default function UserDashboard() {
                                         <Button onClick={() => setActiveView('manage')} className="px-10 py-4 rounded-2xl bg-primary">Go to Manage Topics</Button>
                                     </Card>
                                 ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                                         {topics.filter(t => materials.some(m => (m.topicId?._id || m.topicId) === t._id)).map((topic) => (
                                             <Card
                                                 key={topic._id}
@@ -812,7 +812,7 @@ export default function UserDashboard() {
                                                     </div>
 
                                                     <div className="flex flex-col gap-8 relative z-10">
-                                                        <h3 className="text-3xl font-black group-hover:text-rose-400 transition-colors">{topic.name}</h3>
+                                                        <h3 className="text-xl font-black group-hover:text-rose-400 transition-colors uppercase tracking-tight">{topic.name}</h3>
                                                         <p className="text-slate-500 text-lg line-clamp-2 leading-relaxed">{topic.description || "Manage the study resources for this specific topic."}</p>
                                                     </div>
                                                 </div>

@@ -63,7 +63,7 @@ export default function ReusableLibrary() {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {questions.length === 0 ? (
                     <Card className="col-span-full p-20 border-dashed border-white/10 flex flex-col items-center justify-center text-center opacity-50">
                         <FaRegClone className="text-6xl mb-6 text-slate-700" />
@@ -96,7 +96,7 @@ export default function ReusableLibrary() {
                                 </div>
 
                                 <div className="flex-1 relative z-10">
-                                    <p className="text-2xl font-bold text-white leading-relaxed">
+                                    <p className="text-xl font-bold text-white leading-relaxed">
                                         {q.content?.text}
                                     </p>
                                 </div>
