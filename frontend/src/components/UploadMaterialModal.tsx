@@ -47,22 +47,56 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
         setUploading(true);
         setError('');
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('name', name);
-        formData.append('description', description);
-        formData.append('topicId', topicId);
+        const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+        const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 
         try {
+            let cloudUrl = '';
+
+            // 1. If Cloudinary is configured, upload there first (bypasses Vercel 4.5MB limit)
+            if (cloudName && uploadPreset) {
+                console.log('[UPLOAD] Detected Cloudinary config. Uploading directly...');
+                const cloudData = new FormData();
+                cloudData.append('file', file);
+                cloudData.append('upload_preset', uploadPreset);
+
+                const response = await fetch(
+                    `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+                    { method: 'POST', body: cloudData }
+                );
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || 'Cloudinary upload failed');
+                }
+
+                const result = await response.json();
+                cloudUrl = result.secure_url;
+                console.log('[UPLOAD] Cloudinary upload successful:', cloudUrl);
+            }
+
+            // 2. Notify our backend (sending either the cloudUrl or the direct file)
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('topicId', topicId);
+
+            if (cloudUrl) {
+                formData.append('cloudUrl', cloudUrl);
+            } else {
+                formData.append('file', file);
+            }
+
             await api.post('/study-materials/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+
             onSuccess();
         } catch (err: any) {
             console.error(err);
-            setError(err.response?.data?.message || 'Failed to upload material.');
+            setError(err.message || err.response?.data?.message || 'Failed to upload material.');
         } finally {
             setUploading(false);
         }

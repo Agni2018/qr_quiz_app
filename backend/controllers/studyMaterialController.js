@@ -19,12 +19,7 @@ exports.uploadMaterial = async (req, res) => {
     req.on('error', (err) => console.error('[UPLOAD] Request stream error:', err));
 
     try {
-        if (!req.file || !req.file.buffer) {
-            console.error('[UPLOAD] Error: req.file or buffer is missing');
-            return res.status(400).json({ message: 'No file buffer received' });
-        }
-
-        const { name, description, topicId } = req.body;
+        const { name, description, topicId, cloudUrl } = req.body;
 
         if (!name || !topicId) {
             return res.status(400).json({ message: 'Name and Topic ID are required' });
@@ -35,20 +30,38 @@ exports.uploadMaterial = async (req, res) => {
             return res.status(404).json({ message: 'Topic not found' });
         }
 
-        // Manual disk write to test if disk storage was the issue
-        const fileName = `file-${Date.now()}-${req.file.originalname}`;
-        const uploadPath = path.resolve(process.cwd(), 'uploads', fileName);
+        let finalFileUrl = '';
+        let originalName = '';
+        let fileType = '';
 
-        console.log('[UPLOAD] Manual write started:', uploadPath);
-        fs.writeFileSync(uploadPath, req.file.buffer);
-        console.log('[UPLOAD] Manual write finished successfully.');
+        if (cloudUrl) {
+            // Case 1: File pre-uploaded to Cloudinary from Frontend
+            finalFileUrl = cloudUrl;
+            originalName = name; // Simplified
+            fileType = 'image/auto'; // Simplified
+            console.log('[UPLOAD] Using Cloud URL:', cloudUrl);
+        } else if (req.file && req.file.buffer) {
+            // Case 2: File sent to backend (Local/Docker)
+            const fileName = `file-${Date.now()}-${req.file.originalname}`;
+            const uploadPath = path.resolve(process.cwd(), 'uploads', fileName);
+
+            console.log('[UPLOAD] Manual write started:', uploadPath);
+            fs.writeFileSync(uploadPath, req.file.buffer);
+            console.log('[UPLOAD] Manual write finished successfully.');
+
+            finalFileUrl = `/uploads/${fileName}`;
+            originalName = req.file.originalname;
+            fileType = req.file.mimetype;
+        } else {
+            return res.status(400).json({ message: 'No file received' });
+        }
 
         const studyMaterial = new StudyMaterial({
             name,
-            originalName: req.file.originalname,
+            originalName,
             description,
-            fileUrl: `/uploads/${fileName}`,
-            fileType: req.file.mimetype,
+            fileUrl: finalFileUrl,
+            fileType,
             topicId,
             uploadedBy: req.user?.id
         });
