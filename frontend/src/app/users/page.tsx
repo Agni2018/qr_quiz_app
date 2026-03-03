@@ -209,6 +209,8 @@ export default function UserDashboard() {
     };
 
     const getFileUrl = (url: string) => {
+        if (!url) return '';
+        if (url.startsWith('http')) return url;
         if (process.env.NODE_ENV === 'production') {
             return url;
         }

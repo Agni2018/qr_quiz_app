@@ -257,8 +257,10 @@ export default function StudentDashboard() {
     };
 
     const getFileUrl = (url: string) => {
+        if (!url) return '';
+        if (url.startsWith('http')) return url; // Let absolute URLs (Cloudinary) pass through
         if (process.env.NODE_ENV === 'production') {
-            return url; // Use relative path to hit Next.js proxy
+            return url;
         }
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
         return `${baseUrl}${url}`;
