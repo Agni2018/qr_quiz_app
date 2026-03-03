@@ -508,12 +508,12 @@ export default function UserDashboard() {
                                             opacity: 0.5
                                         }} />
                                     </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 items-start">
                                         {analytics.topicStats.map((stat: any) => (
                                             <Card
                                                 key={stat.topicId}
-                                                className="group rounded-[2rem] border shadow-lg hover:shadow-primary/20 transition-all transform hover:-translate-y-2 relative overflow-hidden flex flex-col gap-10"
-                                                style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)', padding: '2.25rem' }}
+                                                className="group rounded-[2rem] border shadow-lg hover:shadow-primary/20 transition-all transform hover:-translate-y-2 relative overflow-hidden flex flex-col gap-8"
+                                                style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)', padding: '1.75rem' }}
                                             >
                                                 {/* Card Accent */}
                                                 <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-3xl rounded-full translate-x-12 -translate-y-12" />
@@ -536,7 +536,7 @@ export default function UserDashboard() {
                                                     </p>
                                                 </div>
 
-                                                <div className="flex items-end justify-between mt-auto relative z-10">
+                                                <div className="flex items-end justify-between mt-6 relative z-10">
                                                     <div className="flex flex-col">
                                                         <span style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--primary)', lineHeight: 1 }}>
                                                             {stat.participantCount}
