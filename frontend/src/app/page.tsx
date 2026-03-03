@@ -109,17 +109,17 @@ export default function Home() {
         >
 
             {/* CENTERED CONTENT */}
-            <div className="flex flex-1 items-center justify-center p-6 md:p-12 relative">
-                <div className="w-full max-w-[540px] animate-fade-in py-12">
+            <div className="flex flex-1 items-center justify-center px-10 py-16 md:p-12 relative text-balance">
+                <div className="w-full max-w-[520px] animate-fade-in py-10 md:py-12">
 
-                    <div className="flex justify-end mb-16 md:absolute md:top-8 md:right-8 md:mb-0">
+                    <div className="flex justify-end mb-12 md:absolute md:top-8 md:right-8 md:mb-0">
                         <ThemeToggle />
                     </div>
 
                     {/* ---------- HEADER ---------- */}
-                    <div className="text-center mb-16 md:mb-24">
+                    <div className="text-center mb-16 md:mb-20">
                         <h1
-                            className="text-[2.5rem] md:text-[3.75rem] font-extrabold mb-4 leading-[1.1]"
+                            className="text-2xl md:text-[3.75rem] font-black mb-4 leading-tight"
                             style={{
                                 background: 'linear-gradient(to right, #10b981, #3b82f6)',
                                 WebkitBackgroundClip: 'text',
@@ -130,7 +130,7 @@ export default function Home() {
                             Quiz Platform
                         </h1>
 
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem', fontWeight: 500 }}>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 600, letterSpacing: '0.02em' }} className="md:text-[1.125rem]">
                             {mode === 'login'
                                 ? 'Welcome back! Please enter your details.'
                                 : 'Create an account to start your journey.'
@@ -139,8 +139,8 @@ export default function Home() {
                     </div>
 
                     {/* ---------- CARD ---------- */}
-                    <Card className="p-8 md:p-12 overflow-hidden" style={{ borderRadius: '2.5rem' }}>
-                        <form onSubmit={handleSubmit} className="flex flex-col gap-10 pt-10">
+                    <Card className="p-6 md:p-12 overflow-hidden" style={{ borderRadius: '1.5rem', maxWidth: '100%' }}>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-6 md:gap-10 pt-4 md:pt-10">
 
                             {/* ---------- MESSAGE ---------- */}
                             {error && (
@@ -357,7 +357,7 @@ export default function Home() {
                             </Button>
 
                             {/* TOGGLE */}
-                            <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                            <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem' }} className="mt-2">
                                 {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
                                 <button
                                     type="button"

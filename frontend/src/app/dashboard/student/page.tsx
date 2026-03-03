@@ -515,7 +515,11 @@ export default function StudentDashboard() {
                                 ) : (
                                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
                                         {attempts.map((attempt) => (
-                                            <Card key={attempt._id} className="p-10 group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl">
+                                            <Card
+                                                key={attempt._id}
+                                                className="group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl"
+                                                style={{ padding: '2.5rem' }}
+                                            >
                                                 <div className="flex justify-between items-start mb-8">
                                                     <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-2xl border border-primary/20 group-hover:scale-110 transition-transform">
                                                         <FaCheckCircle />
@@ -524,32 +528,36 @@ export default function StudentDashboard() {
                                                         {new Date(attempt.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                                                     </span>
                                                 </div>
-                                                <h3 className="text-2xl font-black mb-1 group-hover:text-primary transition-colors">
-                                                    {attempt.topicId?.name}
-                                                </h3>
-                                                <div className="flex items-center gap-2 mb-6">
-                                                    <span className="text-xs font-black uppercase tracking-widest text-slate-500">Global Rank</span>
-                                                    <span className={`text-lg font-black ${attempt.rank <= 3 ? 'text-yellow-500' : 'text-primary'}`}>
-                                                        #{attempt.rank || '-'}
-                                                    </span>
+                                                <div className="flex-1 flex flex-col gap-3">
+                                                    <h3 className="text-2xl font-black group-hover:text-primary transition-colors leading-tight">
+                                                        {attempt.topicId?.name}
+                                                    </h3>
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <span className="text-xs font-black uppercase tracking-widest text-slate-500">Global Rank</span>
+                                                        <span className={`text-lg font-black ${attempt.rank <= 3 ? 'text-yellow-500' : 'text-primary'}`}>
+                                                            #{attempt.rank || '-'}
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-slate-500 text-lg line-clamp-2 leading-relaxed">{attempt.topicId?.description}</p>
                                                 </div>
-                                                <p className="text-slate-500 text-lg mb-10 line-clamp-2 leading-relaxed flex-1">{attempt.topicId?.description}</p>
 
-                                                <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/5">
-                                                    <div className="flex flex-col">
-                                                        <span className="text-slate-500 text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Performance</span>
-                                                        <span className="text-2xl font-black text-white">{attempt.score} <span className="text-sm text-slate-400 font-medium ml-1">pts</span></span>
+                                                <div className="mt-10 pt-8 border-t border-white/5 flex flex-col gap-6">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-slate-500 text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Performance</span>
+                                                            <span className="text-2xl font-black text-white">{attempt.score} <span className="text-sm text-slate-400 font-medium ml-1">pts</span></span>
+                                                        </div>
+                                                        <div className="flex flex-col items-end">
+                                                            <span className="text-emerald-500 text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Status</span>
+                                                            <span className="text-lg font-black text-emerald-400">+1 Point Earned</span>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex flex-col items-end">
-                                                        <span className="text-emerald-500 text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Status</span>
-                                                        <span className="text-lg font-black text-emerald-400">+1 Point Earned</span>
-                                                    </div>
+                                                    <Link href={`/quiz/${attempt.topicId?._id}/result?attemptId=${attempt._id}`}>
+                                                        <Button variant="secondary" className="w-full py-4 rounded-xl font-black text-sm bg-primary hover:scale-[1.02] transition-all shadow-lg shadow-primary/20">
+                                                            View Details →
+                                                        </Button>
+                                                    </Link>
                                                 </div>
-                                                <Link href={`/quiz/${attempt.topicId?._id}/result?attemptId=${attempt._id}`}>
-                                                    <Button variant="secondary" className="px-6 py-3 rounded-xl font-black text-sm bg-primary hover:scale-105 transition-all shadow-lg shadow-primary/20 mt-6">
-                                                        View Details →
-                                                    </Button>
-                                                </Link>
                                             </Card>
                                         ))}
                                     </div>
@@ -571,8 +579,12 @@ export default function StudentDashboard() {
                                 ) : (
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                         {certificates.map((cert) => (
-                                            <Card key={cert._id} className="p-8 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2rem] flex flex-col h-full shadow-2xl transition-all group">
-                                                <div className="flex justify-between items-start mb-6">
+                                            <Card
+                                                key={cert._id}
+                                                className="border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2rem] flex flex-col h-full shadow-2xl transition-all group"
+                                                style={{ padding: '2.5rem' }}
+                                            >
+                                                <div className="flex justify-between items-start mb-8">
                                                     <div className="text-indigo-400 text-3xl opacity-50 group-hover:opacity-100 transition-opacity">
                                                         <FaGraduationCap />
                                                     </div>
@@ -580,10 +592,12 @@ export default function StudentDashboard() {
                                                         Verified
                                                     </div>
                                                 </div>
-                                                <h4 className="text-xl font-black mb-2 text-white group-hover:text-indigo-400 transition-colors">{cert.topicId?.name}</h4>
-                                                <p className="text-slate-500 text-sm mb-8 leading-relaxed line-clamp-2">{cert.topicId?.description}</p>
+                                                <div className="flex-1 flex flex-col gap-3">
+                                                    <h4 className="text-xl font-black text-white group-hover:text-indigo-400 transition-colors leading-tight">{cert.topicId?.name}</h4>
+                                                    <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{cert.topicId?.description}</p>
+                                                </div>
 
-                                                <div className="mt-auto flex items-center justify-between pt-6 border-t border-white/5">
+                                                <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
                                                     <div className="flex flex-col">
                                                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Earned On</span>
                                                         <span className="text-xs font-bold text-slate-300">{new Date(cert.certifiedAt).toLocaleDateString()}</span>

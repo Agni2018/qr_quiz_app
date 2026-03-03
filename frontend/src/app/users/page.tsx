@@ -636,32 +636,34 @@ export default function UserDashboard() {
                                                     )}
                                                 </div>
 
-                                                <div className="flex items-center gap-3 mt-auto pt-6 w-full">
-                                                    <Link href={`/users/topic/${topic._id}`} className="flex-grow min-w-0">
+                                                <div className="flex flex-col gap-4 mt-auto pt-6 w-full">
+                                                    <Link href={`/users/topic/${topic._id}`} className="w-full">
                                                         <Button className="w-full justify-between h-12 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-white font-black transition-all shadow-lg shadow-emerald-500/20">
                                                             Manage <FaArrowRight />
                                                         </Button>
                                                     </Link>
 
-                                                    <Button
-                                                        variant="ghost"
-                                                        className="h-12 px-4 rounded-2xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center shrink-0 gap-2"
-                                                        onClick={() => copyTopic(topic._id)}
-                                                        title="Duplicate Topic"
-                                                    >
-                                                        <FaCopy className="text-slate-400 group-hover:text-white transition-colors" />
-                                                        <span className="text-xs font-bold text-slate-400">Copy</span>
-                                                    </Button>
+                                                    <div className="flex items-center justify-between w-full">
+                                                        <Button
+                                                            variant="ghost"
+                                                            className="min-w-[48px] h-10 px-4 rounded-xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center gap-2 group/btn"
+                                                            onClick={(e) => { e.preventDefault(); copyTopic(topic._id); }}
+                                                            title="Duplicate Topic"
+                                                        >
+                                                            <FaCopy className="text-slate-400 group-hover/btn:text-white transition-colors" />
+                                                            <span className="text-xs font-bold text-slate-400 group-hover/btn:text-white transition-colors">Copy</span>
+                                                        </Button>
 
-                                                    <Button
-                                                        variant="ghost"
-                                                        className="h-12 px-4 rounded-2xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center shrink-0 gap-2"
-                                                        onClick={() => deleteTopic(topic._id)}
-                                                        title="Delete Topic"
-                                                    >
-                                                        <FaTrash className="text-red-500 group-hover:text-red-400 transition-colors" />
-                                                        <span className="text-xs font-bold text-red-500">Del</span>
-                                                    </Button>
+                                                        <Button
+                                                            variant="ghost"
+                                                            className="min-w-[48px] h-10 px-4 rounded-xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center gap-2 group/btn"
+                                                            onClick={(e) => { e.preventDefault(); deleteTopic(topic._id); }}
+                                                            title="Delete Topic"
+                                                        >
+                                                            <FaTrash className="text-red-500/70 group-hover/btn:text-red-400 transition-colors" />
+                                                            <span className="text-xs font-bold text-red-500/70 group-hover/btn:text-red-400 transition-colors">Del</span>
+                                                        </Button>
+                                                    </div>
                                                 </div>
                                             </Card>
                                         );
