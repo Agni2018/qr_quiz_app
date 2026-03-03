@@ -59,6 +59,7 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
                 const cloudData = new FormData();
                 cloudData.append('file', file);
                 cloudData.append('upload_preset', uploadPreset);
+                cloudData.append('resource_type', 'auto'); // Crucial for PDF/Video support
 
                 const response = await fetch(
                     `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
