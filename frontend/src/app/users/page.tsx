@@ -398,8 +398,8 @@ export default function UserDashboard() {
                 </aside>
 
                 {/* MAIN */}
-                <main className="px-8 lg:px-16 py-8 lg:pt-20 lg:pb-12 overflow-y-auto max-h-screen w-full">
-                    <div className="max-w-[1400px] mx-auto">
+                <main className="py-8 lg:pt-20 lg:pb-12 overflow-y-auto max-h-screen w-full">
+                    <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16">
 
                         {/* TOP BAR */}
                         <div className="flex justify-between items-center mb-12">
@@ -512,8 +512,8 @@ export default function UserDashboard() {
                                         {analytics.topicStats.map((stat: any) => (
                                             <Card
                                                 key={stat.topicId}
-                                                className="group p-12 rounded-[2rem] border shadow-lg hover:shadow-primary/20 transition-all transform hover:-translate-y-2 relative overflow-hidden flex flex-col gap-8"
-                                                style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)' }}
+                                                className="group rounded-[2rem] border shadow-lg hover:shadow-primary/20 transition-all transform hover:-translate-y-2 relative overflow-hidden flex flex-col gap-10"
+                                                style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)', padding: '2.25rem' }}
                                             >
                                                 {/* Card Accent */}
                                                 <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-3xl rounded-full translate-x-12 -translate-y-12" />
@@ -536,7 +536,7 @@ export default function UserDashboard() {
                                                     </p>
                                                 </div>
 
-                                                <div className="flex items-end justify-between mt-4 relative z-10">
+                                                <div className="flex items-end justify-between mt-auto relative z-10">
                                                     <div className="flex flex-col">
                                                         <span style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--primary)', lineHeight: 1 }}>
                                                             {stat.participantCount}
