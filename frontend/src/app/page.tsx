@@ -139,8 +139,8 @@ export default function Home() {
                     </div>
 
                     {/* ---------- CARD ---------- */}
-                    <Card className="p-6 md:p-12 overflow-hidden" style={{ borderRadius: '1.5rem', maxWidth: '100%' }}>
-                        <form onSubmit={handleSubmit} className="flex flex-col gap-6 md:gap-10 pt-4 md:pt-10">
+                    <Card className="overflow-hidden" style={{ padding: '2.5rem', borderRadius: '2rem', maxWidth: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', background: 'rgba(15, 23, 42, 0.9)' }}>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-10">
 
                             {/* ---------- MESSAGE ---------- */}
                             {error && (
@@ -180,13 +180,13 @@ export default function Home() {
                                 <div className="relative group">
                                     <label style={{
                                         display: 'block',
-                                        marginBottom: '0.75rem',
-                                        marginTop: '1.5rem',
+                                        marginBottom: '1rem',
+                                        marginTop: '1rem',
                                         fontSize: '0.75rem',
                                         fontWeight: 800,
                                         color: 'var(--text-muted)',
                                         textTransform: 'uppercase',
-                                        letterSpacing: '0.1em',
+                                        letterSpacing: '0.15em',
                                         paddingLeft: '1.5rem'
                                     }}>
                                         Username
@@ -236,12 +236,12 @@ export default function Home() {
                                     <div className="relative group animate-fade-in">
                                         <label style={{
                                             display: 'block',
-                                            marginBottom: '0.75rem',
+                                            marginBottom: '1rem',
                                             fontSize: '0.75rem',
                                             fontWeight: 800,
                                             color: 'var(--text-muted)',
                                             textTransform: 'uppercase',
-                                            letterSpacing: '0.1em',
+                                            letterSpacing: '0.15em',
                                             paddingLeft: '1.5rem'
                                         }}>
                                             Email
@@ -289,12 +289,12 @@ export default function Home() {
                                 <div className="relative group">
                                     <label style={{
                                         display: 'block',
-                                        marginBottom: '0.75rem',
+                                        marginBottom: '1rem',
                                         fontSize: '0.75rem',
                                         fontWeight: 800,
                                         color: 'var(--text-muted)',
                                         textTransform: 'uppercase',
-                                        letterSpacing: '0.1em',
+                                        letterSpacing: '0.15em',
                                         paddingLeft: '1.5rem'
                                     }}>
                                         Password
