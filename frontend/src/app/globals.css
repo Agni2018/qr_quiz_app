@@ -67,6 +67,7 @@
   --glass-border: rgba(255, 255, 255, 0.1);
 
   --primary: #10b981;
+  --primary-rgb: 16, 185, 129;
   --primary-hover: #059669;
   --primary-light: #34d399;
   --primary-dark: #047857;

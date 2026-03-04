@@ -325,14 +325,20 @@ export default function StudentDashboard() {
                         <FaTimes />
                     </button>
 
-                    <div className="mb-2">
-                        <div className="flex items-center gap-3 mb-10">
-                            <div className="w-12 h-[3px] bg-gradient-to-r from-primary to-secondary rounded-full" />
-                            <p className="text-slate-500 text-[0.7rem] font-black uppercase tracking-[0.3em] opacity-60">Student Portal</p>
+                    {/* Branding Section - Premium Styled */}
+                    <div className="mb-14 pt-6 relative group">
+                        <div className="absolute -inset-10 bg-primary/20 blur-[120px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+
+                        <div className="flex items-center gap-4 mb-10 relative z-10 px-4">
+                            <div className="w-16 h-[5px] bg-gradient-to-r from-primary via-secondary to-transparent rounded-full shadow-[0_0_20px_rgba(var(--primary-rgb),0.6)]" />
+                            <span className="text-[0.7rem] font-black uppercase tracking-[0.5em] text-primary drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.4)]">Student Portal</span>
                         </div>
-                        <div className="text-3xl font-light text-slate-400 mb-2" style={{ paddingLeft: '1rem' }}>Welcome,</div>
-                        <div className="text-4xl font-black bg-gradient-to-r from-white via-primary/80 to-primary bg-clip-text text-transparent transform -tracking-wide leading-tight" style={{ paddingLeft: '1rem' }}>
-                            {user?.username}
+
+                        <div className="flex flex-col gap-0 relative z-10">
+                            <h3 className="text-6xl font-light bg-gradient-to-r from-slate-400 via-primary/80 to-secondary bg-clip-text text-transparent tracking-tight leading-none" style={{ paddingLeft: '1.5rem', marginTop: '1rem' }}>Welcome,</h3>
+                            <h2 className="text-8xl font-black bg-gradient-to-br from-white via-primary to-primary bg-clip-text text-transparent tracking-tighter leading-tight mt-1" style={{ paddingLeft: '1.5rem' }}>
+                                {user?.username}
+                            </h2>
                         </div>
                     </div>
 
