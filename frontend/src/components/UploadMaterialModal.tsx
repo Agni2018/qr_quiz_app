@@ -106,7 +106,7 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
     return (
         <div className="fixed inset-0 z-[110] backdrop-blur-md flex items-center justify-center px-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
             <Card className="w-full max-w-lg p-0 rounded-[2.5rem] overflow-hidden shadow-2xl" style={{ background: 'var(--background)', borderColor: 'var(--border-color)' }} onClick={e => e.stopPropagation()}>
-                <div className="p-8 border-b border-white/5 flex justify-between items-center bg-slate-900/40">
+                <div className="border-b border-white/5 flex justify-between items-center bg-slate-900/40" style={{ padding: '3rem 4rem' }}>
                     <div>
                         <h3 className="text-2xl font-black">Upload Materials</h3>
                         <p className="text-slate-500 font-medium">Adding to: {topicName}</p>
@@ -116,7 +116,7 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
                     </button>
                 </div>
 
-                <div className="p-10 flex flex-col gap-10">
+                <div className="flex flex-col gap-10" style={{ padding: '4rem' }}>
                     {/* File Dropzone */}
                     {!file ? (
                         <label
@@ -163,7 +163,7 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
                             <textarea
                                 placeholder="What's in this material?"
                                 style={{
-                                    padding: '1rem 1.5rem',
+                                    padding: '1.25rem 1.75rem',
                                     borderRadius: '1.25rem',
                                     background: 'var(--glass-bg)',
                                     border: '1px solid var(--border-color)',
