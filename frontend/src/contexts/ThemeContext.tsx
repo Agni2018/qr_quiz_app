@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-export type Theme = 'dark' | 'purple';
+export type Theme = 'dark' | 'purple' | 'emerald';
 
 interface ThemeContextType {
     theme: Theme;
@@ -12,21 +12,21 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [theme, setThemeState] = useState<Theme>('dark');
+    const [theme, setThemeState] = useState<Theme>('emerald');
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
         const savedTheme = localStorage.getItem('quiz-theme') as string;
-        if (savedTheme && ['dark', 'purple'].includes(savedTheme)) {
+        if (savedTheme && ['dark', 'purple', 'emerald'].includes(savedTheme)) {
             setThemeState(savedTheme as Theme);
             document.documentElement.setAttribute('data-theme', savedTheme);
         } else if (savedTheme === 'light') {
-            setThemeState('dark');
-            document.documentElement.setAttribute('data-theme', 'dark');
-            localStorage.setItem('quiz-theme', 'dark');
+            setThemeState('emerald');
+            document.documentElement.setAttribute('data-theme', 'emerald');
+            localStorage.setItem('quiz-theme', 'emerald');
         } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.setAttribute('data-theme', 'emerald');
         }
     }, []);
 

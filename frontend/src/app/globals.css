@@ -15,13 +15,15 @@
 
   /* Primary Colors */
   --primary: #10b981;
+  --primary-rgb: 16, 185, 129;
   --primary-hover: #059669;
   --primary-light: #34d399;
   --primary-dark: #065f46;
 
   /* Secondary Colors */
-  --secondary: #0ea5e9;
-  --secondary-hover: #0284c7;
+  --secondary: #10b981;
+  --secondary-rgb: 16, 185, 129;
+  --secondary-hover: #059669;
 
   /* Accent Colors */
   --accent: #10b981;
@@ -69,8 +71,9 @@
   --primary-light: #34d399;
   --primary-dark: #047857;
 
-  --secondary: #3b82f6;
-  --secondary-hover: #60a5fa;
+  --secondary: #10b981;
+  --secondary-rgb: 16, 185, 129;
+  --secondary-hover: #059669;
 
   --accent: #10b981;
   --accent-hover: #34d399;
@@ -106,8 +109,9 @@
   --primary-light: #34d399;
   --primary-dark: #047857;
 
-  --secondary: #3b82f6;
-  --secondary-hover: #60a5fa;
+  --secondary: #10b981;
+  --secondary-rgb: 16, 185, 129;
+  --secondary-hover: #059669;
 
   --accent: #10b981;
   --accent-hover: #34d399;
@@ -127,6 +131,46 @@
   --shadow-md: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
   --shadow-lg: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
   --shadow-xl: 0 20px 25px -5px rgba(16, 185, 129, 0.5);
+}
+
+/* Emerald Prestige Theme (Emerald Background, Yellow Buttons) */
+[data-theme='emerald'] {
+  --background: #03100c;
+  --foreground: #f0f7f4;
+  --card-bg: rgba(6, 26, 20, 0.8);
+  --card-border: rgba(251, 192, 45, 0.2);
+  --glass-bg: rgba(6, 26, 20, 0.6);
+  --glass-border: rgba(251, 192, 45, 0.15);
+
+  /* Primary is Yellow/Gold in this theme */
+  --primary: #fbc02d;
+  --primary-rgb: 251, 192, 45;
+  --primary-hover: #f9a825;
+  --primary-light: #fff263;
+  --primary-dark: #c49000;
+
+  --secondary: #f9a825;
+  --secondary-rgb: 249, 168, 37;
+  --secondary-hover: #fbc02d;
+
+  --accent: #fbc02d;
+  --accent-hover: #fff263;
+
+  --text-primary: #f0f7f4;
+  --text-secondary: #a1b1ac;
+  --text-muted: #6b7a76;
+  --border-color: rgba(251, 192, 45, 0.2);
+  --hover-bg: rgba(251, 192, 45, 0.1);
+
+  --success: #10b981;
+  --warning: #fbc02d;
+  --error: #ef4444;
+  --info: #3b82f6;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
 }
 
 /* ============================================
@@ -177,6 +221,15 @@ body {
     radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.2) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.2) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
+}
+
+/* Emerald theme gradient background */
+[data-theme='emerald'] body {
+  background-image:
+    radial-gradient(at 0% 0%, rgba(251, 192, 45, 0.1) 0px, transparent 40%),
+    radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 40%),
+    radial-gradient(at 50% 50%, rgba(6, 26, 20, 1) 0px, transparent 100%);
+  background-color: #03100c;
 }
 
 a {

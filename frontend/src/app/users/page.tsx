@@ -325,11 +325,11 @@ export default function UserDashboard() {
                     {/* Dashboard heading */}
                     <div className="mb-2">
                         <div className="flex items-center gap-3 mb-10">
-                            <div className="w-12 h-[3px] bg-gradient-to-r from-[#10b981] to-[#3b82f6] rounded-full" />
+                            <div className="w-12 h-[3px] bg-gradient-to-r from-primary to-secondary rounded-full" />
                             <p className="text-slate-500 text-[0.7rem] font-black uppercase tracking-[0.3em] opacity-60">Admin Portal</p>
                         </div>
                         <div className="text-3xl font-light text-slate-400 mb-2" style={{ paddingLeft: '1rem' }}>Welcome,</div>
-                        <div className="text-4xl font-black bg-gradient-to-r from-white via-[#10b981]/80 to-[#10b981] bg-clip-text text-transparent transform -tracking-wide leading-tight" style={{ paddingLeft: '1rem' }}>
+                        <div className="text-4xl font-black bg-gradient-to-r from-white via-primary/80 to-primary bg-clip-text text-transparent transform -tracking-wide leading-tight" style={{ paddingLeft: '1rem' }}>
                             {user?.username || 'Admin'}
                         </div>
                     </div>
@@ -339,26 +339,26 @@ export default function UserDashboard() {
                     <nav className="flex flex-col gap-4 flex-grow">
                         <Button
                             variant={activeView === 'analytics' ? 'secondary' : 'ghost'}
-                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'analytics' ? 'bg-[#10b981]/10 text-[#10b981]' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'analytics' ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
                             onClick={() => { setActiveView('analytics'); setSidebarOpen(false); }}
                         >
-                            <FaChartPie className={activeView === 'analytics' ? 'text-[#10b981]' : 'text-slate-400'} /> Analytics
+                            <FaChartPie className={activeView === 'analytics' ? 'text-primary' : 'text-slate-400'} /> Analytics
                         </Button>
 
                         <Button
                             variant={activeView === 'manage' ? 'secondary' : 'ghost'}
-                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'manage' ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'manage' ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
                             onClick={() => { setActiveView('manage'); setSidebarOpen(false); }}
                         >
-                            <FaGraduationCap className={activeView === 'manage' ? 'text-emerald-400' : 'text-slate-400'} /> Manage Topics
+                            <FaGraduationCap className={activeView === 'manage' ? 'text-primary' : 'text-slate-400'} /> Manage Topics
                         </Button>
 
                         <Button
                             variant={activeView === 'reusable' ? 'secondary' : 'ghost'}
-                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'reusable' ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            className={`justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${activeView === 'reusable' ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
                             onClick={() => { setActiveView('reusable'); setSidebarOpen(false); }}
                         >
-                            <FaBook className={activeView === 'reusable' ? 'text-emerald-400' : 'text-slate-400'} /> Question Bank
+                            <FaBook className={activeView === 'reusable' ? 'text-primary' : 'text-slate-400'} /> Question Bank
                         </Button>
 
                         <Button
@@ -440,7 +440,7 @@ export default function UserDashboard() {
                                 }}>
                                     <span style={{ fontSize: '1.5rem', opacity: 0.8 }}>📊</span>
                                     <span style={{
-                                        backgroundImage: 'linear-gradient(to right, #10b981, #3b82f6)',
+                                        backgroundImage: 'linear-gradient(to right, var(--primary), var(--secondary))',
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
                                         backgroundClip: 'text',
@@ -450,13 +450,13 @@ export default function UserDashboard() {
                                 </h2>
 
                                 {/* Active Topics Card */}
-                                <Card className="p-10 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, var(--card-bg), rgba(16, 185, 129, 0.1))' }}>
+                                <Card className="p-10 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, var(--card-bg), rgba(var(--primary-rgb), 0.15))' }}>
                                     <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:opacity-20 transition-opacity transform rotate-12 translate-x-4 -translate-y-4">
                                         <FaBars size={180} />
                                     </div>
                                     <div className="flex items-center justify-between relative z-10">
                                         <div className="flex flex-col gap-2">
-                                            <span className="text-lg font-bold uppercase tracking-widest text-[#10b981] opacity-90">Active Topics</span>
+                                            <span className="text-lg font-bold uppercase tracking-widest text-primary opacity-90">Active Topics</span>
                                             <span className="text-sm font-medium text-slate-400">Currently live quizzes</span>
                                         </div>
                                         <div className="flex items-baseline gap-2">
@@ -521,11 +521,11 @@ export default function UserDashboard() {
                                                 <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-3xl rounded-full translate-x-12 -translate-y-12" />
 
                                                 <div className="flex items-start justify-between relative z-10">
-                                                    <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary text-2xl border border-secondary/20 shadow-sm">
+                                                    <div className="w-16 h-16 rounded-[1.5rem] bg-emerald-500/10 flex items-center justify-center text-emerald-500 text-3xl border border-emerald-500/20 shadow-inner group-hover:scale-110 transition-transform">
                                                         📦
                                                     </div>
-                                                    <div className="h-2 w-16 bg-border-color rounded-full overflow-hidden mt-5">
-                                                        <div className="h-full bg-primary" style={{ width: '60%' }} />
+                                                    <div className="h-2 w-20 bg-white/5 rounded-full overflow-hidden mt-6">
+                                                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]" style={{ width: '65%' }} />
                                                     </div>
                                                 </div>
 
@@ -538,27 +538,28 @@ export default function UserDashboard() {
                                                     </p>
                                                 </div>
 
-                                                <div className="flex items-end justify-between mt-6 relative z-10">
-                                                    <div className="flex flex-col">
-                                                        <span style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--primary)', lineHeight: 1 }}>
-                                                            {stat.participantCount}
-                                                        </span>
-                                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Total Participants</span>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <button
-                                                            onClick={() => handleOpenCertify(stat.topicId, stat.topicName)}
-                                                            className="px-3 py-2 rounded-xl bg-green-500/10 hover:bg-green-500/20 text-green-500 text-xs font-bold transition-all border border-green-500/20"
-                                                        >
-                                                            Certify
-                                                        </button>
+                                                <div className="flex flex-col gap-8 mt-8 relative z-10">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex flex-col">
+                                                            <span style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--primary)', lineHeight: 1 }}>
+                                                                {stat.participantCount}
+                                                            </span>
+                                                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem', fontWeight: 700, textTransform: 'uppercase' }}>Total Participants</span>
+                                                        </div>
                                                         <button
                                                             onClick={() => handleViewParticipants(stat.topicId, stat.topicName)}
-                                                            className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm shadow-lg group-hover:scale-110 transition-transform cursor-pointer hover:bg-primary/80"
+                                                            className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-slate-500 hover:bg-primary hover:text-white transition-all shadow-inner border border-white/5"
                                                         >
                                                             <FaArrowRight />
                                                         </button>
                                                     </div>
+
+                                                    <button
+                                                        onClick={() => handleOpenCertify(stat.topicId, stat.topicName)}
+                                                        className="w-full py-4 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-white font-black text-xs uppercase tracking-widest transition-all border border-emerald-500/20 shadow-xl shadow-emerald-500/5 flex items-center justify-center gap-3"
+                                                    >
+                                                        <FaAward className="text-lg" /> Certify Results
+                                                    </button>
                                                 </div>
 
                                             </Card>
@@ -606,8 +607,8 @@ export default function UserDashboard() {
                                                     <span
                                                         className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shrink-0"
                                                         style={{
-                                                            background: isActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                                                            color: isActive ? '#10b981' : '#ef4444'
+                                                            background: isActive ? 'rgba(var(--primary-rgb), 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                                            color: isActive ? 'var(--primary)' : '#ef4444'
                                                         }}
                                                     >
                                                         {isActive ? 'Active' : 'Inactive'}
@@ -638,7 +639,7 @@ export default function UserDashboard() {
 
                                                 <div className="flex flex-col gap-4 mt-auto pt-6 w-full">
                                                     <Link href={`/users/topic/${topic._id}`} className="w-full">
-                                                        <Button className="w-full justify-between h-12 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-white font-black transition-all shadow-lg shadow-emerald-500/20">
+                                                        <Button className="w-full justify-between h-12 px-6 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black transition-all shadow-lg shadow-primary/20">
                                                             Manage <FaArrowRight />
                                                         </Button>
                                                     </Link>

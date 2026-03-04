@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from '@/contexts/ThemeContext';
-import { FaSun, FaMoon, FaPalette } from 'react-icons/fa';
+import { FaSun, FaMoon, FaPalette, FaGem } from 'react-icons/fa';
 
 export default function ThemeToggle() {
     const { theme, setTheme } = useTheme();
@@ -23,7 +23,15 @@ export default function ThemeToggle() {
                 title="Modern Dark"
                 aria-label="Switch to modern dark mode"
             >
-                <FaPalette className="text-[#10b981]" />
+                <FaPalette />
+            </button>
+            <button
+                onClick={() => setTheme('emerald')}
+                className={`theme-toggle-btn ${theme === 'emerald' ? 'active' : ''}`}
+                title="Emerald Prestige"
+                aria-label="Switch to emerald prestige theme"
+            >
+                <FaGem className={theme === 'emerald' ? 'text-[#fbc02d]' : ''} />
             </button>
         </div>
     );

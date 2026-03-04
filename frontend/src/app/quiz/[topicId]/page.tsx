@@ -111,16 +111,17 @@ export default function QuizLanding({
     }
 
     return (
-        <main className="container flex items-center justify-center py-20">
+        <main className="container flex items-center justify-center py-24 sm:py-32">
             <Card
-                className="max-w-[500px] w-full p-12 md:p-16 rounded-[40px] border border-white/5 bg-slate-900/60 backdrop-blur-3xl shadow-3xl relative overflow-hidden"
+                className="max-w-[550px] w-full rounded-[3.5rem] border border-white/5 bg-slate-900/60 backdrop-blur-3xl shadow-3xl relative overflow-hidden"
+                style={{ padding: '3.5rem 2.5rem' }}
             >
                 {/* Background accent */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-violet-600/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
                 {/* Topic Header */}
-                <div className="text-center mb-12">
-                    <div className="w-16 h-16 rounded-2xl bg-violet-500/10 flex items-center justify-center text-3xl mx-auto mb-6">
+                <div className="text-center mb-20 leading-relaxed">
+                    <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mx-auto mb-8 border border-primary/20">
                         🎯
                     </div>
                     <h1 className="text-3xl font-black text-white leading-tight mb-3">
@@ -133,9 +134,9 @@ export default function QuizLanding({
 
                 {/* No Questions State */}
                 {questionCount === 0 ? (
-                    <div className="text-center py-16 px-8 bg-violet-600/5 rounded-3xl border-2 border-dashed border-violet-500/20">
+                    <div className="text-center py-16 px-8 bg-primary/5 rounded-3xl border-2 border-dashed border-primary/20">
                         <div className="text-5xl mb-6">📝</div>
-                        <h3 className="text-2xl font-black text-violet-400 mb-2">
+                        <h3 className="text-2xl font-black text-primary mb-2">
                             Coming Soon
                         </h3>
                         <p className="text-slate-500 text-sm font-medium leading-relaxed italic">
@@ -146,9 +147,9 @@ export default function QuizLanding({
                     /* User Details Form */
                     <form
                         onSubmit={handleStart}
-                        className="flex flex-col gap-6"
+                        className="flex flex-col gap-10"
                     >
-                        <div className="flex flex-col gap-5">
+                        <div className="flex flex-col gap-8">
                             <Input
                                 label="Full Name"
                                 value={user.name}
@@ -191,7 +192,7 @@ export default function QuizLanding({
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full mt-6 py-5 rounded-2xl text-lg font-black shadow-xl shadow-violet-500/20 bg-violet-500 text-white hover:scale-[1.02] active:scale-[0.98] transition-all"
+                            className="w-full mt-10 py-6 rounded-2xl text-xl font-black shadow-2xl shadow-primary/40 bg-primary text-white hover:scale-[1.02] active:scale-[0.98] transition-all"
                         >
                             {loading ? 'Preparing Session...' : '🚀 Start Quiz Challenge'}
                         </Button>

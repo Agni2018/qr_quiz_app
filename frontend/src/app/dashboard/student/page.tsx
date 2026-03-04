@@ -327,11 +327,11 @@ export default function StudentDashboard() {
 
                     <div className="mb-2">
                         <div className="flex items-center gap-3 mb-10">
-                            <div className="w-12 h-[3px] bg-gradient-to-r from-[#10b981] to-[#3b82f6] rounded-full" />
+                            <div className="w-12 h-[3px] bg-gradient-to-r from-primary to-secondary rounded-full" />
                             <p className="text-slate-500 text-[0.7rem] font-black uppercase tracking-[0.3em] opacity-60">Student Portal</p>
                         </div>
                         <div className="text-3xl font-light text-slate-400 mb-2" style={{ paddingLeft: '1rem' }}>Welcome,</div>
-                        <div className="text-4xl font-black bg-gradient-to-r from-white via-[#10b981]/80 to-[#10b981] bg-clip-text text-transparent transform -tracking-wide leading-tight" style={{ paddingLeft: '1rem' }}>
+                        <div className="text-4xl font-black bg-gradient-to-r from-white via-primary/80 to-primary bg-clip-text text-transparent transform -tracking-wide leading-tight" style={{ paddingLeft: '1rem' }}>
                             {user?.username}
                         </div>
                     </div>
@@ -432,7 +432,7 @@ export default function StudentDashboard() {
                                 width: '5rem',
                                 height: '5rem',
                                 borderRadius: '1.5rem',
-                                background: activeView === 'progress' ? 'linear-gradient(135deg, #3b82f6, #10b981)' :
+                                background: activeView === 'progress' ? 'linear-gradient(135deg, var(--secondary), var(--primary))' :
                                     activeView === 'available' ? 'linear-gradient(135deg, #8b5cf6, #6366f1)' :
                                         activeView === 'lb' ? 'linear-gradient(135deg, #f59e0b, #f97316)' :
                                             activeView === 'certificates' ? 'linear-gradient(135deg, #6366f1, #a855f7)' :
@@ -467,13 +467,13 @@ export default function StudentDashboard() {
                                 <h2
                                     className="text-7xl font-black tracking-tighter"
                                     style={{
-                                        backgroundImage: activeView === 'progress' ? 'linear-gradient(to right, #10b981, #3b82f6)' :
-                                            activeView === 'available' ? 'linear-gradient(to right, #10b981, #3b82f6)' :
+                                        backgroundImage: activeView === 'progress' ? 'linear-gradient(to right, var(--primary), var(--secondary))' :
+                                            activeView === 'available' ? 'linear-gradient(to right, var(--primary), var(--secondary))' :
                                                 activeView === 'lb' ? 'linear-gradient(to right, #f59e0b, #f97316)' :
-                                                    activeView === 'certificates' ? 'linear-gradient(to right, #3b82f6, #10b981)' :
+                                                    activeView === 'certificates' ? 'linear-gradient(to right, #3b82f6, var(--primary))' :
                                                         activeView === 'materials' ? 'linear-gradient(to right, #f43f5e, #fb7185)' :
                                                             activeView === 'notifications' ? 'linear-gradient(to right, #3b82f6, #60a5fa)' :
-                                                                'linear-gradient(to right, #10b981, #3b82f6)',
+                                                                'linear-gradient(to right, var(--primary), var(--secondary))',
 
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
@@ -489,13 +489,13 @@ export default function StudentDashboard() {
 
                                 </h2>
                                 <div className="h-2 w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r" style={{
-                                    backgroundImage: activeView === 'progress' ? 'linear-gradient(to right, #10b981, transparent)' :
-                                        activeView === 'available' ? 'linear-gradient(to right, #10b981, transparent)' :
+                                    backgroundImage: activeView === 'progress' ? 'linear-gradient(to right, var(--primary), transparent)' :
+                                        activeView === 'available' ? 'linear-gradient(to right, var(--primary), transparent)' :
                                             activeView === 'lb' ? 'linear-gradient(to right, #f59e0b, transparent)' :
                                                 activeView === 'certificates' ? 'linear-gradient(to right, #3b82f6, transparent)' :
                                                     activeView === 'materials' ? 'linear-gradient(to right, #f43f5e, transparent)' :
                                                         activeView === 'notifications' ? 'linear-gradient(to right, #3b82f6, transparent)' :
-                                                            'linear-gradient(to right, #10b981, transparent)'
+                                                            'linear-gradient(to right, var(--primary), transparent)'
 
                                 }} />
                             </div>
@@ -548,12 +548,12 @@ export default function StudentDashboard() {
                                                             <span className="text-2xl font-black text-white">{attempt.score} <span className="text-sm text-slate-400 font-medium ml-1">pts</span></span>
                                                         </div>
                                                         <div className="flex flex-col items-end">
-                                                            <span className="text-emerald-500 text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Status</span>
-                                                            <span className="text-lg font-black text-emerald-400">+1 Point Earned</span>
+                                                            <span className="text-primary text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Status</span>
+                                                            <span className="text-lg font-black text-primary/80">+1 Point Earned</span>
                                                         </div>
                                                     </div>
                                                     <Link href={`/quiz/${attempt.topicId?._id}/result?attemptId=${attempt._id}`}>
-                                                        <Button variant="secondary" className="w-full py-4 rounded-xl font-black text-sm bg-primary hover:scale-[1.02] transition-all shadow-lg shadow-primary/20">
+                                                        <Button variant="secondary" className="w-full py-4 rounded-xl font-black text-sm bg-primary hover:scale-[1.02] transition-all shadow-lg shadow-primary/40">
                                                             View Details →
                                                         </Button>
                                                     </Link>
@@ -691,7 +691,7 @@ export default function StudentDashboard() {
                                                     className={`p-10 group transition-all duration-500 border-white/5 bg-slate-950/40 rounded-[2.5rem] flex flex-col h-full shadow-2xl ${hasAttempted ? 'opacity-70 cursor-not-allowed' : 'hover:-translate-y-3 hover:bg-slate-900/60 cursor-pointer'}`}
                                                 >
                                                     <div className="flex justify-between items-start mb-8">
-                                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border transition-all duration-700 ${hasAttempted ? 'bg-slate-500/10 text-slate-500 border-slate-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 group-hover:rotate-[360deg]'}`}>
+                                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border transition-all duration-700 ${hasAttempted ? 'bg-slate-500/10 text-slate-500 border-slate-500/20' : 'bg-primary/10 text-primary border-primary/20 group-hover:rotate-[360deg]'}`}>
                                                             {hasAttempted ? <FaCheckCircle /> : <FaPlus />}
                                                         </div>
                                                     </div>

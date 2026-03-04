@@ -121,7 +121,7 @@ export default function Home() {
                         <h1
                             className="text-2xl md:text-[3.75rem] font-black mb-4 leading-tight"
                             style={{
-                                background: 'linear-gradient(to right, #10b981, #3b82f6)',
+                                backgroundImage: 'linear-gradient(to right, var(--primary), var(--secondary))',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 backgroundClip: 'text',
@@ -349,8 +349,8 @@ export default function Home() {
                                     fontSize: '1.125rem',
                                     fontWeight: 800,
                                     borderRadius: 'var(--radius-lg)',
-                                    background: '#10b981', // Explicitly using the theme green
-                                    boxShadow: '0 10px 30px rgba(16, 185, 129, 0.3)'
+                                    background: 'var(--primary)',
+                                    boxShadow: '0 10px 30px rgba(var(--primary-rgb), 0.3)'
                                 }}
                             >
                                 {loading ? 'Processing...' : (mode === 'login' ? 'Sign In to Dashboard' : 'Create Account')}
@@ -369,7 +369,7 @@ export default function Home() {
                                         setError('');
                                         setSuccess('');
                                     }}
-                                    style={{ color: '#10b981', fontWeight: 700, textDecoration: 'underline' }}
+                                    style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'underline' }}
                                 >
                                     {mode === 'login' ? 'Register here' : 'Login here'}
                                 </button>

@@ -8,17 +8,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#0a0e1a',
-        foreground: '#f8fafc',
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
         primary: {
-          DEFAULT: '#10b981',
-          hover: '#059669',
+          DEFAULT: 'var(--primary)',
+          hover: 'var(--primary-hover)',
+          light: 'var(--primary-light)',
+          dark: 'var(--primary-dark)',
         },
-        secondary: '#3b82f6',
-        'card-bg': 'rgba(15, 23, 42, 0.7)',
-        'card-border': 'rgba(255, 255, 255, 0.1)',
-        'glass-bg': 'rgba(255, 255, 255, 0.05)',
-        'glass-border': 'rgba(255, 255, 255, 0.1)',
+        secondary: 'var(--secondary)',
+        'card-bg': 'var(--card-bg)',
+        'card-border': 'var(--card-border)',
+        'glass-bg': 'var(--glass-bg)',
+        'glass-border': 'var(--glass-border)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
