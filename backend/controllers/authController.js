@@ -115,6 +115,13 @@ exports.login = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000,
             path: '/'
         });
+        res.cookie('userRole', user.role, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            maxAge: 24 * 60 * 60 * 1000,
+            path: '/'
+        });
 
         res.json({
             id: user._id,
@@ -138,6 +145,13 @@ exports.logout = (req, res) => {
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         path: '/',
         expires: new Date(0) // Expire immediately
+    });
+    res.cookie('userRole', '', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/',
+        expires: new Date(0)
     });
     res.json({ message: 'Logged out successfully' });
 };

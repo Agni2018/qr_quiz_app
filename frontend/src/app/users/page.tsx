@@ -82,6 +82,12 @@ export default function UserDashboard() {
                 const statusRes = await api.get('/auth/status');
                 setUser(statusRes.data.user);
 
+                // Check if user is an admin
+                if (statusRes.data.user && statusRes.data.user.role !== 'admin') {
+                    router.replace('/dashboard/student');
+                    return;
+                }
+
                 const [t, a] = await Promise.all([
                     api.get('/topics'),
                     api.get('/analytics/overview')
@@ -416,7 +422,7 @@ export default function UserDashboard() {
                                 {/* Headings removed from top bar to avoid duplication with page content headers */}
                             </div>
 
-                            <div className="flex items-center gap-4" style={{margin:'1rem 1rem 2rem 1rem'}}>
+                            <div className="flex items-center gap-4" style={{ margin: '1rem 1rem 2rem 1rem' }}>
                                 <ThemeToggle />
                                 <div className="h-6 w-[1px] bg-white/10 mx-2" />
                                 {activeView === 'manage' && (
@@ -439,7 +445,7 @@ export default function UserDashboard() {
                                     fontWeight: 900,
                                     letterSpacing: '-0.03em',
                                     marginBottom: '0.75rem',
-    
+
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '1rem',
@@ -451,21 +457,21 @@ export default function UserDashboard() {
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
                                         backgroundClip: 'text',
-                                        
+
                                     }}>
                                         Analytics
                                     </span>
                                 </h2>
 
                                 {/* Active Topics Card */}
-                                <Card className="p-10 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, var(--card-bg), rgba(var(--primary-rgb), 0.15))',margin:'0 1rem 1rem 1rem'  }}>
+                                <Card className="p-10 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, var(--card-bg), rgba(var(--primary-rgb), 0.15))', margin: '0 1rem 1rem 1rem' }}>
                                     <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:opacity-20 transition-opacity transform rotate-12 translate-x-4 -translate-y-4">
                                         <FaBars size={180} />
                                     </div>
                                     <div className="flex items-center justify-between relative z-10">
                                         <div className="flex flex-col gap-2">
-                                            <span className="text-lg font-bold uppercase tracking-widest text-primary opacity-90" style={{marginLeft:'1rem'}}>Active Topics</span>
-                                            <span className="text-sm font-medium text-slate-400" style={{marginLeft:'1rem'}}>Currently live quizzes</span>
+                                            <span className="text-lg font-bold uppercase tracking-widest text-primary opacity-90" style={{ marginLeft: '1rem' }}>Active Topics</span>
+                                            <span className="text-sm font-medium text-slate-400" style={{ marginLeft: '1rem' }}>Currently live quizzes</span>
                                         </div>
                                         <div className="flex items-baseline gap-2">
                                             <span className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 drop-shadow-sm">
@@ -523,7 +529,7 @@ export default function UserDashboard() {
                                             <Card
                                                 key={stat.topicId}
                                                 className="group rounded-[2rem] border shadow-lg hover:shadow-primary/20 transition-all transform hover:-translate-y-2 relative overflow-hidden flex flex-col gap-8"
-                                                style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)', padding: '1.75rem',margin:'0 1rem 1rem 1rem' }}
+                                                style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)', padding: '1.75rem', margin: '0 1rem 1rem 1rem' }}
                                             >
                                                 {/* Card Accent */}
                                                 <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-3xl rounded-full translate-x-12 -translate-y-12" />
@@ -608,7 +614,7 @@ export default function UserDashboard() {
                                             <Card
                                                 key={topic._id}
                                                 className="rounded-[2.5rem] border-none shadow-lg hover:shadow-primary/10 transition-all group flex flex-col gap-6"
-                                                style={{ background: 'var(--card-bg)', padding: '2.5rem',margin:'0 1rem 1rem 1rem' }}
+                                                style={{ background: 'var(--card-bg)', padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}
                                             >
                                                 <div className="flex justify-between items-start pt-1">
                                                     <h3 className="font-bold text-2xl tracking-tight leading-tight">{topic.name}</h3>
@@ -811,7 +817,7 @@ export default function UserDashboard() {
                                             <Card
                                                 key={topic._id}
                                                 className="group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl overflow-hidden relative"
-                                                style={{ padding: '2.5rem',margin:'0 1rem 1rem 1rem'  }}
+                                                style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}
                                             >
                                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-primary/20 transition-all duration-700" />
                                                 <div className="flex flex-col gap-8 flex-1">
