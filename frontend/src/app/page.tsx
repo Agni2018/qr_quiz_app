@@ -7,13 +7,14 @@ import Card from "@/components/Card";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import ThemeToggle from "@/components/ThemeToggle";
-import { FaLock, FaUser, FaEnvelope } from 'react-icons/fa';
+import { FaLock, FaUser, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export default function Home() {
     const [mode, setMode] = useState<'login' | 'register'>('login');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -112,7 +113,7 @@ export default function Home() {
             <div className="flex flex-1 items-center justify-center px-10 py-16 md:p-12 relative text-balance">
                 <div className="w-full max-w-[520px] animate-fade-in py-10 md:py-12">
 
-                    <div className="flex justify-end mb-12 md:absolute md:top-8 md:right-8 md:mb-0" style={{margin:'0 1rem 2.5rem 1rem' }}>
+                    <div className="flex justify-end mb-12 md:absolute md:top-8 md:right-8 md:mb-0" style={{ margin: '0 1rem 2.5rem 1rem' }}>
                         <ThemeToggle />
                     </div>
 
@@ -130,7 +131,7 @@ export default function Home() {
                             Quiz Platform
                         </h1>
 
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem',marginBottom: '1rem', fontWeight: 600, letterSpacing: '0.02em' }} className="md:text-[1.125rem]">
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 600, letterSpacing: '0.02em' }} className="md:text-[1.125rem]">
                             {mode === 'login'
                                 ? 'Welcome back! Please enter your details.'
                                 : 'Create an account to start your journey.'
@@ -139,7 +140,7 @@ export default function Home() {
                     </div>
 
                     {/* ---------- CARD ---------- */}
-                    <Card className="overflow-hidden" style={{ padding: '2.5rem', borderRadius: '2rem', maxWidth: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', background: 'rgba(15, 23, 42, 0.9)',margin:'0 1rem 1rem 1rem'  }}>
+                    <Card className="overflow-hidden" style={{ padding: '2.5rem', borderRadius: '2rem', maxWidth: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', background: 'rgba(15, 23, 42, 0.9)', margin: '0 1rem 1rem 1rem' }}>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-10">
 
                             {/* ---------- MESSAGE ---------- */}
@@ -213,6 +214,9 @@ export default function Home() {
                                             placeholder="Enter username"
                                             value={username}
                                             onChange={(e) => setUsername(e.target.value)}
+                                            autoCapitalize="none"
+                                            autoCorrect="off"
+                                            spellCheck="false"
                                             required
                                         />
 
@@ -268,6 +272,9 @@ export default function Home() {
                                                 placeholder="Enter email"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
+                                                autoCapitalize="none"
+                                                autoCorrect="off"
+                                                spellCheck="false"
                                                 required
                                             />
                                             <div style={{
@@ -317,10 +324,13 @@ export default function Home() {
                                                 transition: 'var(--transition)'
                                             }}
                                             className="focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:ring-opacity-20"
-                                            type="password"
+                                            type={showPassword ? "text" : "password"}
                                             placeholder="Enter password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
+                                            autoCapitalize="none"
+                                            autoCorrect="off"
+                                            spellCheck="false"
                                             required
                                         />
                                         <div style={{
@@ -329,10 +339,26 @@ export default function Home() {
                                             top: '50%',
                                             transform: 'translateY(-50%)',
                                             color: 'var(--text-muted)',
-                                            pointerEvents: 'none',
-                                            transition: 'var(--transition)'
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '1rem'
                                         }} className="group-focus-within:text-[var(--primary)]">
-                                            <FaLock className="w-[16px] h-[16px]" />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    padding: 0,
+                                                    cursor: 'pointer',
+                                                    color: 'inherit',
+                                                    display: 'flex'
+                                                }}
+                                                title={showPassword ? "Hide password" : "Show password"}
+                                            >
+                                                {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                                            </button>
+                                            <FaLock size={16} />
                                         </div>
                                     </div>
                                 </div>
