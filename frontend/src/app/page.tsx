@@ -112,7 +112,7 @@ export default function Home() {
             <div className="flex flex-1 items-center justify-center px-10 py-16 md:p-12 relative text-balance">
                 <div className="w-full max-w-[520px] animate-fade-in py-10 md:py-12">
 
-                    <div className="flex justify-end mb-12 md:absolute md:top-8 md:right-8 md:mb-0">
+                    <div className="flex justify-end mb-12 md:absolute md:top-8 md:right-8 md:mb-0" style={{margin:'0 1rem 2.5rem 1rem' }}>
                         <ThemeToggle />
                     </div>
 
@@ -130,7 +130,7 @@ export default function Home() {
                             Quiz Platform
                         </h1>
 
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 600, letterSpacing: '0.02em' }} className="md:text-[1.125rem]">
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem',marginBottom: '1rem', fontWeight: 600, letterSpacing: '0.02em' }} className="md:text-[1.125rem]">
                             {mode === 'login'
                                 ? 'Welcome back! Please enter your details.'
                                 : 'Create an account to start your journey.'
@@ -139,7 +139,7 @@ export default function Home() {
                     </div>
 
                     {/* ---------- CARD ---------- */}
-                    <Card className="overflow-hidden" style={{ padding: '2.5rem', borderRadius: '2rem', maxWidth: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', background: 'rgba(15, 23, 42, 0.9)' }}>
+                    <Card className="overflow-hidden" style={{ padding: '2.5rem', borderRadius: '2rem', maxWidth: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', background: 'rgba(15, 23, 42, 0.9)',margin:'0 1rem 1rem 1rem'  }}>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-10">
 
                             {/* ---------- MESSAGE ---------- */}

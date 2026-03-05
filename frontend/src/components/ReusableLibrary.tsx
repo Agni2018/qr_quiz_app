@@ -43,11 +43,11 @@ export default function ReusableLibrary() {
         <div className="flex flex-col gap-10">
             <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
-                    <h3 className="text-2xl font-black">Global Question Bank</h3>
-                    <p className="text-slate-500 text-sm">Reusable questions that can be imported into any topic.</p>
+                    <h3 className="text-2xl font-black" style={{margin:'0 1rem 1rem 1rem' }}>Global Question Bank</h3>
+                    <p className="text-slate-500 text-sm" style={{margin:'0 1rem 1rem 1rem' }}>Reusable questions that can be imported into any topic.</p>
                 </div>
-                <Button onClick={() => setShowForm(true)}>
-                    <FaPlus className="mr-2" /> New Bank Question
+                <Button onClick={() => setShowForm(true)} style={{margin:'0 1rem 1rem 1rem' }}>
+                    <FaPlus className="mr-2"/> New Bank Question
                 </Button>
             </div>
 
@@ -72,7 +72,7 @@ export default function ReusableLibrary() {
                     </Card>
                 ) : (
                     questions.map(q => (
-                        <Card key={q._id} className="group hover:-translate-y-2 transition-all duration-300 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2rem] flex flex-col shadow-xl overflow-hidden relative" style={{ padding: '2.5rem' }}>
+                        <Card key={q._id} className="group hover:-translate-y-2 transition-all duration-300 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2rem] flex flex-col shadow-xl overflow-hidden relative" style={{ padding: '2.5rem',margin:'0 1rem 1rem 1rem' }}>
                             {/* Accent line */}
                             <div className="absolute top-0 left-0 w-1.5 h-full bg-primary/30" />
 

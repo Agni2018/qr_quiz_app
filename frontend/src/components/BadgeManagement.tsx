@@ -77,8 +77,8 @@ export default function BadgeManagement() {
     return (
         <div className="flex flex-col gap-10">
             <div className="flex justify-between items-center">
-                <h3 className="text-2xl font-black">System Badges</h3>
-                <Button onClick={() => setShowForm(!showForm)}>
+                <h3 className="text-2xl font-black" style={{margin:'0 1rem 1rem 1rem' }}>System Badges</h3>
+                <Button onClick={() => setShowForm(!showForm)} style={{margin:'0 1rem 1rem 1rem' }}>
                     {showForm ? 'Cancel' : <><FaPlus className="mr-2" /> Create Badge</>}
                 </Button>
             </div>
@@ -158,7 +158,7 @@ export default function BadgeManagement() {
                 </Card>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{margin:'0 1rem 1rem 1rem' }}>
                 {badges.map(badge => (
                     <Card key={badge._id} className="p-8 border-white/5 bg-white/5 group hover:bg-white/10 transition-all flex flex-col items-center text-center gap-2">
                         <div className="w-24 h-24 rounded-full bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 flex items-center justify-center text-4xl text-yellow-500 mb-6 group-hover:scale-110 transition-transform">

@@ -412,7 +412,7 @@ export default function StudentDashboard() {
 
                 {/* MAIN CONTENT */}
                 <main className="flex-1 py-8 lg:p-14 xl:py-24 overflow-y-auto">
-                    <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-20">
+                    <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-20" style={{margin:'1rem 1rem 2rem 1rem' }}>
                         {/* TOP BAR */}
                         <div className="flex flex-wrap items-center justify-end gap-6 mb-16">
                             <ThemeToggle />
