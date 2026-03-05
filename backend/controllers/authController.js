@@ -6,9 +6,11 @@ const User = require('../models/User');
 exports.register = async (req, res) => {
     try {
         const { username, email, password, referralCode } = req.body;
+        const trimmedUsername = username?.trim();
+        const trimmedEmail = email?.trim();
 
         const userExists = await User.findOne({
-            $or: [{ username }, { email }]
+            $or: [{ username: trimmedUsername }, { email: trimmedEmail }]
         });
 
         if (userExists) {
@@ -49,7 +51,8 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { username, password } = req.body;
-        const user = await User.findOne({ username });
+        const trimmedUsername = username?.trim();
+        const user = await User.findOne({ username: trimmedUsername });
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });

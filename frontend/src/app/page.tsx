@@ -62,10 +62,14 @@ export default function Home() {
         setSuccess('');
 
         try {
+            const trimmedUsername = username.trim();
+            const trimmedPassword = password.trim();
+            const trimmedEmail = email.trim();
+
             if (mode === 'login') {
                 const res = await api.post('/auth/login', {
-                    username,
-                    password
+                    username: trimmedUsername,
+                    password: trimmedPassword
                 });
 
                 if (res.data.pointsAwarded) {
@@ -88,9 +92,9 @@ export default function Home() {
                 }
             } else {
                 await api.post('/auth/register', {
-                    username,
-                    email,
-                    password
+                    username: trimmedUsername,
+                    email: trimmedEmail,
+                    password: trimmedPassword
                 });
                 setSuccess('Registration successful! Please login.');
                 setMode('login');
