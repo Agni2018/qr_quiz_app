@@ -86,7 +86,7 @@ export default function ProgressPage() {
                             style={{ padding: '2.5rem', marginTop: 2 }}
                         >
                             <div className="flex justify-between items-start mb-8">
-                                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-2xl border border-primary/20 group-hover:scale-110 transition-transform">
+                                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-2xl border border-primary/20 group-hover:scale-110 transition-transform" style={{marginBottom:30}}>
                                     <FaCheckCircle />
                                 </div>
                                 <span className="text-[0.7rem] font-black uppercase tracking-widest text-slate-400 bg-white/5 py-2 px-5 rounded-xl">
@@ -106,7 +106,7 @@ export default function ProgressPage() {
                                 <p className="text-slate-500 text-lg line-clamp-2 leading-relaxed">{attempt.topicId?.description}</p>
                             </div>
 
-                            <div className="mt-10 pt-8 border-t border-white/5 flex flex-col gap-6">
+                            <div className="mt-10 pt-8 border-t border-white/5 flex flex-col gap-6" style={{marginTop:30}}>
                                 <div className="flex items-center justify-between">
                                     <div className="flex flex-col">
                                         <span className="text-slate-500 text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Performance</span>

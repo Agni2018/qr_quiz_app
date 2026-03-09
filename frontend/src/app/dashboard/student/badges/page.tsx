@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import BadgeManagement from '@/components/BadgeManagement';
+import StudentBadges from './StudentBadges';
 
 export default function StudentBadgesPage() {
     return (
         <div className="animate-fade-in mb-24">
-            <div className="flex items-center gap-8 mb-32 group" style={{margin:'10px 0 50px 0'}}>
+            <div className="flex items-center gap-8 mb-32 group" style={{ margin: '10px 0 50px 0' }}>
                 <div style={{
                     width: '5rem',
                     height: '5rem',
@@ -39,7 +39,7 @@ export default function StudentBadgesPage() {
             </div>
 
             <div className="mt-12">
-                <BadgeManagement />
+                <StudentBadges />
             </div>
         </div>
     );

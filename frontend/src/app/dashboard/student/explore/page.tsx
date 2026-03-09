@@ -114,9 +114,10 @@ export default function ExplorePage() {
                                 key={quiz._id}
                                 onClick={() => !hasAttempted && handleStartQuiz(quiz._id)}
                                 className={`p-10 group transition-all duration-500 border-white/5 bg-slate-950/40 rounded-[2.5rem] flex flex-col h-full shadow-2xl ${hasAttempted ? 'opacity-70 cursor-not-allowed' : 'hover:-translate-y-3 hover:bg-slate-900/60 cursor-pointer'}`}
+                                style={{padding:30}}
                             >
                                 <div className="flex justify-between items-start mb-8">
-                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border transition-all duration-700 ${hasAttempted ? 'bg-slate-500/10 text-slate-500 border-slate-500/20' : 'bg-primary/10 text-primary border-primary/20 group-hover:rotate-[360deg]'}`}>
+                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border transition-all duration-700 ${hasAttempted ? 'bg-slate-500/10 text-slate-500 border-slate-500/20' : 'bg-primary/10 text-primary border-primary/20 group-hover:rotate-[360deg]'}`} style={{marginBottom:30}}>
                                         {hasAttempted ? <FaCheckCircle /> : <FaPlus />}
                                     </div>
                                 </div>
@@ -126,7 +127,7 @@ export default function ExplorePage() {
                                 <p className="text-slate-500 text-lg mb-10 line-clamp-2 leading-relaxed flex-1">{quiz.description}</p>
 
                                 {hasAttempted && (
-                                    <div className="mt-auto pt-6 border-t border-white/5 text-center">
+                                    <div className="mt-auto pt-6 border-t border-white/5 text-center" style={{marginTop:30}}>
                                         <span className="text-red-500 font-black uppercase tracking-widest text-sm">
                                             Attempted Already
                                         </span>

@@ -95,7 +95,7 @@ export default function CertificatesPage() {
 
     return (
         <div className="animate-fade-in mb-24">
-            <div className="flex items-center gap-8 mb-32 group" style={{margin:'10px 0 50px 0'}}>
+            <div className="flex items-center gap-8 mb-32 group" style={{ margin: '10px 0 50px 0' }}>
                 <div style={{
                     width: '5rem',
                     height: '5rem',
@@ -157,7 +157,7 @@ export default function CertificatesPage() {
                                 <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{cert.topicId?.description}</p>
                             </div>
 
-                            <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+                            <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between" style={{ marginTop: 30 }}>
                                 <div className="flex flex-col">
                                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Earned On</span>
                                     <span className="text-xs font-bold text-slate-300">{new Date(cert.certifiedAt).toLocaleDateString()}</span>
@@ -188,15 +188,42 @@ export default function CertificatesPage() {
                             <FaTimes size={24} />
                         </button>
 
-                        <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
-                            {/* This is the area captured by html2canvas */}
-                            <div id="certificate-download-area" className="w-full">
-                                <CertificateTemplate
-                                    participantName={selectedCertificate?.studentName || 'Student'}
-                                    topicName={selectedCertificate?.topicId?.name || 'Quiz Topic'}
-                                    date={new Date(selectedCertificate?.certifiedAt).toLocaleDateString()}
-                                />
+                        <div className="bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col items-center justify-center p-4 sm:p-8 min-h-[400px]">
+                            {/* Fixed size container for capture, scaled visually for preview */}
+                            <div className="certificate-preview-wrapper flex items-center justify-center overflow-hidden w-full h-[300px] sm:h-[500px] lg:h-[700px]">
+                                <div
+                                    id="certificate-download-area"
+                                    className="origin-center shadow-inner"
+                                    style={{
+                                        width: '1000px',
+                                        height: '750px',
+                                        transform: 'scale(var(--cert-scale, 1))',
+                                        flexShrink: 0
+                                    }}
+                                >
+                                    <CertificateTemplate
+                                        participantName={selectedCertificate?.user?.name || 'Student'}
+                                        topicName={selectedCertificate?.topicId?.name || 'Quiz Topic'}
+                                        date={new Date(selectedCertificate?.certifiedAt).toLocaleDateString()}
+                                    />
+                                </div>
                             </div>
+
+                            <style jsx>{`
+                                .certificate-preview-wrapper {
+                                    --cert-scale: 0.95;
+                                }
+                                @media (max-width: 1100px) {
+                                    .certificate-preview-wrapper {
+                                        --cert-scale: calc((100vw - 80px) / 1000);
+                                    }
+                                }
+                                @media (max-width: 640px) {
+                                    .certificate-preview-wrapper {
+                                        --cert-scale: calc((100vw - 40px) / 1000);
+                                    }
+                                }
+                            `}</style>
                         </div>
 
                         <div className="mt-10 flex justify-center">

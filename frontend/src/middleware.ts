@@ -20,6 +20,11 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/dashboard/student', request.url));
     }
 
+    // Role-based protection for /dashboard/student (Student only)
+    if (pathname.startsWith('/dashboard/student') && userRole === 'admin') {
+        return NextResponse.redirect(new URL('/users', request.url));
+    }
+
     // Prevent logged-in users from seeing login page
     if (pathname === '/' && token) {
         if (userRole === 'admin') {
