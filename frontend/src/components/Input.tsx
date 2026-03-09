@@ -24,7 +24,6 @@ export default function Input({ label, className, containerClassName, style, ...
         fontSize: '0.875rem',
         fontWeight: 600,
         color: 'var(--text-secondary)',
-        textTransform: 'uppercase',
         letterSpacing: '0.05em'
     };
 

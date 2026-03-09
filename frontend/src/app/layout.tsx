@@ -13,6 +13,12 @@ const inter = Inter({
 export const metadata: Metadata = {
     title: "QR Quiz Platform",
     description: "Topic-based quizzes via QR code",
+    icons: {
+        icon: [
+            { url: '/favicon.ico' },
+            { url: '/favicon.svg', type: 'image/svg+xml' },
+        ],
+    },
 };
 
 export default function RootLayout({
