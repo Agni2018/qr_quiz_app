@@ -6,7 +6,7 @@ import Button from './Button';
 import Input from './Input';
 import TextArea from './TextArea';
 import Card from './Card';
-import { FaPlus, FaTrash, FaUniversity } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaUniversity, FaChevronDown } from 'react-icons/fa';
 import QuestionBankModal from './QuestionBankModal';
 
 export default function QuestionForm({
@@ -176,7 +176,7 @@ export default function QuestionForm({
             <div className="relative z-10 flex flex-col gap-14">
 
                 {!topicId && (
-                    <div className="flex items-center gap-6 px-4 py-8 bg-violet-500/10 rounded-[32px] border border-violet-500/20 mb-2">
+                    <div className="flex items-center gap-6 px-8 md:px-12 py-8 bg-violet-500/10 rounded-[32px] border border-violet-500/20 mb-2">
                         <div className="w-16 h-16 rounded-full bg-violet-400 flex items-center justify-center text-3xl text-white shadow-xl shadow-violet-500/30">
                             <FaUniversity />
                         </div>
@@ -187,24 +187,29 @@ export default function QuestionForm({
                     </div>
                 )}
 
-                <div className="flex flex-col gap-8 px-2">
+                <div className="flex flex-col gap-8 px-8 md:px-12" style={{ padding: 30 }}>
                     <h5 className="text-2xl font-black text-white border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em]">Questions Details</h5>
                     <div className={`grid grid-cols-1 ${topicId ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-8 md:gap-12`}>
                         <div className="flex flex-col gap-4">
                             <label className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 px-1">
                                 Question Type
                             </label>
-                            <select
-                                value={type}
-                                onChange={e => handleTypeChange(e.target.value)}
-                                className="w-full h-[64px] p-4 px-8 rounded-2xl bg-black/30 border-2 border-white/5 text-slate-200 focus:border-violet-500/50 transition-all outline-none appearance-none cursor-pointer shadow-inner font-bold"
-                            >
-                                {questionTypes.map(t => (
-                                    <option key={t.value} value={t.value} className="bg-[#1e293b]">
-                                        {t.label}
-                                    </option>
-                                ))}
-                            </select>
+                            <div className="relative">
+                                <select
+                                    value={type}
+                                    onChange={e => handleTypeChange(e.target.value)}
+                                    className="w-full h-[64px] p-4 px-8 rounded-2xl bg-black/30 border-2 border-white/5 text-slate-200 focus:border-violet-500/50 transition-all outline-none appearance-none cursor-pointer shadow-inner font-bold"
+                                >
+                                    {questionTypes.map(t => (
+                                        <option key={t.value} value={t.value} className="bg-[#1e293b]">
+                                            {t.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                                    <FaChevronDown size={14} />
+                                </div>
+                            </div>
                         </div>
 
                         <div className="flex flex-col gap-4">
@@ -240,7 +245,7 @@ export default function QuestionForm({
                 </div>
 
                 {/* QUESTION CONTENT */}
-                <div className="flex flex-col gap-8 px-2">
+                <div className="flex flex-col gap-8 px-8 md:px-12" style={{ padding: 30 }}>
                     <h5 className="text-2xl font-black text-white border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em]">Question Content</h5>
                     <div className="flex flex-col gap-4">
                         <label className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 px-1">
@@ -257,12 +262,12 @@ export default function QuestionForm({
 
                 {/* OPTIONS */}
                 {(type === 'single_choice' || type === 'multi_select') && (
-                    <div className="flex flex-col gap-6 px-2">
+                    <div className="flex flex-col gap-6 px-8 md:px-12" style={{ padding: 30 }}>
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 px-1">
                             Answer Options
                         </label>
 
-                        <div className="p-6 md:p-10 rounded-[32px] bg-black/10 border border-white/5 flex flex-col gap-8">
+                        <div className="p-6 md:p-10 rounded-[32px] bg-black/10 border border-white/5 flex flex-col gap-8" style={{ padding: 30 }}>
 
                             <div className="flex justify-between items-center">
                                 <span className="text-xs text-slate-500 font-bold uppercase tracking-widest ml-2">Define Choices</span>
@@ -304,14 +309,14 @@ export default function QuestionForm({
 
                 {/* MATCH */}
                 {type === 'match' && (
-                    <div className="flex flex-col gap-6 px-2">
+                    <div className="flex flex-col gap-6 px-8 md:px-12" style={{padding:30}}>
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 px-1">
                             Matching Pairs
                         </label>
 
                         <div className="p-6 md:p-10 rounded-[32px] bg-black/10 border border-white/5 flex flex-col gap-8">
 
-                            <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center" style={{padding:30}}>
                                 <span className="text-xs text-slate-500 font-bold uppercase tracking-widest ml-2">Specify Pairs</span>
                                 <Button
                                     variant="secondary"
@@ -323,7 +328,7 @@ export default function QuestionForm({
                                 </Button>
                             </div>
 
-                            <div className="flex flex-col gap-5">
+                            <div className="flex flex-col gap-5" style={{padding:30}}>
                                 {matchPairs.map((pair, idx) => (
                                     <div key={idx} className="flex gap-4 items-center group">
                                         <Input
@@ -357,7 +362,7 @@ export default function QuestionForm({
                 )}
 
                 {/* CORRECT ANSWER */}
-                <div className="flex flex-col gap-4 px-2">
+                <div className="flex flex-col gap-4 px-8 md:px-12" style={{ padding: 30 }}>
                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-400/70 px-1">
                         Set Correct Answer
                     </label>
@@ -434,7 +439,7 @@ export default function QuestionForm({
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-8 pt-12 border-t border-white/10 px-2 mt-4">
+                <div className="flex flex-col md:flex-row gap-8 pt-12 border-t border-white/10 px-8 md:px-12 mt-4" style={{ padding: 30 }}>
                     <Button onClick={handleSubmit} className="flex-[2] py-6 rounded-[32px] text-2xl font-black shadow-2xl shadow-violet-500/40 hover:scale-[1.02] transition-transform">
                         ✨ Save Question
                     </Button>

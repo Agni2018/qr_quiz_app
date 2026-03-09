@@ -47,14 +47,14 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
     const paginatedQuestions = filteredQuestions.slice(startIndex, startIndex + itemsPerPage);
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-12 bg-black/95 backdrop-blur-2xl">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-12 bg-black/95 backdrop-blur-2xl" style={{padding:30}}>
             <div className="max-w-4xl w-full bg-[#1e293b] rounded-[40px] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] overflow-hidden">
                 {/* Header */}
-                <div className="relative py-6 md:py-10 border-b border-white/5 flex items-center justify-center bg-black/5 shrink-0 overflow-visible">
+                <div className="relative py-6 md:py-10 px-8 md:px-16 border-b border-white/5 flex items-center justify-center bg-black/5 shrink-0 overflow-visible" style={{padding:30}}>
                     <h3 className="text-2xl font-black text-white leading-normal">Question Bank</h3>
                     <button
                         onClick={onClose}
-                        className="absolute right-4 md:right-12 p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-colors text-slate-400 hover:text-white shrink-0"
+                        className="absolute right-8 md:right-16 p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-colors text-slate-400 hover:text-white shrink-0"
                     >
                         <FaTimes size={18} />
                     </button>
@@ -64,7 +64,7 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
                 <div className="h-6 w-full shrink-0 bg-[#1e293b]" />
 
                 {/* Search */}
-                <div className="px-6 md:px-12 pb-6 md:pb-8 bg-black/10 border-b border-white/5 shrink-0">
+                <div className="px-8 md:px-16 pb-6 md:pb-8 bg-black/10 border-b border-white/5 shrink-0" style={{padding:30}}>
                     <div className="relative">
                         <input
                             type="text"
@@ -78,7 +78,7 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
                 </div>
 
                 {/* List Container - Scrollable */}
-                <div className="flex-1 overflow-y-auto px-6 md:px-12 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto px-8 md:px-16 custom-scrollbar" style={{padding:20}}>
                     {/* Explicit Top Spacer */}
                     <div className="h-10 w-full shrink-0" />
 
@@ -94,12 +94,13 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
                             <p className="text-slate-500 max-w-sm text-xl leading-relaxed">Try a different search term or add more questions to your bank.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 gap-10">
+                        <div className="grid grid-cols-1 gap-10" >
                             {paginatedQuestions.map((q) => (
                                 <div
                                     key={q._id}
                                     onClick={() => onSelect(q)}
-                                    className="px-6 md:px-12 py-6 md:py-10 rounded-[24px] border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-violet-500/30 transition-all cursor-pointer group relative overflow-visible"
+                                    className="px-8 md:px-12 py-6 md:py-10 rounded-[24px] border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-violet-500/30 transition-all cursor-pointer group relative overflow-visible"
+                                    style={{padding:20}}
                                 >
                                     <div className="flex justify-between items-center mb-6 pl-2 pr-4">
                                         <div className="flex-1">
@@ -129,8 +130,8 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
 
                 {/* Sticky Pagination Footer */}
                 {!loading && filteredQuestions.length > 5 && (
-                    <div className="px-10 md:px-16 h-28 md:h-36 bg-black/60 backdrop-blur-md border-t border-white/10 flex items-center justify-between shrink-0 overflow-visible">
-                        <div className="flex-1 flex items-center pl-20 md:pl-32">
+                    <div className="px-12 md:px-20 h-28 md:h-36 bg-black/60 backdrop-blur-md border-t border-white/10 flex items-center justify-between shrink-0 overflow-visible" style={{padding:30}}>
+                        <div className="flex-1 flex items-center pl-8 md:pl-12">
                             <div className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em]">
                                 Page <span className="text-violet-400 ml-4 font-black text-base">{currentPage}</span> <span className="mx-4 text-white/5">|</span> <span className="text-slate-600">{totalPages}</span>
                             </div>

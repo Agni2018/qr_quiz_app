@@ -84,7 +84,7 @@ export default function BadgeManagement() {
             </div>
 
             {showForm && (
-                <Card className="p-10 border-primary/20 bg-primary/5 shadow-2xl">
+                <Card className="p-10 border-primary/20 bg-primary/5 shadow-2xl" style={{padding:30,margin:'0 1rem 1rem 1rem' }}>
                     <div className="flex flex-col gap-12">
                         <div className="flex flex-col gap-6">
                             <h5 className="text-xl font-black text-white/50 border-l-4 border-primary pl-4 mb-4 uppercase tracking-widest">Badge Identity</h5>

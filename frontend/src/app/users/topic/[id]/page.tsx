@@ -142,8 +142,8 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                 </div>
 
                 {/* Right Column: QR & Info */}
-                <div className="flex flex-col gap-10">
-                    <Card className="flex flex-col items-center text-center p-9">
+                <div className="flex flex-col gap-10" >
+                    <Card className="flex flex-col items-center text-center p-9" style={{padding:30}}>
                         <h3 className="text-xl font-bold mb-6">Share Quiz</h3>
                         {questions.length === 0 ? (
                             <p className="text-slate-400 text-sm">Create questions to receive the quiz link and QR code.</p>
@@ -162,7 +162,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                         )}
                     </Card>
 
-                    <Card className="flex flex-col gap-6 p-9">
+                    <Card className="flex flex-col gap-6 p-9" style={{padding:30}}>
                         <h3 className="text-xl font-bold mb-2">Quiz Settings</h3>
 
                         <div className="flex items-center justify-between py-3 border-b border-white/5">
@@ -181,7 +181,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                         </div>
                     </Card>
 
-                    <Card className="flex flex-col gap-6 p-9 relative overflow-hidden group">
+                    <Card className="flex flex-col gap-6 p-9 relative overflow-hidden group" style={{padding:30}}>
                         <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full translate-x-8 -translate-y-8 group-hover:bg-primary/10 transition-colors" />
                         <h3 className="text-xl font-bold mb-2">Study Materials</h3>
                         <p className="text-slate-400 text-sm leading-relaxed">

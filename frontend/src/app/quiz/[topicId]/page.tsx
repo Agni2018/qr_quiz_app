@@ -127,7 +127,7 @@ export default function QuizLanding({
                     <h1 className="text-3xl font-black text-white leading-tight mb-3">
                         {topic.name}
                     </h1>
-                    <p className="text-slate-400 font-medium leading-relaxed">
+                    <p className="text-slate-400 font-medium leading-relaxed" style={{marginBottom:30}}>
                         {topic.description}
                     </p>
                 </div>
@@ -151,7 +151,7 @@ export default function QuizLanding({
                     >
                         <div className="flex flex-col gap-8">
                             <Input
-                                label="Full Name"
+                                label={<>Full Name <span style={{ color: '#ef4444' }}>*</span></>}
                                 value={user.name}
                                 onChange={e =>
                                     setUser({ ...user, name: e.target.value })
@@ -161,7 +161,7 @@ export default function QuizLanding({
                             />
 
                             <Input
-                                label="Email Address"
+                                label={<>Email Address <span style={{ color: '#ef4444' }}>*</span></>}
                                 type="email"
                                 value={user.email}
                                 onChange={e =>
@@ -172,7 +172,7 @@ export default function QuizLanding({
                             />
 
                             <Input
-                                label="Phone Number"
+                                label={<>Phone Number <span style={{ color: '#ef4444' }}>*</span></>}
                                 type="tel"
                                 value={user.phone}
                                 onChange={e =>

@@ -194,7 +194,7 @@ export default function Home() {
                                         letterSpacing: '0.15em',
                                         paddingLeft: '1.5rem'
                                     }}>
-                                        Username
+                                        Username <span style={{ color: 'var(--error)' }}>*</span>
                                     </label>
 
                                     <div className="relative">
@@ -252,7 +252,7 @@ export default function Home() {
                                             letterSpacing: '0.15em',
                                             paddingLeft: '1.5rem'
                                         }}>
-                                            Email
+                                            Email <span style={{ color: 'var(--error)' }}>*</span>
                                         </label>
 
                                         <div className="relative">
@@ -308,7 +308,7 @@ export default function Home() {
                                         letterSpacing: '0.15em',
                                         paddingLeft: '1.5rem'
                                     }}>
-                                        Password
+                                        Password <span style={{ color: 'var(--error)' }}>*</span>
                                     </label>
 
                                     <div className="relative">
