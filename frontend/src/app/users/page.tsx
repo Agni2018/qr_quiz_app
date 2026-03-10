@@ -165,11 +165,11 @@ export default function AnalyticsPage() {
                 </div>
                 <div className="flex items-center justify-between relative z-10" >
                     <div className="flex flex-col gap-2">
-                        <span className="text-lg font-bold uppercase tracking-widest text-primary opacity-90" style={{marginLeft:10}}>Active Topics</span>
-                        <span className="text-sm font-medium text-slate-400" style={{marginLeft:10}}>Currently live quizzes</span>
+                        <span className="text-lg font-bold uppercase tracking-widest text-primary opacity-90" style={{ marginLeft: 10 }}>Active Topics</span>
+                        <span className="text-sm font-medium text-slate-400" style={{ marginLeft: 10 }}>Currently live quizzes</span>
                     </div>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 drop-shadow-sm" style={{marginRight:10}}>
+                        <span className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 drop-shadow-sm" style={{ marginRight: 10 }}>
                             {topics.length === 0 ? '0' : analytics.activeTopics}
                         </span>
                     </div>
@@ -177,7 +177,7 @@ export default function AnalyticsPage() {
             </Card>
 
             {/* Topic Performance */}
-            <div className="flex flex-col gap-14 mt-10" style={{margin:"0 1rem 1rem 1rem"}}>
+            <div className="flex flex-col gap-14 mt-10" style={{ margin: "0 1rem 1rem 1rem" }}>
                 <div className="flex flex-col gap-8">
                     <div className="flex items-center gap-6">
                         <div style={{
@@ -284,10 +284,10 @@ export default function AnalyticsPage() {
                 >
                     <Card
                         className="w-full max-w-4xl p-0 rounded-3xl overflow-hidden flex flex-col max-h-[85vh] shadow-2xl pb-10"
-                        style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
+                        style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)', padding: 30, margin: "10px 10px 10px 10px" }}
                         onClick={e => e.stopPropagation()}
                     >
-                        <div className="p-8 border-b border-white/5 flex justify-between items-center bg-slate-900/40">
+                        <div className="p-8 border-b border-white/5 flex justify-between items-center bg-slate-900/40" style={{ padding: 30, marginBottom: 30 }}>
                             <div>
                                 <h3 className="text-2xl font-black tracking-tight">{selectedTopicName}</h3>
                                 <p className="text-slate-500 font-medium">Participants Review</p>
@@ -309,34 +309,34 @@ export default function AnalyticsPage() {
                             ) : participants.length === 0 ? (
                                 <div className="text-center py-20 text-slate-500 italic">No participants yet for this topic.</div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4" >
                                     {participants.map((p, idx) => (
                                         <React.Fragment key={p.id || idx}>
-                                            <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg shadow-inner">
+                                            <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between group hover:bg-white/10 transition-all gap-4">
+                                                <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
+                                                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg shadow-inner shrink-0" style={{ padding: 30 }}>
                                                         {p.name.charAt(0).toUpperCase()}
                                                     </div>
-                                                    <div className="flex flex-col">
-                                                        <span className="font-bold text-white">{p.name}</span>
-                                                        <span className="text-xs text-slate-500 font-mono italic">{p.email || p.phone}</span>
+                                                    <div className="flex flex-col min-w-0" >
+                                                        <span className="font-bold text-white truncate">{p.name}</span>
+                                                        <span className="text-xs text-slate-500 font-mono italic truncate">{p.email || p.phone}</span>
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center gap-4">
-                                                    <div className="flex flex-col items-end">
+                                                <div className="flex items-center gap-4 shrink-0 w-full sm:w-auto justify-between sm:justify-end">
+                                                    <div className="flex flex-col items-end" >
                                                         <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{p.score}</span>
                                                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Points</span>
                                                     </div>
                                                     {p.userId && (
                                                         messageSuccessTo === p.id ? (
-                                                            <div className="w-10 h-10 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center ml-2 relative" title="Message sent successfully">
+                                                            <div className="w-10 h-10 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center ml-2 relative shrink-0" title="Message sent successfully">
                                                                 <div className="absolute inset-0 bg-green-500/20 rounded-xl animate-ping opacity-75"></div>
                                                                 <FaCheckCircle size={20} className="relative z-10" />
                                                             </div>
                                                         ) : (
                                                             <button
                                                                 onClick={() => setSendingMessageTo(sendingMessageTo === p.id ? null : p.id)}
-                                                                className="w-10 h-10 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary flex items-center justify-center transition-all ml-2"
+                                                                className="w-10 h-10 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary flex items-center justify-center transition-all ml-2 shrink-0"
                                                                 title="Send Message"
                                                             >
                                                                 <FaEnvelope />
@@ -393,12 +393,12 @@ export default function AnalyticsPage() {
                     <Card
                         noGlass
                         className="w-full max-w-4xl p-0 rounded-[2.5rem] overflow-hidden flex flex-col max-h-[85vh] shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-200"
-                        style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)',padding:30}}
+                        style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)', padding: 30, margin: "10px 10px 10px 10px" }}
                         onClick={e => e.stopPropagation()}
                     >
                         {/* Header */}
                         <div className="p-10 pb-6 border-b border-white/5 bg-gradient-to-r from-green-500/10 to-transparent">
-                            <div className="flex justify-between items-center mb-4" style={{padding:30}}>
+                            <div className="flex justify-between items-center mb-4" style={{ padding: 30 }}>
                                 <div className="flex items-center gap-4">
                                     <div className="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center text-3xl shadow-lg border border-green-500/30">
                                         📜
@@ -418,7 +418,7 @@ export default function AnalyticsPage() {
 
                         {/* Content */}
                         <div className="flex-grow overflow-hidden flex flex-col" >
-                            <div className="p-10 py-6 bg-white/5 border-b border-white/5" style={{padding:30}}>
+                            <div className="p-10 py-6 bg-white/5 border-b border-white/5" style={{ padding: 30 }}>
                                 <p className="text-lg text-slate-300 font-medium">
                                     {participants.filter(p => !p.isCertified && p.isQualified).length > 0
                                         ? `Are you sure you want to generate certificates for these students? (Min. Required: ${passingMarks || 1} ${passingMarks > 0 ? 'marks' : 'correct'})`
@@ -433,7 +433,7 @@ export default function AnalyticsPage() {
                                         <p className="text-xl font-bold tracking-tight">Fetching participant data...</p>
                                     </div>
                                 ) : participants.filter(p => !p.isCertified).length === 0 ? (
-                                    <div className="text-center py-24 text-slate-500 flex flex-col items-center gap-6 opacity-60" style={{padding:30,marginBottom:20,marginTop:10}}>
+                                    <div className="text-center py-24 text-slate-500 flex flex-col items-center gap-6 opacity-60" style={{ padding: 30, marginBottom: 20, marginTop: 10 }}>
                                         <div className="w-20 h-20 rounded-[2rem] bg-slate-800 flex items-center justify-center text-5xl shadow-inner">✅</div>
                                         <div className="flex flex-col gap-2" >
                                             <p className="text-2xl font-black text-white">All Caught Up!</p>
@@ -441,7 +441,7 @@ export default function AnalyticsPage() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{padding:30,marginBottom:20,marginTop:10}}>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ padding: 30, marginBottom: 20, marginTop: 10 }}>
                                         {participants.filter(p => !p.isCertified).map((p, idx) => {
                                             const isQualified = p.isQualified;
                                             return (
@@ -449,16 +449,16 @@ export default function AnalyticsPage() {
                                                     key={idx}
                                                     className={`p-6 rounded-2xl border transition-all flex items-center justify-between ${isQualified ? 'bg-green-500/5 border-green-500/20' : 'bg-slate-500/5 border-white/5 opacity-60'}`}
                                                 >
-                                                    <div className="flex items-center gap-4" style={{padding:10}}>
+                                                    <div className="flex items-center gap-4" style={{ padding: 10 }}>
                                                         <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg bg-gradient-to-br ${isQualified ? 'from-green-400 to-emerald-600' : 'from-slate-500 to-slate-700'}`}>
                                                             {p.name.charAt(0).toUpperCase()}
                                                         </div>
-                                                        <div className="flex flex-col" style={{padding:10}}>
+                                                        <div className="flex flex-col" style={{ padding: 10 }}>
                                                             <span className="font-bold text-lg text-white">{p.name}</span>
                                                             <span className="text-xs text-slate-400 font-mono italic">{isQualified ? `Qualified (${p.score}/${passingMarks || 1})` : `Not Qualified (Req: ${passingMarks || 1})`}</span>
                                                         </div>
                                                     </div>
-                                                    <div className="flex flex-col items-end" style={{padding:10}}>
+                                                    <div className="flex flex-col items-end" style={{ padding: 10 }}>
                                                         <span className={`text-2xl font-black ${isQualified ? 'text-green-400' : 'text-slate-500'}`}>
                                                             {p.score}
                                                         </span>
@@ -473,7 +473,7 @@ export default function AnalyticsPage() {
                         </div>
 
                         {/* Footer */}
-                        <div className="p-10 pt-6 border-t border-white/5 bg-slate-900/50 flex gap-4" style={{marginTop:50}}>
+                        <div className="p-10 pt-6 border-t border-white/5 bg-slate-900/50 flex gap-4" style={{ marginTop: 50 }}>
                             <Button
                                 className="flex-1 h-14 text-lg bg-green-600 hover:bg-green-500 shadow-xl shadow-green-900/20 rounded-2xl disabled:opacity-50"
                                 onClick={handleGenerateCertificates}
