@@ -24,6 +24,12 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
+
+    // Daily Points Modal State
+    const [showPointsModal, setShowPointsModal] = useState(false);
+    const [pointsAwarded, setPointsAwarded] = useState(0);
+    const [streakInfo, setStreakInfo] = useState('');
+
     const router = useRouter();
     const pathname = usePathname();
 
@@ -53,6 +59,23 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             setUnreadCount(0);
         };
         window.addEventListener('messages-read', handleMessagesRead);
+
+        // Check for daily points award
+        const dailyAwarded = localStorage.getItem('dailyPointsAwarded');
+        if (dailyAwarded === 'true') {
+            const points = parseInt(localStorage.getItem('pointsAwarded') || '0');
+            const streak = localStorage.getItem('streakStatus') || '';
+
+            setPointsAwarded(points);
+            setStreakInfo(streak);
+            setShowPointsModal(true);
+
+            // Clear the flags so it doesn't show again on refresh
+            localStorage.removeItem('dailyPointsAwarded');
+            localStorage.removeItem('pointsAwarded');
+            localStorage.removeItem('streakStatus');
+        }
+
         return () => window.removeEventListener('messages-read', handleMessagesRead);
     }, [router]);
 
@@ -237,6 +260,39 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                     </div>
                 </main>
             </div>
+
+            {/* DAILY POINTS MODAL */}
+            {showPointsModal && (
+                <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl animate-fade-in">
+                    <div className="max-w-md w-full bg-slate-950 border border-white/10 rounded-[3rem] p-12 text-center shadow-[0_0_100px_rgba(234,179,8,0.2)] relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+
+                        <div className="relative z-10">
+                            <div className="w-32 h-32 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-10 border border-yellow-500/30 animate-bounce shadow-[0_0_40px_rgba(234,179,8,0.3)]">
+                                <FaTrophy className="text-6xl text-yellow-500" />
+                            </div>
+
+                            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter">CONGRATULATIONS!</h2>
+                            <p className="text-yellow-500 font-black text-xl uppercase tracking-[0.2em] mb-8">Awesome!</p>
+
+                            <div className="bg-white/5 rounded-3xl p-8 mb-10 border border-white/5">
+                                <p className="text-slate-400 font-bold mb-2 uppercase text-xs tracking-widest">You've Earned</p>
+                                <h3 className="text-6xl font-black text-white">+{pointsAwarded} <span className="text-2xl text-yellow-500 font-black">PTS</span></h3>
+                                {streakInfo && (
+                                    <p className="mt-4 text-emerald-400 font-bold italic text-sm">{streakInfo}</p>
+                                )}
+                            </div>
+
+                            <Button
+                                onClick={() => setShowPointsModal(false)}
+                                className="w-full py-6 rounded-[2rem] bg-yellow-500 hover:bg-yellow-400 text-black text-xl font-black uppercase tracking-widest shadow-2xl shadow-yellow-500/20 active:scale-95 transition-all"
+                            >
+                                GREAT!
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

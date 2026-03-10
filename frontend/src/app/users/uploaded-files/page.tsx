@@ -153,7 +153,7 @@ export default function UploadedFilesPage() {
             {/* ADMIN STUDY MATERIALS MODAL */}
             {showAdminMaterialsModal && (
                 <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)}>
-                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={(e) => e.stopPropagation()} style={{padding:20}}>
+                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={(e) => e.stopPropagation()} style={{ padding: 30, margin: '0 2rem 1rem 1rem' }}>
                         <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center" style={{ padding: 30, marginBottom: 20 }}>
                             <div>
                                 <h3 className="text-3xl font-black text-white">{selectedTopicName}</h3>
@@ -168,28 +168,29 @@ export default function UploadedFilesPage() {
                                 <p className="text-center py-20 text-slate-500 font-bold italic">No materials found for this topic.</p>
                             ) : (
                                 selectedTopicMaterials.map((m) => (
-                                    <div key={m._id} className="rounded-[2rem] bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group" style={{ padding: '3rem' }}>
-                                        <div className="flex items-center gap-8">
+                                    <div key={m._id} className="rounded-[2rem] bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group min-w-0" style={{ padding: '50' }}>
+                                        <div className="flex items-center gap-8 min-w-0" style={{ padding: 30 }}>
                                             <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-3xl border border-rose-500/20 shrink-0">
                                                 {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
                                             </div>
-                                            <div className="flex flex-col gap-3">
-                                                <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight">{m.name}</h4>
+                                            <div className="flex flex-col gap-3 min-w-0">
+                                                <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight break-all md:break-words">{m.name}</h4>
                                                 {m.description && <p className="text-slate-400 text-sm italic leading-relaxed">"{m.description}"</p>}
-                                                <span className="text-[0.6rem] font-black uppercase tracking-widest text-[#64748b] mt-1">
+                                                <span className="text-[0.6rem] font-black uppercase tracking-widest text-[#64748b] mt-1 break-all">
                                                     {m.fileType?.split('/')[1]?.toUpperCase() || 'FILE'}
                                                 </span>
                                             </div>
                                         </div>
-                                        <div className="flex gap-4 w-full md:w-auto pt-4 md:pt-0">
+                                        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto pt-4 md:pt-0 shrink-0">
                                             <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none">
-                                                <Button className="w-full md:px-10 py-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-black border-none flex items-center gap-3">
+                                                <Button className="w-full md:px-10 py-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-black border-none flex items-center gap-3" style={{margin:'20px 20px 20px 20px',width:200}}>
                                                     View Material
                                                 </Button>
                                             </a>
                                             <Button
                                                 onClick={() => deleteMaterial(m._id)}
                                                 className="w-full md:px-6 py-5 rounded-2xl bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black border-none"
+                                                style={{margin:'20px 20px 20px 60px',width:100}}
                                             >
                                                 <FaTrash />
                                             </Button>

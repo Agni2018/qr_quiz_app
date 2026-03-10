@@ -60,7 +60,7 @@ export default function MaterialsPage() {
 
     return (
         <div className="animate-fade-in mb-32">
-            <div className="flex items-center gap-8 mb-32 group"  style={{margin:'10px 0 50px 0'}}>
+            <div className="flex items-center gap-8 mb-32 group" style={{ margin: '10px 0 50px 0' }}>
                 <div style={{
                     width: '5rem',
                     height: '5rem',
@@ -137,9 +137,9 @@ export default function MaterialsPage() {
 
             {/* MATERIALS MODAL */}
             {showMaterialsModal && (
-                <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl animate-fade-in" onClick={() => setShowMaterialsModal(false)} style={{padding:30}}>
+                <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl animate-fade-in" onClick={() => setShowMaterialsModal(false)} style={{ padding: 30 }}>
                     <Card className="max-w-4xl w-full p-0 bg-slate-950 border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={e => e.stopPropagation()}>
-                        <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center" style={{marginBottom:20,padding:30}}>
+                        <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center" style={{ marginBottom: 20, padding: 30 }}>
                             <div>
                                 <h3 className="text-3xl font-black text-white">{viewingTopicName}</h3>
                                 <p className="text-rose-400 font-bold text-sm mt-1 uppercase tracking-widest leading-relaxed">Study Resources</p>
@@ -148,15 +148,15 @@ export default function MaterialsPage() {
                                 <FaTimes size={24} />
                             </button>
                         </div>
-                        <div className="p-10 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6" style={{padding:30}}>
+                        <div className="p-10 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6" style={{ padding: 30 }}>
                             {selectedTopicMaterials.map((m) => (
-                                <div key={m._id} className="rounded-[2rem] bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 p-8 hover:bg-white/10 transition-all group" style={{padding:30}}>
-                                    <div className="flex items-center gap-8">
+                                <div key={m._id} className="rounded-[2rem] bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 p-8 hover:bg-white/10 transition-all group" style={{ padding: 30 }}>
+                                    <div className="flex items-center gap-8 min-w-0">
                                         <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-3xl border border-rose-500/20 shrink-0">
                                             {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
                                         </div>
-                                        <div className="flex flex-col gap-2">
-                                            <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight">{m.name}</h4>
+                                        <div className="flex flex-col gap-2 min-w-0">
+                                            <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight break-all md:break-words">{m.name}</h4>
                                             {m.description && <p className="text-slate-400 text-sm italic leading-relaxed">"{m.description}"</p>}
                                         </div>
                                     </div>
