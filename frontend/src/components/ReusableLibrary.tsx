@@ -43,11 +43,11 @@ export default function ReusableLibrary() {
         <div className="flex flex-col gap-10">
             <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
-                    <h3 className="text-2xl font-black" style={{margin:'0 1rem 1rem 1rem' }}>Global Question Bank</h3>
-                    <p className="text-slate-500 text-sm" style={{margin:'0 1rem 1rem 1rem' }}>Reusable questions that can be imported into any topic.</p>
+                    <h3 className="text-2xl font-black" style={{ margin: '0 1rem 1rem 1rem' }}>Global Question Bank</h3>
+                    <p className="text-slate-500 text-sm" style={{ margin: '0 1rem 1rem 1rem' }}>Reusable questions that can be imported into any topic.</p>
                 </div>
-                <Button onClick={() => setShowForm(true)} style={{margin:'0 1rem 1rem 1rem' }}>
-                    <FaPlus className="mr-2"/> New Bank Question
+                <Button onClick={() => setShowForm(true)} style={{ margin: '0 1rem 1rem 1rem' }}>
+                    <FaPlus className="mr-2" /> New Bank Question
                 </Button>
             </div>
 
@@ -72,23 +72,23 @@ export default function ReusableLibrary() {
                     </Card>
                 ) : (
                     questions.map(q => (
-                        <Card key={q._id} className="group hover:-translate-y-2 transition-all duration-300 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2rem] flex flex-col shadow-xl overflow-hidden relative" style={{ padding: '2.5rem',margin:'0 1rem 1rem 1rem' }}>
+                        <Card key={q._id} className="group hover:-translate-y-2 transition-all duration-300 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2rem] flex flex-col shadow-xl overflow-hidden relative" style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}>
                             {/* Accent line */}
                             <div className="absolute top-0 left-0 w-1.5 h-full bg-primary/30" />
 
                             <div className="flex flex-col gap-10 flex-1">
-                                <div className="flex justify-between items-start relative z-10">
-                                    <div className="flex items-center gap-4">
-                                        <div className="px-4 py-2 rounded-lg bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">
+                                <div className="flex flex-col sm:flex-row justify-between items-start relative z-10 gap-4">
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <div className="px-3 sm:px-4 py-2 rounded-lg bg-primary text-white text-[9px] sm:text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 whitespace-nowrap">
                                             {q.type.replace('_', ' ')}
                                         </div>
-                                        <div className="px-4 py-2 rounded-lg bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-widest border border-white/10">
+                                        <div className="px-3 sm:px-4 py-2 rounded-lg bg-white/5 text-slate-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-white/10 whitespace-nowrap">
                                             {q.marks} pts
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => deleteQuestion(q._id)}
-                                        className="text-slate-600 hover:text-red-500 hover:bg-red-500/10 transition-all p-3 rounded-xl -mr-2 -mt-2"
+                                        className="text-slate-600 hover:text-red-500 hover:bg-red-500/10 transition-all p-3 rounded-xl -mr-2 -mt-2 sm:mt-0"
                                         title="Delete from library"
                                     >
                                         <FaTrash size={16} />

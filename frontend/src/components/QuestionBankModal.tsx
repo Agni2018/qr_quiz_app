@@ -47,10 +47,10 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
     const paginatedQuestions = filteredQuestions.slice(startIndex, startIndex + itemsPerPage);
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-12 bg-black/95 backdrop-blur-2xl" style={{padding:30}}>
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-12 bg-black/95 backdrop-blur-2xl" style={{ padding: 30 }}>
             <div className="max-w-4xl w-full bg-[#1e293b] rounded-[40px] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] overflow-hidden">
                 {/* Header */}
-                <div className="relative py-6 md:py-10 px-8 md:px-16 border-b border-white/5 flex items-center justify-center bg-black/5 shrink-0 overflow-visible" style={{padding:30}}>
+                <div className="relative py-6 md:py-10 px-8 md:px-16 border-b border-white/5 flex items-center justify-center bg-black/5 shrink-0 overflow-visible" style={{ padding: 30 }}>
                     <h3 className="text-2xl font-black text-white leading-normal">Question Bank</h3>
                     <button
                         onClick={onClose}
@@ -64,7 +64,7 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
                 <div className="h-6 w-full shrink-0 bg-[#1e293b]" />
 
                 {/* Search */}
-                <div className="px-8 md:px-16 pb-6 md:pb-8 bg-black/10 border-b border-white/5 shrink-0" style={{padding:30}}>
+                <div className="px-8 md:px-16 pb-6 md:pb-8 bg-black/10 border-b border-white/5 shrink-0" style={{ padding: 30 }}>
                     <div className="relative">
                         <input
                             type="text"
@@ -78,7 +78,7 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
                 </div>
 
                 {/* List Container - Scrollable */}
-                <div className="flex-1 overflow-y-auto px-8 md:px-16 custom-scrollbar" style={{padding:20}}>
+                <div className="flex-1 overflow-y-auto px-8 md:px-16 custom-scrollbar" style={{ padding: 20 }}>
                     {/* Explicit Top Spacer */}
                     <div className="h-10 w-full shrink-0" />
 
@@ -100,19 +100,19 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
                                     key={q._id}
                                     onClick={() => onSelect(q)}
                                     className="px-8 md:px-12 py-6 md:py-10 rounded-[24px] border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-violet-500/30 transition-all cursor-pointer group relative overflow-visible"
-                                    style={{padding:20}}
+                                    style={{ padding: 20 }}
                                 >
-                                    <div className="flex justify-between items-center mb-6 pl-2 pr-4">
-                                        <div className="flex-1">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pl-2 pr-4">
+                                        <div className="flex-1 min-w-0">
                                             <div className="opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 text-violet-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1.5 shrink-0">
                                                 Import <FaSearch size={10} className="mt-0.5" />
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-4 shrink-0">
-                                            <div className="px-4 py-1.5 rounded-xl bg-violet-500/10 text-violet-400 text-xs font-black uppercase tracking-widest border border-violet-500/20">
+                                        <div className="flex flex-wrap items-center gap-3 sm:gap-4 shrink-0 justify-start sm:justify-end">
+                                            <div className="px-3 sm:px-4 py-1.5 rounded-xl bg-violet-500/10 text-violet-400 text-[10px] sm:text-xs font-black uppercase tracking-widest border border-violet-500/20 whitespace-nowrap">
                                                 {q.type.replace('_', ' ')}
                                             </div>
-                                            <div className="px-4 py-1.5 rounded-xl bg-white/5 text-slate-400 text-xs font-black uppercase tracking-widest border border-white/5">
+                                            <div className="px-3 sm:px-4 py-1.5 rounded-xl bg-white/5 text-slate-400 text-[10px] sm:text-xs font-black uppercase tracking-widest border border-white/5 whitespace-nowrap">
                                                 {q.marks} pts
                                             </div>
                                         </div>
@@ -130,7 +130,7 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
 
                 {/* Sticky Pagination Footer */}
                 {!loading && filteredQuestions.length > 5 && (
-                    <div className="px-12 md:px-20 h-28 md:h-36 bg-black/60 backdrop-blur-md border-t border-white/10 flex items-center justify-between shrink-0 overflow-visible" style={{padding:30}}>
+                    <div className="px-12 md:px-20 h-28 md:h-36 bg-black/60 backdrop-blur-md border-t border-white/10 flex items-center justify-between shrink-0 overflow-visible" style={{ padding: 30 }}>
                         <div className="flex-1 flex items-center pl-8 md:pl-12">
                             <div className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em]">
                                 Page <span className="text-violet-400 ml-4 font-black text-base">{currentPage}</span> <span className="mx-4 text-white/5">|</span> <span className="text-slate-600">{totalPages}</span>
