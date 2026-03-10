@@ -140,9 +140,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                             <div className="w-16 h-[5px] bg-gradient-to-r from-primary via-secondary to-transparent rounded-full shadow-[0_0_20px_rgba(var(--primary-rgb),0.6)]" />
                             <span className="text-[0.7rem] font-black uppercase tracking-[0.5em] text-primary drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.4)]">Student Portal</span>
                         </div>
-                        <div className="flex flex-col gap-0 relative z-10">
+                        <div className="flex flex-col gap-0 relative z-10 min-w-0 max-w-full overflow-hidden">
                             <h3 className="text-6xl font-light bg-gradient-to-r from-slate-400 via-primary/80 to-secondary bg-clip-text text-transparent tracking-tight leading-none" style={{ paddingLeft: '1.5rem', marginTop: '1rem' }}>Welcome,</h3>
-                            <h2 className="text-8xl font-black bg-gradient-to-br from-white via-primary to-primary bg-clip-text text-transparent tracking-tighter leading-tight mt-1" style={{ paddingLeft: '1.5rem' }}>
+                            <h2 className="text-8xl font-black bg-gradient-to-br from-white via-primary to-primary bg-clip-text text-transparent tracking-tighter leading-tight mt-1 pr-6 break-words break-all" style={{ paddingLeft: '1.5rem' }}>
                                 {user?.username}
                             </h2>
                         </div>
