@@ -153,43 +153,43 @@ export default function UploadedFilesPage() {
             {/* ADMIN STUDY MATERIALS MODAL */}
             {showAdminMaterialsModal && (
                 <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)}>
-                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={(e) => e.stopPropagation()} style={{ padding: 30, margin: '0 2rem 1rem 1rem' }}>
-                        <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center" style={{ padding: 30, marginBottom: 20 }}>
+                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden max-md:!p-4 max-md:!m-0" onClick={(e) => e.stopPropagation()} style={{ padding: 30, margin: '0 2rem 1rem 1rem' }}>
+                        <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center max-md:!p-4" style={{ padding: 30, marginBottom: 20 }}>
                             <div>
-                                <h3 className="text-3xl font-black text-white">{selectedTopicName}</h3>
-                                <p className="text-rose-400 font-bold text-sm mt-1 uppercase tracking-widest">Study Resource Management</p>
+                                <h3 className="text-3xl font-black text-white max-md:text-2xl">{selectedTopicName}</h3>
+                                <p className="text-rose-400 font-bold text-sm mt-1 uppercase tracking-widest max-md:text-xs">Study Resource Management</p>
                             </div>
                             <button onClick={() => setShowAdminMaterialsModal(false)} className="p-3 bg-white/5 hover:bg-red-500/20 hover:text-red-500 rounded-2xl transition-all text-slate-400">
                                 <FaTimes size={20} />
                             </button>
                         </div>
-                        <div className="p-10 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6" style={{ marginBottom: 20 }}>
+                        <div className="p-10 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6 max-md:p-4 max-md:pr-2" style={{ marginBottom: 20 }}>
                             {selectedTopicMaterials.length === 0 ? (
                                 <p className="text-center py-20 text-slate-500 font-bold italic">No materials found for this topic.</p>
                             ) : (
                                 selectedTopicMaterials.map((m) => (
-                                    <div key={m._id} className="rounded-[2rem] bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group min-w-0" style={{ padding: '50' }}>
-                                        <div className="flex items-center gap-8 min-w-0" style={{ padding: 30 }}>
-                                            <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-3xl border border-rose-500/20 shrink-0">
+                                    <div key={m._id} className="rounded-[2rem] bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/10 transition-all group min-w-0 max-md:!p-5" style={{ padding: '50' }}>
+                                        <div className="flex items-center gap-8 min-w-0 max-md:!p-0 max-md:gap-4" style={{ padding: 30 }}>
+                                            <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-3xl border border-rose-500/20 shrink-0 max-md:w-12 max-md:h-12 max-md:text-xl">
                                                 {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
                                             </div>
-                                            <div className="flex flex-col gap-3 min-w-0">
-                                                <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight break-all md:break-words">{m.name}</h4>
-                                                {m.description && <p className="text-slate-400 text-sm italic leading-relaxed">"{m.description}"</p>}
+                                            <div className="flex flex-col gap-3 min-w-0 max-md:gap-1">
+                                                <h4 className="text-xl font-black text-white group-hover:text-rose-400 transition-colors uppercase tracking-tight break-all md:break-words max-md:text-lg">{m.name}</h4>
+                                                {m.description && <p className="text-slate-400 text-sm italic leading-relaxed max-md:text-xs">"{m.description}"</p>}
                                                 <span className="text-[0.6rem] font-black uppercase tracking-widest text-[#64748b] mt-1 break-all">
                                                     {m.fileType?.split('/')[1]?.toUpperCase() || 'FILE'}
                                                 </span>
                                             </div>
                                         </div>
                                         <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto pt-4 md:pt-0 shrink-0">
-                                            <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none">
-                                                <Button className="w-full md:px-10 py-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-black border-none flex items-center gap-3" style={{margin:'20px 20px 20px 20px',width:200}}>
+                                            <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none w-full md:w-auto">
+                                                <Button className="w-full md:px-10 py-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-black border-none flex items-center justify-center gap-3 max-md:!m-0 max-md:!w-full" style={{margin:'20px 20px 20px 20px',width:200}}>
                                                     View Material
                                                 </Button>
                                             </a>
                                             <Button
                                                 onClick={() => deleteMaterial(m._id)}
-                                                className="w-full md:px-6 py-5 rounded-2xl bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black border-none"
+                                                className="w-full md:px-6 py-5 rounded-2xl bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black border-none flex items-center justify-center max-md:!m-0 max-md:!w-full"
                                                 style={{margin:'20px 20px 20px 60px',width:100}}
                                             >
                                                 <FaTrash />
@@ -199,7 +199,7 @@ export default function UploadedFilesPage() {
                                 ))
                             )}
                         </div>
-                        <div className="p-8 bg-slate-900/20 border-t border-white/5 flex justify-center">
+                        <div className="p-8 bg-slate-900/20 border-t border-white/5 flex justify-center max-md:p-4">
                             <p className="text-slate-500 text-xs font-medium uppercase tracking-widest text-center">
                                 Admins can manage and delete materials. Students can download these for learning.
                             </p>
