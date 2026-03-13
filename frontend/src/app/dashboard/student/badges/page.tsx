@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import StudentBadges from './StudentBadges';
+import StudentBadges from '@/components/StudentBadges';
 
 export default function StudentBadgesPage() {
     return (
