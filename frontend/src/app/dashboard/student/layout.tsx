@@ -240,14 +240,14 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                         {/* TOP BAR */}
                         <div className="flex flex-wrap items-center justify-end gap-6 mb-16">
                             <ThemeToggle />
-                            <div className="bg-slate-900/60 border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-3 backdrop-blur-xl shadow-lg">
+                            <div className="bg-slate-900/60 border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-3 backdrop-blur-xl shadow-lg" style={{padding:10}}>
                                 <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-500">🔥</div>
                                 <div className="flex flex-col leading-none">
                                     <span className="text-[0.6rem] font-bold text-slate-500 uppercase">Streak</span>
                                     <span className="text-xl font-black">{user?.loginStreak || 0} days</span>
                                 </div>
                             </div>
-                            <div className="bg-slate-900/60 border border-white/10 px-8 py-4 rounded-[2rem] flex items-center gap-5 backdrop-blur-xl shadow-2xl group">
+                            <div className="bg-slate-900/60 border border-white/10 px-8 py-4 rounded-[2rem] flex items-center gap-5 backdrop-blur-xl shadow-2xl group" style={{padding:15}}>
                                 <FaTrophy className="text-yellow-500 text-3xl animate-pulse" />
                                 <div className="flex flex-col leading-tight">
                                     <span className="text-[0.7rem] font-black text-slate-500 uppercase tracking-widest mb-1">Total Points</span>
