@@ -9,10 +9,11 @@ import {
     FaArrowRight,
     FaBars,
     FaTimes,
+    FaCheckCircle,
     FaAward,
-    FaEnvelope,
-    FaCheckCircle
+    FaEnvelope
 } from 'react-icons/fa';
+import AlertModal from '@/components/AlertModal';
 
 export default function TopicPerformance() {
     const [topics, setTopics] = useState<any[]>([]);
@@ -32,6 +33,8 @@ export default function TopicPerformance() {
     const [messageSuccessTo, setMessageSuccessTo] = useState<string | null>(null);
     const [messageText, setMessageText] = useState('');
     const [isSendingMessage, setIsSendingMessage] = useState(false);
+
+    const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
 
     const fetchData = async () => {
         try {
@@ -65,7 +68,7 @@ export default function TopicPerformance() {
             setPassingMarks(res.data.passingMarks);
         } catch (err) {
             console.error(err);
-            alert('Failed to load participants');
+            setAlertModal({ isOpen: true, message: 'Failed to load participants', type: 'error' });
         } finally {
             setLoadingParticipants(false);
         }
@@ -82,7 +85,7 @@ export default function TopicPerformance() {
             setPassingMarks(res.data.passingMarks);
         } catch (err) {
             console.error(err);
-            alert('Failed to load participants');
+            setAlertModal({ isOpen: true, message: 'Failed to load participants', type: 'error' });
         } finally {
             setLoadingParticipants(false);
         }
@@ -92,11 +95,11 @@ export default function TopicPerformance() {
         setCertifying(true);
         try {
             await api.post(`/quiz/certify/${selectedTopicId}`);
-            alert('Certificates generated successfully!');
+            setAlertModal({ isOpen: true, message: 'Certificates generated successfully!', type: 'success' });
             setShowCertifyModal(false);
             fetchData();
         } catch (err: any) {
-            alert(err.response?.data?.message || 'Failed to generate certificates');
+            setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Failed to generate certificates', type: 'error' });
         } finally {
             setCertifying(false);
         }
@@ -115,7 +118,7 @@ export default function TopicPerformance() {
             }, 3000);
         } catch (err: any) {
             console.error('Failed to send message:', err);
-            alert(err.response?.data?.message || 'Failed to send message');
+            setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Failed to send message', type: 'error' });
         } finally {
             setIsSendingMessage(false);
         }
@@ -465,6 +468,13 @@ export default function TopicPerformance() {
                     </Card>
                 </div>
             )}
+
+            <AlertModal
+                isOpen={alertModal.isOpen}
+                onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+                message={alertModal.message}
+                type={alertModal.type}
+            />
         </div>
     );
 }

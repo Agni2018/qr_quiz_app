@@ -11,6 +11,8 @@ import {
     FaVideo,
     FaTimes
 } from 'react-icons/fa';
+import AlertModal from '@/components/AlertModal';
+import ConfirmModal from '@/components/ConfirmModal';
 
 export default function UploadedMaterials() {
     const [topics, setTopics] = useState<any[]>([]);
@@ -22,6 +24,9 @@ export default function UploadedMaterials() {
     const [selectedTopicId, setSelectedTopicId] = useState('');
     const [selectedTopicName, setSelectedTopicName] = useState('');
     const [selectedTopicMaterials, setSelectedTopicMaterials] = useState<any[]>([]);
+
+    const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
+    const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', onConfirm: () => {} });
 
     const fetchData = async () => {
         try {
@@ -50,19 +55,24 @@ export default function UploadedMaterials() {
         setShowAdminMaterialsModal(true);
     };
 
-    const deleteMaterial = async (id: string) => {
-        const ok = confirm('Are you sure you want to delete this material?');
-        if (!ok) return;
-        try {
-            await api.delete(`/study-materials/${id}`);
-            // Update local state for the modal
-            setSelectedTopicMaterials(prev => prev.filter(m => m._id !== id));
-            // Update global state
-            setMaterials(prev => prev.filter(m => m._id !== id));
-        } catch (err) {
-            console.error('Delete material error:', err);
-            alert('Failed to delete material');
-        }
+    const deleteMaterial = (id: string) => {
+        setConfirmModal({
+            isOpen: true,
+            message: 'Are you sure you want to delete this material?',
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/study-materials/${id}`);
+                    // Update local state for the modal
+                    setSelectedTopicMaterials(prev => prev.filter(m => m._id !== id));
+                    // Update global state
+                    setMaterials(prev => prev.filter(m => m._id !== id));
+                    setAlertModal({ isOpen: true, message: 'Material deleted successfully', type: 'success' });
+                } catch (err) {
+                    console.error('Delete material error:', err);
+                    setAlertModal({ isOpen: true, message: 'Failed to delete material', type: 'error' });
+                }
+            }
+        });
     };
 
     const getFileUrl = (url: string) => {
@@ -185,6 +195,19 @@ export default function UploadedMaterials() {
                     </Card>
                 </div>
             )}
+
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                onConfirm={confirmModal.onConfirm}
+                message={confirmModal.message}
+            />
+            <AlertModal
+                isOpen={alertModal.isOpen}
+                onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+                message={alertModal.message}
+                type={alertModal.type}
+            />
         </div>
     );
 }

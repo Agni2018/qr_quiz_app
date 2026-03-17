@@ -8,6 +8,7 @@ import Button from '@/components/Button';
 import QuestionForm from '@/components/QuestionForm';
 import UploadMaterialModal from '@/components/UploadMaterialModal';
 import Link from 'next/link';
+import AlertModal from '@/components/AlertModal';
 
 import { useRouter } from 'next/navigation';
 
@@ -19,6 +20,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
     const [quizLink, setQuizLink] = useState('');
+    const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -205,10 +207,17 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                     onClose={() => setShowUploadModal(false)}
                     onSuccess={() => {
                         setShowUploadModal(false);
-                        alert('Material uploaded successfully!');
+                        setAlertModal({ isOpen: true, message: 'Material uploaded successfully!', type: 'success' });
                     }}
                 />
             )}
+
+            <AlertModal
+                isOpen={alertModal.isOpen}
+                onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+                message={alertModal.message}
+                type={alertModal.type}
+            />
         </main>
 
     );

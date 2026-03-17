@@ -7,6 +7,8 @@ import Button from './Button';
 import Input from './Input';
 import TextArea from './TextArea';
 import { FaTrash, FaPlus, FaAward, FaTrophy, FaStar, FaBolt, FaUsers, FaChevronDown } from 'react-icons/fa';
+import AlertModal from '@/components/AlertModal';
+import ConfirmModal from '@/components/ConfirmModal';
 
 export default function BadgeManagement() {
     const [badges, setBadges] = useState<any[]>([]);
@@ -19,6 +21,9 @@ export default function BadgeManagement() {
         type: 'points',
         threshold: 100
     });
+
+    const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
+    const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', onConfirm: () => {} });
 
     const icons = [
         { name: 'FaAward', icon: <FaAward /> },
@@ -51,25 +56,32 @@ export default function BadgeManagement() {
     }, []);
 
     const handleSubmit = async () => {
-        if (!newBadge.name) return alert('Name is required');
+        if (!newBadge.name) return setAlertModal({ isOpen: true, message: 'Name is required', type: 'error' });
         try {
             await api.post('/badges', newBadge);
             setShowForm(false);
             setNewBadge({ name: '', description: '', icon: 'FaAward', type: 'points', threshold: 100 });
+            setAlertModal({ isOpen: true, message: 'Badge created successfully', type: 'success' });
             fetchBadges();
         } catch (err) {
-            alert('Failed to create badge');
+            setAlertModal({ isOpen: true, message: 'Failed to create badge', type: 'error' });
         }
     };
 
-    const deleteBadge = async (id: string) => {
-        if (!confirm('Are you sure?')) return;
-        try {
-            await api.delete(`/badges/${id}`);
-            fetchBadges();
-        } catch (err) {
-            alert('Failed to delete badge');
-        }
+    const deleteBadge = (id: string) => {
+        setConfirmModal({
+            isOpen: true,
+            message: 'Are you sure you want to delete this badge?',
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/badges/${id}`);
+                    fetchBadges();
+                    setAlertModal({ isOpen: true, message: 'Badge deleted successfully', type: 'success' });
+                } catch (err) {
+                    setAlertModal({ isOpen: true, message: 'Failed to delete badge', type: 'error' });
+                }
+            }
+        });
     };
 
     if (loading) return <div>Loading badges...</div>;
@@ -180,6 +192,19 @@ export default function BadgeManagement() {
                     </Card>
                 ))}
             </div>
+
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                onConfirm={confirmModal.onConfirm}
+                message={confirmModal.message}
+            />
+            <AlertModal
+                isOpen={alertModal.isOpen}
+                onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+                message={alertModal.message}
+                type={alertModal.type}
+            />
         </div>
     );
 }

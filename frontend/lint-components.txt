@@ -1,0 +1,108 @@
+﻿
+`Date.now` is an impure 
+function. Calling an 
+impure function can 
+produce unstable results 
+that update 
+unpredictably when the 
+component happens to 
+re-render. (https://react
+.dev/reference/rules/comp
+onents-and-hooks-must-be-
+pure#components-and-hooks
+-must-be-idempotent).
+`Math.random` is an 
+impure function. Calling 
+an impure function can 
+produce unstable results 
+that update 
+unpredictably when the 
+component happens to 
+re-render. (https://react
+.dev/reference/rules/comp
+onents-and-hooks-must-be-
+pure#components-and-hooks
+-must-be-idempotent).
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\BadgeManagement.t
+sx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\Button.tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\CertificateTempla
+te.tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\QuestionBankModal
+.tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\QuestionForm.tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\ReusableLibrary.t
+sx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\StudentBadges.tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\StudentCertificat
+es.tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\StudentExplore.ts
+x
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\StudentMaterials.
+tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\StudentNotificati
+ons.tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\StudentProgress.t
+sx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\ThemeToggle.tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\TopicManagement.t
+sx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\TopicPerformance.
+tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\UploadMaterialMod
+al.tsx
+C:\Users\Agni\.gemini\ant
+igravity\scratch\qr-quiz-
+platform\frontend\src\com
+ponents\UploadedMaterials
+.tsx
+
+

@@ -13,6 +13,8 @@ import {
     FaTrash,
     FaCopy
 } from 'react-icons/fa';
+import AlertModal from '@/components/AlertModal';
+import ConfirmModal from '@/components/ConfirmModal';
 
 export default function TopicManagement() {
     const [topics, setTopics] = useState<any[]>([]);
@@ -26,6 +28,9 @@ export default function TopicManagement() {
         timeBasedScoring: false,
         passingMarks: 0
     });
+
+    const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
+    const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', onConfirm: () => {} });
 
     const fetchData = async () => {
         try {
@@ -62,31 +67,39 @@ export default function TopicManagement() {
             fetchData();
         } catch (err) {
             console.error('Create topic error:', err);
-            alert('Failed to create topic');
+            setAlertModal({ isOpen: true, message: 'Failed to create topic', type: 'error' });
         }
     };
 
-    const deleteTopic = async (id: string) => {
-        const ok = confirm('Are you sure you want to delete this topic?');
-        if (!ok) return;
-        try {
-            await api.delete(`/topics/${id}`);
-            fetchData();
-        } catch (err) {
-            console.error('Delete topic error:', err);
-            alert('Failed to delete topic');
-        }
+    const deleteTopic = (id: string) => {
+        setConfirmModal({
+            isOpen: true,
+            message: 'Are you sure you want to delete this topic?',
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/topics/${id}`);
+                    fetchData();
+                } catch (err) {
+                    console.error('Delete topic error:', err);
+                    setAlertModal({ isOpen: true, message: 'Failed to delete topic', type: 'error' });
+                }
+            }
+        });
     };
 
-    const copyTopic = async (id: string) => {
-        const ok = confirm('Are you sure you want to duplicate this topic and all its questions?');
-        if (!ok) return;
-        try {
-            await api.post(`/topics/${id}/copy`);
-            fetchData();
-        } catch (err: any) {
-            alert(err.response?.data?.message || 'Failed to copy topic');
-        }
+    const copyTopic = (id: string) => {
+        setConfirmModal({
+            isOpen: true,
+            message: 'Are you sure you want to duplicate this topic and all its questions?',
+            onConfirm: async () => {
+                try {
+                    await api.post(`/topics/${id}/copy`);
+                    fetchData();
+                } catch (err: any) {
+                    setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Failed to copy topic', type: 'error' });
+                }
+            }
+        });
     };
 
     if (loading) {
@@ -246,6 +259,19 @@ export default function TopicManagement() {
                     </Card>
                 </div>
             )}
+
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                onConfirm={confirmModal.onConfirm}
+                message={confirmModal.message}
+            />
+            <AlertModal
+                isOpen={alertModal.isOpen}
+                onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+                message={alertModal.message}
+                type={alertModal.type}
+            />
         </div>
     );
 }
