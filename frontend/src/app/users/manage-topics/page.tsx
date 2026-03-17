@@ -16,7 +16,7 @@ export default function ManageTopicsPage() {
                 color: 'var(--text-primary)',
                 marginBottom: '1rem'
             }}>
-                <span style={{ fontSize: '1.5rem', opacity: 0.8 }}>🎓</span>
+                <span style={{ fontSize: '1.5rem', opacity: 0.8}}>🎓</span>
                 <span style={{
                     backgroundImage: 'linear-gradient(to right, var(--primary), var(--secondary))',
                     WebkitBackgroundClip: 'text',

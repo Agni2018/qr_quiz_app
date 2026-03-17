@@ -6,11 +6,15 @@ import Card from './Card';
 import Button from './Button';
 import { FaTrash, FaPlus, FaPuzzlePiece, FaCheckDouble, FaEdit, FaRegClone } from 'react-icons/fa';
 import QuestionForm from './QuestionForm';
+import AlertModal from '@/components/AlertModal';
+import ConfirmModal from '@/components/ConfirmModal';
 
 export default function ReusableLibrary() {
     const [questions, setQuestions] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
+    const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
+    const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', onConfirm: () => {} });
 
     const fetchQuestions = async () => {
         try {
@@ -27,14 +31,20 @@ export default function ReusableLibrary() {
         fetchQuestions();
     }, []);
 
-    const deleteQuestion = async (id: string) => {
-        if (!confirm('Are you sure? This will remove it from the library.')) return;
-        try {
-            await api.delete(`/questions/${id}`);
-            fetchQuestions();
-        } catch (err) {
-            alert('Failed to delete question');
-        }
+    const deleteQuestion = (id: string) => {
+        setConfirmModal({
+            isOpen: true,
+            message: 'Are you sure? This will remove it from the library.',
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/questions/${id}`);
+                    fetchQuestions();
+                    setAlertModal({ isOpen: true, message: 'Question deleted from library successfully', type: 'success' });
+                } catch (err) {
+                    setAlertModal({ isOpen: true, message: 'Failed to delete question', type: 'error' });
+                }
+            }
+        });
     };
 
     if (loading) return <div>Loading question bank...</div>;
@@ -53,7 +63,7 @@ export default function ReusableLibrary() {
 
             {showForm && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-black/80 backdrop-blur-md">
-                    <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[32px] shadow-2xl">
+                    <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[32px] shadow-2xl" style={{margin:'1rem 1rem 1rem 1rem'}}>
                         <QuestionForm
                             topicId={undefined}
                             onQuestionAdded={() => { setShowForm(false); fetchQuestions(); }}
@@ -115,6 +125,19 @@ export default function ReusableLibrary() {
                     ))
                 )}
             </div>
+
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                onConfirm={confirmModal.onConfirm}
+                message={confirmModal.message}
+            />
+            <AlertModal
+                isOpen={alertModal.isOpen}
+                onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+                message={alertModal.message}
+                type={alertModal.type}
+            />
         </div>
     );
 }

@@ -26,7 +26,8 @@ export default function QuestionBankPage() {
                     justifyContent: 'center',
                     fontSize: '1.75rem',
                     boxShadow: '0 8px 30px rgba(59, 130, 246, 0.4)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    marginLeft:'15px'
                 }}>
                     📚
                 </span>
