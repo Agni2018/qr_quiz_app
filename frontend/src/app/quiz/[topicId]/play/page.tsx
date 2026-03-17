@@ -9,6 +9,8 @@ import TextArea from '@/components/TextArea';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdTimer, MdPersonOutline, MdChevronRight, MdChevronLeft, MdSend } from 'react-icons/md';
 import { HiOutlineQuestionMarkCircle } from 'react-icons/hi';
+import AlertModal from '@/components/AlertModal';
+import ConfirmModal from '@/components/ConfirmModal';
 
 export default function QuizPlay({ params }: { params: Promise<{ topicId: string }> }) {
     const { topicId } = use(params);
@@ -24,6 +26,8 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     const [startTime, setStartTime] = useState<number>(Date.now());
     const [isTimeOut, setIsTimeOut] = useState(false);
     const [duplicateDetected, setDuplicateDetected] = useState(false);
+    const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
+    const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', onConfirm: () => {} });
 
     useEffect(() => {
         const storedUser = localStorage.getItem('quizUser');
@@ -51,7 +55,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
 
         const handlePopState = (e: PopStateEvent) => {
             window.history.pushState(null, '', window.location.href);
-            alert('You cannot go back during the quiz!');
+            setAlertModal({ isOpen: true, message: 'You cannot go back during the quiz!', type: 'error' });
         };
 
         window.history.pushState(null, '', window.location.href);
@@ -104,47 +108,54 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     const submitQuiz = async (isAuto = false) => {
         if (submitting) return;
 
+        const performSubmit = async () => {
+            setSubmitting(true);
+
+            if (isAuto) {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+
+            const userId = localStorage.getItem('userId');
+            const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+
+            try {
+                const res = await api.post('/quiz/submit', {
+                    topicId: topicId,
+                    userId,
+                    user,
+                    answers,
+                    timeTaken
+                });
+
+                if (res.data.message && (res.data.message.includes('already attempted') || res.data.message.includes('duplicate'))) {
+                    setDuplicateDetected(true);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+
+                router.replace(`/quiz/${topicId}/result?attemptId=${res.data.attemptId || ''}`);
+            } catch (err: any) {
+                console.error(err);
+                if (err.response?.data?.message?.includes('already attempted')) {
+                    setDuplicateDetected(true);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    router.replace(`/quiz/${topicId}`);
+                    return;
+                }
+                if (!isAuto) {
+                    setAlertModal({ isOpen: true, message: 'Submission failed! Please try again.', type: 'error' });
+                    setSubmitting(false);
+                }
+            }
+        };
+
         if (!isAuto) {
-            const confirmed = window.confirm('Are you sure you want to submit your assessment?');
-            if (!confirmed) return;
-        }
-
-        setSubmitting(true);
-
-        if (isAuto) {
-            await new Promise(resolve => setTimeout(resolve, 2000));
-        }
-
-        const userId = localStorage.getItem('userId');
-        const timeTaken = Math.floor((Date.now() - startTime) / 1000);
-
-        try {
-            const res = await api.post('/quiz/submit', {
-                topicId: topicId,
-                userId,
-                user,
-                answers,
-                timeTaken
+            setConfirmModal({
+                isOpen: true,
+                message: 'Are you sure you want to submit your assessment?',
+                onConfirm: performSubmit
             });
-
-            if (res.data.message && (res.data.message.includes('already attempted') || res.data.message.includes('duplicate'))) {
-                setDuplicateDetected(true);
-                await new Promise(resolve => setTimeout(resolve, 2000));
-            }
-
-            router.replace(`/quiz/${topicId}/result?attemptId=${res.data.attemptId || ''}`);
-        } catch (err: any) {
-            console.error(err);
-            if (err.response?.data?.message?.includes('already attempted')) {
-                setDuplicateDetected(true);
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                router.replace(`/quiz/${topicId}`);
-                return;
-            }
-            if (!isAuto) {
-                alert('Submission failed! Please try again.');
-                setSubmitting(false);
-            }
+        } else {
+            performSubmit();
         }
     };
 
@@ -483,6 +494,19 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                     </motion.div>
                 </div>
             )}
+
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                onConfirm={confirmModal.onConfirm}
+                message={confirmModal.message}
+            />
+            <AlertModal
+                isOpen={alertModal.isOpen}
+                onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+                message={alertModal.message}
+                type={alertModal.type}
+            />
         </main>
     );
 }
