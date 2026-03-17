@@ -90,7 +90,7 @@ export default function UploadedMaterials() {
     }
 
     return (
-        <div className="flex flex-col gap-10 md:gap-16">
+        <div className="flex flex-col gap-10 md:gap-16" style={{ paddingBottom: '4rem' }}>
             {materials.length === 0 ? (
                 <Card className="p-20 text-center bg-slate-950/40 border-dashed border-2 border-white/5 rounded-[40px]">
                     <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl">📂</div>
@@ -140,7 +140,7 @@ export default function UploadedMaterials() {
 
             {/* ADMIN STUDY MATERIALS MODAL */}
             {showAdminMaterialsModal && (
-                <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)} style={{ margin: '0 2rem 2rem 2rem' }}>
+                <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)} style={{padding:30, margin: '0 2rem 2rem 2rem' }}>
                     <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden max-md:!p-4 max-md:!m-0" onClick={(e) => e.stopPropagation()} style={{ padding: 30, margin: '0 2rem 2rem 2rem' }}>
                         <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center max-md:!p-4" style={{ padding: 30, marginBottom: 20 }}>
                             <div>

@@ -27,7 +27,7 @@ export default function BadgesPage() {
                     fontSize: '1.75rem',
                     boxShadow: '0 8px 30px rgba(245, 158, 11, 0.4)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
-                    marginLeft:'15px'
+                    marginLeft:'10px'
                 }}>
                     🏆
                 </span>
@@ -36,6 +36,7 @@ export default function BadgesPage() {
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
+                    marginRight:'10px'
                 }}>
                     Badge Management
                 </span>
