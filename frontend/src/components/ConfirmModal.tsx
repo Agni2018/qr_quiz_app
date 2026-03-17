@@ -28,8 +28,8 @@ export default function ConfirmModal({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[120] backdrop-blur-sm flex items-center justify-center px-4" style={{ background: 'rgba(0, 0, 0, 0.6)' }}>
-            <Card className="w-full max-w-md p-0 rounded-[2rem] overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-200" style={{ background: 'var(--background)', padding:30, borderColor: 'var(--border-color)' }} onClick={e => e.stopPropagation()} >
+        <div className="fixed inset-0 z-[500] backdrop-blur-sm flex items-center justify-center px-4" style={{ background: 'rgba(0, 0, 0, 0.6)' }}>
+            <Card className="w-full max-w-md p-0 rounded-[2rem] overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-200" style={{ background: 'var(--background)', padding:30,margin:'1rem 2rem 2rem 2rem', borderColor: 'var(--border-color)' }} onClick={e => e.stopPropagation()} >
                 <button onClick={onClose} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors z-10">
                     <FaTimes />
                 </button>

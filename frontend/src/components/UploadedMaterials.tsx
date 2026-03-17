@@ -140,8 +140,8 @@ export default function UploadedMaterials() {
 
             {/* ADMIN STUDY MATERIALS MODAL */}
             {showAdminMaterialsModal && (
-                <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)}>
-                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden max-md:!p-4 max-md:!m-0" onClick={(e) => e.stopPropagation()} style={{ padding: 30, margin: '0 2rem 1rem 1rem' }}>
+                <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)} style={{ margin: '0 2rem 2rem 2rem' }}>
+                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden max-md:!p-4 max-md:!m-0" onClick={(e) => e.stopPropagation()} style={{ padding: 30, margin: '0 2rem 2rem 2rem' }}>
                         <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center max-md:!p-4" style={{ padding: 30, marginBottom: 20 }}>
                             <div>
                                 <h3 className="text-3xl font-black text-white max-md:text-2xl">{selectedTopicName}</h3>
