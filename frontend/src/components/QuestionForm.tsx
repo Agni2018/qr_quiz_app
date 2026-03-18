@@ -6,7 +6,7 @@ import Button from './Button';
 import Input from './Input';
 import TextArea from './TextArea';
 import Card from './Card';
-import { FaPlus, FaTrash, FaUniversity, FaChevronDown } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaUniversity, FaChevronDown, FaArrowLeft } from 'react-icons/fa';
 import QuestionBankModal from './QuestionBankModal';
 
 export default function QuestionForm({
@@ -174,6 +174,17 @@ export default function QuestionForm({
             <div className="absolute top-0 right-0 w-32 h-32 bg-violet-600/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
             <div className="relative z-10 flex flex-col gap-14">
+
+                {/* Back Button */}
+                <div className="px-8 md:px-12 pt-8" style={{ padding: '30px 30px 0 30px' }}>
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-bold uppercase tracking-widest text-[11px] group"
+                    >
+                        <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Question Bank
+                    </button>
+                </div>
 
                 {!topicId && (
                     <div className="flex items-center gap-6 px-8 md:px-12 py-8 bg-violet-500/10 rounded-[32px] border border-violet-500/20 mb-2" style={{padding:20,margin:"1rem 1rem 1rem 1rem"}}>

@@ -15,6 +15,10 @@ router.post('/logout', authController.logout);
 // Status Route
 router.get('/status', optionalProtect, authController.getStatus);
 
+// Referral Routes
+router.post('/referrals/create', protect, authController.createReferral);
+router.get('/referrals/my', protect, authController.getMyReferrals);
+
 // Seed Route (Temporary for setup)
 router.post('/seed', authController.seed);
 

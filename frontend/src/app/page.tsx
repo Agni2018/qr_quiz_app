@@ -18,6 +18,8 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [referralCode, setReferralCode] = useState('');
+    const [showReferralInput, setShowReferralInput] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -94,7 +96,8 @@ export default function Home() {
                 await api.post('/auth/register', {
                     username: trimmedUsername,
                     email: trimmedEmail,
-                    password: trimmedPassword
+                    password: trimmedPassword,
+                    referralCode: referralCode.trim()
                 });
                 setSuccess('Registration successful! Please login.');
                 setMode('login');
@@ -366,6 +369,65 @@ export default function Home() {
                                         </div>
                                     </div>
                                 </div>
+                                
+                                {mode === 'register' && (
+                                    <div className="animate-fade-in">
+                                        {!showReferralInput ? (
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowReferralInput(true)}
+                                                className="text-xs font-black uppercase tracking-widest text-primary hover:text-secondary transition-colors underline underline-offset-4 ml-6"
+                                            >
+                                                + Have a referral code?
+                                            </button>
+                                        ) : (
+                                            <div className="relative group animate-fade-in">
+                                                <label style={{
+                                                    display: 'block',
+                                                    marginBottom: '1rem',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: 800,
+                                                    color: 'var(--text-muted)',
+                                                    textTransform: 'uppercase',
+                                                    letterSpacing: '0.15em',
+                                                    paddingLeft: '1.5rem'
+                                                }}>
+                                                    Referral Code
+                                                </label>
+                                                <div className="relative">
+                                                    <input
+                                                        style={{
+                                                            width: '100%',
+                                                            paddingRight: '3rem',
+                                                            paddingLeft: '1.5rem',
+                                                            paddingTop: '1.25rem',
+                                                            paddingBottom: '1.25rem',
+                                                            borderRadius: 'var(--radius-lg)',
+                                                            border: '1px solid var(--border-color)',
+                                                            background: 'var(--glass-bg)',
+                                                            color: 'var(--text-primary)',
+                                                            outline: 'none',
+                                                            fontSize: '1rem',
+                                                            transition: 'var(--transition)'
+                                                        }}
+                                                        className="focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:ring-opacity-20 uppercase tracking-widest"
+                                                        type="text"
+                                                        placeholder="ENTER CODE"
+                                                        value={referralCode}
+                                                        onChange={(e) => setReferralCode(e.target.value)}
+                                                    />
+                                                    <button 
+                                                        type="button"
+                                                        onClick={() => {setShowReferralInput(false); setReferralCode('');}}
+                                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
+                                                    >
+                                                        &times;
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                             </div>
 

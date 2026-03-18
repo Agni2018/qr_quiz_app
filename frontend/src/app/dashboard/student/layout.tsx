@@ -15,7 +15,8 @@ import {
     FaAward,
     FaBookOpen,
     FaBell,
-    FaCompass
+    FaCompass,
+    FaUserPlus
 } from 'react-icons/fa';
 import Link from 'next/link';
 
@@ -59,6 +60,30 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             setUnreadCount(0);
         };
         window.addEventListener('messages-read', handleMessagesRead);
+
+        // Check for referral points in messages
+        const checkReferralPoints = async () => {
+            try {
+                const res = await api.get('/messages');
+                const messages = res.data;
+                const unreadReferralMsg = messages.find((m: any) => !m.isRead && m.text.includes('Congratulations! You\'ve earned') && m.text.includes('points for'));
+                
+                if (unreadReferralMsg) {
+                    const pointsMatch = unreadReferralMsg.text.match(/earned (\d+) points/);
+                    if (pointsMatch) {
+                        const points = parseInt(pointsMatch[1]);
+                        setPointsAwarded(points);
+                        setStreakInfo(unreadReferralMsg.text);
+                        setShowPointsModal(true);
+                        // Mark as read so it doesn't show again
+                        await api.patch('/messages/read', { messageId: unreadReferralMsg._id });
+                    }
+                }
+            } catch (err) {
+                console.error('Error checking referral points:', err);
+            }
+        };
+        checkReferralPoints();
 
         // Check for daily points award
         const dailyAwarded = localStorage.getItem('dailyPointsAwarded');
@@ -175,6 +200,15 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                                 className={`justify-start gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/leaderboard') ? 'bg-yellow-500/10 text-white border-none shadow-none' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
                             >
                                 <FaTrophy className={isActive('/dashboard/student/leaderboard') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> <span className={isActive('/dashboard/student/leaderboard') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Leaderboard</span>
+                            </Button>
+                        </Link>
+
+                        <Link href="/dashboard/student/referral" onClick={() => setSidebarOpen(false)}>
+                            <Button
+                                variant={isActive('/dashboard/student/referral') ? 'secondary' : 'ghost'}
+                                className={`justify-start gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/referral') ? 'bg-emerald-500/10 text-white border-none shadow-none' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                            >
+                                <FaUserPlus className={isActive('/dashboard/student/referral') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> <span className={isActive('/dashboard/student/referral') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Referral</span>
                             </Button>
                         </Link>
 

@@ -225,9 +225,9 @@ exports.submitQuiz = async (req, res) => {
                 console.log(`[DEBUG] hasCorrectAnswer: ${hasCorrectAnswer}`);
 
                 if (hasCorrectAnswer) {
-                    pointsEarned = 1;
+                    pointsEarned = 3;
                     userDoc.points += pointsEarned;
-                    console.log(`[DEBUG] Awarded +1 point. New Balance: ${userDoc.points}`);
+                    console.log(`[DEBUG] Awarded +3 points. New Balance: ${userDoc.points}`);
                 }
 
 

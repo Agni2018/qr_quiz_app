@@ -26,15 +26,14 @@ const syncPoints = async () => {
             // 2. Calculate referral bonuses
             let referralBonus = 0;
             if (user.referredBy) {
-                referralBonus += 20; // Bonus for being referred
+                referralBonus += 3; // Bonus for being referred
             }
 
             const referredCount = await User.countDocuments({ referredBy: user._id });
-            referralBonus += (referredCount * 50); // Bonus for referring others
+            referralBonus += (referredCount * 5); // Bonus for referring others
 
-            // 3. Set points: 5 (base) + 1 per attempt + referral bonuses
-            // Note: This reset specifically aligns with the new +1 per quiz rule.
-            const newPoints = 5 + attemptCount + referralBonus;
+            // 3. Set points: 2 (base/first login) + (3 * attempts) + referral bonuses
+            const newPoints = 2 + (attemptCount * 3) + referralBonus;
 
             console.log(`User: ${user.username} | Attempts: ${attemptCount} | Ref Bonus: ${referralBonus} | Old: ${user.points} | New: ${newPoints}`);
 

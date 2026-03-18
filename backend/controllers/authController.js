@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const PendingReferral = require('../models/PendingReferral');
+const Message = require('../models/Message');
+const Badge = require('../models/Badge');
 
 // Register
 exports.register = async (req, res) => {
@@ -21,28 +24,118 @@ exports.register = async (req, res) => {
         const newReferralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
 
         const newUser = new User({
-            username,
-            email,
+            username: trimmedUsername,
+            email: trimmedEmail,
             password,
             role: 'student',
             referralCode: newReferralCode,
-            points: 0 // Start with 0, get 5 on first login
+            points: 0
         });
 
         // Handle referral
         if (referralCode) {
-            const referrer = await User.findOne({ referralCode: referralCode.toUpperCase() });
-            if (referrer) {
-                newUser.referredBy = referrer._id;
-                newUser.points += 20; // Referee bonus
-                referrer.points += 50; // Referrer bonus
-                await referrer.save();
+            const codeUpper = referralCode.trim().toUpperCase();
+            
+            // 1. Check for targeted referral first
+            const pendingReferral = await PendingReferral.findOne({ referralCode: codeUpper, status: 'pending' });
+            
+            if (pendingReferral) {
+                // Precise case-insensitive match for name and email
+                const nameMatch = pendingReferral.targetUsername.trim().toLowerCase() === trimmedUsername.toLowerCase();
+                const emailMatch = pendingReferral.targetEmail.trim().toLowerCase() === trimmedEmail.toLowerCase();
+                
+                if (!nameMatch || !emailMatch) {
+                    return res.status(400).json({ 
+                        message: "the name and the email doesn't match the referral code" 
+                    });
+                }
+
+                const referrer = await User.findById(pendingReferral.referrerId);
+                if (referrer) {
+                    newUser.referredBy = referrer._id;
+                    newUser.points += 3; // Referee bonus: 3 points
+                    referrer.points += 5; // Referrer bonus: 5 points
+                    await referrer.save();
+
+                    // Notify Referrer
+                    const referrerMsg = new Message({
+                        sender: newUser._id,
+                        recipient: referrer._id,
+                        text: `Congratulations! You've earned 5 points for referring ${trimmedUsername}.`
+                    });
+
+                    // Notify Referee (New User)
+                    const refereeMsg = new Message({
+                        sender: referrer._id,
+                        recipient: newUser._id,
+                        text: `Congratulations! You've earned 3 points for being referred by ${referrer.username}.`
+                    });
+
+                    await Promise.all([referrerMsg.save(), refereeMsg.save()]);
+                    
+                    pendingReferral.status = 'completed';
+                    await pendingReferral.save();
+
+                    // --- Referral Badge Logic ---
+                    const referralCount = await User.countDocuments({ referredBy: referrer._id });
+                    const potentialBadges = await Badge.find({ type: 'referral', threshold: { $lte: referralCount } });
+                    
+                    if (potentialBadges.length > 0) {
+                        let badgesAdded = false;
+                        for (const badge of potentialBadges) {
+                            // Check if user already has this badge
+                            const hasBadge = referrer.badges.some(b => b.badgeId.toString() === badge._id.toString());
+                            if (!hasBadge) {
+                                referrer.badges.push({ badgeId: badge._id });
+                                badgesAdded = true;
+                            }
+                        }
+                        if (badgesAdded) {
+                            await referrer.save();
+                        }
+                    }
+                    // ----------------------------
+                } else {
+                    return res.status(400).json({ message: "Referrer no longer exists" });
+                }
+            } else {
+                // 2. Fallback to generic referral code
+                const referrer = await User.findOne({ referralCode: codeUpper });
+                if (referrer) {
+                    newUser.referredBy = referrer._id;
+                    newUser.points += 3;
+                    referrer.points += 5;
+                    await referrer.save();
+
+                    // --- Referral Badge Logic (Generic) ---
+                    const referralCount = await User.countDocuments({ referredBy: referrer._id });
+                    const potentialBadges = await Badge.find({ type: 'referral', threshold: { $lte: referralCount } });
+                    
+                    if (potentialBadges.length > 0) {
+                        let badgesAdded = false;
+                        for (const badge of potentialBadges) {
+                            const hasBadge = referrer.badges.some(b => b.badgeId.toString() === badge._id.toString());
+                            if (!hasBadge) {
+                                referrer.badges.push({ badgeId: badge._id });
+                                badgesAdded = true;
+                            }
+                        }
+                        if (badgesAdded) {
+                            await referrer.save();
+                        }
+                    }
+                    // --------------------------------------
+                } else {
+                    // 3. Invalid code provided
+                    return res.status(400).json({ message: "Invalid referral code" });
+                }
             }
         }
 
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully', referralCode: newReferralCode });
     } catch (error) {
+        console.error('Registration error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -73,8 +166,8 @@ exports.login = async (req, res) => {
             // First time login bonus
             user.lastLoginDate = now;
             user.loginStreak = 1;
-            user.points += 5; // Award daily points on first login too
-            pointsAwarded = 5;
+            user.points += 2; // Award daily points on first login too
+            pointsAwarded = 2;
             await user.save();
         } else {
             const lastLoginDate = new Date(lastLogin).setHours(0, 0, 0, 0);
@@ -84,22 +177,22 @@ exports.login = async (req, res) => {
             if (diffInDays === 1) {
                 // Consecutive login
                 user.loginStreak += 1;
-                user.points += 5; // Daily login points
-                pointsAwarded = 5;
+                user.points += 2; // Daily login points
+                pointsAwarded = 2;
 
                 // Streak milestone every 7 days
                 if (user.loginStreak % 7 === 0) {
-                    user.points += 20;
-                    pointsAwarded += 20;
-                    streakStatus = `7-day streak! +20 bonus points!`;
+                    user.points += 10; // Scaled down streak bonus (optional, keeping it proportional)
+                    pointsAwarded += 10;
+                    streakStatus = `7-day streak! +10 bonus points!`;
                 }
                 user.lastLoginDate = now;
                 await user.save();
             } else if (diffInDays > 1) {
                 // Streak broken
                 user.loginStreak = 1;
-                user.points += 5; // Still give daily points
-                pointsAwarded = 5;
+                user.points += 2; // Still give daily points
+                pointsAwarded = 2;
                 user.lastLoginDate = now;
                 await user.save();
             }
@@ -215,6 +308,51 @@ exports.resetAdmin = async (req, res) => {
         user.password = password;
         await user.save();
         res.json({ message: 'Admin password updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+// Create Targeted Referral
+exports.createReferral = async (req, res) => {
+    try {
+        const { username, email } = req.body;
+        const referrerId = req.user.id;
+
+        if (!username || !email) {
+            return res.status(400).json({ message: 'Username and email are required' });
+        }
+
+        const referralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+        const pendingReferral = new PendingReferral({
+            referrerId,
+            targetUsername: username.trim(),
+            targetEmail: email.trim().toLowerCase(),
+            referralCode
+        });
+
+        await pendingReferral.save();
+
+        res.status(201).json({
+            message: 'Referral created successfully',
+            referralCode
+        });
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ message: 'Referral with this unique code already exists. Please try again.' });
+        }
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+// Get My Referrals
+exports.getMyReferrals = async (req, res) => {
+    console.log('[DEBUG] getMyReferrals called by user:', req.user.id);
+    try {
+        const referrerId = req.user.id;
+        const referrals = await PendingReferral.find({ referrerId }).sort({ createdAt: -1 });
+        res.json(referrals);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }

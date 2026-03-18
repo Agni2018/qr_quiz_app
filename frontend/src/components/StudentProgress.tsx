@@ -83,7 +83,7 @@ export default function StudentProgress() {
                             </div>
                             <div className="flex flex-col items-end">
                                 <span className="text-primary text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Status</span>
-                                <span className="text-lg font-black text-primary/80">+1 Point Earned</span>
+                                <span className="text-lg font-black text-primary/80">+3 Points Earned</span>
                             </div>
                         </div>
                         <Link href={`/quiz/${attempt.topicId?._id}/result?attemptId=${attempt._id}`}>
