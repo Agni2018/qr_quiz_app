@@ -13,7 +13,10 @@ import {
     FaBook,
     FaAward,
     FaUpload,
-    FaPlus
+    FaPlus,
+    FaChevronDown,
+    FaChevronUp,
+    FaStar
 } from 'react-icons/fa';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -26,6 +29,7 @@ export default function UsersLayout({
     const [user, setUser] = useState<any>(null);
     const [authLoading, setAuthLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isBadgeChallengesOpen, setIsBadgeChallengesOpen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
 
@@ -167,14 +171,41 @@ export default function UsersLayout({
                             </Button>
                         </Link>
 
-                        <Link href="/users/badges" onClick={() => setSidebarOpen(false)}>
+                        {/* Badge & Challenges Dropdown */}
+                        <div className="flex flex-col gap-2">
                             <Button
-                                variant={isActive('/users/badges') ? 'secondary' : 'ghost'}
-                                className={`w-full justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/badges') ? 'bg-amber-500/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                variant={(isActive('/users/badges') || isActive('/users/challenges')) ? 'secondary' : 'ghost'}
+                                className={`w-full justify-between gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${(isActive('/users/badges') || isActive('/users/challenges')) ? 'bg-amber-500/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                onClick={() => setIsBadgeChallengesOpen(!isBadgeChallengesOpen)}
                             >
-                                <FaAward className={isActive('/users/badges') ? 'text-amber-400' : 'text-[#94a3b8] group-hover:text-white'} /> <span className={isActive('/users/badges') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Badge Rewards</span>
+                                <div className="flex items-center gap-4">
+                                    <FaAward className={(isActive('/users/badges') || isActive('/users/challenges')) ? 'text-amber-400' : 'text-[#94a3b8] group-hover:text-white'} /> 
+                                    <span className={(isActive('/users/badges') || isActive('/users/challenges')) ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Badge & Challenges</span>
+                                </div>
+                                {isBadgeChallengesOpen ? <FaChevronUp className="text-sm" /> : <FaChevronDown className="text-sm" />}
                             </Button>
-                        </Link>
+
+                            {isBadgeChallengesOpen && (
+                                <div className="flex flex-col gap-2 pl-6 animate-fade-in">
+                                    <Link href="/users/badges" onClick={() => setSidebarOpen(false)}>
+                                        <Button
+                                            variant={isActive('/users/badges') ? 'secondary' : 'ghost'}
+                                            className={`justify-start gap-4 h-10 rounded-xl text-sm font-bold transition-all w-full ${isActive('/users/badges') ? 'bg-amber-500/20 text-white' : 'text-slate-500 hover:text-white hover:bg-white/5 border-none'}`}
+                                        >
+                                            <FaAward className="text-xs text-amber-500" /> Badge Rewards
+                                        </Button>
+                                    </Link>
+                                    <Link href="/users/challenges" onClick={() => setSidebarOpen(false)}>
+                                        <Button
+                                            variant={isActive('/users/challenges') ? 'secondary' : 'ghost'}
+                                            className={`justify-start gap-4 h-10 rounded-xl text-sm font-bold transition-all w-full ${isActive('/users/challenges') ? 'bg-blue-500/20 text-white' : 'text-slate-500 hover:text-white hover:bg-white/5 border-none'}`}
+                                        >
+                                            <FaStar className="text-xs text-yellow-500" /> Weekly Challenges
+                                        </Button>
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
 
                         <Link href="/users/uploaded-files" onClick={() => setSidebarOpen(false)}>
                             <Button

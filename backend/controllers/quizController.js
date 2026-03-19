@@ -3,6 +3,7 @@ const Topic = require('../models/Topic');
 const Question = require('../models/Question');
 const UserAttempt = require('../models/UserAttempt');
 const User = require('../models/User');
+const challengeController = require('./challengeController');
 const Badge = require('../models/Badge');
 
 // Check eligibility to start quiz
@@ -108,7 +109,11 @@ exports.submitQuiz = async (req, res) => {
 
         const questions = await Question.find({ topicId });
         let rawScore = 0;
+        let maxScore = 0;
         const processedAnswers = [];
+
+        // Calculate max possible score
+        maxScore = questions.reduce((sum, q) => sum + (q.marks || 1), 0);
 
         // Scoring Logic
         for (let ans of answers) {
@@ -175,6 +180,23 @@ exports.submitQuiz = async (req, res) => {
 
         try {
             await attempt.save();
+
+            // --- Challenge Progress Integration ---
+            if (finalUserId) { // Only update challenges for logged-in users
+                await challengeController.updateProgress(finalUserId, 'quiz_count', 1);
+                // Check for perfect score: must have answers for all questions and all must be correct
+                const isPerfect = processedAnswers.length > 0 && 
+                                 processedAnswers.length === questions.length && 
+                                 processedAnswers.every(ans => ans.isCorrect);
+
+                if (isPerfect) {
+                    await challengeController.updateProgress(finalUserId, 'perfect_score', 1);
+                }
+                // Points earned are handled below, but if we want to track points from quizzes specifically:
+                // await challengeController.updateProgress(finalUserId, 'points_earned_from_quizzes', pointsEarned);
+            }
+            // --------------------------------------
+
         } catch (saveErr) {
             // Handle duplicate key error (race condition or double submit)
             if (saveErr.code === 11000) {
@@ -228,6 +250,10 @@ exports.submitQuiz = async (req, res) => {
                     pointsEarned = 3;
                     userDoc.points += pointsEarned;
                     console.log(`[DEBUG] Awarded +3 points. New Balance: ${userDoc.points}`);
+
+                    // --- Challenge Progress: Quiz Points ---
+                    await challengeController.updateProgress(finalUserId, 'points_earned', 3);
+                    // ---------------------------------------
                 }
 
 

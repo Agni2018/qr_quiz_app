@@ -93,6 +93,9 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/badges', badgeRoutes);
 app.use('/api/study-materials', studyMaterialRoutes);
 app.use('/api/messages', messageRoutes);
+const challengeRoutes = require('./routes/challenges');
+app.use('/api/challenges', challengeRoutes);
+app.get('/api/test', (req, res) => res.json({ ok: true }));
 
 // Ensure uploads directory exists on startup
 const uploadPath = path.resolve(process.cwd(), 'uploads');

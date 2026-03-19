@@ -4,6 +4,7 @@ const User = require('../models/User');
 const PendingReferral = require('../models/PendingReferral');
 const Message = require('../models/Message');
 const Badge = require('../models/Badge');
+const challengeController = require('./challengeController');
 
 // Register
 exports.register = async (req, res) => {
@@ -76,6 +77,12 @@ exports.register = async (req, res) => {
                     pendingReferral.status = 'completed';
                     await pendingReferral.save();
 
+                    // --- Challenge Progress: Referral ---
+                    await challengeController.updateProgress(referrer._id, 'referral_count', 1);
+                    await challengeController.updateProgress(referrer._id, 'points_earned', 5);
+                    await challengeController.updateProgress(newUser._id, 'points_earned', 3);
+                    // ------------------------------------
+
                     // --- Referral Badge Logic ---
                     const referralCount = await User.countDocuments({ referredBy: referrer._id });
                     const potentialBadges = await Badge.find({ type: 'referral', threshold: { $lte: referralCount } });
@@ -106,6 +113,12 @@ exports.register = async (req, res) => {
                     newUser.points += 3;
                     referrer.points += 5;
                     await referrer.save();
+
+                    // --- Challenge Progress: Referral (Generic) ---
+                    await challengeController.updateProgress(referrer._id, 'referral_count', 1);
+                    await challengeController.updateProgress(referrer._id, 'points_earned', 5);
+                    await challengeController.updateProgress(newUser._id, 'points_earned', 3);
+                    // ----------------------------------------------
 
                     // --- Referral Badge Logic (Generic) ---
                     const referralCount = await User.countDocuments({ referredBy: referrer._id });
@@ -169,6 +182,11 @@ exports.login = async (req, res) => {
             user.points += 2; // Award daily points on first login too
             pointsAwarded = 2;
             await user.save();
+
+            // --- Challenge Progress: First Login ---
+            await challengeController.updateProgress(user._id, 'points_earned', 2);
+            await challengeController.updateProgress(user._id, 'streak', 1);
+            // ----------------------------------------
         } else {
             const lastLoginDate = new Date(lastLogin).setHours(0, 0, 0, 0);
             const todayDate = new Date(now).setHours(0, 0, 0, 0);
@@ -188,6 +206,14 @@ exports.login = async (req, res) => {
                 }
                 user.lastLoginDate = now;
                 await user.save();
+
+                // --- Challenge Progress: Daily Login ---
+                await challengeController.updateProgress(user._id, 'points_earned', 2);
+                await challengeController.updateProgress(user._id, 'streak', 1);
+                if (user.loginStreak % 7 === 0) {
+                    await challengeController.updateProgress(user._id, 'points_earned', 10);
+                }
+                // ---------------------------------------
             } else if (diffInDays > 1) {
                 // Streak broken
                 user.loginStreak = 1;
@@ -195,6 +221,11 @@ exports.login = async (req, res) => {
                 pointsAwarded = 2;
                 user.lastLoginDate = now;
                 await user.save();
+
+                // --- Challenge Progress: New Streak Start ---
+                await challengeController.updateProgress(user._id, 'points_earned', 2);
+                await challengeController.updateProgress(user._id, 'streak', 1);
+                // --------------------------------------------
             }
             // If already logged in today, do nothing.
         }

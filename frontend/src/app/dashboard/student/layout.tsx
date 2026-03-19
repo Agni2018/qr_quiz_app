@@ -16,7 +16,10 @@ import {
     FaBookOpen,
     FaBell,
     FaCompass,
-    FaUserPlus
+    FaUserPlus,
+    FaChevronDown,
+    FaChevronUp,
+    FaStar
 } from 'react-icons/fa';
 import Link from 'next/link';
 
@@ -25,6 +28,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [isBadgeChallengesOpen, setIsBadgeChallengesOpen] = useState(false);
 
     // Daily Points Modal State
     const [showPointsModal, setShowPointsModal] = useState(false);
@@ -66,17 +70,17 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             try {
                 const res = await api.get('/messages');
                 const messages = res.data;
-                const unreadReferralMsg = messages.find((m: any) => !m.isRead && m.text.includes('Congratulations! You\'ve earned') && m.text.includes('points for'));
+                const unreadPointsMsg = messages.find((m: any) => !m.isRead && m.text.includes('Congratulations!') && m.text.includes('earned') && m.text.includes('points'));
                 
-                if (unreadReferralMsg) {
-                    const pointsMatch = unreadReferralMsg.text.match(/earned (\d+) points/);
+                if (unreadPointsMsg) {
+                    const pointsMatch = unreadPointsMsg.text.match(/earned (\d+) points/);
                     if (pointsMatch) {
                         const points = parseInt(pointsMatch[1]);
                         setPointsAwarded(points);
-                        setStreakInfo(unreadReferralMsg.text);
+                        setStreakInfo(unreadPointsMsg.text);
                         setShowPointsModal(true);
                         // Mark as read so it doesn't show again
-                        await api.patch('/messages/read', { messageId: unreadReferralMsg._id });
+                        await api.patch('/messages/read', { messageId: unreadPointsMsg._id });
                     }
                 }
             } catch (err) {
@@ -212,14 +216,41 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                             </Button>
                         </Link>
 
-                        <Link href="/dashboard/student/badges" onClick={() => setSidebarOpen(false)}>
+                        {/* Badge & Challenges Dropdown */}
+                        <div className="flex flex-col gap-2">
                             <Button
-                                variant={isActive('/dashboard/student/badges') ? 'secondary' : 'ghost'}
-                                className={`justify-start gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/badges') ? 'bg-purple-500/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                variant={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'secondary' : 'ghost'}
+                                className={`justify-between gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full px-4 ${(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'bg-purple-500/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                onClick={() => setIsBadgeChallengesOpen(!isBadgeChallengesOpen)}
                             >
-                                <FaAward className={isActive('/dashboard/student/badges') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> <span className={isActive('/dashboard/student/badges') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>My Badges</span>
+                                <div className="flex items-center gap-4">
+                                    <FaAward className={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
+                                    <span className={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Badge & Challenges</span>
+                                </div>
+                                {isBadgeChallengesOpen ? <FaChevronUp className="text-sm" /> : <FaChevronDown className="text-sm" />}
                             </Button>
-                        </Link>
+
+                            {isBadgeChallengesOpen && (
+                                <div className="flex flex-col gap-2 pl-6 animate-fade-in">
+                                    <Link href="/dashboard/student/badges" onClick={() => setSidebarOpen(false)}>
+                                        <Button
+                                            variant={isActive('/dashboard/student/badges') ? 'secondary' : 'ghost'}
+                                            className={`justify-start gap-4 h-10 rounded-xl text-sm font-bold transition-all w-full ${isActive('/dashboard/student/badges') ? 'bg-purple-500/20 text-white' : 'text-slate-500 hover:text-white hover:bg-white/5 border-none'}`}
+                                        >
+                                            <FaAward className="text-xs" /> Badge Rewards
+                                        </Button>
+                                    </Link>
+                                    <Link href="/dashboard/student/challenges" onClick={() => setSidebarOpen(false)}>
+                                        <Button
+                                            variant={isActive('/dashboard/student/challenges') ? 'secondary' : 'ghost'}
+                                            className={`justify-start gap-4 h-10 rounded-xl text-sm font-bold transition-all w-full ${isActive('/dashboard/student/challenges') ? 'bg-blue-500/20 text-white' : 'text-slate-500 hover:text-white hover:bg-white/5 border-none'}`}
+                                        >
+                                            <FaStar className="text-xs text-yellow-500" /> Weekly Challenges
+                                        </Button>
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
 
                         <Link href="/dashboard/student/certificates" onClick={() => setSidebarOpen(false)}>
                             <Button
