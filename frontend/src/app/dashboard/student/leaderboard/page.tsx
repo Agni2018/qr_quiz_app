@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Card from '@/components/Card';
-import { FaTrophy } from 'react-icons/fa';
+import Button from '@/components/Button';
+import Link from 'next/link';
+import { FaTrophy, FaUserPlus } from 'react-icons/fa';
 
 export default function LeaderboardPage() {
     const [leaderboard, setLeaderboard] = useState<any>(null);
@@ -62,6 +64,17 @@ export default function LeaderboardPage() {
                         Leaderboard
                     </h2>
                     <div className="h-2 w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r from-[#f59e0b] to-transparent" />
+                </div>
+                <div className="ml-auto" style={{ alignSelf: 'center' }}>
+                    <Link href="/dashboard/student/referral-leads">
+                        <Button
+                            variant="primary"
+                            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black shadow-lg shadow-emerald-500/20 transform hover:-translate-y-1 transition-all"
+                        >
+                            <FaUserPlus className="text-xl" />
+                            <span>Referral Leads</span>
+                        </Button>
+                    </Link>
                 </div>
             </div>
 

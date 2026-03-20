@@ -16,9 +16,10 @@ import {
     FaPlus,
     FaChevronDown,
     FaChevronUp,
-    FaStar
+    FaStar,
+    FaFolderPlus
 } from 'react-icons/fa';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 export default function UsersLayout({
@@ -32,6 +33,7 @@ export default function UsersLayout({
     const [isBadgeChallengesOpen, setIsBadgeChallengesOpen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -244,15 +246,32 @@ export default function UsersLayout({
                         <div className="flex justify-end items-center mb-12">
                             <div className="flex items-center gap-4" style={{ margin: '1rem 1rem 2rem 1rem' }}>
                                 {pathname === '/users/manage-topics' && (
-                                    <Button
-                                        onClick={() => {
-                                            // Emit custom event to trigger modal in manage-topics/page.tsx
-                                            window.dispatchEvent(new CustomEvent('open-create-topic-modal'));
-                                        }}
-                                        className="rounded-xl px-6 h-11 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 flex items-center gap-2 whitespace-nowrap"
-                                    >
-                                        <FaPlus /> Create Topic
-                                    </Button>
+                                    <div className="flex items-center gap-2 md:gap-3">
+                                        {!searchParams.has('category') && (
+                                            <Button
+                                                onClick={() => {
+                                                    window.dispatchEvent(new CustomEvent('open-create-category-modal'));
+                                                }}
+                                                variant="ghost"
+                                                title="Create Category"
+                                                className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-white/5 hover:bg-white/10 border border-white/10 flex items-center gap-2 whitespace-nowrap text-slate-300 font-bold"
+                                            >
+                                                <FaFolderPlus className="text-xs md:text-sm" /> 
+                                                <span className="hidden sm:inline text-[10px] md:text-xs">Create Category</span>
+                                                <span className="sm:hidden text-[10px]">Category</span>
+                                            </Button>
+                                        )}
+                                        <Button
+                                            onClick={() => {
+                                                // Emit custom event to trigger modal in manage-topics/page.tsx
+                                                window.dispatchEvent(new CustomEvent('open-create-topic-modal'));
+                                            }}
+                                            title="Create Topic"
+                                            className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 flex items-center gap-2 whitespace-nowrap"
+                                        >
+                                            <FaPlus /> <span className="hidden sm:inline">Create Topic</span>
+                                        </Button>
+                                    </div>
                                 )}
                                 <ThemeToggle />
                                 <div className="h-6 w-[1px] bg-white/10 mx-2" />

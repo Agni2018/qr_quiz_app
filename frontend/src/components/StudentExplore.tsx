@@ -44,11 +44,6 @@ export default function StudentExplore() {
             });
 
             if (res.data.canAttempt) {
-                localStorage.setItem('quizUser', JSON.stringify({
-                    name: user.username,
-                    email: user.email,
-                    phone: 'N/A'
-                }));
                 router.push(`/quiz/${quizId}/play`);
             }
         } catch (err: any) {

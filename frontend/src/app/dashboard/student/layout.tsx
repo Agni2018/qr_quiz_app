@@ -90,19 +90,19 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
         checkReferralPoints();
 
         // Check for daily points award
-        const dailyAwarded = localStorage.getItem('dailyPointsAwarded');
+        const dailyAwarded = sessionStorage.getItem('dailyPointsAwarded');
         if (dailyAwarded === 'true') {
-            const points = parseInt(localStorage.getItem('pointsAwarded') || '0');
-            const streak = localStorage.getItem('streakStatus') || '';
+            const points = parseInt(sessionStorage.getItem('pointsAwarded') || '0');
+            const streak = sessionStorage.getItem('streakStatus') || '';
 
             setPointsAwarded(points);
             setStreakInfo(streak);
             setShowPointsModal(true);
 
             // Clear the flags so it doesn't show again on refresh
-            localStorage.removeItem('dailyPointsAwarded');
-            localStorage.removeItem('pointsAwarded');
-            localStorage.removeItem('streakStatus');
+            sessionStorage.removeItem('dailyPointsAwarded');
+            sessionStorage.removeItem('pointsAwarded');
+            sessionStorage.removeItem('streakStatus');
         }
 
         return () => window.removeEventListener('messages-read', handleMessagesRead);
@@ -115,6 +115,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             console.error('Logout error:', err);
         }
         localStorage.clear();
+        sessionStorage.clear();
         window.location.href = '/';
     };
 

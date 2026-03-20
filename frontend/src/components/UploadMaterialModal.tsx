@@ -55,7 +55,6 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
 
             // 1. If Cloudinary is configured, upload there first (bypasses Vercel 4.5MB limit)
             if (cloudName && uploadPreset) {
-                console.log('[UPLOAD] Detected Cloudinary config. Uploading directly...');
                 const cloudData = new FormData();
                 cloudData.append('file', file);
                 cloudData.append('upload_preset', uploadPreset);
@@ -73,7 +72,6 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
 
                 const result = await response.json();
                 cloudUrl = result.secure_url;
-                console.log('[UPLOAD] Cloudinary upload successful:', cloudUrl);
             }
 
             // 2. Notify our backend (sending either the cloudUrl or the direct file)

@@ -30,28 +30,49 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', onConfirm: () => {} });
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('quizUser');
-        if (!storedUser) {
-            router.push(`/quiz/${topicId}`);
-            return;
-        }
-        setUser(JSON.parse(storedUser));
+        const checkUser = async () => {
+            try {
+                // 1. Check if user is a logged-in student
+                const statusRes = await api.get('/auth/status');
+                if (statusRes.data.authenticated && statusRes.data.user?.role === 'student') {
+                    const student = statusRes.data.user;
+                    setUser({
+                        name: student.username,
+                        email: student.email,
+                        phone: 'N/A' // Student session already has info
+                    });
+                } else {
+                    // 2. Not a student session, check if it's a guest in sessionStorage
+                    const storedUser = sessionStorage.getItem('quizUser');
+                    if (storedUser) {
+                        setUser(JSON.parse(storedUser));
+                    } else {
+                        // 3. No transient session found, redirect back
+                        router.push(`/quiz/${topicId}`);
+                        return;
+                    }
+                }
 
-        Promise.all([
-            api.get(`/questions/topic/${topicId}`),
-            api.get(`/topics/${topicId}`)
-        ]).then(([qRes, tRes]) => {
-            setQuestions(qRes.data);
-            setTopic(tRes.data);
-            if (tRes.data.timeLimit > 0) {
-                setTimeLeft(tRes.data.timeLimit);
+                // 4. Fetch quiz data
+                const [qRes, tRes] = await Promise.all([
+                    api.get(`/questions/topic/${topicId}`),
+                    api.get(`/topics/${topicId}`)
+                ]);
+                setQuestions(qRes.data);
+                setTopic(tRes.data);
+                if (tRes.data.timeLimit > 0) {
+                    setTimeLeft(tRes.data.timeLimit);
+                }
+                setStartTime(Date.now());
+                setLoading(false);
+            } catch (err) {
+                console.error('Quiz initialization error:', err);
+                setLoading(false);
+                router.push(`/quiz/${topicId}`);
             }
-            setStartTime(Date.now());
-            setLoading(false);
-        }).catch(err => {
-            console.error(err);
-            setLoading(false);
-        });
+        };
+
+        checkUser();
 
         const handlePopState = (e: PopStateEvent) => {
             window.history.pushState(null, '', window.location.href);
@@ -115,13 +136,11 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }
 
-            const userId = localStorage.getItem('userId');
             const timeTaken = Math.floor((Date.now() - startTime) / 1000);
 
             try {
                 const res = await api.post('/quiz/submit', {
                     topicId: topicId,
-                    userId,
                     user,
                     answers,
                     timeTaken

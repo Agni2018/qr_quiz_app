@@ -130,7 +130,6 @@ exports.updateProgress = async (userId, type, increment = 1) => {
             }
 
             await progress.save();
-            console.log(`[DEBUG] Saved progress for ${challenge.name}. currentValue: ${progress.currentValue}`);
         }
     } catch (error) {
         console.error('Error updating challenge progress:', error);

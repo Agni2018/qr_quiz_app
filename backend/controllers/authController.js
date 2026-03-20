@@ -379,7 +379,6 @@ exports.createReferral = async (req, res) => {
 
 // Get My Referrals
 exports.getMyReferrals = async (req, res) => {
-    console.log('[DEBUG] getMyReferrals called by user:', req.user.id);
     try {
         const referrerId = req.user.id;
         const referrals = await PendingReferral.find({ referrerId }).sort({ createdAt: -1 });

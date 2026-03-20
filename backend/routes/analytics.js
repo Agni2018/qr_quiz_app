@@ -9,6 +9,9 @@ router.get('/overview', protect, analyticsController.getOverview);
 // GET global leaderboard
 router.get('/global-leaderboard', analyticsController.getGlobalLeaderboard);
 
+// GET referral leaderboard
+router.get('/referral-leaderboard', protect, analyticsController.getReferralLeaderboard);
+
 // GET topic participants
 router.get('/topic/:topicId/participants', protect, analyticsController.getTopicParticipants);
 

@@ -8,6 +8,7 @@ const topicSchema = new mongoose.Schema({
     negativeMarking: { type: Number, default: 0 }, // Value to subtract for wrong answers
     timeBasedScoring: { type: Boolean, default: false }, // Bonus for fast completion
     passingMarks: { type: Number, default: 0 }, // Threshold for certification
+    categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     createdAt: { type: Date, default: Date.now }
 });
 

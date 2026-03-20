@@ -75,17 +75,12 @@ export default function Home() {
                 });
 
                 if (res.data.pointsAwarded) {
-                    localStorage.setItem('dailyPointsAwarded', 'true');
-                    localStorage.setItem('pointsAwarded', res.data.pointsAwarded.toString());
+                    sessionStorage.setItem('dailyPointsAwarded', 'true');
+                    sessionStorage.setItem('pointsAwarded', res.data.pointsAwarded.toString());
                     if (res.data.streakStatus) {
-                        localStorage.setItem('streakStatus', res.data.streakStatus);
+                        sessionStorage.setItem('streakStatus', res.data.streakStatus);
                     }
                 }
-
-                localStorage.setItem('userId', res.data.id);
-                localStorage.setItem('userPoints', res.data.points.toString());
-                localStorage.setItem('userRole', res.data.role);
-                localStorage.setItem('userName', res.data.username);
 
                 if (res.data.role === 'admin') {
                     router.push('/users');

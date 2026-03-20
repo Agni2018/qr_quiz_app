@@ -83,6 +83,7 @@ const analyticsRoutes = require('./routes/analytics');
 const badgeRoutes = require('./routes/badges');
 const studyMaterialRoutes = require('./routes/studyMaterials');
 const messageRoutes = require('./routes/messages');
+const categoryRoutes = require('./routes/categories');
 
 
 app.use('/api/topics', topicRoutes);
@@ -93,6 +94,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/badges', badgeRoutes);
 app.use('/api/study-materials', studyMaterialRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/categories', categoryRoutes);
 const challengeRoutes = require('./routes/challenges');
 app.use('/api/challenges', challengeRoutes);
 app.get('/api/test', (req, res) => res.json({ ok: true }));

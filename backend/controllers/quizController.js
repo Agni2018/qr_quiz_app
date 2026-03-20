@@ -73,23 +73,16 @@ exports.submitQuiz = async (req, res) => {
     try {
         // 1. ALWAYS prefer matching by the explicitly provided email if it belongs to a User
         if (user && user.email) {
-            console.log(`[DEBUG] Searching for student by email: ${user.email}`);
             const matchedUser = await User.findOne({ email: user.email });
             if (matchedUser) {
                 finalUserId = matchedUser._id;
                 foundByEmail = true;
-                console.log(`[DEBUG] Found matching user: ${matchedUser.username} (${matchedUser.role})`);
-            } else {
-                console.log(`[DEBUG] No user found with email: ${user.email}`);
             }
         }
 
         // 2. Fallback to provided userId ONLY if no email was provided
         if (!finalUserId && !user?.email && userId && mongoose.Types.ObjectId.isValid(userId)) {
             finalUserId = userId;
-            console.log(`[DEBUG] Falling back to provided userId: ${userId}`);
-        } else if (!finalUserId && user?.email) {
-            console.log(`[DEBUG] Email was provided but no match found. Points will NOT be awarded to guests or mismatched IDs.`);
         }
 
         const topic = await Topic.findById(topicId);
@@ -233,35 +226,23 @@ exports.submitQuiz = async (req, res) => {
         let pointsEarned = 0;
         let badgesAwarded = [];
 
-        console.log(`[DEBUG] Attempting point award. finalUserId: ${finalUserId}`);
         if (finalUserId) {
             const userDoc = await User.findById(finalUserId);
-            if (!userDoc) {
-                console.log(`[DEBUG] No User document found for ID: ${finalUserId}`);
-            } else if (userDoc.role !== 'student') {
-                console.log(`[DEBUG] User found but is NOT a student (Role: ${userDoc.role}). Points skipped.`);
-            } else {
-                console.log(`[DEBUG] Processing student: ${userDoc.username} (Current Points: ${userDoc.points})`);
+            if (userDoc && userDoc.role === 'student') {
                 // Points for quiz performance: Exactly +1 for completing the quiz with at least one correct answer
                 const hasCorrectAnswer = processedAnswers.some(ans => ans.isCorrect);
-                console.log(`[DEBUG] hasCorrectAnswer: ${hasCorrectAnswer}`);
 
                 if (hasCorrectAnswer) {
                     pointsEarned = 3;
                     userDoc.points += pointsEarned;
-                    console.log(`[DEBUG] Awarded +3 points. New Balance: ${userDoc.points}`);
 
                     // --- Challenge Progress: Quiz Points ---
                     await challengeController.updateProgress(finalUserId, 'points_earned', 3);
                     // ---------------------------------------
                 }
 
-
                 await userDoc.save();
-                console.log(`[DEBUG] userDoc saved successfully for ${userDoc.username}`);
             }
-        } else {
-            console.log(`[DEBUG] No finalUserId identified. Points will NOT be awarded.`);
         }
 
         res.json({

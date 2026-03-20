@@ -80,7 +80,7 @@ export default function QuizLanding({
             });
 
             if (res.data.canAttempt) {
-                localStorage.setItem('quizUser', JSON.stringify(user));
+                sessionStorage.setItem('quizUser', JSON.stringify(user));
                 router.push(`/quiz/${topicId}/play`);
             }
         } catch (err: any) {

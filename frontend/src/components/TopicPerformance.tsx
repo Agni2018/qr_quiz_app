@@ -214,9 +214,16 @@ export default function TopicPerformance() {
                             </div>
 
                             <div className="flex flex-col gap-1 relative z-10">
-                                <h4 style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }} className="truncate">
-                                    {stat.topicName}
-                                </h4>
+                                <div className="flex items-center justify-between gap-4">
+                                    <h4 style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }} className="truncate flex-1">
+                                        {stat.topicName}
+                                    </h4>
+                                    {stat.categoryName && (
+                                        <span className="text-[10px] font-black uppercase text-primary/70 tracking-tighter whitespace-nowrap bg-primary/5 px-2 py-1 rounded-md shrink-0">
+                                            📁 {stat.categoryName}
+                                        </span>
+                                    )}
+                                </div>
                                 <p style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', fontWeight: 600 }}>
                                     Topic Metrics
                                 </p>

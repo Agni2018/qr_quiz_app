@@ -4,7 +4,15 @@ const Question = require('../models/Question');
 // GET all topics
 exports.getAllTopics = async (req, res) => {
     try {
-        const topics = await Topic.find().sort({ createdAt: -1 });
+        const query = {};
+        if (req.query.category === 'null') {
+            query.$or = [{ categoryId: null }, { categoryId: { $exists: false } }];
+        } else if (req.query.category) {
+            query.categoryId = req.query.category;
+        }
+        const topics = await Topic.find(query)
+            .populate('categoryId', 'name')
+            .sort({ createdAt: -1 });
         res.json(topics);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -24,7 +32,7 @@ exports.getTopicById = async (req, res) => {
 
 // POST create topic
 exports.createTopic = async (req, res) => {
-    const { name, description, timeLimit, negativeMarking, timeBasedScoring, passingMarks } = req.body;
+    const { name, description, timeLimit, negativeMarking, timeBasedScoring, passingMarks, categoryId } = req.body;
     if (!name) return res.status(400).json({ message: 'Name is required' });
 
     const topic = new Topic({
@@ -33,7 +41,8 @@ exports.createTopic = async (req, res) => {
         timeLimit: timeLimit || 0,
         negativeMarking: negativeMarking || 0,
         timeBasedScoring: timeBasedScoring || false,
-        passingMarks: passingMarks || 0
+        passingMarks: passingMarks || 0,
+        categoryId: categoryId || null
     });
 
     try {
@@ -91,7 +100,8 @@ exports.copyTopic = async (req, res) => {
             timeLimit: sourceTopic.timeLimit,
             negativeMarking: sourceTopic.negativeMarking,
             timeBasedScoring: sourceTopic.timeBasedScoring,
-            passingMarks: sourceTopic.passingMarks
+            passingMarks: sourceTopic.passingMarks,
+            categoryId: sourceTopic.categoryId
         });
         await newTopic.save();
 

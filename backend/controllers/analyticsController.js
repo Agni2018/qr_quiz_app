@@ -27,9 +27,18 @@ exports.getOverview = async (req, res) => {
                 $unwind: '$topicInfo'
             },
             {
+                $lookup: {
+                    from: 'categories',
+                    localField: 'topicInfo.categoryId',
+                    foreignField: '_id',
+                    as: 'categoryInfo'
+                }
+            },
+            {
                 $project: {
                     topicId: '$_id',
                     topicName: '$topicInfo.name',
+                    categoryName: { $arrayElemAt: ['$categoryInfo.name', 0] },
                     participantCount: 1,
                     _id: 0
                 }
@@ -82,6 +91,36 @@ exports.getGlobalLeaderboard = async (req, res) => {
             topScorers,
             referralStats
         });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// GET referral leaderboard
+exports.getReferralLeaderboard = async (req, res) => {
+    try {
+        const referralStats = await User.aggregate([
+            { $match: { role: 'student' } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: 'referredBy',
+                    as: 'referrals'
+                }
+            },
+            {
+                $project: {
+                    username: 1,
+                    referralCount: { $size: '$referrals' }
+                }
+            },
+            { $match: { referralCount: { $gt: 0 } } },
+            { $sort: { referralCount: -1 } },
+            { $limit: 10 }
+        ]);
+
+        res.json(referralStats);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
