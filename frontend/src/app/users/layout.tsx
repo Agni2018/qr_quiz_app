@@ -21,6 +21,7 @@ import {
 } from 'react-icons/fa';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 export default function UsersLayout({
     children,
@@ -33,7 +34,7 @@ export default function UsersLayout({
     const [isBadgeChallengesOpen, setIsBadgeChallengesOpen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
-    const searchParams = useSearchParams();
+    const searchParams = useSearchParams(); // Keep it here if it's used elsewhere, but we'll see
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -245,34 +246,9 @@ export default function UsersLayout({
                         {/* TOP BAR */}
                         <div className="flex justify-end items-center mb-12">
                             <div className="flex items-center gap-4" style={{ margin: '1rem 1rem 2rem 1rem' }}>
-                                {pathname === '/users/manage-topics' && (
-                                    <div className="flex items-center gap-2 md:gap-3">
-                                        {!searchParams.has('category') && (
-                                            <Button
-                                                onClick={() => {
-                                                    window.dispatchEvent(new CustomEvent('open-create-category-modal'));
-                                                }}
-                                                variant="ghost"
-                                                title="Create Category"
-                                                className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-white/5 hover:bg-white/10 border border-white/10 flex items-center gap-2 whitespace-nowrap text-slate-300 font-bold"
-                                            >
-                                                <FaFolderPlus className="text-xs md:text-sm" /> 
-                                                <span className="hidden sm:inline text-[10px] md:text-xs">Create Category</span>
-                                                <span className="sm:hidden text-[10px]">Category</span>
-                                            </Button>
-                                        )}
-                                        <Button
-                                            onClick={() => {
-                                                // Emit custom event to trigger modal in manage-topics/page.tsx
-                                                window.dispatchEvent(new CustomEvent('open-create-topic-modal'));
-                                            }}
-                                            title="Create Topic"
-                                            className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 flex items-center gap-2 whitespace-nowrap"
-                                        >
-                                            <FaPlus /> <span className="hidden sm:inline">Create Topic</span>
-                                        </Button>
-                                    </div>
-                                )}
+                                    <Suspense fallback={<div className="w-40 h-10 bg-white/5 animate-pulse rounded-xl" />}>
+                                        <AdminTopBarButtons />
+                                    </Suspense>
                                 <ThemeToggle />
                                 <div className="h-6 w-[1px] bg-white/10 mx-2" />
                             </div>
@@ -282,6 +258,42 @@ export default function UsersLayout({
                     </div>
                 </main>
             </div>
+        </div>
+    );
+}
+
+function AdminTopBarButtons() {
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
+    if (pathname !== '/users/manage-topics') return null;
+
+    return (
+        <div className="flex items-center gap-2 md:gap-3">
+            {!searchParams.has('category') && (
+                <Button
+                    onClick={() => {
+                        window.dispatchEvent(new CustomEvent('open-create-category-modal'));
+                    }}
+                    variant="ghost"
+                    title="Create Category"
+                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-white/5 hover:bg-white/10 border border-white/10 flex items-center gap-2 whitespace-nowrap text-slate-300 font-bold"
+                >
+                    <FaFolderPlus className="text-xs md:text-sm" />
+                    <span className="hidden sm:inline text-[10px] md:text-xs">Create Category</span>
+                    <span className="sm:hidden text-[10px]">Category</span>
+                </Button>
+            )}
+            <Button
+                onClick={() => {
+                    // Emit custom event to trigger modal in manage-topics/page.tsx
+                    window.dispatchEvent(new CustomEvent('open-create-topic-modal'));
+                }}
+                title="Create Topic"
+                className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 flex items-center gap-2 whitespace-nowrap"
+            >
+                <FaPlus /> <span className="hidden sm:inline">Create Topic</span>
+            </Button>
         </div>
     );
 }
