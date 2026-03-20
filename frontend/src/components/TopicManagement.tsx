@@ -212,7 +212,7 @@ export default function TopicManagement() {
         <div className="flex flex-col gap-10 md:gap-16">
             
             {view === 'topics' && currentCategory && (
-                <div className="flex flex-wrap items-center justify-between gap-4 mb-2 bg-white/5 p-4 rounded-3xl border border-white/5">
+                <div className="flex flex-wrap items-center justify-between gap-4 mb-2 bg-white/5 p-4 rounded-3xl border border-white/5" style={{marginLeft:10,marginRight:10}}>
                     <div className="flex items-center gap-4">
                         <Button 
                             variant="ghost" 
