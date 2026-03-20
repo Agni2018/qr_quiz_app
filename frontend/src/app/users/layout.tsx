@@ -34,7 +34,7 @@ export default function UsersLayout({
     const [isBadgeChallengesOpen, setIsBadgeChallengesOpen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
-    const searchParams = useSearchParams(); // Keep it here if it's used elsewhere, but we'll see
+ // Keep it here if it's used elsewhere, but we'll see
 
     useEffect(() => {
         const checkAuth = async () => {

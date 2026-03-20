@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use, Suspense } from 'react';
 import api from '@/lib/api';
 import { useSearchParams } from 'next/navigation';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Link from 'next/link';
 
-export default function QuizResult({ params }: { params: Promise<{ topicId: string }> }) {
-    const { topicId } = use(params);
+function QuizResultContent({ topicId }: { topicId: string }) {
     const searchParams = useSearchParams();
     const attemptId = searchParams.get('attemptId');
 
@@ -35,7 +34,7 @@ export default function QuizResult({ params }: { params: Promise<{ topicId: stri
         fetchData();
     }, [attemptId, topicId]);
 
-    if (loading) return <div className="container">Loading Results...</div>;
+    if (loading) return <div className="container py-20 text-center font-bold text-slate-500">Loading Results...</div>;
 
     return (
         <main className="container py-16 flex flex-col gap-12">
@@ -108,10 +107,17 @@ export default function QuizResult({ params }: { params: Promise<{ topicId: stri
                 <h3 className="text-2xl font-black text-emerald-400 mb-3">
                     🎉 Thank you for participating!
                 </h3>
-
             </footer>
-
-
         </main>
+    );
+}
+
+export default function QuizResult({ params }: { params: Promise<{ topicId: string }> }) {
+    const { topicId } = use(params);
+
+    return (
+        <Suspense fallback={<div className="container py-20 text-center font-bold text-slate-500">Loading Results...</div>}>
+            <QuizResultContent topicId={topicId} />
+        </Suspense>
     );
 }
