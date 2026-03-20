@@ -35,25 +35,27 @@ export default function LeaderboardPage() {
 
     return (
         <div className="animate-fade-in mb-24">
-            <div className="flex items-center gap-8 mb-32 group" style={{margin:'10px 0 50px 0'}}>
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8 mb-16 lg:mb-32 group" style={{ margin: '10px 0 50px 0' }}>
                 <div style={{
-                    width: '5rem',
-                    height: '5rem',
-                    borderRadius: '1.5rem',
+                    minWidth: '4rem',
+                    minHeight: '4rem',
+                    width: '4rem',
+                    height: '4rem',
+                    borderRadius: '1.25rem',
                     background: 'linear-gradient(135deg, #f59e0b, #f97316)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '2.25rem',
+                    fontSize: '1.75rem',
                     boxShadow: '0 10px 40px rgba(245, 158, 11, 0.4)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     transform: 'rotate(-3deg)'
-                }} className="group-hover:rotate-0 transition-transform duration-500">
+                }} className="group-hover:rotate-0 transition-transform duration-500 lg:w-20 lg:h-20 lg:text-4xl lg:rounded-[1.5rem]">
                     🏅
                 </div>
                 <div className="flex flex-col">
                     <h2
-                        className="text-7xl font-black tracking-tighter"
+                        className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter"
                         style={{
                             backgroundImage: 'linear-gradient(to right, #f59e0b, #f97316)',
                             WebkitBackgroundClip: 'text',
@@ -63,15 +65,15 @@ export default function LeaderboardPage() {
                     >
                         Leaderboard
                     </h2>
-                    <div className="h-2 w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r from-[#f59e0b] to-transparent" />
+                    <div className="h-1.5 lg:h-2 w-24 lg:w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r from-[#f59e0b] to-transparent" />
                 </div>
-                <div className="ml-auto" style={{ alignSelf: 'center' }}>
-                    <Link href="/dashboard/student/referral-leads">
+                <div className="w-full lg:w-auto lg:ml-auto" style={{ alignSelf: 'center' }}>
+                    <Link href="/dashboard/student/referral-leads" className="block w-full">
                         <Button
                             variant="primary"
-                            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black shadow-lg shadow-emerald-500/20 transform hover:-translate-y-1 transition-all"
+                            className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black shadow-lg shadow-emerald-500/20 transform hover:-translate-y-1 transition-all text-sm lg:text-base"
                         >
-                            <FaUserPlus className="text-xl" />
+                            <FaUserPlus className="text-lg lg:text-xl" />
                             <span>Referral Leads</span>
                         </Button>
                     </Link>

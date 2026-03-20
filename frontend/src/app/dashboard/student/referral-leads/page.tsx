@@ -35,25 +35,27 @@ export default function ReferralLeaderboardPage() {
 
     return (
         <div className="animate-fade-in mb-24">
-            <div className="flex items-center gap-8 mb-32 group" style={{ margin: '10px 0 50px 0' }}>
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8 mb-16 lg:mb-32 group" style={{ margin: '10px 0 50px 0' }}>
                 <div style={{
-                    width: '5rem',
-                    height: '5rem',
-                    borderRadius: '1.5rem',
+                    minWidth: '4rem',
+                    minHeight: '4rem',
+                    width: '4rem',
+                    height: '4rem',
+                    borderRadius: '1.25rem',
                     background: 'linear-gradient(135deg, #10b981, #14b8a6)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '2.25rem',
+                    fontSize: '1.75rem',
                     boxShadow: '0 10px 40px rgba(16, 185, 129, 0.4)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     transform: 'rotate(-3deg)'
-                }} className="group-hover:rotate-0 transition-transform duration-500">
+                }} className="group-hover:rotate-0 transition-transform duration-500 lg:w-20 lg:h-20 lg:text-4xl lg:rounded-[1.5rem]">
                     👥
                 </div>
                 <div className="flex flex-col">
                     <h2
-                        className="text-7xl font-black tracking-tighter"
+                        className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter"
                         style={{
                             backgroundImage: 'linear-gradient(to right, #10b981, #14b8a6)',
                             WebkitBackgroundClip: 'text',
@@ -63,13 +65,13 @@ export default function ReferralLeaderboardPage() {
                     >
                         Referral Leads
                     </h2>
-                    <div className="h-2 w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r from-[#10b981] to-transparent" />
+                    <div className="h-1.5 lg:h-2 w-24 lg:w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r from-[#10b981] to-transparent" />
                 </div>
-                <div className="ml-auto" style={{ alignSelf: 'center' }}>
-                    <Link href="/dashboard/student/leaderboard">
+                <div className="w-full lg:w-auto lg:ml-auto" style={{ alignSelf: 'center' }}>
+                    <Link href="/dashboard/student/leaderboard" className="block w-full">
                         <Button
                             variant="secondary"
-                            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 border-white/10 text-white font-bold hover:bg-white/10 transition-all"
+                            className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white/5 border-white/10 text-white font-bold hover:bg-white/10 transition-all text-sm lg:text-base mb-2 lg:mb-0"
                         >
                             <FaArrowLeft />
                             <span>Back to Global</span>
