@@ -33,24 +33,6 @@ export default function StudentExplore() {
         fetchData();
     }, []);
 
-    const handleStartQuiz = async (quizId: string) => {
-        if (!user) return;
-        try {
-            const res = await api.post('/quiz/start', {
-                topicId: quizId,
-                name: user.username,
-                email: user.email,
-                phone: 'N/A'
-            });
-
-            if (res.data.canAttempt) {
-                router.push(`/quiz/${quizId}/play`);
-            }
-        } catch (err: any) {
-            console.error(err);
-            alert(err.response?.data?.message || 'Failed to start quiz');
-        }
-    };
 
     if (loading) {
         return (
@@ -77,16 +59,15 @@ export default function StudentExplore() {
                 return (
                     <Card
                         key={quiz._id}
-                        onClick={() => !hasAttempted && handleStartQuiz(quiz._id)}
-                        className={`p-10 group transition-all duration-500 border-white/5 bg-slate-950/40 rounded-[2.5rem] flex flex-col h-full shadow-2xl ${hasAttempted ? 'opacity-70 cursor-not-allowed' : 'hover:-translate-y-3 hover:bg-slate-900/60 cursor-pointer'}`}
+                        className={`p-10 transition-all duration-500 border-white/5 bg-slate-950/40 rounded-[2.5rem] flex flex-col h-full shadow-2xl ${hasAttempted ? 'opacity-70' : 'bg-slate-950/40'}`}
                         style={{ padding: 30 }}
                     >
                         <div className="flex justify-between items-start mb-8">
-                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border transition-all duration-700 ${hasAttempted ? 'bg-slate-500/10 text-slate-500 border-slate-500/20' : 'bg-primary/10 text-primary border-primary/20 group-hover:rotate-[360deg]'}`} style={{ marginBottom: 30 }}>
+                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border transition-all duration-700 ${hasAttempted ? 'bg-slate-500/10 text-slate-500 border-slate-500/20' : 'bg-primary/10 text-primary border-primary/20'}`} style={{ marginBottom: 30 }}>
                                 {hasAttempted ? <FaCheckCircle /> : <FaPlus />}
                             </div>
                         </div>
-                        <h3 className={`text-2xl font-black mb-3 transition-colors ${!hasAttempted && 'group-hover:text-primary'}`}>
+                        <h3 className="text-2xl font-black mb-3 transition-colors text-white">
                             {quiz.name}
                         </h3>
                         <p className="text-slate-500 text-lg mb-10 line-clamp-2 leading-relaxed flex-1">{quiz.description}</p>

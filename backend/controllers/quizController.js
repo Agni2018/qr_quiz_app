@@ -235,13 +235,12 @@ exports.submitQuiz = async (req, res) => {
                 if (hasCorrectAnswer) {
                     pointsEarned = 3;
                     userDoc.points += pointsEarned;
+                    await userDoc.save();
 
                     // --- Challenge Progress: Quiz Points ---
                     await challengeController.updateProgress(finalUserId, 'points_earned', 3);
                     // ---------------------------------------
                 }
-
-                await userDoc.save();
             }
         }
 
