@@ -57,7 +57,7 @@ export default function StudentNotifications() {
                             <FaBell />
                         </div>
                         <div className="flex flex-col gap-4 flex-1">
-                            <div className="flex justify-between items-start">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-4">
                                 <h4 className="text-xl font-black text-white group-hover:text-blue-400 transition-colors uppercase tracking-tight">
                                     {msg.sender?.username || 'Admin'}
                                 </h4>
