@@ -115,7 +115,7 @@ export default function Home() {
             <div className="flex flex-1 items-center justify-center px-10 py-16 md:p-12 relative text-balance">
                 <div className="w-full max-w-[520px] animate-fade-in py-10 md:py-12">
 
-                    <div className="flex justify-end mb-12 md:absolute md:top-8 md:right-8 md:mb-0" style={{ margin: '0 1rem 2.5rem 1rem' }}>
+                    <div className="flex justify-end mb-12 md:absolute md:top-8 md:right-8 md:mb-0" style={{ margin: '1rem 1rem 2.5rem 1rem' }}>
                         <ThemeToggle />
                     </div>
 

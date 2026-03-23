@@ -21,11 +21,11 @@ export default function Button({ children, variant = 'primary', className = '', 
 
     if (variant === 'primary') {
         baseStyle.background = 'var(--primary)';
-        baseStyle.color = 'white';
+        baseStyle.color = 'var(--primary-foreground)';
         baseStyle.boxShadow = 'var(--shadow-md)';
     } else if (variant === 'secondary') {
         baseStyle.background = 'var(--secondary)';
-        baseStyle.color = 'white';
+        baseStyle.color = 'var(--primary-foreground)';
         baseStyle.boxShadow = 'var(--shadow-md)';
     } else if (variant === 'danger') {
         baseStyle.background = 'var(--error)';

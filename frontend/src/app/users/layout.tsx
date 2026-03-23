@@ -16,9 +16,13 @@ import {
     FaPlus,
     FaChevronDown,
     FaChevronUp,
+    FaChevronLeft,
+    FaChevronRight,
     FaStar,
-    FaFolderPlus
+    FaFolderPlus,
+    FaUser
 } from 'react-icons/fa';
+
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -31,7 +35,7 @@ export default function UsersLayout({
     const [user, setUser] = useState<any>(null);
     const [authLoading, setAuthLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [isBadgeChallengesOpen, setIsBadgeChallengesOpen] = useState(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
  // Keep it here if it's used elsewhere, but we'll see
@@ -99,16 +103,16 @@ export default function UsersLayout({
             )}
 
             {/* GRID */}
-            <div className="lg:grid lg:grid-cols-[280px_1fr] lg:gap-10">
+            <div className={`lg:grid ${isSidebarCollapsed ? 'lg:grid-cols-[80px_1fr]' : 'lg:grid-cols-[280px_1fr]'} lg:gap-10 transition-all duration-300`}>
 
                 {/* SIDEBAR */}
                 <aside
                     className={`
                         fixed lg:static top-0 left-0 z-50
-                        h-screen w-[280px]
+                        h-screen ${isSidebarCollapsed ? 'lg:w-[80px]' : 'lg:w-[280px]'}
                         border-r
-                        px-8 py-12
-                        transform transition-transform
+                        ${isSidebarCollapsed ? 'px-4' : 'px-8'} py-12
+                        transform transition-all duration-300
                         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
                         lg:translate-x-0
                         flex flex-col
@@ -127,104 +131,100 @@ export default function UsersLayout({
                         <FaTimes />
                     </button>
 
-                    {/* Branding Section - Premium Styled */}
-                    <div className="mb-14 pt-6 relative group">
-                        <div className="absolute -inset-10 bg-primary/20 blur-[120px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-
-                        <div className="flex items-center gap-4 mb-10 relative z-10 px-4">
-                            <div className="w-16 h-[5px] bg-gradient-to-r from-primary via-secondary to-transparent rounded-full shadow-[0_0_20px_rgba(var(--primary-rgb),0.6)]" />
-                            <span className="text-[0.7rem] font-black uppercase tracking-[0.5em] text-primary drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.4)]">Admin Portal</span>
+                    {/* Branding Section - Stylized Greeting */}
+                    <div className={`mb-14 mt-10 px-6 flex flex-col items-center text-center relative group ${isSidebarCollapsed ? 'hidden lg:block lg:opacity-0 lg:h-0 overflow-hidden' : ''} transition-all duration-300`}>
+                        <div className="w-24 h-24 rounded-full bg-slate-800/50 border-2 border-orange-500/30 flex items-center justify-center mb-6 overflow-hidden shadow-2xl group-hover:border-orange-500 transition-all duration-500 relative" style={{marginTop:10}}>
+                            <div className="absolute inset-0 bg-orange-500/5 blur-xl group-hover:bg-orange-500/10 transition-all duration-500" />
+                            <FaUser className="text-4xl text-slate-400 group-hover:text-orange-500 transition-colors relative z-10" />
                         </div>
-
-                        <div className="flex flex-col gap-0 relative z-10">
-                            <h3 className="text-6xl font-light bg-gradient-to-r from-slate-400 via-primary/80 to-secondary bg-clip-text text-transparent tracking-tight leading-none" style={{ paddingLeft: '1.5rem', marginTop: '1rem' }}>Welcome,</h3>
-                            <h2 className="text-8xl font-black bg-gradient-to-br from-white via-primary to-primary bg-clip-text text-transparent tracking-tighter leading-tight mt-1" style={{ paddingLeft: '1.5rem' }}>
-                                {user?.username || 'admin'}
-                            </h2>
-                        </div>
+                        <h2 className="text-2xl font-black tracking-tighter uppercase leading-tight">
+                            <span className="text-orange-500 block mb-1" style={{marginTop:10}}>WELCOME,</span> 
+                            <span className="text-white break-words">{user?.username || 'ADMIN'}</span>
+                        </h2>
                     </div>
+
+                    {isSidebarCollapsed && (
+                        <div className="hidden lg:flex items-center justify-center mb-10 pt-6">
+                            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                                <span className="text-white font-black">A</span>
+                            </div>
+                        </div>
+                    )}
 
                     <div className="h-14 lg:h-16" />
 
                     <nav className="flex flex-col gap-4 flex-grow">
                         <Link href="/users" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/users') ? 'secondary' : 'ghost'}
-                                className={`w-full justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users') ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                variant={isActive('/users') ? 'primary' : 'ghost'}
+                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                title={isSidebarCollapsed ? "Analytics" : ""}
                             >
-                                <FaChartPie className={isActive('/users') ? 'text-primary' : 'text-[#94a3b8] group-hover:text-white'} /> <span className={isActive('/users') ? 'text-primary' : 'text-[#94a3b8] group-hover:text-white'}>Analytics</span>
+                                <FaChartPie className={isActive('/users') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className="text-white">Analytics</span>}
                             </Button>
                         </Link>
 
                         <Link href="/users/manage-topics" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/users/manage-topics') ? 'secondary' : 'ghost'}
-                                className={`w-full justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/manage-topics') ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                variant={isActive('/users/manage-topics') ? 'primary' : 'ghost'}
+                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/manage-topics') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                title={isSidebarCollapsed ? "Manage Topics" : ""}
                             >
-                                <FaGraduationCap className={isActive('/users/manage-topics') ? 'text-primary' : 'text-[#94a3b8] group-hover:text-white'} /> <span className={isActive('/users/manage-topics') ? 'text-primary' : 'text-[#94a3b8] group-hover:text-white'}>Manage Topics</span>
+                                <FaGraduationCap className={isActive('/users/manage-topics') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className="text-white">Manage Topics</span>}
                             </Button>
                         </Link>
 
                         <Link href="/users/question-bank" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/users/question-bank') ? 'secondary' : 'ghost'}
-                                className={`w-full justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/question-bank') ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                variant={isActive('/users/question-bank') ? 'primary' : 'ghost'}
+                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/question-bank') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                title={isSidebarCollapsed ? "Question Bank" : ""}
                             >
-                                <FaBook className={isActive('/users/question-bank') ? 'text-primary' : 'text-[#94a3b8] group-hover:text-white'} /> <span className={isActive('/users/question-bank') ? 'text-primary' : 'text-[#94a3b8] group-hover:text-white'}>Question Bank</span>
+                                <FaBook className={isActive('/users/question-bank') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className="text-white">Question Bank</span>}
                             </Button>
                         </Link>
 
-                        {/* Badge & Challenges Dropdown */}
-                        <div className="flex flex-col gap-2">
+                        <Link href="/users/badges" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={(isActive('/users/badges') || isActive('/users/challenges')) ? 'secondary' : 'ghost'}
-                                className={`w-full justify-between gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${(isActive('/users/badges') || isActive('/users/challenges')) ? 'bg-amber-500/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                                onClick={() => setIsBadgeChallengesOpen(!isBadgeChallengesOpen)}
+                                variant={(isActive('/users/badges') || isActive('/users/challenges')) ? 'primary' : 'ghost'}
+                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${(isActive('/users/badges') || isActive('/users/challenges')) ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                title={isSidebarCollapsed ? "Badge & Challenges" : ""}
                             >
-                                <div className="flex items-center gap-4">
-                                    <FaAward className={(isActive('/users/badges') || isActive('/users/challenges')) ? 'text-amber-400' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                    <span className={(isActive('/users/badges') || isActive('/users/challenges')) ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Badge & Challenges</span>
-                                </div>
-                                {isBadgeChallengesOpen ? <FaChevronUp className="text-sm" /> : <FaChevronDown className="text-sm" />}
+                                <FaAward className={(isActive('/users/badges') || isActive('/users/challenges')) ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className="text-white">Badge & Challenges</span>}
                             </Button>
-
-                            {isBadgeChallengesOpen && (
-                                <div className="flex flex-col gap-2 pl-6 animate-fade-in">
-                                    <Link href="/users/badges" onClick={() => setSidebarOpen(false)}>
-                                        <Button
-                                            variant={isActive('/users/badges') ? 'secondary' : 'ghost'}
-                                            className={`justify-start gap-4 h-10 rounded-xl text-sm font-bold transition-all w-full ${isActive('/users/badges') ? 'bg-amber-500/20 text-white' : 'text-slate-500 hover:text-white hover:bg-white/5 border-none'}`}
-                                        >
-                                            <FaAward className="text-xs text-amber-500" /> Badge Rewards
-                                        </Button>
-                                    </Link>
-                                    <Link href="/users/challenges" onClick={() => setSidebarOpen(false)}>
-                                        <Button
-                                            variant={isActive('/users/challenges') ? 'secondary' : 'ghost'}
-                                            className={`justify-start gap-4 h-10 rounded-xl text-sm font-bold transition-all w-full ${isActive('/users/challenges') ? 'bg-blue-500/20 text-white' : 'text-slate-500 hover:text-white hover:bg-white/5 border-none'}`}
-                                        >
-                                            <FaStar className="text-xs text-yellow-500" /> Weekly Challenges
-                                        </Button>
-                                    </Link>
-                                </div>
-                            )}
-                        </div>
+                        </Link>
 
                         <Link href="/users/uploaded-files" onClick={() => setSidebarOpen(false)}>
                             <Button
                                 variant={isActive('/users/uploaded-files') ? 'secondary' : 'ghost'}
-                                className={`w-full justify-start gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/uploaded-files') ? 'bg-rose-500/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/uploaded-files') ? 'bg-rose-500/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                title={isSidebarCollapsed ? "Uploaded Files" : ""}
                             >
-                                <FaUpload className={isActive('/users/uploaded-files') ? 'text-rose-400' : 'text-[#94a3b8] group-hover:text-white'} /> <span className={isActive('/users/uploaded-files') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Uploaded Files</span>
+                                <FaUpload className={isActive('/users/uploaded-files') ? 'text-rose-400' : 'text-[#94a3b8] group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className={isActive('/users/uploaded-files') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Uploaded Files</span>}
                             </Button>
                         </Link>
                     </nav>
 
-                    {/* Logout at bottom */}
-                    <div className="mt-auto pt-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
+                    {/* Collapse & Logout at bottom */}
+                    <div className="mt-auto pt-6 border-t flex flex-col gap-2" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
                         <Button
                             variant="ghost"
-                            className="w-full justify-start gap-3 h-12 text-[#94a3b8] hover:text-white hover:bg-white/5 border-none"
+                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-[#94a3b8] hover:text-white hover:bg-white/5 border-none hidden lg:flex`}
+                            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                            title={isSidebarCollapsed ? "Expand Menu" : "Collapse Menu"}
+                        >
+                            {isSidebarCollapsed ? <FaChevronRight /> : <><FaChevronLeft /> Collapse Menu</>}
+                        </Button>
+
+                        <Button
+                            variant="ghost"
+                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-[#94a3b8] hover:text-white hover:bg-white/5 border-none`}
+                            title={isSidebarCollapsed ? "Logout" : ""}
                             onClick={async () => {
                                 try {
                                     await api.post('/auth/logout');
@@ -235,7 +235,7 @@ export default function UsersLayout({
                                 window.location.href = '/';
                             }}
                         >
-                            <FaSignOutAlt /> Logout
+                            <FaSignOutAlt /> {!isSidebarCollapsed && "Logout"}
                         </Button>
                     </div>
                 </aside>

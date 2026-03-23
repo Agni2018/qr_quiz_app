@@ -84,7 +84,7 @@ export default function StudentReferral() {
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{marginTop:40,marginBottom:40}}>
                                 <div className="space-y-4">
-                                    <label className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Friend's Username</label>
+                                    <label className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Friend's Username <span className="text-rose-500">*</span></label>
                                     <Input
                                         placeholder="Enter their username"
                                         value={username}
@@ -94,7 +94,7 @@ export default function StudentReferral() {
                                     />
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Friend's Email</label>
+                                    <label className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Friend's Email <span className="text-rose-500">*</span></label>
                                     <Input
                                         type="email"
                                         placeholder="friend@example.com"

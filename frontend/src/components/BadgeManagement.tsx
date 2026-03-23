@@ -102,14 +102,14 @@ export default function BadgeManagement() {
                             <h5 className="text-xl font-black text-white/50 border-l-4 border-primary pl-4 mb-4 uppercase tracking-widest">Badge Identity</h5>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <Input
-                                    label="Badge Name"
+                                    label={<span>Badge Name <span className="text-rose-500">*</span></span>}
                                     value={newBadge.name}
                                     onChange={e => setNewBadge({ ...newBadge, name: e.target.value })}
                                     placeholder="e.g. Points Warrior"
                                     className="!px-8 h-[64px] !rounded-2xl border-white/5 bg-black/20"
                                 />
                                 <Input
-                                    label="Requirement Threshold"
+                                    label={<span>Requirement Threshold <span className="text-rose-500">*</span></span>}
                                     type="number"
                                     value={newBadge.threshold}
                                     onChange={e => setNewBadge({ ...newBadge, threshold: Number(e.target.value) })}
@@ -120,7 +120,7 @@ export default function BadgeManagement() {
                         </div>
 
                         <div className="flex flex-col gap-6">
-                            <h5 className="text-xl font-black text-white/50 border-l-4 border-primary pl-4 mb-4 uppercase tracking-widest">Description</h5>
+                            <h5 className="text-xl font-black text-white/50 border-l-4 border-primary pl-4 mb-4 uppercase tracking-widest">Description <span className="text-rose-500">*</span></h5>
                             <TextArea
                                 value={newBadge.description}
                                 onChange={e => setNewBadge({ ...newBadge, description: e.target.value })}
@@ -133,7 +133,7 @@ export default function BadgeManagement() {
                             <h5 className="text-xl font-black text-white/50 border-l-4 border-primary pl-4 mb-4 uppercase tracking-widest">Configuration</h5>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                                 <div className="flex flex-col gap-4">
-                                    <label className="text-[11px] font-black uppercase text-slate-500 tracking-widest px-1">Tracking Type</label>
+                                    <label className="text-[11px] font-black uppercase text-slate-500 tracking-widest px-1">Tracking Type <span className="text-rose-500">*</span></label>
                                     <div className="relative">
                                         <select
                                             className="w-full h-[64px] p-4 px-8 rounded-2xl bg-black/30 border-2 border-white/5 text-slate-200 outline-none appearance-none cursor-pointer focus:border-primary/50 font-bold shadow-inner"
@@ -148,7 +148,7 @@ export default function BadgeManagement() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-4">
-                                    <label className="text-[11px] font-black uppercase text-slate-500 tracking-widest px-1">Visual Icon</label>
+                                    <label className="text-[11px] font-black uppercase text-slate-500 tracking-widest px-1">Visual Icon <span className="text-rose-500">*</span></label>
                                     <div className="flex gap-4">
                                         {icons.map(icon => (
                                             <button
