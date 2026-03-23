@@ -109,12 +109,13 @@ export default function UsersLayout({
                 <aside
                     className={`
                         fixed lg:static top-0 left-0 z-50
-                        h-screen ${isSidebarCollapsed ? 'lg:w-[80px]' : 'lg:w-[280px]'}
+                        h-screen w-[280px] ${isSidebarCollapsed ? 'lg:w-[80px]' : 'lg:w-[280px]'}
                         border-r
                         ${isSidebarCollapsed ? 'px-4' : 'px-8'} py-12
                         transform transition-all duration-300
                         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
                         lg:translate-x-0
+
                         flex flex-col
                     `}
                     style={{
@@ -137,10 +138,12 @@ export default function UsersLayout({
                             <div className="absolute inset-0 bg-orange-500/5 blur-xl group-hover:bg-orange-500/10 transition-all duration-500" />
                             <FaUser className="text-4xl text-slate-400 group-hover:text-orange-500 transition-colors relative z-10" />
                         </div>
-                        <h2 className="text-2xl font-black tracking-tighter uppercase leading-tight">
+                        <h2 className="text-xl font-black tracking-tighter uppercase leading-tight px-4 w-full">
                             <span className="text-orange-500 block mb-1" style={{marginTop:10}}>WELCOME,</span> 
-                            <span className="text-white break-words">{user?.username || 'ADMIN'}</span>
+                            <span className="text-white break-all">{user?.username || 'ADMIN'}</span>
                         </h2>
+
+
                     </div>
 
                     {isSidebarCollapsed && (
