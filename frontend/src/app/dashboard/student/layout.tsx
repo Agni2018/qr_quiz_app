@@ -5,6 +5,7 @@ import api from '@/lib/api';
 import { useRouter, usePathname } from 'next/navigation';
 import Button from '@/components/Button';
 import ThemeToggle from '@/components/ThemeToggle';
+import LevelCard from '@/components/LevelCard';
 import {
     FaGraduationCap,
     FaHistory,
@@ -35,6 +36,10 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     const [pointsAwarded, setPointsAwarded] = useState(0);
     const [streakInfo, setStreakInfo] = useState('');
 
+    // Level Up Modal State
+    const [showLevelModal, setShowLevelModal] = useState(false);
+    const [levelInfo, setLevelInfo] = useState<any>(null);
+
     const router = useRouter();
     const pathname = usePathname();
 
@@ -48,8 +53,16 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                     api.get('/messages/unread-count')
                 ]);
 
+                console.log('[Dashboard] User data:', statusRes.data.user);
                 setUser(statusRes.data.user);
                 setUnreadCount(unreadRes.data.count);
+
+                // Check for level up
+                if (statusRes.data.user.levelUp) {
+                    console.log('[Dashboard] Level up detected:', statusRes.data.user.levelUp);
+                    setLevelInfo(statusRes.data.user.levelUp);
+                    setShowLevelModal(true);
+                }
             } catch (err) {
                 console.error('Failed to fetch user status:', err);
                 router.replace('/');
@@ -306,6 +319,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                         {/* TOP BAR */}
                         <div className="flex flex-wrap items-center justify-end gap-6 mb-16">
                             <ThemeToggle />
+                            <LevelCard points={user?.points || 0} />
                             <div className="bg-slate-900/60 border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-3 backdrop-blur-xl shadow-lg" style={{padding:10}}>
                                 <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-500">🔥</div>
                                 <div className="flex flex-col leading-none">
@@ -354,6 +368,38 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                                 className="w-full py-6 rounded-[2rem] bg-yellow-500 hover:bg-yellow-400 text-black text-xl font-black uppercase tracking-widest shadow-2xl shadow-yellow-500/20 active:scale-95 transition-all"
                             >
                                 GREAT!
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* LEVEL UP MODAL */}
+            {showLevelModal && (
+                <div className="fixed inset-0 z-[1100] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl animate-fade-in">
+                    <div className="max-w-md w-full bg-slate-950 border border-white/10 rounded-[3rem] p-12 text-center shadow-[0_0_100px_rgba(59,130,246,0.2)] relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                        
+                        <div className="relative z-10">
+                            <div className="w-32 h-32 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-10 border border-blue-500/30 animate-bounce shadow-[0_0_40px_rgba(59,130,246,0.3)]">
+                                <FaStar className="text-6xl text-blue-500" />
+                            </div>
+
+                            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter">LEVEL UP!</h2>
+                            <p className="text-blue-500 font-black text-xl uppercase tracking-[0.2em] mb-8">Legendary Progress!</p>
+
+                            <div className="bg-white/5 rounded-3xl p-8 mb-10 border border-white/5">
+                                <p className="text-slate-400 font-bold mb-2 uppercase text-xs tracking-widest">You've reached</p>
+                                <h3 className="text-6xl font-black text-white">LEVEL {levelInfo?.new}</h3>
+                                {levelInfo?.old && (
+                                    <p className="mt-4 text-slate-500 font-bold italic text-sm">Advanced from Level {levelInfo.old}</p>
+                                )}
+                            </div>
+
+                            <Button
+                                onClick={() => setShowLevelModal(false)}
+                                className="w-full py-6 rounded-[2rem] bg-blue-600 hover:bg-blue-500 text-white text-xl font-black uppercase tracking-widest shadow-2xl shadow-blue-500/20 active:scale-95 transition-all"
+                            >
+                                FANTASTIC!
                             </Button>
                         </div>
                     </div>

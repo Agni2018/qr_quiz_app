@@ -76,15 +76,23 @@ export default function StudentProgress() {
                     </div>
 
                     <div className="mt-10 pt-8 border-t border-white/5 flex flex-col gap-6" style={{ marginTop: 30 }}>
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div className="flex flex-col">
                                 <span className="text-slate-500 text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Performance</span>
                                 <span className="text-2xl font-black text-white">{attempt.score} <span className="text-sm text-slate-400 font-medium ml-1">pts</span></span>
                             </div>
-                            <div className="flex flex-col items-end">
-                                <span className="text-primary text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Status</span>
-                                <span className="text-lg font-black text-primary/80">+3 Points Earned</span>
-                            </div>
+                            {(() => {
+                                const isPassed = attempt.pointsEarned > 0 || 
+                                               (attempt.topicId && attempt.score > 0 && attempt.score >= (attempt.topicId.passingMarks || 0));
+                                return (
+                                    <div className="flex flex-col items-start sm:items-end">
+                                        <span className={`text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1 ${isPassed ? 'text-primary' : 'text-slate-500'}`}>Status</span>
+                                        <span className={`text-lg font-black ${isPassed ? 'text-primary' : 'text-slate-500'}`}>
+                                            {isPassed ? '+3 Points Earned' : 'Passing Mark Not Met'}
+                                        </span>
+                                    </div>
+                                );
+                            })()}
                         </div>
                         <Link href={`/quiz/${attempt.topicId?._id}/result?attemptId=${attempt._id}`}>
                             <Button variant="secondary" className="w-full py-4 rounded-xl font-black text-sm bg-primary hover:scale-[1.02] transition-all shadow-lg shadow-primary/40">

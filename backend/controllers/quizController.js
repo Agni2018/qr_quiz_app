@@ -168,7 +168,8 @@ exports.submitQuiz = async (req, res) => {
             userId: finalUserId,
             user,
             answers: processedAnswers,
-            score: totalScore
+            score: totalScore,
+            pointsEarned: 0 // Will be updated below if they pass
         });
 
         try {
@@ -230,12 +231,17 @@ exports.submitQuiz = async (req, res) => {
             const userDoc = await User.findById(finalUserId);
             if (userDoc && userDoc.role === 'student') {
                 // Points for quiz performance: Exactly +1 for completing the quiz with at least one correct answer
-                const hasCorrectAnswer = processedAnswers.some(ans => ans.isCorrect);
+                const passingMarks = topic.passingMarks || 0;
+                const matchesPassingMark = totalScore >= passingMarks;
 
-                if (hasCorrectAnswer) {
+                if (matchesPassingMark) {
                     pointsEarned = 3;
                     userDoc.points += pointsEarned;
                     await userDoc.save();
+
+                    // Update attempt with points earned
+                    attempt.pointsEarned = 3;
+                    await attempt.save();
 
                     // --- Challenge Progress: Quiz Points ---
                     await challengeController.updateProgress(finalUserId, 'points_earned', 3);
@@ -303,7 +309,7 @@ exports.getStudentAttempts = async (req, res) => {
                 }
             ]
         })
-            .populate('topicId', 'name description')
+            .populate('topicId', 'name description passingMarks')
             .sort({ completedAt: -1 });
 
         // Filter out attempts where the topic no longer exists

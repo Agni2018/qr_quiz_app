@@ -250,6 +250,19 @@ exports.login = async (req, res) => {
             path: '/'
         });
 
+        // Level up logic
+        const currentLevel = Math.min(Math.floor((user.points || 0) / 50) + 1, 11);
+        let levelUp = null;
+        if (currentLevel > (user.lastSeenLevel || 1)) {
+            levelUp = {
+                old: user.lastSeenLevel || 1,
+                new: currentLevel
+            };
+            console.log(`[LevelUp] User ${user.username} leveled up:`, levelUp);
+            user.lastSeenLevel = currentLevel;
+            await user.save();
+        }
+
         res.json({
             id: user._id,
             username: user.username,
@@ -257,7 +270,9 @@ exports.login = async (req, res) => {
             points: user.points,
             pointsAwarded,
             streak: user.loginStreak,
-            streakStatus
+            streakStatus,
+            currentLevel,
+            levelUp
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
@@ -293,9 +308,29 @@ exports.getStatus = async (req, res) => {
         if (!user) {
             return res.json({ authenticated: false });
         }
+
+        // Level up logic for status check
+        const currentLevel = Math.min(Math.floor((user.points || 0) / 50) + 1, 11);
+        let levelUp = null;
+        if (currentLevel > (user.lastSeenLevel || 1)) {
+            levelUp = {
+                old: user.lastSeenLevel || 1,
+                new: currentLevel
+            };
+            console.log(`[Status LevelUp] User ${user.username} leveled up:`, levelUp);
+            user.lastSeenLevel = currentLevel;
+            await user.save();
+        }
+        
+        console.log(`[Status Check] User ${user.username}, levelUp:`, levelUp);
+
         res.json({
             authenticated: true,
-            user
+            user: {
+                ...user.toObject(),
+                currentLevel,
+                levelUp
+            }
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });

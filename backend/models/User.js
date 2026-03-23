@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    lastSeenLevel: {
+        type: Number,
+        default: 1
+    },
     badges: [{
         badgeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Badge' },
         awardedAt: { type: Date, default: Date.now }
