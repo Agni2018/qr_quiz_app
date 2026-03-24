@@ -82,7 +82,7 @@ export default function ReusableLibrary() {
                     </Card>
                 ) : (
                     questions.map(q => (
-                        <Card key={q._id} className="group hover:-translate-y-2 transition-all duration-300 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2rem] flex flex-col shadow-xl overflow-hidden relative" style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}>
+                        <Card key={q._id} className="group hover:-translate-y-2 transition-all duration-300 border-white/5 hover:border-white/10 rounded-[2rem] flex flex-col shadow-xl overflow-hidden relative" style={{ background: '#1a1f2e', padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}>
                             {/* Accent line */}
                             <div className="absolute top-0 left-0 w-1.5 h-full bg-primary/30" />
 

@@ -27,7 +27,31 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning={true}>
+            <head>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            (function() {
+                                try {
+                                    var savedTheme = localStorage.getItem('quiz-theme');
+                                    var migrated = localStorage.getItem('theme-migrated-v2');
+                                    var theme = 'dark';
+                                    
+                                    if (migrated && savedTheme && (savedTheme === 'dark' || savedTheme === 'emerald')) {
+                                        theme = savedTheme;
+                                    } else {
+                                        localStorage.setItem('quiz-theme', 'dark');
+                                        localStorage.setItem('theme-migrated-v2', 'true');
+                                    }
+                                    
+                                    document.documentElement.setAttribute('data-theme', theme);
+                                } catch (e) {}
+                            })()
+                        `,
+                    }}
+                />
+            </head>
             <body className={inter.className}>
                 <ThemeProvider>
                     <BFCacheHandler />

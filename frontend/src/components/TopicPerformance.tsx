@@ -11,7 +11,9 @@ import {
     FaTimes,
     FaCheckCircle,
     FaAward,
-    FaEnvelope
+    FaEnvelope,
+    FaSearch,
+    FaChartLine
 } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
 
@@ -19,6 +21,7 @@ export default function TopicPerformance() {
     const [topics, setTopics] = useState<any[]>([]);
     const [analytics, setAnalytics] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
 
     // Modals State
     const [showParticipantsModal, setShowParticipantsModal] = useState(false);
@@ -132,75 +135,106 @@ export default function TopicPerformance() {
         );
     }
 
+    const filteredStats = analytics?.topicStats?.filter((stat: any) =>
+        stat.topicName.toLowerCase().includes(searchTerm.trim().toLowerCase())
+    ) || [];
+
     return (
         <div className="flex flex-col gap-10">
-            {/* Active Topics Card */}
-            <Card className="p-10 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, var(--card-bg), rgba(var(--primary-rgb), 0.15))', margin: '0 1rem 1rem 1rem' }}>
-                <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:opacity-20 transition-opacity transform rotate-12 translate-x-4 -translate-y-4">
-                    <FaBars size={180} />
-                </div>
-                <div className="flex items-center justify-between relative z-10" >
-                    <div className="flex flex-col gap-2">
-                        <span className="text-lg font-bold uppercase tracking-widest text-primary opacity-90" style={{ marginLeft: 10 }}>Active Topics</span>
-                        <span className="text-sm font-medium text-slate-400" style={{ marginLeft: 10 }}>Currently live quizzes</span>
-                    </div>
-                    <div className="flex items-baseline gap-2">
-                        <span className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 drop-shadow-sm" style={{ marginRight: 10 }}>
-                            {topics.length === 0 ? '0' : analytics.activeTopics}
-                        </span>
-                    </div>
-                </div>
-            </Card>
+            {/* Analytics Overall Title */}
+            <h2 style={{
+                fontSize: '3.5rem',
+                fontWeight: 900,
+                letterSpacing: '-0.04em',
+                margin: '0 1.5rem 0.5rem 1.5rem',
+                backgroundImage: 'linear-gradient(to right, var(--primary), var(--secondary))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                lineHeight: 1
+            }}>
+                Analytics
+            </h2>
 
-            {/* Topic Performance */}
-            <div className="flex flex-col gap-14 mt-10" style={{ margin: "0 1rem 1rem 1rem" }}>
-                <div className="flex flex-col gap-8">
-                    <div className="flex items-center gap-6">
-                        <div style={{
-                            width: '4.5rem',
-                            height: '4.5rem',
-                            borderRadius: '1.25rem',
-                            background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '2.25rem',
-                            boxShadow: '0 8px 30px rgba(99, 102, 241, 0.4)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)'
-                        }}>
-                            📈
+            {/* Header Section: Combined Topic Performance Header and Active Topics Card */}
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-16 w-full px-6 md:px-10">
+                {/* Left: Topic Performance Header and Search */}
+                <div className="flex flex-col gap-8 flex-1 w-full order-2 lg:order-1" style={{marginTop:'40'}}>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                        <div className="flex items-center gap-6" style={{marginLeft:'1rem'}}>
+                            <div style={{
+                                width: '4px',
+                                height: '2.5rem',
+                                backgroundColor: 'var(--primary)',
+                                borderRadius: '2px',
+                                boxShadow: '0 0 15px var(--primary)'
+                            }} />
+                            <div className="flex flex-col">
+                                <h3 style={{
+                                    fontSize: '1.25rem',
+                                    fontWeight: 900,
+                                    letterSpacing: '0.1em',
+                                    color: '#ffffff',
+                                    textTransform: 'uppercase',
+                                    lineHeight: 1.2,
+                                    marginLeft: '15px',
+                                   
+                                }}>
+                                    Topic<br />Performance
+                                </h3>
+                            </div>
                         </div>
-                        <div className="flex flex-col">
-                            <h3 style={{
-                                fontSize: '2.75rem',
-                                fontWeight: 900,
-                                letterSpacing: '-0.04em',
-                                backgroundImage: 'linear-gradient(to right, var(--text-primary), var(--primary), var(--accent), var(--secondary))',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                backgroundClip: 'text',
-                                lineHeight: 1
-                            }}>
-                                Topic Performance
-                            </h3>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '1.125rem', marginTop: '0.6rem', fontWeight: 500 }}>
-                                Detailed analytics for each available quiz category
-                            </p>
+
+                        {/* Search Bar */}
+                        <div className="relative w-full max-w-xs md:max-w-md group flex-1 md:ml-10" style={{ margin: '1rem 2.5rem 1rem 1.5rem' }}>
+                            <input
+                                type="text"
+                                placeholder="Filter topics..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full bg-[#0a101f]/80 border border-white/5 rounded-lg py-3 pr-16 text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all font-medium"
+                                style={{ background: 'rgba(10, 16, 31, 0.8)', boxSizing: 'border-box', paddingLeft: '1.5rem',marginRight: '1rem'}}
+                            />
+                            <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" />
                         </div>
                     </div>
                     <div style={{
                         width: '100%',
                         height: '1px',
                         background: 'linear-gradient(to right, var(--border-color), transparent)',
-                        opacity: 0.5
+                        opacity: 0.3
                     }} />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 items-start">
-                    {analytics.topicStats.map((stat: any) => (
+
+                {/* Right: Active Topics Card (Obsidian Style) */}
+                <div className="w-full lg:w-1/4 order-1 lg:order-2">
+                    <div className="p-[1.5px] rounded-[2rem] bg-gradient-to-br from-primary/60 to-transparent shadow-2xl">
+                        <Card className="p-10 rounded-[2rem] border-none relative overflow-hidden group h-full" style={{ background: '#0a101f', margin: '0 10px 10px 10px',padding:30 }}>
+                            <div className="absolute top-0 right-0 p-10 opacity-10 group-hover:opacity-20 transition-opacity transform rotate-12 translate-x-4 -translate-y-4">
+                                <FaChartLine size={100} />
+                            </div>
+                            <div className="flex flex-col relative z-10 gap-6">
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 opacity-80">Active Topics</span>
+                                </div>
+                                <div className="flex items-end gap-5">
+                                    <span className="text-7xl font-black text-white leading-none">
+                                        {topics.length === 0 ? '0' : analytics.activeTopics}
+                                    </span>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
+            </div>
+
+            {/* Topic Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 items-start px-4">
+                {filteredStats.map((stat: any) => (
                         <Card
                             key={stat.topicId}
                             className="group rounded-[2rem] border shadow-lg hover:shadow-primary/20 transition-all transform hover:-translate-y-2 relative overflow-hidden flex flex-col gap-8"
-                            style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)', padding: '1.75rem', margin: '0 0 1rem 0' }}
+                            style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)', padding: '1.75rem', margin: '0 20px 20px 10px' }}
                         >
                             <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-3xl rounded-full translate-x-12 -translate-y-12" />
 
@@ -255,8 +289,13 @@ export default function TopicPerformance() {
 
                         </Card>
                     ))}
+                    {filteredStats.length === 0 && (
+                        <div className="col-span-full py-20 text-center">
+                            <div className="text-6xl mb-6 grayscale opacity-20">🔍</div>
+                            <h3 className="text-xl font-bold text-slate-500">No topics found matching "{searchTerm}"</h3>
+                        </div>
+                    )}
                 </div>
-            </div>
 
             {/* PARTICIPANTS MODAL */}
             {showParticipantsModal && (

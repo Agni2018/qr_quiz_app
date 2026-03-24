@@ -177,7 +177,7 @@ export default function BadgeManagement() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ margin: '0 1rem 1rem 1rem' }}>
                 {badges.map(badge => (
-                    <Card key={badge._id} className="p-8 border-white/5 bg-white/5 group hover:bg-white/10 transition-all flex flex-col items-center text-center gap-2">
+                    <Card key={badge._id} className="p-8 border-white/5 hover:border-white/10 group transition-all flex flex-col items-center text-center gap-2" style={{ background: '#1a1f2e' }}>
                         <div className="w-24 h-24 rounded-full bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 flex items-center justify-center text-4xl text-yellow-500 mb-6 group-hover:scale-110 transition-transform" style={{ marginTop: '1rem', marginBottom: '1rem' }}>
                             {icons.find(i => i.name === badge.icon)?.icon || <FaAward />}
                         </div>

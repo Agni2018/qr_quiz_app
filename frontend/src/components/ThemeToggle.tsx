@@ -11,7 +11,6 @@ export default function ThemeToggle() {
 
     const themes: { id: Theme; label: string; icon: any; color: string }[] = [
         { id: 'dark', label: 'Dark Mode', icon: FaMoon, color: '#10b981' },
-        { id: 'purple', label: 'Modern Dark', icon: FaPalette, color: '#10b981' },
         { id: 'emerald', label: 'Emerald Prestige', icon: FaGem, color: '#fbc02d' }
     ];
 

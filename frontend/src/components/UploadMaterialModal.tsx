@@ -102,24 +102,25 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
     };
 
     return (
-        <div className="fixed inset-0 z-[110] backdrop-blur-md flex items-center justify-center px-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
-            <Card className="w-full max-w-lg p-0 rounded-[2.5rem] overflow-hidden shadow-2xl" style={{ background: 'var(--background)', borderColor: 'var(--border-color)' }} onClick={e => e.stopPropagation()}>
-                <div className="border-b border-white/5 flex justify-between items-center bg-slate-900/40" style={{ padding: '3rem 4rem' }}>
+        <div className="fixed inset-0 z-[110] backdrop-blur-xl flex items-center justify-center p-6 bg-black/80" onClick={onClose} style={{ padding: '1.5rem' }}>
+            <Card className="w-full max-w-lg p-0 rounded-[2.5rem] overflow-hidden shadow-3xl border border-white/10" style={{ background: '#0a0e1a', margin: '1rem' }} onClick={e => e.stopPropagation()}>
+                <div className="border-b border-white/5 flex justify-between items-center bg-[#060910]" style={{ padding: '2.5rem 3rem' }}>
                     <div>
-                        <h3 className="text-2xl font-black">Upload Materials</h3>
-                        <p className="text-slate-500 font-medium">Adding to: {topicName}</p>
+                        <h3 className="text-2xl font-black text-white">Upload Materials</h3>
+                        <p className="text-primary font-bold text-xs mt-1 uppercase tracking-[0.2em]">Adding to: {topicName}</p>
                     </div>
-                    <button onClick={onClose} className="p-2 text-slate-400 hover:text-white transition-colors">
-                        <FaTimes />
+                    <button onClick={onClose} className="p-3 bg-white/5 hover:bg-red-500/20 hover:text-red-500 rounded-2xl transition-all text-slate-400">
+                        <FaTimes size={18} />
                     </button>
                 </div>
 
-                <div className="flex flex-col gap-10" style={{ padding: '4rem' }}>
+                <div className="flex flex-col gap-10" style={{ padding: '3rem' }}>
                     {/* File Dropzone */}
                     {!file ? (
                         <label
                             htmlFor="file-upload-input"
-                            className="border-2 border-dashed border-white/10 rounded-3xl p-12 flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all group"
+                            className="border-2 border-dashed border-white/10 rounded-[2rem] p-12 flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all group bg-white/5"
+                            style={{ padding: '3rem' }}
                         >
                             <input
                                 id="file-upload-input"
@@ -127,61 +128,65 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
                                 className="hidden"
                                 onChange={handleFileChange}
                             />
-                            <FaCloudUploadAlt className="text-5xl text-slate-600 group-hover:text-primary mb-4 transition-colors" />
-                            <p className="text-slate-400 font-bold">Click to select file</p>
-                            <p className="text-slate-600 text-xs mt-2 uppercase tracking-widest font-black">PDF, Images, Video, DOCX</p>
+                            <FaCloudUploadAlt className="text-5xl text-slate-600 group-hover:text-primary mb-4 transition-all duration-500 group-hover:scale-110" />
+                            <p className="text-slate-400 font-black uppercase tracking-widest text-xs">Click to select file</p>
+                            <p className="text-slate-600 text-[10px] mt-2 uppercase tracking-[0.2em] font-black">PDF, Images, Video, DOCX</p>
                         </label>
                     ) : (
 
-                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary text-xl">
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 flex items-center justify-between group hover:bg-white/10 transition-all" style={{ padding: '1.5rem' }}>
+                            <div className="flex items-center gap-4" style={{ padding: '0' }}>
+                                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl border border-primary/20">
                                     {file.type.startsWith('video/') ? <FaVideo /> : <FaFile />}
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="text-sm font-bold text-white truncate max-w-[200px]">{file.name}</span>
-                                    <span className="text-xs text-slate-500">{(file.size / (1024 * 1024)).toFixed(2)} MB</span>
+                                    <span className="text-sm font-black text-white truncate max-w-[200px] uppercase tracking-tight">{file.name}</span>
+                                    <span className="text-xs text-slate-500 font-bold uppercase tracking-widest">{(file.size / (1024 * 1024)).toFixed(2)} MB</span>
                                 </div>
                             </div>
-                            <button onClick={() => setFile(null)} className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-all">
-                                <FaTrash />
+                            <button onClick={() => setFile(null)} className="p-3 text-red-500/60 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all">
+                                <FaTrash size={16} />
                             </button>
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-8">
+                    <div className="flex flex-col gap-8" style={{ padding: '0' }}>
                         <Input
                             label="Display Name"
                             placeholder="Enter material title..."
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            className="bg-white/5 border-white/10 focus:border-primary transition-all rounded-2xl h-14 font-bold"
+                            style={{ margin: '0' }}
                         />
-                        <div className="w-full">
-                            <label className="block mb-3 text-sm font-semibold text-slate-400 uppercase tracking-wider">Description</label>
+                        <div className="w-full text-left" style={{ margin: '0' }}>
+                            <label className="block mb-3 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Description</label>
                             <textarea
                                 placeholder="What's in this material?"
                                 style={{
                                     padding: '1.25rem 1.75rem',
                                     borderRadius: '1.25rem',
-                                    background: 'var(--glass-bg)',
-                                    border: '1px solid var(--border-color)',
-                                    fontSize: '1rem',
-                                    minHeight: '140px'
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    fontSize: '0.875rem',
+                                    minHeight: '120px',
+                                    margin: '0'
                                 }}
-                                className="w-full text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none shadow-inner"
+                                className="w-full text-white outline-none focus:border-primary transition-all resize-none font-medium placeholder:text-slate-600"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
                     </div>
 
-                    {error && <p className="text-red-500 text-sm font-bold text-center bg-red-500/10 p-4 rounded-xl">{error}</p>}
+                    {error && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest text-center bg-red-500/10 p-4 rounded-xl border border-red-500/20" style={{ padding: '1rem', margin: '0' }}>{error}</p>}
 
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4" style={{ padding: '0' }}>
                         <Button
-                            className="flex-1 h-14 rounded-2xl bg-primary shadow-xl shadow-primary/20 font-black text-lg"
+                            className="w-full h-14 rounded-2xl bg-primary hover:bg-primary-hover shadow-xl shadow-primary/20 font-black uppercase tracking-widest text-xs transition-all active:scale-95"
                             onClick={handleUpload}
                             disabled={uploading || !file}
+                            style={{ margin: '0' }}
                         >
                             {uploading ? (
                                 <div className="flex items-center gap-2">
@@ -191,9 +196,10 @@ export default function UploadMaterialModal({ topicId, topicName, onClose, onSuc
                             ) : 'Upload Material'}
                         </Button>
                         <Button
-                            variant="outline"
-                            className="flex-1 h-14 rounded-2xl border-white/10 text-slate-400 font-bold"
+                            variant="ghost"
+                            className="w-full h-14 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-400 font-black uppercase tracking-widest text-xs transition-all border border-white/5"
                             onClick={onClose}
+                            style={{ margin: '0' }}
                         >
                             Cancel
                         </Button>

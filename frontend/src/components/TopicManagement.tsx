@@ -10,7 +10,7 @@ import TextArea from '@/components/TextArea';
 import { 
     FaPlus, FaTrash, FaCopy, FaArrowRight, FaFolder, 
     FaChevronLeft, FaSearch, FaTimes, FaQuestionCircle,
-    FaFolderPlus
+    FaFolderPlus, FaClock, FaMinusCircle, FaStar
 } from 'react-icons/fa';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AlertModal from '@/components/AlertModal';
@@ -43,6 +43,8 @@ export default function TopicManagement() {
     const [newCategory, setNewCategory] = useState({
         name: ''
     });
+
+    const [searchQuery, setSearchQuery] = useState('');
 
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', onConfirm: () => {} });
@@ -207,9 +209,27 @@ export default function TopicManagement() {
             </div>
         );
     }
-
     return (
         <div className="flex flex-col gap-10 md:gap-16">
+
+            {/* SEARCH BAR & HEADER */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-4 px-4">
+                <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight uppercase shrink-0">
+                    Manage Topics
+                </h2>
+                
+                <div className="relative w-full max-w-xs md:max-w-md group flex-1 md:ml-10" style={{ margin: '1rem 2.5rem 1rem 1.5rem' }}>
+                    <input
+                        type="text"
+                        placeholder="Filter topics..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-[#0a101f]/80 border border-white/5 rounded-lg py-3 pr-16 text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all font-medium"
+                        style={{ background: 'rgba(10, 16, 31, 0.8)', boxSizing: 'border-box', paddingLeft: '1.5rem',marginRight: '1rem'}}
+                    />
+                    <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" />
+                </div>
+            </div>
             
             {view === 'topics' && currentCategory && (
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-2 bg-white/5 p-4 rounded-3xl border border-white/5" style={{marginLeft:10,marginRight:10}}>
@@ -232,61 +252,59 @@ export default function TopicManagement() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {/* CATEGORIES SECTION (Only in categories view) */}
-                {view === 'categories' && categories.map(category => (
-                    <Card
-                        key={category._id}
-                        className="rounded-[2.5rem] border-none shadow-lg hover:shadow-primary/10 transition-all group flex flex-col gap-6"
-                        style={{ background: 'var(--card-bg)', padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}
-                    >
-                        <div className="flex justify-between items-start pt-1">
-                            <h3 className="font-bold text-xl md:text-2xl tracking-tight leading-tight">{category.name}</h3>
-                            <span
-                                className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shrink-0 ml-2"
-                                style={{
-                                    background: 'rgba(var(--primary-rgb), 0.1)',
-                                    color: 'var(--primary)'
-                                }}
-                            >
-                                Category
-                            </span>
-                        </div>
+                {view === 'categories' && categories
+                    .filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                    .map(category => (
+                        <div
+                            key={category._id}
+                            className="bg-[#1a1f2e] rounded-2xl flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
+                            style={{ margin: '0 0.5rem 1.5rem 0.5rem', padding: '1.5rem' }}
+                        >
+                            {/* Card Header */}
+                            <div className="flex justify-between items-center">
+                                <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md bg-primary/10 text-primary">
+                                    Category
+                                </span>
+                            </div>
 
-                        <p className="text-slate-400 text-sm leading-relaxed line-clamp-2">
-                            Organized group of quiz topics for better management and navigation.
-                        </p>
+                            {/* Title & Description */}
+                            <div className="flex flex-col gap-2">
+                                <h3 className="font-bold text-xl text-white tracking-tight line-clamp-1 group-hover:text-primary transition-colors">
+                                    {category.name}
+                                </h3>
+                                <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
+                                    Organized group of quiz topics for better management and navigation.
+                                </p>
+                            </div>
 
-                        <div className="flex flex-col gap-4 mt-auto pt-6 w-full">
-                            <Button 
-                                onClick={() => manageCategory(category)}
-                                className="w-full justify-between h-12 px-6 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black transition-all shadow-lg shadow-primary/20"
-                            >
-                                Manage <FaArrowRight />
-                            </Button>
-
-                            <div className="flex items-center justify-between w-full">
-                                <Button
-                                    variant="ghost"
-                                    className="min-w-[48px] h-10 px-4 rounded-xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center gap-2 group/btn"
-                                    onClick={(e) => { e.preventDefault(); copyCategory(category._id); }}
-                                    title="Duplicate Category"
-                                >
-                                    <FaCopy className="text-slate-400 group-hover/btn:text-white transition-colors" />
-                                    <span className="text-xs font-bold text-slate-400 group-hover/btn:text-white transition-colors">Copy</span>
-                                </Button>
-
-                                <Button
-                                    variant="ghost"
-                                    className="min-w-[48px] h-10 px-4 rounded-xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center gap-2 group/btn"
-                                    onClick={(e) => { e.preventDefault(); deleteCategory(category._id); }}
+                            {/* Footer Actions */}
+                            <div className="flex items-center justify-between mt-auto pt-8 border-t border-white/5">
+                                <div className="flex gap-3" style={{ marginTop: '1.5rem' }}>
+                                    <button 
+                                        onClick={() => manageCategory(category)}
+                                        className="rounded-lg font-black uppercase text-[11px] tracking-widest transition-all hover:opacity-90 active:scale-95 shadow-lg"
+                                        style={{ backgroundColor: 'var(--primary)', color: 'white', padding: '0.85rem 2rem' }}
+                                    >
+                                        Manage
+                                    </button>
+                                    <button 
+                                        onClick={() => copyCategory(category._id)}
+                                        className="rounded-lg font-black uppercase text-[11px] tracking-widest transition-all hover:bg-slate-900 active:scale-95 shadow-lg"
+                                        style={{ backgroundColor: 'black', color: 'white', padding: '0.85rem 2rem' }}
+                                    >
+                                        Copy
+                                    </button>
+                                </div>
+                                <button 
+                                    onClick={() => deleteCategory(category._id)}
+                                    className="p-2 text-slate-500 hover:text-red-500 transition-colors"
                                     title="Delete Category"
                                 >
-                                    <FaTrash className="text-red-500/70 group-hover/btn:text-red-400 transition-colors" />
-                                    <span className="text-xs font-bold text-red-500/70 group-hover/btn:text-red-400 transition-colors">Del</span>
-                                </Button>
+                                    <FaTrash size={14} />
+                                </button>
                             </div>
                         </div>
-                    </Card>
-                ))}
+                    ))}
 
                 {/* TOPICS SECTION */}
                 {topics.filter(topic => {
@@ -298,88 +316,79 @@ export default function TopicManagement() {
                     }
                     // In topics view, topics are already filtered by backend query parameter
                     return true; 
-                }).map(topic => {
+                })
+                .filter(topic => topic.name.toLowerCase().includes(searchQuery.toLowerCase()) || (topic.description && topic.description.toLowerCase().includes(searchQuery.toLowerCase())))
+                .map(topic => {
                     const isActive = topic.status === 'active';
                     return (
-                        <Card
+                        <div
                             key={topic._id}
-                            className="rounded-[2.5rem] border-none shadow-lg hover:shadow-primary/10 transition-all group flex flex-col gap-6"
-                            style={{ background: 'var(--card-bg)', padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}
+                            className="bg-[#1a1f2e] rounded-2xl flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
+                            style={{ margin: '0 0.5rem 1.5rem 0.5rem', padding: '1.5rem' }}
                         >
-                            <div className="flex justify-between items-start pt-1">
-                                <div className="flex items-center justify-between gap-4 min-w-0 flex-1">
-                                    <h3 className="font-bold text-xl md:text-2xl tracking-tight leading-tight truncate">
-                                        {topic.name}
-                                    </h3>
-                                    {topic.categoryId && !currentCategory && (
-                                        <div className="flex items-center gap-1 text-[10px] font-black uppercase text-primary/70 tracking-tighter whitespace-nowrap bg-primary/5 px-2 py-1 rounded-md shrink-0">
-                                            <FaFolder className="text-[10px]" /> {topic.categoryId.name}
-                                        </div>
-                                    )}
-                                </div>
-                                <span
-                                    className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shrink-0 ml-2"
-                                    style={{
-                                        background: isActive ? 'rgba(var(--primary-rgb), 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                                        color: isActive ? 'var(--primary)' : '#ef4444'
-                                    }}
-                                >
+                            {/* Card Header */}
+                            <div className="flex justify-between items-center">
+                                <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md ${isActive ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
                                     {isActive ? 'Active' : 'Inactive'}
                                 </span>
-                            </div>
-
-                            <p className="text-slate-400 text-sm leading-relaxed line-clamp-2">
-                                {topic.description || "No description provided for this quiz topic."}
-                            </p>
-
-                            <div className="flex gap-4 items-center mb-4">
-                                {topic.timeLimit > 0 && (
-                                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 bg-white/5 px-2.5 py-1.5 rounded-lg">
-                                        ⏱️ {topic.timeLimit}s
-                                    </div>
-                                )}
-                                {topic.negativeMarking > 0 && (
-                                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 bg-white/5 px-2.5 py-1.5 rounded-lg">
-                                        ❌ -{topic.negativeMarking}
-                                    </div>
-                                )}
-                                {topic.passingMarks > 0 && (
-                                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-green-500/80 bg-green-500/5 px-2.5 py-1.5 rounded-lg border border-green-500/10">
-                                        ✅ {topic.passingMarks} Marks
-                                    </div>
+                                {topic.categoryId && (
+                                    <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md bg-white/5 text-slate-400">
+                                        Category: {typeof topic.categoryId === 'object' ? topic.categoryId.name : 'Uncategorized'}
+                                    </span>
                                 )}
                             </div>
 
-                            <div className="flex flex-col gap-4 mt-auto pt-6 w-full">
-                                <Link href={`/users/topic/${topic._id}`} className="w-full">
-                                    <Button className="w-full justify-between h-12 px-6 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black transition-all shadow-lg shadow-primary/20">
-                                        Manage <FaArrowRight />
-                                    </Button>
-                                </Link>
+                            {/* Title & Description */}
+                            <div className="flex flex-col gap-2">
+                                <h3 className="font-bold text-xl text-white tracking-tight line-clamp-1 group-hover:text-primary transition-colors">
+                                    {topic.name}
+                                </h3>
+                                <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
+                                    {topic.description || "Master questions about this topic and test your knowledge in this comprehensive quiz."}
+                                </p>
+                            </div>
 
-                                <div className="flex items-center justify-between w-full">
-                                    <Button
-                                        variant="ghost"
-                                        className="min-w-[48px] h-10 px-4 rounded-xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center gap-2 group/btn"
-                                        onClick={(e) => { e.preventDefault(); copyTopic(topic._id); }}
-                                        title="Duplicate Topic"
-                                    >
-                                        <FaCopy className="text-slate-400 group-hover/btn:text-white transition-colors" />
-                                        <span className="text-xs font-bold text-slate-400 group-hover/btn:text-white transition-colors">Copy</span>
-                                    </Button>
-
-                                    <Button
-                                        variant="ghost"
-                                        className="min-w-[48px] h-10 px-4 rounded-xl bg-white/5 hover:bg-white/10 border-none flex items-center justify-center gap-2 group/btn"
-                                        onClick={(e) => { e.preventDefault(); deleteTopic(topic._id); }}
-                                        title="Delete Topic"
-                                    >
-                                        <FaTrash className="text-red-500/70 group-hover/btn:text-red-400 transition-colors" />
-                                        <span className="text-xs font-bold text-red-500/70 group-hover/btn:text-red-400 transition-colors">Del</span>
-                                    </Button>
+                            {/* Stats */}
+                            <div className="flex flex-wrap gap-3">
+                                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0d1117] rounded-lg border border-white/5 text-[11px] font-bold text-slate-300" style={{padding:5,fontSize:12}}>
+                                    <FaClock className="text-primary/70" /> {topic.timeLimit}S
+                                </div>
+                                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0d1117] rounded-lg border border-white/5 text-[11px] font-bold text-slate-300" style={{padding:5,fontSize:12}}>
+                                    <FaMinusCircle className="text-red-400/70" /> -{topic.negativeMarking}
+                                </div>
+                                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0d1117] rounded-lg border border-white/5 text-[11px] font-bold text-slate-300" style={{padding:5,fontSize:12}}>
+                                    <FaStar className="text-yellow-400/70" /> {topic.passingMarks} MARKS
                                 </div>
                             </div>
-                        </Card>
+
+                            {/* Footer Actions */}
+                            <div className="flex items-center justify-between mt-8 pt-8 border-t border-white/5">
+                                <div className="flex gap-3" style={{ marginTop: '1.5rem' }}>
+                                    <Link href={`/users/topic/${topic._id}`}>
+                                        <button 
+                                            className="rounded-lg font-black uppercase text-[11px] tracking-widest transition-all hover:opacity-90 active:scale-95 shadow-lg"
+                                            style={{ backgroundColor: 'var(--primary)', color: 'white', padding: '0.85rem 2rem' }}
+                                        >
+                                            Manage
+                                        </button>
+                                    </Link>
+                                    <button 
+                                        onClick={() => copyTopic(topic._id)}
+                                        className="rounded-lg font-black uppercase text-[11px] tracking-widest transition-all hover:bg-slate-900 active:scale-95 shadow-lg"
+                                        style={{ backgroundColor: 'black', color: 'white', padding: '0.85rem 2rem' }}
+                                    >
+                                        Copy
+                                    </button>
+                                </div>
+                                <button 
+                                    onClick={() => deleteTopic(topic._id)}
+                                    className="p-2 text-slate-500 hover:text-red-500 transition-colors"
+                                    title="Delete Topic"
+                                >
+                                    <FaTrash size={14} />
+                                </button>
+                            </div>
+                        </div>
                     );
                 })}
 
@@ -427,13 +436,14 @@ export default function TopicManagement() {
                                 <label className="flex flex-col gap-2">
                                     <span className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Category</span>
                                     <select 
-                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-primary transition-all font-bold"
+                                        className="bg-[#0f172a] border border-white/20 rounded-xl px-4 py-3 text-white outline-none focus:border-primary transition-all font-bold appearance-none cursor-pointer"
                                         value={newTopic.categoryId}
                                         onChange={e => setNewTopic({ ...newTopic, categoryId: e.target.value })}
+                                        style={{ background: '#0f172a', color: 'white' }}
                                     >
-                                        <option value="">None</option>
+                                        <option value="" style={{ background: '#0f172a', color: 'white' }}>None</option>
                                         {categories.map(c => (
-                                            <option key={c._id} value={c._id}>{c.name}</option>
+                                            <option key={c._id} value={c._id} style={{ background: '#0f172a', color: 'white' }}>{c.name}</option>
                                         ))}
                                     </select>
                                 </label>
