@@ -5,11 +5,12 @@ import api from '@/lib/api';
 import Link from 'next/link';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaSearch } from 'react-icons/fa';
 
 export default function StudentProgress() {
     const [attempts, setAttempts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,9 +47,30 @@ export default function StudentProgress() {
         );
     }
 
+    const filteredAttempts = attempts.filter(attempt => 
+        attempt.topicId?.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        attempt.topicId?.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 mt-12" >
-            {attempts.map((attempt) => (
+        <div className="flex flex-col gap-10 md:gap-16">
+            {/* SEARCH BAR & HEADER */}
+            <div className="flex flex-col md:flex-row items-center justify-end gap-6 mb-4 px-4">
+                <div className="relative w-full max-w-xs md:max-w-md group flex-1 md:ml-10" style={{ margin: '1rem 2.5rem 1rem 1.5rem' }}>
+                    <input
+                        type="text"
+                        placeholder="Filter topics..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-[#0a101f]/80 border border-white/5 rounded-lg py-3 pr-16 text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all font-medium"
+                        style={{ background: 'rgba(10, 16, 31, 0.8)', boxSizing: 'border-box', paddingLeft: '1.5rem', marginRight: '1rem' }}
+                    />
+                    <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 mt-12" >
+                {filteredAttempts.map((attempt) => (
                 <Card
                     key={attempt._id}
                     className="group hover:-translate-y-3 transition-all duration-500 border-white/5 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl"
@@ -75,9 +97,18 @@ export default function StudentProgress() {
                         <p className="text-slate-500 text-lg line-clamp-2 leading-relaxed">{attempt.topicId?.description}</p>
                     </div>
 
-                    <div className="mt-10 pt-8 border-t border-white/5 flex flex-col gap-6" style={{ marginTop: 30 }}>
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div className="flex flex-col">
+                    <div className="mt-7 pt-7 border-t border-white/5 flex flex-col gap-6" style={{ marginTop: 25 }}>
+                        <div 
+                            className="flex flex-row items-center justify-between bg-[#0a101f] rounded-xl gap-4"
+                            style={{ 
+                                paddingInline: '10px', 
+                                marginTop: '10px', 
+                                marginBottom: '10px',
+                                paddingTop: '15px',
+                                paddingBottom: '15px' 
+                            }}
+                        >
+                            <div className="flex flex-col shrink-0">
                                 <span className="text-slate-500 text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Performance</span>
                                 <span className="text-2xl font-black text-white">{attempt.score} <span className="text-sm text-slate-400 font-medium ml-1">pts</span></span>
                             </div>
@@ -85,9 +116,9 @@ export default function StudentProgress() {
                                 const isPassed = attempt.pointsEarned > 0 || 
                                                (attempt.topicId && attempt.score > 0 && attempt.score >= (attempt.topicId.passingMarks || 0));
                                 return (
-                                    <div className="flex flex-col items-start sm:items-end">
+                                    <div className="flex flex-col items-end text-right min-w-0">
                                         <span className={`text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1 ${isPassed ? 'text-primary' : 'text-slate-500'}`}>Status</span>
-                                        <span className={`text-lg font-black ${isPassed ? 'text-primary' : 'text-slate-500'}`}>
+                                        <span className={`text-lg font-black leading-tight ${isPassed ? 'text-primary' : 'text-slate-500'}`}>
                                             {isPassed ? '+3 Points Earned' : 'Passing Mark Not Met'}
                                         </span>
                                     </div>
@@ -102,6 +133,12 @@ export default function StudentProgress() {
                     </div>
                 </Card>
             ))}
+            {filteredAttempts.length === 0 && (
+                <div className="col-span-full py-20 text-center flex flex-col items-center gap-4 text-slate-500">
+                    <p className="font-bold">No topics found matching "{searchQuery}"</p>
+                </div>
+            )}
+            </div>
         </div>
     );
 }
