@@ -7,7 +7,7 @@ const { protect } = require('../middleware/authMiddleware');
 router.get('/overview', protect, analyticsController.getOverview);
 
 // GET global leaderboard
-router.get('/global-leaderboard', analyticsController.getGlobalLeaderboard);
+router.get('/global-leaderboard', protect, analyticsController.getGlobalLeaderboard);
 
 // GET referral leaderboard
 router.get('/referral-leaderboard', protect, analyticsController.getReferralLeaderboard);

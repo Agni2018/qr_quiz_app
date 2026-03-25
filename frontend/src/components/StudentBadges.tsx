@@ -58,7 +58,7 @@ export default function StudentBadges() {
                 </div>
 
                 {earnedBadges.length === 0 ? (
-                    <Card className="p-16 text-center bg-slate-950/40 border-dashed border-2 border-white/5 rounded-[40px]">
+                    <Card className="p-16 text-center border-dashed border-2 border-white/5 rounded-[40px]" style={{ background: '#1a1f2e' }}>
                         <div className="w-20 h-20 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-4xl grayscale opacity-30">🏆</div>
                         <h4 className="text-xl font-bold mb-2">No badges earned yet</h4>
                         <p className="text-slate-500 max-w-sm mx-auto">Complete quizzes and achieve high scores to start your collection!</p>
@@ -66,7 +66,7 @@ export default function StudentBadges() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {earnedBadges.map(badge => (
-                            <Card key={badge._id} className="p-8 border-none bg-gradient-to-br from-white/[0.05] to-transparent hover:from-pink-500/10 transition-all group relative overflow-hidden flex flex-col items-center text-center gap-2 rounded-[2.5rem] shadow-xl" style={{padding:30}}>
+                            <Card key={badge._id} className="p-8 border-none hover:from-pink-500/10 transition-all group relative overflow-hidden flex flex-col items-center text-center gap-2 rounded-[2.5rem] shadow-xl" style={{padding:30, background: '#1a1f2e' }}>
                                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-pink-500/10 blur-3xl rounded-full group-hover:bg-pink-500/20 transition-all"></div>
 
                                 <div className="w-24 h-24 rounded-full bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-500/30 flex items-center justify-center text-4xl text-pink-400 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl shadow-pink-500/10">
@@ -104,7 +104,7 @@ export default function StudentBadges() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                             {lockedBadges.map(badge => (
-                                <Card key={badge._id} className="p-8 border-white/5 bg-slate-950/20 grayscale opacity-60 flex flex-col items-center text-center gap-2 rounded-[2.5rem] relative group overflow-hidden" style={{padding:30}}>
+                                <Card key={badge._id} className="p-8 border-white/5 grayscale opacity-60 flex flex-col items-center text-center gap-2 rounded-[2.5rem] relative group overflow-hidden" style={{padding:30, background: '#1a1f2e' }}>
                                     <div className="absolute inset-0 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                                         <div className="px-6 py-3 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 flex items-center gap-3">
                                             <FaLock className="text-pink-500 text-xs" />

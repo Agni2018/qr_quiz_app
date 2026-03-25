@@ -35,7 +35,7 @@ export default function StudentProgress() {
 
     if (attempts.length === 0) {
         return (
-            <Card className="p-20 text-center bg-slate-950/40 border-dashed border-2 border-white/5 rounded-[40px] mt-12">
+            <Card className="p-20 text-center border-dashed border-2 border-white/5 rounded-[40px] mt-12" style={{ background: '#1a1f2e' }}>
                 <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner shadow-white/5">📝</div>
                 <h3 className="text-4xl font-black mb-4">No topics yet</h3>
                 <p className="text-slate-500 mb-12 text-xl max-w-md mx-auto leading-relaxed">Start your academic journey by exploring new quiz topics!</p>
@@ -51,8 +51,8 @@ export default function StudentProgress() {
             {attempts.map((attempt) => (
                 <Card
                     key={attempt._id}
-                    className="group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl"
-                    style={{ padding: '2.5rem', marginTop: 2 }}
+                    className="group hover:-translate-y-3 transition-all duration-500 border-white/5 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl"
+                    style={{ padding: '2.5rem', marginTop: 2, background: '#1a1f2e' }}
                 >
                     <div className="flex justify-between items-start mb-8">
                         <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-2xl border border-primary/20 group-hover:scale-110 transition-transform" style={{ marginBottom: 30 }}>

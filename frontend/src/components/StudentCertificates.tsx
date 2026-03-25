@@ -94,7 +94,7 @@ export default function StudentCertificates() {
 
     if (certificates.length === 0) {
         return (
-            <Card className="p-20 text-center bg-slate-950/40 border-dashed border-2 border-white/5 rounded-[40px] mt-12">
+            <Card className="p-20 text-center border-dashed border-2 border-white/5 rounded-[40px] mt-12" style={{ background: '#1a1f2e' }}>
                 <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner shadow-white/5">📜</div>
                 <h3 className="text-4xl font-black mb-4">No certificates earned</h3>
                 <p className="text-slate-500 mb-12 text-xl max-w-md mx-auto leading-relaxed">Complete quiz topics with at least one correct answer to earn yours!</p>
@@ -111,8 +111,8 @@ export default function StudentCertificates() {
                 {certificates.map((cert) => (
                     <Card
                         key={cert._id}
-                        className="border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2rem] flex flex-col h-full shadow-2xl transition-all group"
-                        style={{ padding: '2.5rem' }}
+                        className="border-white/5 hover:bg-slate-900/60 rounded-[2rem] flex flex-col h-full shadow-2xl transition-all group"
+                        style={{ padding: '2.5rem', background: '#1a1f2e' }}
                     >
                         <div className="flex justify-between items-start mb-8">
                             <div className="text-indigo-400 text-3xl opacity-50 group-hover:opacity-100 transition-opacity">

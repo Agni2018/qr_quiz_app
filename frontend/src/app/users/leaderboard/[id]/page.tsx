@@ -82,6 +82,7 @@ export default function UserLeaderboard({ params }: { params: Promise<{ id: stri
                         <div
                             key={index}
                             className="group flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 md:p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] hover:border-amber-500/20 transition-all duration-300 gap-4"
+                            style={{ background: '#1a1f2e',padding:10 }}
                         >
                             <div className="flex gap-4 md:gap-6 items-center">
                                 <span className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl font-black text-lg transition-transform group-hover:scale-110 shadow-lg shrink-0 ${index === 0 ? 'bg-amber-500 text-black shadow-amber-500/20' :

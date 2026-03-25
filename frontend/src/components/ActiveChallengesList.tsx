@@ -69,7 +69,7 @@ export default function ActiveChallengesList() {
                         <Card 
                             key={c._id} 
                             className="group relative border border-white/10 bg-black/40 hover:bg-black/60 hover:border-primary/40 transition-all duration-300 rounded-2xl overflow-hidden" 
-                            style={{ padding: '20px', margin: '0 0 10px 0' }}
+                            style={{ padding: '20px', margin: '0 0 10px 0',background: '#1a1f2e' }}
                         >
                             <div className="flex flex-col gap-3">
                                 {/* CARD HEADER: Type & Rewards & Actions */}

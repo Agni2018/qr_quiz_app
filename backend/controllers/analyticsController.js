@@ -87,9 +87,25 @@ exports.getGlobalLeaderboard = async (req, res) => {
             { $limit: 10 }
         ]);
 
+        // Current user's rank
+        let userRank = null;
+        if (req.user && req.user.id) {
+            const currentUser = await User.findById(req.user.id);
+            if (currentUser && currentUser.role === 'student') {
+                userRank = await User.countDocuments({
+                    role: 'student',
+                    $or: [
+                        { points: { $gt: currentUser.points } },
+                        { points: currentUser.points, _id: { $lt: currentUser._id } }
+                    ]
+                }) + 1;
+            }
+        }
+
         res.json({
             topScorers,
-            referralStats
+            referralStats,
+            userRank
         });
     } catch (err) {
         res.status(500).json({ message: err.message });
