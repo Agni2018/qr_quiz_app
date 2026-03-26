@@ -196,14 +196,14 @@ export default function StudentReferral() {
                                         style={{ background: '#1a1f2e', marginBottom: '1.5rem',padding:15, marginTop: idx === 0 ? '2rem' : '0' }}
                                     >
                                         <div className="flex items-center gap-4 mb-4">
-                                            <div className="w-14 h-14 rounded-2xl bg-slate-800 flex items-center justify-center text-2xl font-black text-slate-500 uppercase">
+                                            <div className="w-14 h-14 rounded-2xl bg-slate-800 flex items-center justify-center text-2xl font-black text-slate-500 uppercase shrink-0">
                                                 {ref.targetUsername?.charAt(0) || 'U'}
                                             </div>
-                                            <div className="flex flex-col overflow-hidden">
-                                                <h4 className="text-xl font-black text-white truncate">{ref.targetUsername}</h4>
-                                                <p className="text-slate-500 font-medium text-[0.75rem] truncate">{ref.targetEmail}</p>
+                                            <div className="flex flex-col flex-1 min-w-0 pr-2">
+                                                <h4 className="text-xl font-black text-white break-words">{ref.targetUsername}</h4>
+                                                <p className="text-slate-500 font-medium text-[0.75rem] break-all">{ref.targetEmail}</p>
                                             </div>
-                                            <div className="ml-auto flex flex-col items-end gap-2">
+                                            <div className="ml-auto flex flex-col items-end gap-2 shrink-0">
                                                 <div 
                                                     className={`text-[0.6rem] font-black uppercase tracking-widest rounded-lg ${ref.status === 'completed' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-primary/20 text-primary border border-primary/30'}`}
                                                     style={{ padding: '5px' }}
