@@ -159,8 +159,8 @@ export default function TopicPerformance() {
             {/* Header Section: Combined Topic Performance Header and Active Topics Card */}
             <div className="flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-16 w-full px-6 md:px-10">
                 {/* Left: Topic Performance Header and Search */}
-                <div className="flex flex-col gap-8 flex-1 w-full order-2 lg:order-1" style={{marginTop:'40'}}>
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div className="flex flex-col gap-8 flex-1 w-full order-2 lg:order-1" >
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-8" style={{marginTop:50}}>
                         <div className="flex items-center gap-6" style={{marginLeft:'1rem'}}>
                             <div style={{
                                 width: '4px',
