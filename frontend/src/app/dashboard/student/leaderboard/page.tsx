@@ -73,19 +73,6 @@ export default function LeaderboardPage() {
                             <div className="h-1.5 lg:h-2 w-24 lg:w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r from-[#f59e0b] to-transparent" />
                         </div>
                     </div>
-
-                    <div className="w-full lg:w-[320px] flex justify-center lg:justify-end">
-                        <Link href="/dashboard/student/referral-leads" className="w-full lg:w-[200px]">
-                            <Button
-                                variant="secondary"
-                                className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-black transition-all text-base shadow-xl backdrop-blur-md border-none"
-                                style={{ background: '#10b981', color: 'white' }}
-                            >
-                                <FaUsers className="text-xl text-white" />
-                                <span>Referral Leads</span>
-                            </Button>
-                        </Link>
-                    </div>
                 </div>
 
                 {/* Content Row: Leaderboard (Left) and Momentum (Right) */}
@@ -93,9 +80,21 @@ export default function LeaderboardPage() {
                     
                     {/* Left Column: Leaderboard Rows */}
                     <div className="flex-1 w-full order-2 lg:order-1">
-                        <h3 className="text-2xl font-bold mb-8 flex items-center gap-3 text-slate-500 uppercase tracking-widest pl-2" style={{marginBottom:20}}>
-                            <FaTrophy className="text-yellow-500" /> Top Global Performers
-                        </h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 mb-8" style={{marginBottom:20}}>
+                            <h3 className="text-2xl font-bold flex items-center gap-3 text-slate-500 uppercase tracking-widest pl-2 m-0">
+                                <FaTrophy className="text-yellow-500" /> Top Performers
+                            </h3>
+                            <Link href="/dashboard/student/referral-leads" className="w-full sm:w-auto">
+                                <Button
+                                    variant="secondary"
+                                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all text-sm shadow-xl backdrop-blur-md border border-emerald-500/20"
+                                    style={{ background: '#10b981', color: 'white' }}
+                                >
+                                    <FaUsers className="text-base text-white" />
+                                    <span>Referral Leads</span>
+                                </Button>
+                            </Link>
+                        </div>
 
                         <div className="flex flex-col gap-4">
                             {leaderboard?.topScorers?.map((u: any, i: number) => (
@@ -149,16 +148,17 @@ export default function LeaderboardPage() {
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full -mr-16 -mt-16 blur-2xl" />
                                 
                                 <div className="flex items-center gap-3 mb-8">
-                                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center border border-emerald-500/20 shadow-lg shadow-emerald-500/10" style={{marginBottom:20}}>
+                                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/20 shadow-lg shadow-emerald-500/10">
                                         <FaStar className="text-emerald-500 text-lg" />
                                     </div>
                                     <span className="text-[0.7rem] font-black uppercase tracking-[0.25em] text-emerald-500">Your Momentum</span>
                                 </div>
 
-                                <div className="flex flex-col relative z-10">
-                                    <span className="text-[0.7rem] font-bold uppercase tracking-widest text-slate-500 mb-2">Global Rank</span>
-                                    <div className="flex items-baseline gap-1">
-                                        <span className="text-6xl font-black text-white tracking-tighter group-hover:momentum:scale-105 transition-transform duration-500">
+                                <div className="flex justify-center relative z-10 w-full mb-6">
+                                    <div className="flex flex-col items-center justify-center w-48 h-48 rounded-full border-[8px] border-[#10b981] shadow-[0_0_20px_rgba(16,185,129,0.15)] relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-[#10b981] opacity-5 rounded-full"></div>
+                                        <span className="text-[0.65rem] font-bold uppercase tracking-widest text-slate-400 mb-1 z-10 mt-2">Global Rank</span>
+                                        <span className="text-6xl font-black text-[#10b981] tracking-tighter z-10">
                                             #{leaderboard.userRank.toLocaleString()}
                                         </span>
                                     </div>

@@ -7,7 +7,7 @@ import Card from '@/components/Card';
 import Button from '@/components/Button';
 import { FaCheckCircle, FaSearch } from 'react-icons/fa';
 
-export default function StudentProgress() {
+export default function StudentProgress({ titleComponent }: { titleComponent?: React.ReactNode }) {
     const [attempts, setAttempts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
@@ -55,17 +55,24 @@ export default function StudentProgress() {
     return (
         <div className="flex flex-col gap-10 md:gap-16">
             {/* SEARCH BAR & HEADER */}
-            <div className="flex flex-col md:flex-row items-center justify-end gap-6 mb-4 px-4">
-                <div className="relative w-full max-w-xs md:max-w-md group flex-1 md:ml-10" style={{ margin: '1rem 2.5rem 1rem 1.5rem' }}>
-                    <input
-                        type="text"
-                        placeholder="Filter topics..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-[#0a101f]/80 border border-white/5 rounded-lg py-3 pr-16 text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all font-medium"
-                        style={{ background: 'rgba(10, 16, 31, 0.8)', boxSizing: 'border-box', paddingLeft: '1.5rem', marginRight: '1rem' }}
-                    />
-                    <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" />
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-4 px-4 w-full">
+                {titleComponent && (
+                    <div className="flex-shrink-0">
+                        {titleComponent}
+                    </div>
+                )}
+                <div className="flex justify-end w-full lg:w-auto flex-1">
+                    <div className="relative w-full max-w-xs lg:max-w-md group lg:ml-10" style={{ margin: '1rem 2.5rem 1rem 1.5rem' }}>
+                        <input
+                            type="text"
+                            placeholder="Filter topics..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-[#0a101f]/80 border border-white/5 rounded-lg py-3 pr-16 text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all font-medium"
+                            style={{ background: 'rgba(10, 16, 31, 0.8)', boxSizing: 'border-box', paddingLeft: '1.5rem', marginRight: '1rem' }}
+                        />
+                        <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" />
+                    </div>
                 </div>
             </div>
 

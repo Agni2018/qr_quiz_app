@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import { FaGraduationCap, FaDownload, FaTimes } from 'react-icons/fa';
+import { FaGraduationCap, FaDownload, FaTimes, FaMedal } from 'react-icons/fa';
 import CertificateTemplate from '@/components/CertificateTemplate';
 import Link from 'next/link';
 
@@ -145,6 +145,29 @@ export default function StudentCertificates() {
                     </Card>
                 ))}
             </div>
+
+            {/* CONTINUE YOUR JOURNEY */}
+            <Card
+                className="flex flex-col sm:flex-row items-center sm:items-center justify-between border-white/5 rounded-[2rem] shadow-2xl transition-all"
+                style={{ margin: '50px 0', padding: 30, background: '#1a1f2e' }}
+            >
+                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 text-center sm:text-left">
+                    <div className="w-16 h-16 rounded-2xl bg-[#1b4332] text-[#34d399] flex items-center justify-center flex-shrink-0 shadow-inner shadow-white/5">
+                        <FaMedal size={28} />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                        <h3 className="text-2xl font-black text-white">Continue your journey</h3>
+                        <p className="text-slate-400 text-base font-medium">You have obtained {certificates.length} certificate{certificates.length !== 1 ? 's' : ''}.</p>
+                    </div>
+                </div>
+                <div className="mt-6 sm:mt-0 flex-shrink-0 w-full sm:w-auto">
+                    <Link href="/dashboard/student/explore">
+                        <Button className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold bg-[#34d399] hover:bg-[#10b981] text-slate-900 transition-colors shadow-lg shadow-[#34d399]/20 flex items-center justify-center">
+                            Browse Topics
+                        </Button>
+                    </Link>
+                </div>
+            </Card>
 
             {/* CERTIFICATE PREVIEW MODAL */}
             {showCertificateModal && (
