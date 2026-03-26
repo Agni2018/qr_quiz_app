@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Card from './Card';
 import Button from './Button';
-import { FaTrash, FaPlus, FaPuzzlePiece, FaCheckDouble, FaEdit, FaRegClone } from 'react-icons/fa';
+import { FaTrash, FaPlus, FaPuzzlePiece, FaCheckDouble, FaEdit, FaRegClone, FaGlobe } from 'react-icons/fa';
 import QuestionForm from './QuestionForm';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
@@ -88,20 +88,20 @@ export default function ReusableLibrary() {
 
                             <div className="flex flex-col gap-10 flex-1">
                                 <div className="flex flex-col sm:flex-row justify-between items-start relative z-10 gap-4">
-                                    <div className="flex flex-wrap items-center gap-3">
-                                        <div className="px-3 sm:px-4 py-2 rounded-lg bg-primary text-white text-[9px] sm:text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 whitespace-nowrap">
+                                    <div className="flex flex-col gap-1.5">
+                                        <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#00d26a]">
                                             {q.type.replace('_', ' ')}
-                                        </div>
-                                        <div className="px-3 sm:px-4 py-2 rounded-lg bg-white/5 text-slate-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-white/10 whitespace-nowrap">
-                                            {q.marks} pts
-                                        </div>
+                                        </span>
+                                        <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-slate-500">
+                                            {q.marks} PTS{Array.isArray(q.options) && q.options.length > 0 ? ` • ${q.options.length} OPTIONS` : ''}
+                                        </span>
                                     </div>
                                     <button
                                         onClick={() => deleteQuestion(q._id)}
-                                        className="text-slate-600 hover:text-red-500 hover:bg-red-500/10 transition-all p-3 rounded-xl -mr-2 -mt-2 sm:mt-0"
+                                        className="text-slate-600 hover:text-red-500 hover:bg-red-500/10 transition-all p-2 rounded-xl -mr-3 -mt-3"
                                         title="Delete from library"
                                     >
-                                        <FaTrash size={16} />
+                                        <FaTrash size={14} />
                                     </button>
                                 </div>
 
@@ -111,14 +111,9 @@ export default function ReusableLibrary() {
                                     </p>
                                 </div>
 
-                                <div className="flex items-center gap-3 text-xs font-black text-slate-600 uppercase tracking-widest mt-auto relative z-10 opacity-60">
-                                    {Array.isArray(q.options) && q.options.length > 0 && (
-                                        <>
-                                            <span>{q.options.length} Options</span>
-                                            <span className="text-slate-800">•</span>
-                                        </>
-                                    )}
-                                    <span>Global Library</span>
+                                <div className="flex justify-between items-center w-full mt-auto relative z-10 pt-5 border-t border-white/5" >
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500" style={{marginTop:10}}>GLOBAL LIBRARY</span>
+                                    <FaGlobe className="text-[#00d26a] text-sm opacity-80"  style={{marginTop:10}}/>
                                 </div>
                             </div>
                         </Card>

@@ -203,7 +203,7 @@ export default function QuestionForm({
                     <div className={`grid grid-cols-1 ${topicId ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-8 md:gap-12`}>
                         <div className="flex flex-col gap-4">
                             <label className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 px-1">
-                                Question Type
+                                Question Type <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <select
@@ -225,7 +225,7 @@ export default function QuestionForm({
 
                         <div className="flex flex-col gap-4">
                             <label className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 px-1">
-                                Difficulty / Marks
+                                Difficulty / Marks <span className="text-red-500">*</span>
                             </label>
                             <Input
                                 type="number"
@@ -260,7 +260,7 @@ export default function QuestionForm({
                     <h5 className="text-2xl font-black text-white border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em]">Question Content</h5>
                     <div className="flex flex-col gap-4">
                         <label className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 px-1">
-                            Main Content
+                            Main Content <span className="text-red-500">*</span>
                         </label>
                         <TextArea
                             value={content}
@@ -275,7 +275,7 @@ export default function QuestionForm({
                 {(type === 'single_choice' || type === 'multi_select') && (
                     <div className="flex flex-col gap-6 px-8 md:px-12" style={{ padding: 30 }}>
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 px-1">
-                            Answer Options
+                            Answer Options <span className="text-red-500">*</span>
                         </label>
 
                         <div className="p-6 md:p-10 rounded-[32px] bg-black/10 border border-white/5 flex flex-col gap-8" style={{ padding: 30 }}>
@@ -322,7 +322,7 @@ export default function QuestionForm({
                 {type === 'match' && (
                     <div className="flex flex-col gap-6 px-8 md:px-12" style={{padding:30}}>
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 px-1">
-                            Matching Pairs
+                            Matching Pairs <span className="text-red-500">*</span>
                         </label>
 
                         <div className="p-6 md:p-10 rounded-[32px] bg-black/10 border border-white/5 flex flex-col gap-8">
@@ -375,7 +375,7 @@ export default function QuestionForm({
                 {/* CORRECT ANSWER */}
                 <div className="flex flex-col gap-4 px-8 md:px-12" style={{ padding: 30 }}>
                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-400/70 px-1">
-                        Set Correct Answer
+                        Set Correct Answer <span className="text-red-500">*</span>
                     </label>
 
                     <div className="p-6 md:p-10 rounded-[32px] bg-violet-500/5 border border-violet-500/10 shadow-inner">

@@ -177,18 +177,26 @@ export default function BadgeManagement() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ margin: '0 1rem 1rem 1rem' }}>
                 {badges.map(badge => (
-                    <Card key={badge._id} className="p-8 border-white/5 hover:border-white/10 group transition-all flex flex-col items-center text-center gap-2" style={{ background: '#1a1f2e' }}>
-                        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 flex items-center justify-center text-4xl text-yellow-500 mb-6 group-hover:scale-110 transition-transform" style={{ marginTop: '1rem', marginBottom: '1rem' }}>
-                            {icons.find(i => i.name === badge.icon)?.icon || <FaAward />}
+                    <Card key={badge._id} className="p-8 border-white/5 hover:border-white/10 group transition-all flex flex-col gap-2" style={{ background: '#1a1f2e', padding: 30 }}>
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-2xl text-emerald-400 group-hover:scale-110 transition-transform" style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+                                {icons.find(i => i.name === badge.icon)?.icon || <FaAward />}
+                            </div>
+                            <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-black tracking-widest uppercase" style={{ marginTop: '1.5rem' }}>
+                                {badge.type === 'points' ? 'Tier' : badge.type === 'quiz_perfect' ? 'Expert' : badge.type.replace('_', ' ')}
+                            </span>
                         </div>
-                        <h4 className="text-2xl font-black mb-1">{badge.name}</h4>
-                        <p className="text-slate-500 text-sm mb-6 flex-1 leading-relaxed">{badge.description}</p>
-                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-8">
-                            Target: <span className="text-amber-400 ml-1.5">{badge.threshold} {badge.type === 'points' ? 'pts' : badge.type === 'streak' ? 'days' : 'items'}</span>
+                        <h4 className="text-xl font-bold mb-1 text-white">{badge.name}</h4>
+                        <p className="text-slate-400 text-sm mb-6 flex-1">{badge.description}</p>
+                        <div className="flex justify-between items-center mb-6">
+                            <span className="text-[11px] font-bold text-slate-500 tracking-widest uppercase">Target</span>
+                            <span className="text-[12px] font-bold text-emerald-400 tracking-widest uppercase">
+                                {badge.threshold} {badge.type === 'points' ? 'pts' : badge.type === 'streak' ? 'days' : 'items'}
+                            </span>
                         </div>
-                        <Button variant="danger" style={{ marginBottom: '2rem', marginTop: '1rem', width: '300px' }} className="w-full opacity-0 group-hover:opacity-100 transition-opacity mt-4" onClick={() => deleteBadge(badge._id)}>
-                            <FaTrash className="mr-2" /> Remove Badge
-                        </Button>
+                        <button className="w-full flex items-center justify-center gap-2 rounded-xl border border-rose-500/20 text-rose-400 hover:bg-rose-500/10 transition-all text-sm font-bold mt-4" style={{ marginBottom: '2rem', marginTop: '1rem', padding: 15 }} onClick={() => deleteBadge(badge._id)}>
+                            <FaTrash size={12} className="mr-2" /> Remove Badge
+                        </button>
                     </Card>
                 ))}
             </div>
