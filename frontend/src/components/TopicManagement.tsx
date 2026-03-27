@@ -350,28 +350,32 @@ export default function TopicManagement() {
                                 </div>
 
                                 {/* Footer Actions */}
-                                <div className="flex items-center gap-4 mt-auto pt-6 border-t border-white/5">
-                                    <Button 
-                                        variant="primary" 
-                                        onClick={() => manageCategory(item)}
-                                        className="h-11 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all shadow-lg"
-                                        style={{ background: '#f97316' }}
-                                    >
-                                        Manage
-                                    </Button>
-                                    <Button 
-                                        onClick={() => copyCategory(item._id)}
-                                        className="h-11 px-8 rounded-xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-tight text-[10px] border border-white/10 transition-all shadow-lg"
-                                        style={{ background: 'black', color: 'white' }}
-                                    >
-                                        Copy
-                                    </Button>
-                                    <button 
-                                        onClick={() => deleteCategory(item._id)}
-                                        className="p-2.5 bg-transparent hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-xl transition-all ml-auto"
-                                    >
-                                        <FaTrash size={14} />
-                                    </button>
+                                <div className="mt-auto pt-6 border-t border-white/5">
+                                    <div className="flex items-center justify-between w-full" style={{ marginTop: '1rem' }}>
+                                        <div className="flex items-center gap-4">
+                                            <Button 
+                                                variant="primary" 
+                                                onClick={() => manageCategory(item)}
+                                                className="h-11 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all shadow-lg"
+                                                style={{ background: '#f97316' }}
+                                            >
+                                                Manage
+                                            </Button>
+                                            <Button 
+                                                onClick={() => copyCategory(item._id)}
+                                                className="h-11 px-8 rounded-xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-tight text-[10px] border border-white/10 transition-all shadow-lg"
+                                                style={{ background: 'black', color: 'white' }}
+                                            >
+                                                Copy
+                                            </Button>
+                                        </div>
+                                        <button 
+                                            onClick={() => deleteCategory(item._id)}
+                                            className="p-2.5 bg-transparent hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-xl transition-all"
+                                        >
+                                            <FaTrash size={14} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         );
@@ -416,29 +420,33 @@ export default function TopicManagement() {
                                 </div>
 
                                 {/* Footer Actions */}
-                                <div className="flex items-center gap-4 mt-auto pt-6 border-t border-white/5">
-                                    <Link href={`/users/topic/${topic._id}`}>
-                                        <Button 
-                                            variant="primary" 
-                                            className="h-11 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all shadow-lg"
-                                            style={{ background: '#f97316' }}
+                                <div className="mt-auto pt-6 border-t border-white/5">
+                                    <div className="flex items-center justify-between w-full" style={{ marginTop: '1rem' }}>
+                                        <div className="flex items-center gap-4">
+                                            <Link href={`/users/topic/${topic._id}`}>
+                                                <Button 
+                                                    variant="primary" 
+                                                    className="h-11 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all shadow-lg"
+                                                    style={{ background: '#f97316' }}
+                                                >
+                                                    Manage
+                                                </Button>
+                                            </Link>
+                                            <Button 
+                                                onClick={() => copyTopic(topic._id)}
+                                                className="h-11 px-8 rounded-xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-tight text-[10px] border border-white/10 transition-all shadow-lg"
+                                                style={{ background: 'black', color: 'white' }}
+                                            >
+                                                Copy
+                                            </Button>
+                                        </div>
+                                        <button 
+                                            onClick={() => deleteTopic(topic._id)}
+                                            className="p-2.5 bg-transparent hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-xl transition-all"
                                         >
-                                            Manage
-                                        </Button>
-                                    </Link>
-                                    <Button 
-                                        onClick={() => copyTopic(topic._id)}
-                                        className="h-11 px-8 rounded-xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-tight text-[10px] border border-white/10 transition-all shadow-lg"
-                                        style={{ background: 'black', color: 'white' }}
-                                    >
-                                        Copy
-                                    </Button>
-                                    <button 
-                                        onClick={() => deleteTopic(topic._id)}
-                                        className="p-2.5 bg-transparent hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-xl transition-all ml-auto"
-                                    >
-                                        <FaTrash size={14} />
-                                    </button>
+                                            <FaTrash size={14} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         );
@@ -490,29 +498,33 @@ export default function TopicManagement() {
                             </div>
 
                             {/* Footer Actions */}
-                            <div className="flex items-center gap-4 mt-auto pt-6 border-t border-white/5">
-                                <Link href={`/users/topic/${topic._id}`}>
-                                    <Button 
-                                        variant="primary" 
-                                        className="h-11 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all shadow-lg"
-                                        style={{ background: '#f97316' }}
+                            <div className="mt-auto pt-6 border-t border-white/5">
+                                <div className="flex items-center justify-between w-full" style={{ marginTop: '1rem' }}>
+                                    <div className="flex items-center gap-4">
+                                        <Link href={`/users/topic/${topic._id}`}>
+                                            <Button 
+                                                variant="primary" 
+                                                className="h-11 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all shadow-lg"
+                                                style={{ background: '#f97316' }}
+                                            >
+                                                Manage
+                                            </Button>
+                                        </Link>
+                                        <Button 
+                                            onClick={() => copyTopic(topic._id)}
+                                            className="h-11 px-8 rounded-xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-tight text-[10px] border border-white/10 transition-all shadow-lg"
+                                            style={{ background: 'black', color: 'white' }}
+                                        >
+                                            Copy
+                                        </Button>
+                                    </div>
+                                    <button 
+                                        onClick={() => deleteTopic(topic._id)}
+                                        className="p-2.5 bg-transparent hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-xl transition-all"
                                     >
-                                        Manage
-                                    </Button>
-                                </Link>
-                                <Button 
-                                    onClick={() => copyTopic(topic._id)}
-                                    className="h-11 px-8 rounded-xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-tight text-[10px] border border-white/10 transition-all shadow-lg"
-                                    style={{ background: 'black', color: 'white' }}
-                                >
-                                    Copy
-                                </Button>
-                                <button 
-                                    onClick={() => deleteTopic(topic._id)}
-                                    className="p-2.5 bg-transparent hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-xl transition-all ml-auto"
-                                >
-                                    <FaTrash size={14} />
-                                </button>
+                                        <FaTrash size={14} />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     );

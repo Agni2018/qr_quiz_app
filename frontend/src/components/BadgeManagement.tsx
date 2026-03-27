@@ -225,17 +225,20 @@ export default function BadgeManagement() {
                         </div>
                         <h4 className="text-xl font-bold mb-1 text-white">{badge.name}</h4>
                         <p className="text-slate-400 text-sm mb-6 flex-1">{badge.description}</p>
-                        <div className="flex justify-between items-center bg-black/40 px-4 py-2.5 rounded-xl border border-white/5 mb-6">
-                            <span className="text-[10px] font-black text-slate-500 tracking-wider uppercase">Target Milestone</span>
-                            <span className="text-[14px] font-black text-emerald-400 tracking-tight uppercase">
+                        <div className="flex justify-between items-center mb-6">
+                            <span className="text-[11px] font-bold text-slate-500 tracking-widest uppercase">Target</span>
+                            <span className="text-[12px] font-bold text-emerald-400 tracking-widest uppercase">
                                 {badge.threshold} {badge.type === 'points' ? 'pts' : badge.type === 'streak' ? 'days' : 'items'}
                             </span>
                         </div>
                         <button 
-                            className="w-full h-11 flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-slate-900 border border-white/10 text-rose-400 transition-all text-[10px] font-black uppercase tracking-widest mt-auto shadow-lg" 
-                            onClick={() => deleteBadge(badge._id)}
+                            className="w-full h-14 flex items-center justify-center gap-2 rounded-2xl border border-rose-500/20 text-rose-400 hover:bg-rose-500/10 transition-all text-xs font-black uppercase tracking-widest mt-6" 
+                            style={{marginTop:10}}
+                            onClick={() => deleteBadge(badge._id)
+    
+                            }
                         >
-                            <FaTrash size={12} /> Remove Badge
+                            <FaTrash size={12} className="mr-2" /> Remove Badge
                         </button>
                     </Card>
                 ))}
