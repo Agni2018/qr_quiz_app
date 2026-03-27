@@ -162,7 +162,7 @@ export default function QuestionForm({
     };
 
     return (
-        <Card className="p-4 sm:p-8 md:p-12 rounded-[32px] border border-white/10 shadow-2xl overflow-hidden relative" style={{ background: '#1a1f2e' }}>
+        <Card className="p-4 sm:p-8 md:p-12 rounded-[32px] border border-slate-200 shadow-2xl overflow-hidden relative" style={{ background: '#ffffff' }}>
 
             {showBankModal && (
                 <QuestionBankModal
@@ -180,7 +180,7 @@ export default function QuestionForm({
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="flex items-center gap-2 text-white/70 hover:text-white transition-colors font-bold uppercase tracking-widest text-[11px] group"
+                        className="flex items-center gap-2 text-slate-500 hover:text-black transition-colors font-bold uppercase tracking-widest text-[11px] group"
                     >
                         <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Question Bank
                     </button>
@@ -192,17 +192,17 @@ export default function QuestionForm({
                             <FaUniversity />
                         </div>
                         <div>
-                            <h4 className="text-3xl font-black text-white tracking-tight">Reusable Question Library</h4>
-                            <p className="text-violet-400/80 font-bold uppercase tracking-widest text-xs mt-1">Creating a Global Bank Resource</p>
+                            <h4 className="text-3xl font-black tracking-tight" style={{ color: '#3b0764' }}>Reusable Question Library</h4>
+                            <p className="font-bold uppercase tracking-widest text-xs mt-1" style={{ color: '#6d28d9' }}>Creating a Global Bank Resource</p>
                         </div>
                     </div>
                 )}
 
                 <div className="flex flex-col gap-8 px-4 sm:px-8 md:px-12" style={{ padding: '30px 15px' }}>
-                    <h5 className="text-2xl font-black text-white border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em] shadow-sm">Questions Details</h5>
+                    <h5 className="text-2xl font-black border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em]" style={{ color: '#1e1b4b' }}>Questions Details</h5>
                     <div className={`grid grid-cols-1 ${topicId ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-8 md:gap-12`}>
                         <div className="flex flex-col gap-4">
-                            <label className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90 px-1">
+                            <label className="text-[11px] font-black uppercase tracking-[0.25em] text-black px-1">
                                 Question Type <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
@@ -224,7 +224,7 @@ export default function QuestionForm({
                         </div>
 
                         <div className="flex flex-col gap-4">
-                            <label className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90 px-1">
+                            <label className="text-[11px] font-black uppercase tracking-[0.25em] text-black px-1">
                                 Difficulty / Marks <span className="text-red-500">*</span>
                             </label>
                             <Input
@@ -239,7 +239,7 @@ export default function QuestionForm({
 
                         {topicId && (
                             <div className="flex flex-col gap-4">
-                                <label className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90 px-1">
+                                <label className="text-[11px] font-black uppercase tracking-[0.25em] text-black px-1">
                                     Library Access
                                 </label>
                                 <Button
@@ -256,11 +256,10 @@ export default function QuestionForm({
                     </div>
                 </div>
 
-                {/* QUESTION CONTENT */}
                 <div className="flex flex-col gap-8 px-4 sm:px-8 md:px-12" style={{ padding: '30px 15px' }}>
-                    <h5 className="text-2xl font-black text-white border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em] shadow-sm">Question Content</h5>
+                    <h5 className="text-2xl font-black border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em]" style={{ color: '#1e1b4b' }}>Question Content</h5>
                     <div className="flex flex-col gap-4">
-                        <label className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90 px-1">
+                        <label className="text-[11px] font-black uppercase tracking-[0.25em] text-black px-1">
                             Main Content <span className="text-red-500">*</span>
                         </label>
                         <TextArea
@@ -275,7 +274,7 @@ export default function QuestionForm({
                 {/* OPTIONS */}
                 {(type === 'single_choice' || type === 'multi_select') && (
                     <div className="flex flex-col gap-6 px-4 sm:px-8 md:px-12" style={{ padding: '30px 15px' }}>
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/90 px-1">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-black px-1">
                             Answer Options <span className="text-red-500">*</span>
                         </label>
 
@@ -322,7 +321,7 @@ export default function QuestionForm({
                 {/* MATCH */}
                 {type === 'match' && (
                     <div className="flex flex-col gap-6 px-8 md:px-12" style={{padding:30}}>
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/80 px-1">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-black px-1">
                             Matching Pairs <span className="text-red-500">*</span>
                         </label>
 
@@ -378,11 +377,11 @@ export default function QuestionForm({
 
                 {/* CORRECT ANSWER */}
                 <div className="flex flex-col gap-4 px-4 sm:px-8 md:px-12" style={{ padding: '30px 15px' }}>
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-400/70 px-1">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-black px-1">
                         Set Correct Answer <span className="text-red-500">*</span>
                     </label>
 
-                    <div className="p-6 md:p-10 rounded-[32px] bg-violet-500/5 border border-violet-500/10 shadow-inner">
+                    <div className="p-6 md:p-10 rounded-[32px] border border-slate-200 shadow-inner" style={{ background: '#f8f7ff' }}>
 
                         {type === 'fill_blank' && (
                             <Input
@@ -401,7 +400,7 @@ export default function QuestionForm({
                                         onClick={() => handleSingleChoiceSelect(option)}
                                         className={`flex-1 py-6 rounded-[24px] font-bold transition-all border-2 text-xl ${correctAnswer === option
                                             ? 'bg-violet-500 border-violet-400 text-white shadow-lg shadow-violet-500/30 scale-[1.02]'
-                                            : 'bg-black/20 border-white/5 text-slate-400 hover:border-violet-500/30'
+                                            : 'bg-slate-100 border-slate-300 text-slate-700 hover:border-violet-400'
                                             }`}
                                     >
                                         {option}
@@ -422,8 +421,8 @@ export default function QuestionForm({
                                         }
                                         className={`p-6 rounded-[24px] flex items-center gap-6 transition-all border-2 text-left ${(type === 'single_choice' && correctAnswer === option) ||
                                             (type === 'multi_select' && Array.isArray(correctAnswer) && correctAnswer.includes(option))
-                                            ? 'bg-violet-500/20 border-violet-500 text-white shadow-xl shadow-violet-500/10'
-                                            : 'bg-black/20 border-white/5 text-slate-400 hover:border-violet-500/20'
+                                            ? 'bg-violet-500/20 border-violet-500 text-slate-900 shadow-xl shadow-violet-500/10'
+                                            : 'bg-slate-100 border-slate-300 text-slate-700 hover:border-violet-400'
                                             }`}
                                     >
                                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${(type === 'single_choice' && correctAnswer === option) ||
@@ -443,9 +442,9 @@ export default function QuestionForm({
                         )}
 
                         {type === 'match' && (
-                            <div className="flex flex-col items-center justify-center gap-4 text-violet-400/60 bg-violet-500/5 p-8 rounded-2xl border border-violet-500/10">
-                                <div className="w-16 h-16 rounded-full bg-violet-500/10 flex items-center justify-center text-3xl">🔗</div>
-                                <p className="text-sm font-black uppercase tracking-widest text-center">
+                            <div className="flex flex-col items-center justify-center gap-4 bg-violet-50 p-8 rounded-2xl border border-violet-200">
+                                <div className="w-16 h-16 rounded-full bg-violet-100 flex items-center justify-center text-3xl">🔗</div>
+                                <p className="text-sm font-black uppercase tracking-widest text-center text-violet-700">
                                     Correct pairs are mapped automatically.
                                 </p>
                             </div>
@@ -454,13 +453,18 @@ export default function QuestionForm({
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-8 pt-12 border-t border-white/10 px-4 sm:px-8 md:px-12 mt-4" style={{ padding: '30px 15px' }}>
+                <div className="flex flex-col md:flex-row gap-8 pt-12 border-t border-slate-200 px-4 sm:px-8 md:px-12 mt-4" style={{ padding: '30px 15px' }}>
                     <Button onClick={handleSubmit} className="flex-[2] py-6 rounded-[32px] text-2xl font-black shadow-2xl shadow-violet-500/40 hover:scale-[1.02] transition-transform">
                         ✨ Save Question
                     </Button>
-                    <Button variant="outline" onClick={onCancel} className="flex-1 py-6 rounded-[32px] border-white/20 text-white hover:bg-white/10 font-black text-lg">
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="flex-1 py-6 rounded-[32px] font-black text-lg transition-all hover:scale-105 active:scale-95"
+                        style={{ border: '2px solid #475569', color: '#1e293b', background: '#f1f5f9' }}
+                    >
                         Discard
-                    </Button>
+                    </button>
                 </div>
 
             </div>

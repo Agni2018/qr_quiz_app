@@ -66,8 +66,8 @@ export default function StudentReferral() {
                 {/* Left Column: Form and Steps */}
                 <div className="w-full lg:flex-1 flex flex-col gap-0">
                     <Card
-                        className="p-8 sm:p-12 border-white/5 rounded-[3rem] shadow-2xl overflow-hidden relative group"
-                        style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem', background: '#1a1f2e' }}
+                        className="p-8 sm:p-12 border-slate-200 rounded-[3rem] shadow-2xl overflow-hidden relative group bg-white"
+                        style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}
                     >
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] rounded-full -mr-32 -mt-32 group-hover:bg-primary/20 transition-all duration-1000" />
                         
@@ -77,8 +77,8 @@ export default function StudentReferral() {
                                     <FaUserPlus />
                                 </div>
                                 <div className="text-center sm:text-left">
-                                    <h2 className="text-4xl sm:text-5xl font-black text-white mb-3 tracking-tight">Refer a Friend</h2>
-                                    <p className="text-slate-400 text-lg font-medium">Invite your friends and earn <span className="text-primary font-black">5 points</span> for each successful referral! They get <span className="text-secondary font-black">3 points</span> too.</p>
+                                    <h2 className="text-4xl sm:text-5xl font-black text-black mb-3 tracking-tight" style={{ color: '#000' }}>Refer a Friend</h2>
+                                    <p className="text-slate-500 text-lg font-medium" style={{ color: '#333' }}>Invite your friends and earn <span className="text-primary font-black">5 points</span> for each successful referral! They get <span className="text-secondary font-black">3 points</span> too.</p>
                                 </div>
                             </div>
 
@@ -98,7 +98,7 @@ export default function StudentReferral() {
                                                 value={username}
                                                 onChange={(e) => setUsername(e.target.value)}
                                                 required
-                                                className="bg-white/5 border-white/10 focus:border-primary/50 h-16 rounded-2xl text-lg transition-all"
+                                                className="bg-white border-slate-200 focus:border-primary/50 h-16 rounded-2xl text-lg transition-all text-black"
                                             />
                                         </div>
                                         <div className="space-y-4">
@@ -109,7 +109,7 @@ export default function StudentReferral() {
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 required
-                                                className="bg-white/5 border-white/10 focus:border-primary/50 h-16 rounded-2xl text-lg transition-all"
+                                                className="bg-white border-slate-200 focus:border-primary/50 h-16 rounded-2xl text-lg transition-all text-black"
                                             />
                                         </div>
                                     </div>
@@ -125,12 +125,12 @@ export default function StudentReferral() {
                             ) : (
                                 <div className="animate-fade-in">
                                     <div 
-                                        className="bg-white/5 border border-white/10 rounded-[2.5rem] p-10 text-center relative overflow-hidden group/code" 
+                                        className="bg-slate-50 border border-slate-200 rounded-[2.5rem] p-10 text-center relative overflow-hidden group/code" 
                                         style={{ padding: '2.5rem', marginTop: '2rem', marginBottom: '3rem' }}
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-primary/5 opacity-0 group-hover/code:opacity-100 transition-opacity duration-1000" />
                                         <span className="text-slate-500 text-[0.7rem] font-black uppercase tracking-[0.3em] mb-4 block relative z-10" style={{ marginTop: 10 }}>Your Unique Referral Code</span>
-                                        <h3 className="text-6xl sm:text-7xl font-black text-white tracking-widest break-all relative z-10">{referralCode}</h3>
+                                        <h3 className="text-6xl sm:text-7xl font-black text-black tracking-widest break-all relative z-10" style={{ color: '#000' }}>{referralCode}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-6" style={{ marginBottom: '3rem' }}>
@@ -167,10 +167,10 @@ export default function StudentReferral() {
                             { title: "Register", desc: "Friend signs up with code", icon: "📝" },
                             { title: "Earn", desc: "Both get reward points", icon: "💎" }
                         ].map((step, i) => (
-                            <Card key={i} className="p-8 text-center border-white/5 rounded-[2rem] hover:bg-white/5 transition-all" style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem', background: '#1a1f2e' }}>
+                            <Card key={i} className="p-8 text-center border-slate-200 rounded-[2rem] hover:bg-slate-50 transition-all bg-white" style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}>
                                 <div className="text-4xl mb-4">{step.icon}</div>
-                                <h4 className="text-lg font-black mb-1">{step.title}</h4>
-                                <p className="text-slate-500 text-sm font-medium">{step.desc}</p>
+                                <h4 className="text-lg font-black mb-1 text-black" style={{ color: '#000' }}>{step.title}</h4>
+                                <p className="text-slate-500 text-sm font-medium" style={{ color: '#333' }}>{step.desc}</p>
                             </Card>
                         ))}
                     </div>
@@ -179,11 +179,11 @@ export default function StudentReferral() {
                 {/* Right Column: Referrals List */}
                 <div className="w-full lg:w-[450px] shrink-0">
                     <Card
-                        className="border-white/5 rounded-[3rem] shadow-2xl overflow-hidden relative group h-full"
-                        style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem', background: '#1a1f2e' }}
+                        className="border-slate-200 rounded-[3rem] shadow-2xl overflow-hidden relative group h-full bg-white"
+                        style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem' }}
                     >
                         <div className="flex justify-between items-center mb-8">
-                             <h3 className="text-2xl font-black text-white">Your Recent Referrals</h3>
+                             <h3 className="text-2xl font-black text-black" style={{ color: '#000' }}>Your Recent Referrals</h3>
                              <button className="text-[0.7rem] font-black uppercase tracking-widest text-emerald-500 hover:text-emerald-400 transition-colors">View All</button>
                         </div>
                         
@@ -192,15 +192,15 @@ export default function StudentReferral() {
                                 paginatedReferrals.map((ref, idx) => (
                                     <div 
                                         key={ref._id} 
-                                        className="p-6 rounded-[2rem] border border-white/5 shadow-xl transition-all duration-300 group/ref"
-                                        style={{ background: '#1a1f2e', marginBottom: '1.5rem',padding:15, marginTop: idx === 0 ? '2rem' : '0' }}
+                                        className="p-6 rounded-[2rem] border border-slate-200 shadow-xl transition-all duration-300 group/ref bg-slate-50"
+                                        style={{ marginBottom: '1.5rem',padding:15, marginTop: idx === 0 ? '2rem' : '0' }}
                                     >
                                         <div className="flex items-center gap-4 mb-4">
                                             <div className="w-14 h-14 rounded-2xl bg-slate-800 flex items-center justify-center text-2xl font-black text-slate-500 uppercase shrink-0">
                                                 {ref.targetUsername?.charAt(0) || 'U'}
                                             </div>
                                             <div className="flex flex-col flex-1 min-w-0 pr-2">
-                                                <h4 className="text-xl font-black text-white break-words">{ref.targetUsername}</h4>
+                                                <h4 className="text-xl font-black text-black break-words" style={{ color: '#000' }}>{ref.targetUsername}</h4>
                                                 <p className="text-slate-500 font-medium text-[0.75rem] break-all">{ref.targetEmail}</p>
                                             </div>
                                             <div className="ml-auto flex flex-col items-end gap-2 shrink-0">
@@ -216,9 +216,9 @@ export default function StudentReferral() {
                                             </div>
                                         </div>
                                         
-                                        <div className="pt-6 border-t border-white/5 flex items-center justify-between" style={{marginTop:10,marginBottom:10}}>
+                                        <div className="pt-6 border-t border-slate-200 flex items-center justify-between" style={{marginTop:10,marginBottom:10}}>
                                             <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Referral Code</span>
-                                            <span className="text-base font-black text-white tracking-[0.2em] bg-white/10 px-4 py-2 rounded-xl border border-white/10 group-hover/ref:border-primary/30 group-hover/ref:text-primary transition-all font-mono" style={{ padding: '5px',marginTop:10 }}>
+                                            <span className="text-base font-black text-black tracking-[0.2em] bg-white px-4 py-2 rounded-xl border border-slate-200 group-hover/ref:border-primary/30 group-hover/ref:text-primary transition-all font-mono" style={{ padding: '5px',marginTop:10, color: '#000' }}>
                                                 {ref.referralCode}
                                             </span>
                                         </div>

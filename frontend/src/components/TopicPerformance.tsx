@@ -294,11 +294,12 @@ export default function TopicPerformance() {
                 {currentItems.map((stat: any) => (
                     <div
                         key={stat.topicId}
-                        className="bg-[#111827] border border-[#1a1f2e] rounded-[2.5rem] transition-all hover:border-orange-500/30 group hover:shadow-2xl hover:shadow-orange-500/5 relative overflow-hidden flex flex-col"
+                        className="bg-white border border-slate-200 rounded-[2.5rem] transition-all hover:border-orange-500/30 group relative overflow-hidden flex flex-col"
                         style={{ 
                             padding: '30px',
                             gap: '2.5rem',
-                            minHeight: '340px'
+                            minHeight: '340px',
+                            boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)'
                         }}
                     >
                         <div 
@@ -310,7 +311,7 @@ export default function TopicPerformance() {
                                 style={{ gap: '1.5rem' }}
                             >
                                 <div 
-                                    className="w-20 h-20 rounded-2xl bg-[#0a0b10] border border-[#1a1f2e] flex items-center justify-center text-3xl text-orange-500 shadow-inner group-hover:scale-110 transition-transform duration-500"
+                                    className="w-20 h-20 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-3xl text-orange-500 shadow-inner group-hover:scale-110 transition-transform duration-500"
                                 >
                                     {getCategoryIcon(stat.categoryName || stat.topicName)}
                                 </div>
@@ -319,8 +320,8 @@ export default function TopicPerformance() {
                                     style={{ gap: '0.25rem' }}
                                 >
                                     <h4 
-                                        className="text-3xl font-black text-white tracking-tight group-hover:text-orange-500 transition-colors"
-                                        style={{ marginBottom: '0.1rem' }}
+                                        className="text-3xl font-black text-black tracking-tight group-hover:text-orange-500 transition-colors"
+                                        style={{ marginBottom: '0.1rem', color: '#000' }}
                                     >
                                         {stat.topicName}
                                     </h4>
@@ -332,8 +333,8 @@ export default function TopicPerformance() {
                                 </div>
                             </div>
                             <div className="text-right flex flex-col items-end">
-                                <span className="text-[10px] font-black text-[#4b5563] uppercase tracking-widest" style={{ marginBottom: '0.5rem' }}>Participants</span>
-                                <span className="text-4xl font-black text-white tracking-tighter">{stat.participantCount.toLocaleString()}</span>
+                                <span className="text-[10px] font-black text-[#4b5563] uppercase tracking-widest" style={{ marginBottom: '0.5rem', color: '#333' }}>Participants</span>
+                                <span className="text-4xl font-black text-black tracking-tighter" style={{ color: '#000' }}>{stat.participantCount.toLocaleString()}</span>
                             </div>
                         </div>
 
@@ -354,7 +355,7 @@ export default function TopicPerformance() {
                             </button>
                             <button
                                 onClick={() => handleViewParticipants(stat.topicId, stat.topicName)}
-                                className="bg-[#1a1f2e] hover:bg-[#1a1f2e]/80 text-orange-500 border border-[#1a1f2e] rounded-2xl flex items-center justify-center transition-all active:scale-95 group/btn"
+                                className="bg-white hover:bg-slate-50 text-orange-500 border border-slate-200 rounded-2xl flex items-center justify-center transition-all active:scale-95 group/btn"
                                 title="View Participants"
                                 style={{ 
                                     width: '74px',
@@ -453,7 +454,7 @@ export default function TopicPerformance() {
                                     {participants.map((p, idx) => (
                                         <React.Fragment key={p.id || idx}>
                                             <div 
-                                                className="rounded-[2.5rem] bg-[#111827] border border-[#1a1f2e] flex items-center justify-between group hover:border-orange-500/30 transition-all shadow-2xl relative overflow-hidden"
+                                                className="rounded-[2.5rem] bg-white border border-slate-200 flex items-center justify-between group hover:border-orange-500/30 transition-all shadow-2xl relative overflow-hidden"
                                                 style={{ padding: '30px', gap: '1rem' }}
                                             >
                                                 <div 
@@ -474,8 +475,8 @@ export default function TopicPerformance() {
                                                         className="flex flex-col min-w-0"
                                                         style={{ gap: '0.1rem' }}
                                                     >
-                                                        <span style={{ fontSize: isMobile ? '16px' : '20px' }} className="font-black text-white tracking-tight truncate">{p.name}</span>
-                                                        <span className="text-[#4b5563] font-black uppercase tracking-widest truncate" style={{ fontSize: isMobile ? '8px' : '10px' }}>{p.email || p.phone}</span>
+                                                        <span style={{ fontSize: isMobile ? '16px' : '20px', color: '#000' }} className="font-black text-black tracking-tight truncate">{p.name}</span>
+                                                        <span className="text-[#4b5563] font-black uppercase tracking-widest truncate" style={{ fontSize: isMobile ? '8px' : '10px', color: '#333' }}>{p.email || p.phone}</span>
                                                     </div>
                                                 </div>
                                                 <div 
@@ -497,7 +498,7 @@ export default function TopicPerformance() {
                                                         ) : (
                                                             <button
                                                                 onClick={() => setSendingMessageTo(sendingMessageTo === p.id ? null : p.id)}
-                                                                className="w-14 h-14 rounded-2xl bg-[#1a1f2e] hover:bg-orange-500/10 hover:text-orange-500 text-[#4b5563] flex items-center justify-center transition-all shadow-lg active:scale-95"
+                                                                className="w-14 h-14 rounded-2xl bg-white border border-slate-200 hover:bg-orange-500/10 hover:text-orange-500 text-[#4b5563] flex items-center justify-center transition-all shadow-lg active:scale-95"
                                                                 title="Send Private Message"
                                                             >
                                                                 <FaEnvelope size={24} />
@@ -607,10 +608,10 @@ export default function TopicPerformance() {
                             style={{ padding: '30px' }}
                         >
                             <div 
-                                className="bg-[#111827]/50 border border-[#1a1f2e] rounded-[2.5rem] shadow-sm"
+                                className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm"
                                 style={{ padding: '30px', marginBottom: '3.5rem' }}
                             >
-                                <p className="text-2xl text-white font-black tracking-tight leading-relaxed">
+                                <p className="text-2xl text-black font-black tracking-tight leading-relaxed" style={{ color: '#000' }}>
                                     {participants.filter(p => !p.isCertified && p.isQualified).length > 0
                                         ? `Authorize official certification for qualified participants discovered. (Benchmark: ${passingMarks || 1} Points)`
                                         : `Verification complete. All qualified participants have already been certified.`}
@@ -635,7 +636,7 @@ export default function TopicPerformance() {
                                         return (
                                             <div
                                                 key={idx}
-                                                className={`rounded-[2.5rem] border transition-all flex items-center justify-between shadow-md relative overflow-hidden ${isQualified ? 'bg-[#111827] border-orange-500/30' : 'bg-[#111827]/50 border-[#1a1f2e] opacity-40'}`}
+                                                className={`rounded-[2.5rem] border transition-all flex items-center justify-between shadow-md relative overflow-hidden ${isQualified ? 'bg-white border-orange-500/30' : 'bg-slate-50 border-slate-200 opacity-60'}`}
                                                 style={{ padding: '30px', gap: '1.5rem' }}
                                             >
                                                 <div 
@@ -643,7 +644,7 @@ export default function TopicPerformance() {
                                                     style={{ gap: '1.5rem' }}
                                                 >
                                                     <div 
-                                                        className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg ${isQualified ? 'bg-orange-500' : 'bg-[#1a1f2e] text-[#4b5563]'}`}
+                                                        className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg ${isQualified ? 'bg-orange-500' : 'bg-slate-200 text-[#4b5563]'}`}
                                                     >
                                                         {p.name.charAt(0).toUpperCase()}
                                                     </div>
@@ -651,7 +652,7 @@ export default function TopicPerformance() {
                                                         className="flex flex-col min-w-0"
                                                         style={{ gap: '0.2rem' }}
                                                     >
-                                                        <span className="font-black text-white text-xl tracking-tight truncate">{p.name}</span>
+                                                        <span className="font-black text-black text-xl tracking-tight truncate" style={{ color: '#000' }}>{p.name}</span>
                                                         <span className={`text-[10px] font-black uppercase tracking-widest ${isQualified ? 'text-orange-500' : 'text-[#4b5563]'}`}>
                                                             {isQualified ? 'Qualified Status' : 'Below Benchmark'}
                                                         </span>

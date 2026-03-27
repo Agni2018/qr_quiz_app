@@ -125,19 +125,19 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                             <p className="text-slate-400 text-sm">No questions created yet.</p>
                         ) : (
                             questions.map((q, i) => (
-                                <Card key={q._id} className="p-6 border border-white/5 hover:border-emerald-500/20 transition-all flex flex-col gap-4" style={{ background: '#1a1f2e',padding:10 }}>
+                                <Card key={q._id} className="p-6 border border-slate-200 hover:border-slate-300 transition-all flex flex-col gap-4" style={{ background: 'white',padding:10 }}>
                                     <div className="flex justify-between items-start mb-4">
-                                        <h4 className="text-xl font-bold text-white/90">Q{i + 1}. {q.content.text}</h4>
-                                        <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full">{q.marks} Marks</span>
+                                        <h4 className="text-xl font-bold text-black" style={{ color: '#000' }}>Q{i + 1}. {q.content.text}</h4>
+                                        <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100">{q.marks} Marks</span>
                                     </div>
                                     <div className="flex gap-6">
                                         <div className="flex flex-col gap-1">
                                             <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Type</span>
-                                            <span className="text-sm font-medium text-slate-300 capitalize">{q.type.replace('_', ' ')}</span>
+                                            <span className="text-sm font-medium text-slate-700 capitalize">{q.type.replace('_', ' ')}</span>
                                         </div>
                                         <div className="flex flex-col gap-1">
                                             <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Answer</span>
-                                            <span className="text-sm font-medium text-emerald-400/80">{String(q.correctAnswer)}</span>
+                                            <span className="text-sm font-medium text-emerald-600">{String(q.correctAnswer)}</span>
                                         </div>
                                     </div>
                                 </Card>
@@ -149,18 +149,18 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
                 {/* Right Column: QR & Info */}
                 <div className="flex flex-col gap-10" >
-                    <Card className="flex flex-col items-center text-center p-9" style={{padding:30,background: '#1a1f2e'}}>
-                        <h3 className="text-xl font-bold mb-6">Share Quiz</h3>
+                    <Card className="flex flex-col items-center text-center p-9 border border-slate-200" style={{padding:30,background: 'white'}}>
+                        <h3 className="text-xl font-bold mb-6 text-black" style={{ color: '#000' }}>Share Quiz</h3>
                         {questions.length === 0 ? (
-                            <p className="text-slate-400 text-sm">Create questions to receive the quiz link and QR code.</p>
+                            <p className="text-slate-500 text-sm">Create questions to receive the quiz link and QR code.</p>
                         ) : (
                             <>
-                                <div className="bg-white p-6 rounded-2xl shadow-inner mb-6">
+                                <div className="bg-white p-6 rounded-2xl border border-slate-100 mb-6">
                                     <QRCode value={quizLink} size={160} />
                                 </div>
                                 <div className="w-full flex flex-col gap-3">
                                     <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Direct Link</p>
-                                    <div className="bg-black/20 p-4 rounded-xl break-all text-[0.85rem] text-emerald-300 font-mono border border-white/5">
+                                    <div className="bg-slate-50 p-4 rounded-xl break-all text-[0.85rem] text-emerald-600 font-mono border border-slate-200">
                                         <a href={quizLink} target="_blank" className="hover:underline">{quizLink}</a>
                                     </div>
                                 </div>
@@ -168,11 +168,11 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                         )}
                     </Card>
 
-                    <Card className="flex flex-col gap-6 p-9" style={{padding:30,background: '#1a1f2e'}}>
-                        <h3 className="text-xl font-bold mb-2">Quiz Settings</h3>
+                    <Card className="flex flex-col gap-6 p-9 border border-slate-200" style={{padding:30,background: 'white'}}>
+                        <h3 className="text-xl font-bold mb-2 text-black" style={{ color: '#000' }}>Quiz Settings</h3>
 
-                        <div className="flex items-center justify-between py-3 border-b border-white/5">
-                            <span className="text-slate-400 font-medium">Topic Status</span>
+                        <div className="flex items-center justify-between py-3 border-b border-slate-200">
+                            <span className="text-slate-600 font-medium">Topic Status</span>
                             <label className="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" className="sr-only peer" checked={topic.status === 'active'} onChange={handleToggleStatus} />
                                 <div className="w-14 h-7 bg-red-500/30 peer-checked:bg-emerald-500/30 rounded-full peer peer-focus:ring-2 peer-focus:ring-purple-400 transition-colors"></div>
@@ -187,10 +187,10 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                         </div>
                     </Card>
 
-                    <Card className="flex flex-col gap-6 p-9 relative overflow-hidden group" style={{padding:30,background: '#1a1f2e'}}>
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full translate-x-8 -translate-y-8 group-hover:bg-primary/10 transition-colors" />
-                        <h3 className="text-xl font-bold mb-2">Study Materials</h3>
-                        <p className="text-slate-400 text-sm leading-relaxed">
+                    <Card className="flex flex-col gap-6 p-9 relative overflow-hidden group border border-slate-200" style={{padding:30,background: 'white'}}>
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 blur-2xl rounded-full translate-x-8 -translate-y-8 group-hover:bg-orange-500/10 transition-colors" />
+                        <h3 className="text-xl font-bold mb-2 text-black" style={{ color: '#000' }}>Study Materials</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">
                             Upload PDFs, videos, or documents to help students prepare for this quiz.
                         </p>
                         <Button

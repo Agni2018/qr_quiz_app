@@ -60,7 +60,7 @@ export default function ActiveChallengesList() {
             </h3>
 
             {challenges.length === 0 ? (
-                <Card className="p-20 text-center border-dashed border-2 border-slate-200 bg-slate-50 opacity-100 shadow-inner" style={{ padding: 40 }}>
+                <Card className="p-20 text-center border-dashed border-2 border-slate-200 bg-slate-50 opacity-100 shadow-inner" style={{ background: 'white', padding: 40 }}>
                     <h3 className="text-xl font-bold text-slate-400 uppercase tracking-widest">No Challenges Created</h3>
                 </Card>
             ) : (
@@ -68,20 +68,20 @@ export default function ActiveChallengesList() {
                     {challenges.map((c) => (
                         <Card 
                             key={c._id} 
-                            className="group relative border border-white/10 bg-black/40 hover:bg-black/60 hover:border-primary/40 transition-all duration-300 rounded-2xl overflow-hidden" 
-                            style={{ padding: '20px', margin: '0 0 10px 0',background: '#1a1f2e' }}
+                            className="group relative border border-slate-200 bg-white hover:bg-slate-50 hover:border-primary/40 transition-all duration-300 rounded-2xl overflow-hidden" 
+                            style={{ background: 'white', padding: '20px', margin: '0 0 10px 0' }}
                         >
                             <div className="flex flex-col gap-3">
                                 {/* CARD HEADER: Type & Rewards & Actions */}
                                 <div className="flex justify-between items-start gap-4">
                                     <div className="flex flex-wrap items-center gap-3">
-                                        <div className="px-3 py-1.5 rounded-lg bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/30" style={{padding:5,fontSize:12}}>
+                                        <div className="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-[10px] font-black uppercase tracking-widest border border-slate-200" style={{padding:5,fontSize:12}}>
                                             {c.type.replace('_', ' ')}
                                         </div>
-                                        <div className="px-3 py-1.5 rounded-lg bg-yellow-500/10 text-yellow-500 text-[10px] font-black uppercase tracking-widest border border-yellow-500/20 flex items-center gap-2" style={{padding:5,fontSize:12}}>
-                                            <FaStar size={10} className="text-yellow-500" /> <span className="text-white">+{c.rewardPoints} <span className="text-yellow-500/60">pts</span></span>
+                                        <div className="px-3 py-1.5 rounded-lg bg-yellow-50 text-yellow-600 text-[10px] font-black uppercase tracking-widest border border-yellow-200 flex items-center gap-2" style={{padding:5,fontSize:12}}>
+                                            <FaStar size={10} className="text-yellow-500" /> <span className="text-yellow-600">+{c.rewardPoints} <span className="text-yellow-600/80">pts</span></span>
                                         </div>
-                                        <div className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-widest border border-white/5 flex items-center gap-2" style={{padding:6,fontSize:12}}>
+                                        <div className="px-3 py-1.5 rounded-lg bg-orange-50 text-slate-500 text-[10px] font-black uppercase tracking-widest border border-slate-200 flex items-center gap-2" style={{padding:6,fontSize:12}}>
                                             <FaCalendarAlt size={10} className="text-emerald-500/50" />
                                             <span>{new Date(c.startDate).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit' })} - {new Date(c.endDate).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit' })}</span>
                                         </div>
@@ -89,20 +89,20 @@ export default function ActiveChallengesList() {
 
                                     <button 
                                         onClick={() => handleDelete(c._id)}
-                                        className="p-3 bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white rounded-xl transition-all border border-rose-500/20 shadow-lg group/trash"
+                                        className="p-2.5 bg-transparent hover:bg-rose-50 text-rose-500 rounded-xl transition-all"
                                         title="Delete Challenge"
                                     >
-                                        <FaTrash size={16} className="group-hover/trash:scale-110 transition-transform" />
+                                        <FaTrash size={14} className="hover:scale-110 transition-transform" />
                                     </button>
                                 </div>
 
                                 {/* CARD CONTENT: Name & Description */}
                                 <div className="flex flex-col gap-1">
-                                    <h4 className="text-lg font-bold text-white group-hover:text-primary transition-colors flex items-center gap-2">
+                                    <h4 className="text-lg font-bold text-black group-hover:text-primary transition-colors flex items-center gap-2" style={{ color: '#000' }}>
                                         {c.name}
-                                        <span className="text-slate-500 text-xs font-medium">({c.threshold} 🎯)</span>
+                                        <span className="text-slate-500 text-xs font-medium" style={{ color: '#333' }}>({c.threshold} 🎯)</span>
                                     </h4>
-                                    <p className="text-slate-400 text-xs leading-relaxed line-clamp-2 italic opacity-80">
+                                    <p className="text-slate-500 text-xs leading-relaxed line-clamp-2 italic opacity-80" style={{ color: '#333' }}>
                                         "{c.description}"
                                     </p>
                                 </div>

@@ -48,8 +48,8 @@ export default function BadgeChallengeHeader({ type, activeTab }: BadgeChallenge
 
             {/* Navigation Tabs */}
             <div 
-                className="flex flex-col sm:flex-row items-center p-1.5 bg-[#1a1f2e] backdrop-blur-xl border border-white/10 rounded-full w-full sm:w-fit gap-1 shadow-2xl overflow-hidden"
-                style={{ marginTop: '20px' }}
+                className="flex flex-col sm:flex-row items-center p-1.5 bg-white backdrop-blur-xl border border-slate-200 rounded-full w-full sm:w-fit gap-1 shadow-2xl overflow-hidden"
+                style={{ marginTop: '20px',padding:10}}
             >
                 <Link href={badgesPath} className="w-full sm:w-auto">
                     <Button
@@ -57,7 +57,7 @@ export default function BadgeChallengeHeader({ type, activeTab }: BadgeChallenge
                         className={`h-11 md:h-12 px-8 rounded-full font-bold transition-all flex items-center justify-center gap-3 w-full sm:w-auto border-none ${
                             activeTab === 'badges' 
                             ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20' 
-                            : 'text-slate-400 hover:text-white hover:bg-white/5 bg-transparent'
+                            : 'text-slate-500 hover:text-black hover:bg-slate-50 bg-transparent'
                         }`}
                         style={activeTab === 'badges' ? { background: '#f97316', color: 'white' } : {}}
                     >
@@ -72,7 +72,7 @@ export default function BadgeChallengeHeader({ type, activeTab }: BadgeChallenge
                         className={`h-11 md:h-12 px-8 rounded-full font-bold transition-all flex items-center justify-center gap-3 w-full sm:w-auto border-none ${
                             activeTab === 'challenges' 
                             ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20' 
-                            : 'text-slate-400 hover:text-white hover:bg-white/5 bg-transparent'
+                            : 'text-slate-500 hover:text-black hover:bg-slate-50 bg-transparent'
                         }`}
                         style={activeTab === 'challenges' ? { background: '#f97316', color: 'white' } : {}}
                     >

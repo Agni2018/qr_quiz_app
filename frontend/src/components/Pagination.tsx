@@ -49,8 +49,8 @@ export default function Pagination({
                     style={{padding:5}}
                     className={`px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap shrink-0 transition-all active:scale-95 ${
                         currentPage === 1 
-                            ? 'bg-slate-50 text-slate-300 cursor-not-allowed' 
-                            : 'bg-[#1a1f2e] text-orange-500 hover:bg-orange-500 hover:text-white shadow-sm'
+                            ? 'bg-slate-50 text-slate-300 cursor-not-allowed border border-slate-100' 
+                            : 'bg-white border border-slate-200 text-orange-500 hover:bg-orange-50 hover:border-orange-200 shadow-sm'
                     }`}
                 >
                     Prev
@@ -61,8 +61,8 @@ export default function Pagination({
                     style={{padding:5}}
                     className={`px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap shrink-0 transition-all active:scale-95 ${
                         currentPage === totalPages 
-                            ? 'bg-slate-50 text-slate-300 cursor-not-allowed' 
-                            : 'bg-[#1a1f2e] text-orange-500 hover:bg-orange-500 hover:text-white shadow-sm'
+                            ? 'bg-slate-50 text-slate-300 cursor-not-allowed border border-slate-100' 
+                            : 'bg-white border border-slate-200 text-orange-500 hover:bg-orange-50 hover:border-orange-200 shadow-sm'
                     }`}
                 >
                     Next

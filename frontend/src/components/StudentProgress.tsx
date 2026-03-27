@@ -36,10 +36,10 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
 
     if (attempts.length === 0) {
         return (
-            <Card className="p-20 text-center border-dashed border-2 border-white/5 rounded-[40px] mt-12" style={{ background: '#1a1f2e',padding:30,marginTop:50 }}>
-                <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner shadow-white/5" style={{marginTop:20}}>📝</div>
-                <h3 className="text-4xl font-black mb-4">No topics yet</h3>
-                <p className="text-slate-500 mb-12 text-xl max-w-md mx-auto leading-relaxed">Start your academic journey by exploring new quiz topics!</p>
+            <Card className="p-20 text-center border-dashed border-2 border-slate-200 bg-white rounded-[40px] mt-12" style={{ padding:30,marginTop:50 }}>
+                <div className="w-24 h-24 bg-slate-50 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner border border-slate-100" style={{marginTop:20}}>📝</div>
+                <h3 className="text-4xl font-black mb-4 text-black" style={{ color: '#000' }}>No topics yet</h3>
+                <p className="text-slate-500 mb-12 text-xl max-w-md mx-auto leading-relaxed" style={{ color: '#333' }}>Start your academic journey by exploring new quiz topics!</p>
                 <Link href="/dashboard/student/explore">
                     <Button className="px-16 py-6 rounded-[2rem] text-xl font-black bg-primary shadow-xl shadow-primary/20" style={{marginTop:20}}>Discover Topics</Button>
                 </Link>
@@ -79,8 +79,8 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                 {filteredAttempts.map((attempt) => (
                 <Card
                     key={attempt._id}
-                    className="group hover:-translate-y-2 transition-all duration-500 border-white/5 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl"
-                    style={{ background: '#1a1f2e', padding: '30px' }}
+                    className="group hover:-translate-y-2 transition-all duration-500 border-slate-200 hover:bg-slate-50 rounded-[2.5rem] flex flex-col h-full shadow-2xl bg-white"
+                    style={{ padding: '30px' }}
                 >
                     <div className="flex justify-between items-start mb-8">
                         <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-2xl border border-primary/20 group-hover:scale-110 transition-transform">
@@ -91,7 +91,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                         </span>
                     </div>
                     <div className="flex-1 flex flex-col gap-3">
-                        <h3 className="text-2xl font-black group-hover:text-primary transition-colors leading-tight">
+                        <h3 className="text-2xl font-black group-hover:text-primary transition-colors leading-tight text-black" style={{ color: '#000' }}>
                             {attempt.topicId?.name}
                         </h3>
                         <div className="flex items-center gap-2 mb-2">
@@ -103,13 +103,13 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                         <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed">{attempt.topicId?.description}</p>
                     </div>
 
-                    <div className="mt-8 pt-8 border-t border-white/5 flex flex-col gap-6">
+                    <div className="mt-8 pt-8 border-t border-slate-100 flex flex-col gap-6">
                         <div 
-                            className="flex flex-row items-center justify-between bg-[#0a101f] rounded-2xl gap-4 p-5"
+                            className="flex flex-row items-center justify-between bg-slate-50 rounded-2xl gap-4 p-5 border border-slate-100"
                         >
                             <div className="flex flex-col shrink-0">
-                                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest leading-none mb-2">Performance</span>
-                                <span className="text-2xl font-black text-white">{attempt.score} <span className="text-xs text-slate-400 font-bold ml-1">PTS</span></span>
+                                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest leading-none mb-2" style={{ color: '#333' }}>Performance</span>
+                                <span className="text-2xl font-black text-black" style={{ color: '#000' }}>{attempt.score} <span className="text-xs text-slate-500 font-bold ml-1">PTS</span></span>
                             </div>
                             {(() => {
                                 const isPassed = attempt.pointsEarned > 0 || 

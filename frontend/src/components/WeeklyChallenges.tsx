@@ -69,7 +69,7 @@ export default function WeeklyChallenges() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {challenges.map((challenge) => (
-                        <Card key={challenge._id} className={`group relative overflow-hidden transition-all duration-500 ${challenge.isCompleted ? 'border-emerald-500/30' : 'hover:border-primary/30'}`} style={{ padding: 'max(1.25rem, 2.5vw)', margin: "1rem", background: '#1a1f2e' }}>
+                        <Card key={challenge._id} className={`group relative overflow-hidden bg-white border border-slate-200 transition-all duration-500 ${challenge.isCompleted ? 'border-emerald-500/30' : 'hover:border-primary/30'}`} style={{ padding: 'max(1.25rem, 2.5vw)', margin: "1rem" }}>
                             {/* Time Remaining Indicator - Repositioned for safer mobile view */}
                             <div className={`absolute top-2 right-4 font-black text-[0.6rem] sm:text-[0.7rem] uppercase tracking-widest z-20 ${challenge.isCompleted ? 'text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full' : 'text-slate-500'}`}>
                                 {challenge.isCompleted ? 'Completed' : getTimeRemaining(challenge.endDate)}
@@ -82,10 +82,10 @@ export default function WeeklyChallenges() {
 
                                 <div className="flex-1 w-full">
                                     <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2 mb-4">
-                                        <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-primary transition-colors leading-tight">{challenge.name}</h3>
+                                        <h3 className="text-xl sm:text-2xl font-black text-black group-hover:text-primary transition-colors leading-tight" style={{ color: '#000' }}>{challenge.name}</h3>
                                         <span className={`text-lg sm:text-xl font-black shrink-0 ${challenge.isCompleted ? 'text-emerald-500' : 'text-yellow-500'}`}>+{challenge.rewardPoints} <span className="text-[10px] opacity-60 uppercase">pts</span></span>
                                     </div>
-                                    <p className="text-slate-400 font-medium mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">{challenge.description}</p>
+                                    <p className="text-slate-500 font-medium mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base" style={{ color: '#333' }}>{challenge.description}</p>
 
                                     <div className="space-y-4">
                                         <div className="flex justify-between text-[10px] sm:text-xs font-black uppercase tracking-widest pt-4" style={{marginTop:20}}>
@@ -94,7 +94,7 @@ export default function WeeklyChallenges() {
                                                 {Math.min(challenge.currentValue, challenge.threshold)} / {challenge.threshold}
                                             </span>
                                         </div>
-                                        <div className="h-2.5 sm:h-3.5 bg-black/40 rounded-full overflow-hidden border border-white/10 shadow-inner relative">
+                                        <div className="h-2.5 sm:h-3.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200 shadow-inner relative">
                                             <div 
                                                 className={`h-full transition-all duration-1000 ease-out`}
                                                 style={{ 

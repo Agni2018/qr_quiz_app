@@ -95,8 +95,8 @@ export default function UsersLayout({
         { label: 'Uploaded Files', icon: FaUpload, href: '/users/uploaded-files' },
     ];
 
-    const sidebarWidth = isSidebarCollapsed ? '100px' : '360px';
-    const sidebarPadding = '4rem';
+    const sidebarWidth = isSidebarCollapsed ? '100px' : '280px';
+    const sidebarPadding = '2rem';
 
     return (
         <div style={{ minHeight: '100vh', background: '#ffffff', color: '#0f172a', overflowX: 'hidden', position: 'relative' }}>

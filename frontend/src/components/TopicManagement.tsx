@@ -329,7 +329,7 @@ export default function TopicManagement() {
                         return (
                             <div
                                 key={item._id}
-                                className="bg-[#1a1f2e] rounded-[2rem] flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
+                                className="bg-white rounded-[2rem] flex flex-col gap-5 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-xl"
                                 style={{ padding: '30px' }}
                             >
                                 {/* Card Header */}
@@ -341,16 +341,16 @@ export default function TopicManagement() {
 
                                 {/* Title & Description */}
                                 <div className="flex flex-col gap-2">
-                                    <h3 className="font-bold text-xl text-white tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors uppercase">
+                                    <h3 className="font-bold text-xl text-black tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors uppercase" style={{ color: '#000' }}>
                                         {item.name}
                                     </h3>
-                                    <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
+                                    <p className="text-sm leading-relaxed line-clamp-2 min-h-[40px]" style={{ color: '#333' }}>
                                         Organized group of quiz topics for better management and navigation.
                                     </p>
                                 </div>
 
                                 {/* Footer Actions */}
-                                <div className="mt-auto pt-6 border-t border-white/5">
+                                <div className="mt-auto pt-6 border-t border-slate-100">
                                     <div className="flex items-center justify-between w-full" style={{ marginTop: '1rem' }}>
                                         <div className="flex items-center gap-4">
                                             <Button 
@@ -386,7 +386,7 @@ export default function TopicManagement() {
                         return (
                             <div
                                 key={topic._id}
-                                className="bg-[#1a1f2e] rounded-[2rem] flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
+                                className="bg-white rounded-[2rem] flex flex-col gap-5 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-xl"
                                 style={{ padding: '30px' }}
                             >
                                 {/* Card Header */}
@@ -398,29 +398,29 @@ export default function TopicManagement() {
 
                                 {/* Title & Description */}
                                 <div className="flex flex-col gap-2">
-                                    <h3 className="font-bold text-xl text-white tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors uppercase">
+                                    <h3 className="font-bold text-xl text-black tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors uppercase" style={{ color: '#000' }}>
                                         {topic.name}
                                     </h3>
-                                    <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
+                                    <p className="text-sm leading-relaxed line-clamp-2 min-h-[40px]" style={{ color: '#333' }}>
                                         {topic.description || "Master questions about this topic and test your knowledge."}
                                     </p>
                                 </div>
 
                                 {/* Stats Column */}
                                 <div className="flex flex-wrap gap-3">
-                                    <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                    <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
                                         <FaClock className="text-orange-500" /> {topic.timeLimit}S
                                     </div>
-                                    <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                    <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
                                         <FaMinusCircle className="text-red-400" /> {topic.negativeMarking}
                                     </div>
-                                    <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                    <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
                                         <FaStar className="text-yellow-400" /> {topic.passingMarks} MARKS
                                     </div>
                                 </div>
 
                                 {/* Footer Actions */}
-                                <div className="mt-auto pt-6 border-t border-white/5">
+                                <div className="mt-auto pt-6 border-t border-slate-100">
                                     <div className="flex items-center justify-between w-full" style={{ marginTop: '1rem' }}>
                                         <div className="flex items-center gap-4">
                                             <Link href={`/users/topic/${topic._id}`}>
@@ -459,7 +459,7 @@ export default function TopicManagement() {
                     return (
                         <div
                             key={topic._id}
-                            className="bg-[#1a1f2e] rounded-[2rem] flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
+                            className="bg-white rounded-[2rem] flex flex-col gap-5 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-xl"
                             style={{ padding: '30px' }}
                         >
                             {/* Card Header */}
@@ -476,29 +476,29 @@ export default function TopicManagement() {
 
                             {/* Title & Description */}
                             <div className="flex flex-col gap-2">
-                                <h3 className="font-bold text-xl text-white tracking-tight line-clamp-1 group-hover:text-primary transition-colors">
+                                <h3 className="font-bold text-xl text-black tracking-tight line-clamp-1 group-hover:text-primary transition-colors" style={{ color: '#000' }}>
                                     {topic.name}
                                 </h3>
-                                <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
+                                <p className="text-sm leading-relaxed line-clamp-2 min-h-[40px]" style={{ color: '#333' }}>
                                     {topic.description || "Master questions about this topic and test your knowledge in this comprehensive quiz."}
                                 </p>
                             </div>
 
                             {/* Stats Section */}
                             <div className="flex flex-wrap gap-3">
-                                <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
                                     <FaClock className="text-orange-500" /> {topic.timeLimit}S
                                 </div>
-                                <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
                                     <FaMinusCircle className="text-red-400" /> {topic.negativeMarking}
                                 </div>
-                                <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
                                     <FaStar className="text-yellow-400" /> {topic.passingMarks} MARKS
                                 </div>
                             </div>
 
                             {/* Footer Actions */}
-                            <div className="mt-auto pt-6 border-t border-white/5">
+                            <div className="mt-auto pt-6 border-t border-slate-100">
                                 <div className="flex items-center justify-between w-full" style={{ marginTop: '1rem' }}>
                                     <div className="flex items-center gap-4">
                                         <Link href={`/users/topic/${topic._id}`}>
