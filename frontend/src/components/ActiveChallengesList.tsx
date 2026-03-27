@@ -55,13 +55,13 @@ export default function ActiveChallengesList() {
 
     return (
         <div className="flex flex-col gap-4">
-            <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">
-                Active <span className="text-slate-500">Challenges</span>
+            <h3 className="text-2xl font-black text-[#0a0f1e] mb-2 uppercase tracking-tight" style={{color:'orange'}}>
+                Active <span className="text-orange-600">Challenges</span>
             </h3>
 
             {challenges.length === 0 ? (
-                <Card className="p-20 text-center border-dashed border-2 border-white/5 opacity-50" style={{ padding: 40 }}>
-                    <h3 className="text-xl font-bold text-slate-500 uppercase tracking-widest">No Challenges Created</h3>
+                <Card className="p-20 text-center border-dashed border-2 border-slate-200 bg-slate-50 opacity-100 shadow-inner" style={{ padding: 40 }}>
+                    <h3 className="text-xl font-bold text-slate-400 uppercase tracking-widest">No Challenges Created</h3>
                 </Card>
             ) : (
                 <div className="grid grid-cols-1 gap-4">

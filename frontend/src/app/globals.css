@@ -5,100 +5,80 @@
    ============================================ */
 
 :root {
-  /* Light Theme (Default for light mode) */
+  /* Light Theme (Default) - High Contrast */
   --background: #ffffff;
   --foreground: #0f172a;
-  --card-bg: #ffffff;
-  --card-border: rgba(15, 23, 42, 0.1);
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(15, 23, 42, 0.15);
+  --card-bg: #1a1f2e;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-text: #ffffff;
+  --glass-bg: rgba(26, 31, 46, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.1);
 
-  /* Primary Colors */
-  --primary: #10b981;
-  --primary-rgb: 16, 185, 129;
-  --primary-hover: #059669;
-  --primary-light: #34d399;
-  --primary-dark: #065f46;
+  /* Primary Colors - Orange */
+  --primary: #f97316;
+  --primary-rgb: 249, 115, 22;
+  --primary-hover: #ea580c;
+  --primary-light: #fb923c;
+  --primary-dark: #c2410c;
 
-  /* Secondary Colors */
-  --secondary: #10b981;
-  --secondary-rgb: 16, 185, 129;
-  --secondary-hover: #059669;
+  /* Secondary Colors - Orange (Matching Primary for consistency) */
+  --secondary: #f97316;
+  --secondary-rgb: 249, 115, 22;
+  --secondary-hover: #ea580c;
 
-  /* Accent Colors */
-  --accent: #10b981;
-  --accent-hover: #34d399;
+  /* Accent Colors - Vibrant Orange */
+  --accent: #f97316;
+  --accent-hover: #fb923c;
 
-  /* Neutral Colors */
+  /* Neutral Colors - High Contrast for White Background */
   --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
   --border-color: #e2e8f0;
-  --hover-bg: #f8fafc;
+  --hover-bg: #f1f5f9;
 
   /* Status Colors */
-  --success: #10b981;
+  --success: #16a34a;
   --warning: #f59e0b;
-  --error: #ef4444;
-  --info: #3b82f6;
+  --error: #dc2626;
+  --info: #2563eb;
 
-  /* Primary Foreground (Text on primary background) */
+  /* Primary Foreground (Text on primary background - Orange) */
   --primary-foreground: #ffffff;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  /* Shadows - More pronounced for light theme */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
   /* Design Tokens */
-  --blur: 12px;
+  --blur: 16px;
   --radius: 12px;
   --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-xl: 32px;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
-/* Dark Theme */
+/* Dark Theme (Keeping as alternative but primary is now light) */
 [data-theme='dark'] {
-  --background: #0a0e1a;
+  --background: #0f172a;
   --foreground: #f8fafc;
-  --card-bg: rgba(15, 23, 42, 0.6);
+  --card-bg: rgba(30, 41, 59, 0.7);
   --card-border: rgba(255, 255, 255, 0.1);
-  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-bg: rgba(15, 23, 42, 0.5);
   --glass-border: rgba(255, 255, 255, 0.1);
 
-  --primary: #10b981;
-  --primary-rgb: 16, 185, 129;
-  --primary-hover: #059669;
-  --primary-light: #34d399;
-  --primary-dark: #047857;
-
-  --secondary: #10b981;
-  --secondary-rgb: 16, 185, 129;
-  --secondary-hover: #059669;
-
-  --accent: #10b981;
-  --accent-hover: #34d399;
+  --primary: #f97316;
+  --primary-rgb: 249, 115, 22;
+  --primary-hover: #ea580c;
 
   --text-primary: #f8fafc;
   --text-secondary: #cbd5e1;
-  --text-muted: #64748b;
+  --text-muted: #94a3b8;
   --border-color: rgba(255, 255, 255, 0.1);
   --hover-bg: rgba(255, 255, 255, 0.05);
-
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --info: #3b82f6;
-
-  --primary-foreground: #ffffff;
-
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
 }
 
 /* Modern Dark Theme (Replacing legacy purple) */

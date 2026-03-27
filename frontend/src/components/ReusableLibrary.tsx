@@ -53,8 +53,8 @@ export default function ReusableLibrary() {
         <div className="flex flex-col gap-10">
             <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
-                    <h3 className="text-2xl font-black" style={{ margin: '0 1rem 1rem 1rem' }}>Global Question Bank</h3>
-                    <p className="text-slate-500 text-sm" style={{ margin: '0 1rem 1rem 1rem' }}>Reusable questions that can be imported into any topic.</p>
+                    <h3 className="text-2xl font-black text-slate-900" style={{ margin: '0 1rem 1rem 1rem',color:'orange' }}>Global Question Bank</h3>
+                    <p className="text-slate-600 text-sm" style={{ margin: '0 1rem 1rem 1rem',color:'orange' }}>Reusable questions that can be imported into any topic.</p>
                 </div>
                 <Button onClick={() => setShowForm(true)} style={{ margin: '0 1rem 1rem 1rem' }}>
                     <FaPlus className="mr-2" /> New Bank Question
@@ -66,7 +66,11 @@ export default function ReusableLibrary() {
                     <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[32px] shadow-2xl" style={{margin:'1rem 1rem 1rem 1rem'}}>
                         <QuestionForm
                             topicId={undefined}
-                            onQuestionAdded={() => { setShowForm(false); fetchQuestions(); }}
+                            onQuestionAdded={() => { 
+                                setShowForm(false); 
+                                fetchQuestions(); 
+                                setAlertModal({ isOpen: true, message: 'Question created in library successfully!', type: 'success' });
+                            }}
                             onCancel={() => setShowForm(false)}
                         />
                     </div>

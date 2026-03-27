@@ -36,12 +36,12 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
 
     if (attempts.length === 0) {
         return (
-            <Card className="p-20 text-center border-dashed border-2 border-white/5 rounded-[40px] mt-12" style={{ background: '#1a1f2e' }}>
-                <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner shadow-white/5">📝</div>
+            <Card className="p-20 text-center border-dashed border-2 border-white/5 rounded-[40px] mt-12" style={{ background: '#1a1f2e',padding:30,marginTop:50 }}>
+                <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner shadow-white/5" style={{marginTop:20}}>📝</div>
                 <h3 className="text-4xl font-black mb-4">No topics yet</h3>
                 <p className="text-slate-500 mb-12 text-xl max-w-md mx-auto leading-relaxed">Start your academic journey by exploring new quiz topics!</p>
                 <Link href="/dashboard/student/explore">
-                    <Button className="px-16 py-6 rounded-[2rem] text-xl font-black bg-primary shadow-xl shadow-primary/20">Discover Topics</Button>
+                    <Button className="px-16 py-6 rounded-[2rem] text-xl font-black bg-primary shadow-xl shadow-primary/20" style={{marginTop:20}}>Discover Topics</Button>
                 </Link>
             </Card>
         );
@@ -55,39 +55,38 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
     return (
         <div className="flex flex-col gap-10 md:gap-16">
             {/* SEARCH BAR & HEADER */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-4 px-4 w-full">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 px-4 w-full">
                 {titleComponent && (
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                         {titleComponent}
                     </div>
                 )}
-                <div className="flex justify-end w-full lg:w-auto flex-1">
-                    <div className="relative w-full max-w-xs lg:max-w-md group lg:ml-10" style={{ margin: '1rem 2.5rem 1rem 1.5rem' }}>
-                        <input
-                            type="text"
-                            placeholder="Filter topics..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-[#0a101f]/80 border border-white/5 rounded-lg py-3 pr-16 text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all font-medium"
-                            style={{ background: 'rgba(10, 16, 31, 0.8)', boxSizing: 'border-box', paddingLeft: '1.5rem', marginRight: '1rem' }}
-                        />
-                        <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" />
-                    </div>
+                
+                <div className="relative w-full lg:max-w-md group" style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+                    <input
+                        type="text"
+                        placeholder="Filter topics..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-[#0a101f]/80 border border-white/5 rounded-2xl py-4 pr-16 text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all font-bold shadow-xl"
+                        style={{ paddingLeft: '1.5rem' }}
+                    />
+                    <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors size-5" />
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 mt-12" >
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 px-4" >
                 {filteredAttempts.map((attempt) => (
                 <Card
                     key={attempt._id}
-                    className="group hover:-translate-y-3 transition-all duration-500 border-white/5 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl"
-                    style={{ padding: '2.5rem', marginTop: 2, background: '#1a1f2e' }}
+                    className="group hover:-translate-y-2 transition-all duration-500 border-white/5 hover:bg-slate-900/60 rounded-[2.5rem] flex flex-col h-full shadow-2xl"
+                    style={{ background: '#1a1f2e', padding: '30px' }}
                 >
                     <div className="flex justify-between items-start mb-8">
-                        <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-2xl border border-primary/20 group-hover:scale-110 transition-transform" style={{ marginBottom: 30 }}>
+                        <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-2xl border border-primary/20 group-hover:scale-110 transition-transform">
                             <FaCheckCircle />
                         </div>
-                        <span className="text-[0.7rem] font-black uppercase tracking-widest text-slate-400 bg-white/5 py-2 px-5 rounded-xl">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 bg-white/5 py-2 px-5 rounded-xl">
                             {new Date(attempt.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                     </div>
@@ -96,45 +95,38 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                             {attempt.topicId?.name}
                         </h3>
                         <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-black uppercase tracking-widest text-slate-500">Global Rank</span>
-                            <span className={`text-lg font-black ${attempt.rank <= 3 ? 'text-yellow-500' : 'text-primary'}`}>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Global Rank</span>
+                            <span className={`text-xl font-black ${attempt.rank <= 3 ? 'text-yellow-500' : 'text-primary'}`}>
                                 #{attempt.rank || '-'}
                             </span>
                         </div>
-                        <p className="text-slate-500 text-lg line-clamp-2 leading-relaxed">{attempt.topicId?.description}</p>
+                        <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed">{attempt.topicId?.description}</p>
                     </div>
 
-                    <div className="mt-7 pt-7 border-t border-white/5 flex flex-col gap-6" style={{ marginTop: 25 }}>
+                    <div className="mt-8 pt-8 border-t border-white/5 flex flex-col gap-6">
                         <div 
-                            className="flex flex-row items-center justify-between bg-[#0a101f] rounded-xl gap-4"
-                            style={{ 
-                                paddingInline: '10px', 
-                                marginTop: '10px', 
-                                marginBottom: '10px',
-                                paddingTop: '15px',
-                                paddingBottom: '15px' 
-                            }}
+                            className="flex flex-row items-center justify-between bg-[#0a101f] rounded-2xl gap-4 p-5"
                         >
                             <div className="flex flex-col shrink-0">
-                                <span className="text-slate-500 text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1">Performance</span>
-                                <span className="text-2xl font-black text-white">{attempt.score} <span className="text-sm text-slate-400 font-medium ml-1">pts</span></span>
+                                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest leading-none mb-2">Performance</span>
+                                <span className="text-2xl font-black text-white">{attempt.score} <span className="text-xs text-slate-400 font-bold ml-1">PTS</span></span>
                             </div>
                             {(() => {
                                 const isPassed = attempt.pointsEarned > 0 || 
                                                (attempt.topicId && attempt.score > 0 && attempt.score >= (attempt.topicId.passingMarks || 0));
                                 return (
                                     <div className="flex flex-col items-end text-right min-w-0">
-                                        <span className={`text-[0.65rem] font-black uppercase tracking-widest leading-none mb-1 ${isPassed ? 'text-primary' : 'text-slate-500'}`}>Status</span>
-                                        <span className={`text-lg font-black leading-tight ${isPassed ? 'text-primary' : 'text-slate-500'}`}>
-                                            {isPassed ? '+3 Points Earned' : 'Passing Mark Not Met'}
+                                        <span className={`text-[9px] font-black uppercase tracking-widest leading-none mb-2 ${isPassed ? 'text-primary' : 'text-slate-500'}`}>Status</span>
+                                        <span className={`text-sm font-black leading-tight ${isPassed ? 'text-primary' : 'text-slate-500'}`}>
+                                            {isPassed ? '+3 Points' : 'FAILED'}
                                         </span>
                                     </div>
                                 );
                             })()}
                         </div>
                         <Link href={`/quiz/${attempt.topicId?._id}/result?attemptId=${attempt._id}`}>
-                            <Button variant="secondary" className="w-full py-4 rounded-xl font-black text-sm bg-primary hover:scale-[1.02] transition-all shadow-lg shadow-primary/40">
-                                View Details →
+                            <Button variant="secondary" className="w-full h-14 rounded-2xl font-black text-xs uppercase tracking-widest bg-primary hover:scale-[1.02] transition-all shadow-xl shadow-primary/20">
+                                View Details
                             </Button>
                         </Link>
                     </div>

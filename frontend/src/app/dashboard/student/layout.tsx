@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { useRouter, usePathname } from 'next/navigation';
 import Button from '@/components/Button';
-import ThemeToggle from '@/components/ThemeToggle';
 import LevelCard from '@/components/LevelCard';
 import {
     FaGraduationCap,
@@ -145,7 +144,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     }
 
     return (
-        <div style={{ minHeight: '100vh', background: 'var(--background)', color: 'var(--text-primary)', overflowX: 'hidden' }}>
+        <div style={{ minHeight: '100vh', background: '#ffffff', color: '#0f172a', overflowX: 'hidden' }}>
             {/* MOBILE HEADER */}
             <header className="lg:hidden sticky top-0 z-40 flex items-center justify-between p-4 border-b border-white/5 bg-slate-900/60 backdrop-blur-xl">
                 <h1 className="text-xl font-black">Student Portal</h1>
@@ -175,9 +174,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
 
                     style={{
-                        background: 'var(--glass-bg)',
+                        background: '#f97316',
                         backdropFilter: 'blur(var(--blur))',
-                        borderColor: 'var(--border-color)'
+                        borderColor: 'rgba(255,255,255,0.1)'
                     }}
                 >
                     <button onClick={() => setSidebarOpen(false)} className="lg:hidden absolute top-6 right-6">
@@ -191,7 +190,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                             <FaUser className="text-4xl text-slate-400 group-hover:text-orange-500 transition-colors relative z-10" />
                         </div>
                         <h2 className="text-xl font-black tracking-tighter uppercase leading-tight px-4 w-full" style={{marginBottom:35}}>
-                            <span className="text-orange-500 block mb-1" style={{marginTop:10}}>WELCOME,</span> 
+                            <span className="text-white block mb-1" style={{marginTop:10}}>WELCOME,</span> 
                             <span className="text-white break-all" >{user?.username}</span>
                         </h2>
 
@@ -212,7 +211,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                         <Link href="/dashboard/student/progress" onClick={() => setSidebarOpen(false)}>
                             <Button
                                 variant={isActive('/dashboard/student/progress') ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/progress') ? 'bg-primary text-white border-none shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/progress') ? 'bg-white text-orange-600 border-none shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
                                 title={isSidebarCollapsed ? "Manage Topics" : ""}
                             >
                                 <FaHistory className={isActive('/dashboard/student/progress') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
@@ -223,77 +222,77 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                         <Link href="/dashboard/student/explore" onClick={() => setSidebarOpen(false)}>
                             <Button
                                 variant={isActive('/dashboard/student/explore') ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/explore') ? 'bg-primary text-white border-none shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/explore') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
                                 title={isSidebarCollapsed ? "Explore Quiz" : ""}
                             >
-                                <FaCompass className={isActive('/dashboard/student/explore') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className="text-white">Explore Quiz</span>}
+                                <FaCompass className={isActive('/dashboard/student/explore') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/explore') ? 'text-white' : 'text-white'}>Explore Quiz</span>}
                             </Button>
                         </Link>
 
                         <Link href="/dashboard/student/leaderboard" onClick={() => setSidebarOpen(false)}>
                             <Button
                                 variant={isActive('/dashboard/student/leaderboard') ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/leaderboard') ? 'bg-primary text-white border-none shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/leaderboard') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
                                 title={isSidebarCollapsed ? "Leaderboard" : ""}
                             >
-                                <FaTrophy className={isActive('/dashboard/student/leaderboard') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className="text-white">Leaderboard</span>}
+                                <FaTrophy className={isActive('/dashboard/student/leaderboard') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/leaderboard') ? 'text-white' : 'text-white'}>Leaderboard</span>}
                             </Button>
                         </Link>
 
                         <Link href="/dashboard/student/referral" onClick={() => setSidebarOpen(false)}>
                             <Button
                                 variant={isActive('/dashboard/student/referral') ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/referral') ? 'bg-primary text-white border-none shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/referral') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
                                 title={isSidebarCollapsed ? "Referral" : ""}
                             >
-                                <FaUserPlus className={isActive('/dashboard/student/referral') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className="text-white">Referral</span>}
+                                <FaUserPlus className={isActive('/dashboard/student/referral') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/referral') ? 'text-white' : 'text-white'}>Referral</span>}
                             </Button>
                         </Link>
 
                         <Link href="/dashboard/student/badges" onClick={() => setSidebarOpen(false)}>
                             <Button
                                 variant={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'bg-primary text-white border-none shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
                                 title={isSidebarCollapsed ? "Badge & Challenges" : ""}
                             >
-                                <FaAward className={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className="text-white">Badge & Challenges</span>}
+                                <FaAward className={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'text-white' : 'text-white'}>Badge & Challenges</span>}
                             </Button>
                         </Link>
 
                         <Link href="/dashboard/student/certificates" onClick={() => setSidebarOpen(false)}>
                             <Button
                                 variant={isActive('/dashboard/student/certificates') ? 'secondary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/certificates') ? 'bg-indigo-500/10 text-white border-none shadow-none' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/certificates') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
                                 title={isSidebarCollapsed ? "Certificates" : ""}
                             >
-                                <FaGraduationCap className={isActive('/dashboard/student/certificates') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/certificates') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Certificates</span>}
+                                <FaGraduationCap className={isActive('/dashboard/student/certificates') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/certificates') ? 'text-white' : 'text-white'}>Certificates</span>}
                             </Button>
                         </Link>
 
                         <Link href="/dashboard/student/materials" onClick={() => setSidebarOpen(false)}>
                             <Button
                                 variant={isActive('/dashboard/student/materials') ? 'secondary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/materials') ? 'bg-rose-500/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/materials') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
                                 title={isSidebarCollapsed ? "Study Materials" : ""}
                             >
-                                <FaBookOpen className={isActive('/dashboard/student/materials') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/materials') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Study Materials</span>}
+                                <FaBookOpen className={isActive('/dashboard/student/materials') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
+                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/materials') ? 'text-white' : 'text-white'}>Study Materials</span>}
                             </Button>
                         </Link>
 
                         <Link href="/dashboard/student/notifications" onClick={() => setSidebarOpen(false)}>
                             <Button
                                 variant={isActive('/dashboard/student/notifications') ? 'secondary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all relative w-full ${isActive('/dashboard/student/notifications') ? 'bg-blue-500/10 text-white border-none shadow-none' : 'text-slate-400 hover:text-white hover:bg-white/5 border-none'}`}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all relative w-full ${isActive('/dashboard/student/notifications') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
                                 title={isSidebarCollapsed ? "Notifications" : ""}
                             >
                                 <div className="relative">
-                                    <FaBell className={isActive('/dashboard/student/notifications') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} />
+                                    <FaBell className={isActive('/dashboard/student/notifications') ? 'text-white' : 'text-white/70 group-hover:text-white'} />
                                     {unreadCount > 0 && (
                                         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-pulse">
                                             {unreadCount}
@@ -305,11 +304,11 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                         </Link>
                     </nav>
 
-                    <div className="mt-auto pt-8 border-t border-slate-200/10 dark:border-white/5 flex flex-col gap-2">
+                    <div className="mt-auto pt-8 border-t border-white/10 flex flex-col gap-2">
 
                         <Button
                             variant="ghost"
-                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-[#94a3b8] hover:text-white hover:bg-white/5 border-none hidden lg:flex rounded-xl`}
+                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-white/70 hover:text-white hover:bg-white/10 border-none hidden lg:flex rounded-xl`}
                             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                             title={isSidebarCollapsed ? "Expand Menu" : "Collapse Menu"}
                         >
@@ -318,7 +317,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
                         <Button
                             variant="ghost"
-                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-[#94a3b8] hover:text-red-500 hover:bg-red-500/5 border-none rounded-xl`}
+                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-white/70 hover:text-red-200 hover:bg-white/10 border-none rounded-xl`}
                             title={isSidebarCollapsed ? "Sign Out" : ""}
                             onClick={handleLogout}
                         >
@@ -332,7 +331,6 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                     <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-20" style={{ margin: '1rem 1rem 2rem 1rem' }}>
                         {/* TOP BAR */}
                         <div className="flex flex-wrap items-center justify-end gap-6 mb-16">
-                            <ThemeToggle />
                             <LevelCard points={user?.points || 0} />
                             <div className="bg-slate-900/60 border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-3 backdrop-blur-xl shadow-lg" style={{padding:10}}>
                                 <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-500">🔥</div>

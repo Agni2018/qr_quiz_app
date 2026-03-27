@@ -60,17 +60,17 @@ export default function ChallengeManagement() {
             {/* SIMPLIFIED HEADER */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8" style={{ marginBottom: '60px' }}>
                 <div className="flex flex-col gap-2">
-                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase leading-none">
-                        Challenge <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40">Creator</span>
+                    <h2 className="text-5xl md:text-7xl font-black text-[#0a0f1e] tracking-tighter uppercase leading-none" style={{color:'orange'}}>
+                        Challenge <span className="text-orange-600">Creator</span>
                     </h2>
-                    <p className="text-slate-500 font-medium text-lg max-w-xl mt-2">
+                    <p className="text-slate-500 font-medium text-lg max-w-xl mt-2" style={{color:'orange'}}>
                         Define the parameters of elite achievement. Architect your prestige through tactical weekly objectives.
                     </p>
                 </div>
                 
                 <div className="w-full md:w-auto flex justify-end">
                     <Link href="/users/challenges/active">
-                        <Button className="h-14 px-8 rounded-2xl bg-yellow-500 hover:bg-yellow-400 text-black font-black transition-all shadow-[0_0_30px_rgba(234,179,8,0.2)] group flex items-center gap-3">
+                        <Button className="h-14 px-8 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black transition-all shadow-[0_10px_30px_rgba(249,115,22,0.2)] group flex items-center gap-3">
                             <span className="text-xs tracking-widest uppercase">View Active Challenges</span>
                             <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
                         </Button>
@@ -83,13 +83,13 @@ export default function ChallengeManagement() {
                 <div className="relative group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/5 to-blue-500/5 rounded-[2.5rem] blur-2xl opacity-50" />
                     
-                    <Card className="relative bg-[#0a0f18]/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-none overflow-hidden" style={{ padding: '0',marginBottom:'30px' }}>
-                        <form onSubmit={handleSubmit} className="flex flex-col" style={{padding:30}}>
+                    <Card className="relative border border-white/10 rounded-[2.5rem] shadow-none overflow-hidden" style={{ padding: 30,marginBottom:'30px', background: '#1a1f2e' }}>
+                        <form onSubmit={handleSubmit} className="flex flex-col p-4 sm:p-8 md:p-12">
                             
                             {/* SECTOR 01: IDENTITY */}
                             <div className="p-8 md:p-14 lg:p-20 border-b border-white/5" style={{ marginBottom: '20px' }}>
                                 <div className="flex justify-between items-center mb-10">
-                                    <span className="text-[10px] font-black uppercase text-slate-500 tracking-[0.3em]">Sector 01 // Identity</span>
+                                    <span className="text-[10px] font-black uppercase text-white/70 tracking-[0.3em]">Sector 01 // Identity</span>
                                     <div className="flex gap-1">
                                         {[1,2,3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-emerald-500/30" />)}
                                     </div>
@@ -97,24 +97,24 @@ export default function ChallengeManagement() {
                                 <div className="flex flex-col gap-12">
                                     <div style={{ marginBottom: '30px' }}>
                                         <Input
-                                            label={<span>Challenge Name <span className="text-rose-500">*</span></span>}
+                                            label={<span className="text-white/90">Challenge Name <span className="text-rose-500">*</span></span>}
                                             type="text"
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                             placeholder="e.g. Quiz Enthusiast"
-                                            className="!px-10 h-[80px] !rounded-2xl border-white/10 bg-black/40 text-2xl font-black placeholder:opacity-20 focus:border-emerald-500/50 transition-all"
+                                            className="!px-10 h-[80px] !rounded-2xl border-white/20 bg-[#0f172a] text-2xl font-black placeholder:opacity-20 focus:border-emerald-500/50 transition-all !text-white"
                                             required
                                         />
                                     </div>
                                     <div className="flex flex-col gap-4">
-                                        <label className="text-[11px] font-black uppercase text-slate-500 tracking-widest px-4">
+                                        <label className="text-[11px] font-black uppercase text-white/90 tracking-widest px-4">
                                             Operational Directives <span className="text-rose-500">*</span>
                                         </label>
                                         <TextArea
                                             value={formData.description}
                                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                             placeholder="Detail the requirements, constraints, and objective for this elite challenge..."
-                                            className="!p-10 !rounded-[2.5rem] bg-black/40 border-white/10 !min-h-[250px] text-lg font-medium leading-relaxed focus:border-emerald-500/50 transition-all"
+                                            className="!p-10 !rounded-[2.5rem] bg-[#0f172a] border-white/20 !min-h-[250px] text-lg font-medium leading-relaxed focus:border-emerald-500/50 transition-all !text-white"
                                             required
                                         />
                                     </div>
@@ -124,21 +124,21 @@ export default function ChallengeManagement() {
                             {/* SECTOR 02: STRATEGY */}
                             <div className="p-8 md:p-14 lg:p-20 border-b border-white/5" style={{ marginTop: '20px', marginBottom: '20px' }}>
                                 <div className="flex justify-between items-center mb-10">
-                                    <span className="text-[10px] font-black uppercase text-slate-500 tracking-[0.3em]">Sector 02 // Strategy</span>
+                                    <span className="text-[10px] font-black uppercase text-white/70 tracking-[0.3em]">Sector 02 // Strategy</span>
                                     <div className="flex gap-1">
                                         {[1,2,3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-blue-500/30" />)}
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                     <div className="flex flex-col gap-4" style={{ marginBottom: '30px' }}>
-                                        <label className="text-[11px] font-black uppercase text-slate-500 tracking-widest px-4">
+                                        <label className="text-[11px] font-black uppercase text-white/90 tracking-widest px-4">
                                             Goal Type <span className="text-rose-500">*</span>
                                         </label>
                                         <div className="relative text-left group/select">
                                             <select
                                                 value={formData.type}
                                                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                                                className="w-full h-[80px] p-4 px-10 rounded-2xl bg-black border border-white/10 text-white outline-none appearance-none cursor-pointer focus:border-emerald-500/50 font-black text-xl shadow-inner transition-all"
+                                                className="w-full h-[80px] p-4 px-10 rounded-2xl bg-[#0f172a] border border-white/20 text-white outline-none appearance-none cursor-pointer focus:border-emerald-500/50 font-black text-xl shadow-inner transition-all"
                                             >
                                                 <option value="quiz_count" className="bg-[#0a0f18] text-white py-4">Quiz Count</option>
                                                 <option value="points_earned" className="bg-[#0a0f18] text-white py-4">Points Earned</option>
@@ -153,22 +153,22 @@ export default function ChallengeManagement() {
                                     </div>
                                     <div style={{ marginBottom: '30px' }}>
                                         <Input
-                                            label={<span>Requirement Threshold <span className="text-rose-500">*</span></span>}
+                                            label={<span className="text-white/90">Requirement Threshold <span className="text-rose-500">*</span></span>}
                                             type="number"
                                             value={formData.threshold}
                                             onChange={(e) => setFormData({ ...formData, threshold: e.target.value })}
-                                            className="!px-10 h-[80px] !rounded-2xl border-white/10 bg-black/40 font-black text-3xl text-emerald-500 shadow-inner"
+                                            className="!px-10 h-[80px] !rounded-2xl border-white/20 bg-[#0f172a] font-black text-3xl text-emerald-500 shadow-inner"
                                             required
                                         />
                                     </div>
                                 </div>
                                 <div className="mt-8" style={{ marginTop: '40px' }}>
                                     <Input
-                                        label={<span>Bounty Reward <span className="text-rose-500">*</span></span>}
+                                        label={<span className="text-white/90">Bounty Reward <span className="text-rose-500">*</span></span>}
                                         type="number"
                                         value={formData.rewardPoints}
                                         onChange={(e) => setFormData({ ...formData, rewardPoints: e.target.value })}
-                                        className="!px-10 h-[80px] !rounded-2xl border-white/10 bg-black/40 font-black text-4xl text-yellow-500 shadow-inner"
+                                        className="!px-10 h-[80px] !rounded-2xl border-white/20 bg-[#0f172a] font-black text-4xl text-yellow-500 shadow-inner"
                                         required
                                     />
                                 </div>
@@ -177,7 +177,7 @@ export default function ChallengeManagement() {
                             {/* SECTOR 03: LOGISTICS */}
                             <div className="p-8 md:p-14 lg:p-20" style={{ marginTop: '20px' }}>
                                 <div className="flex justify-between items-center mb-10">
-                                    <span className="text-[10px] font-black uppercase text-slate-500 tracking-[0.3em]">Sector 03 // Logistics</span>
+                                    <span className="text-[10px] font-black uppercase text-white/90 tracking-[0.3em]">Sector 03 // Logistics</span>
                                     <div className="flex gap-1">
                                         {[1,2,3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-yellow-500/30" />)}
                                     </div>
@@ -185,21 +185,21 @@ export default function ChallengeManagement() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10" style={{ marginBottom: '60px' }}>
                                     <div style={{ marginBottom: '30px' }}>
                                         <Input
-                                            label={<span>Launch Date <span className="text-rose-500">*</span></span>}
+                                            label={<span className="text-white/90">Launch Date <span className="text-rose-500">*</span></span>}
                                             type="date"
                                             value={formData.startDate}
                                             onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                                            className="!px-8 h-[80px] !rounded-2xl border-white/10 bg-black/40 font-black text-white tracking-widest [color-scheme:dark]"
+                                            className="!px-8 h-[80px] !rounded-2xl border-white/20 bg-[#0f172a] font-black text-white tracking-widest [color-scheme:dark]"
                                             required
                                         />
                                     </div>
                                     <div style={{ marginBottom: '30px' }}>
                                         <Input
-                                            label={<span>Expiration Date <span className="text-rose-500">*</span></span>}
+                                            label={<span className="text-white/90">Expiration Date <span className="text-rose-500">*</span></span>}
                                             type="date"
                                             value={formData.endDate}
                                             onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                                            className="!px-8 h-[80px] !rounded-2xl border-white/10 bg-black/40 font-black text-white tracking-widest [color-scheme:dark]"
+                                            className="!px-8 h-[80px] !rounded-2xl border-white/20 bg-[#0f172a] font-black text-white tracking-widest [color-scheme:dark]"
                                             required
                                         />
                                     </div>
@@ -210,7 +210,7 @@ export default function ChallengeManagement() {
                                     <Button 
                                         type="submit" 
                                         disabled={loading}
-                                        className="w-full h-24 rounded-[2rem] text-3xl font-black bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-[0_0_50px_rgba(16,185,129,0.2)] transition-all hover:scale-[1.01] hover:shadow-[0_0_70px_rgba(16,185,129,0.4)] active:scale-95 flex items-center justify-center gap-4 group"
+                                        className="w-full h-24 rounded-[2rem] text-3xl font-black bg-orange-500 hover:bg-orange-600 text-white shadow-[0_20px_50px_rgba(249,115,22,0.2)] transition-all hover:scale-[1.01] hover:shadow-[0_25px_70px_rgba(249,115,22,0.3)] active:scale-95 flex items-center justify-center gap-4 group"
                                     >
                                         {loading ? 'INITIALIZING...' : (
                                             <>
@@ -219,7 +219,7 @@ export default function ChallengeManagement() {
                                             </>
                                         )}
                                     </Button>
-                                    <p className="text-[10px] font-black text-slate-500 tracking-[0.2em] text-center opacity-60">
+                                    <p className="text-[10px] font-black text-white/50 tracking-[0.2em] text-center opacity-60">
                                         BY INITIALIZING, YOU CONFIRM ADHERENCE TO THE PRESTIGE PROTOCOLS
                                     </p>
                                 </div>

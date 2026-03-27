@@ -10,11 +10,12 @@ import TextArea from '@/components/TextArea';
 import { 
     FaPlus, FaTrash, FaCopy, FaArrowRight, FaFolder, 
     FaChevronLeft, FaSearch, FaTimes, FaQuestionCircle,
-    FaFolderPlus, FaClock, FaMinusCircle, FaStar
+    FaFolderPlus, FaClock, FaMinusCircle, FaStar, FaChevronDown
 } from 'react-icons/fa';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
+import Pagination from './Pagination';
 
 export default function TopicManagement() {
     const router = useRouter();
@@ -26,6 +27,18 @@ export default function TopicManagement() {
     const [categories, setCategories] = useState<any[]>([]);
     const [topics, setTopics] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isMobile = windowWidth < 768;
     
     const [showTopicModal, setShowTopicModal] = useState(false);
     const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -81,6 +94,7 @@ export default function TopicManagement() {
 
     useEffect(() => {
         fetchData();
+        setCurrentPage(1); // Reset page on category change
 
         const handleOpenTopicModal = () => setShowTopicModal(true);
         const handleOpenCategoryModal = () => setShowCategoryModal(true);
@@ -112,6 +126,7 @@ export default function TopicManagement() {
                 passingMarks: 0,
                 categoryId: ''
             });
+            setAlertModal({ isOpen: true, message: 'Topic created successfully', type: 'success' });
             fetchData();
         } catch (err) {
             console.error('Create topic error:', err);
@@ -126,6 +141,7 @@ export default function TopicManagement() {
             onConfirm: async () => {
                 try {
                     await api.delete(`/topics/${id}`);
+                    setAlertModal({ isOpen: true, message: 'Topic deleted successfully', type: 'success' });
                     fetchData();
                 } catch (err) {
                     console.error('Delete topic error:', err);
@@ -142,6 +158,7 @@ export default function TopicManagement() {
             onConfirm: async () => {
                 try {
                     await api.post(`/topics/${id}/copy`);
+                    setAlertModal({ isOpen: true, message: 'Topic duplicated successfully', type: 'success' });
                     fetchData();
                 } catch (err: any) {
                     setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Failed to copy topic', type: 'error' });
@@ -156,6 +173,7 @@ export default function TopicManagement() {
             await api.post('/categories', newCategory);
             setShowCategoryModal(false);
             setNewCategory({ name: '' });
+            setAlertModal({ isOpen: true, message: 'Category created successfully', type: 'success' });
             fetchData();
         } catch (err) {
             console.error('Create category error:', err);
@@ -170,6 +188,7 @@ export default function TopicManagement() {
             onConfirm: async () => {
                 try {
                     await api.delete(`/categories/${id}`);
+                    setAlertModal({ isOpen: true, message: 'Category deleted successfully', type: 'success' });
                     fetchData();
                 } catch (err) {
                     console.error('Delete category error:', err);
@@ -186,6 +205,7 @@ export default function TopicManagement() {
             onConfirm: async () => {
                 try {
                     await api.post(`/categories/${id}/copy`);
+                    setAlertModal({ isOpen: true, message: 'Category duplicated successfully', type: 'success' });
                     fetchData();
                 } catch (err: any) {
                     setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Failed to copy category', type: 'error' });
@@ -202,6 +222,10 @@ export default function TopicManagement() {
         router.push('/users/manage-topics');
     };
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery, view]);
+
     if (loading && categories.length === 0 && topics.length === 0) {
         return (
             <div className="flex justify-center items-center py-20">
@@ -209,122 +233,226 @@ export default function TopicManagement() {
             </div>
         );
     }
+
+    const filteredCategories = categories.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const displayedTopics = topics.filter(topic => {
+        if (view === 'categories') {
+            if (!topic.categoryId) return true;
+            const catId = typeof topic.categoryId === 'object' ? topic.categoryId._id : topic.categoryId;
+            return !categories.find(c => c._id === catId);
+        }
+        return true; 
+    }).filter(topic => 
+        topic.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        (topic.description && topic.description.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+
+    const totalItems = view === 'categories' 
+        ? filteredCategories.length + (view === 'categories' ? displayedTopics.length : 0) 
+        : displayedTopics.length;
+    
+    const combinedItems = view === 'categories' 
+        ? [...filteredCategories, ...displayedTopics] 
+        : displayedTopics;
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentItems = combinedItems.slice(startIndex, startIndex + itemsPerPage);
+
+
     return (
         <div className="flex flex-col gap-10 md:gap-16">
 
             {/* SEARCH BAR & HEADER */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-4 px-4">
-                <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight uppercase shrink-0">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 px-4">
+                <h2 className="text-3xl md:text-5xl font-black text-[#0a0f1e] tracking-tighter uppercase shrink-0" style={{color:'orange'}}>
                     Manage Topics
                 </h2>
                 
-                <div className="relative w-full max-w-xs md:max-w-md group flex-1 md:ml-10" style={{ margin: '1rem 2.5rem 1rem 1.5rem' }}>
+                <div className="relative w-full lg:max-w-md group" style={{ marginTop: '0.5rem', marginBottom: '0.5rem'}}>
                     <input
                         type="text"
                         placeholder="Filter topics..."
                         value={searchQuery}
+                        
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-[#0a101f]/80 border border-white/5 rounded-lg py-3 pr-16 text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all font-medium"
-                        style={{ background: 'rgba(10, 16, 31, 0.8)', boxSizing: 'border-box', paddingLeft: '1.5rem',marginRight: '1rem'}}
+                        className="w-full bg-white border border-slate-200 rounded-3xl py-4 pr-16 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all font-bold shadow-xl"
+                        style={{ paddingLeft: '2rem', height: '74px' }}
                     />
-                    <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" />
+                    <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-[#4b5563] transition-colors size-6" />
                 </div>
             </div>
             
             {view === 'topics' && currentCategory && (
-                <div className="flex flex-wrap items-center justify-between gap-4 mb-2 bg-white/5 p-4 rounded-3xl border border-white/5" style={{marginLeft:10,marginRight:10}}>
-                    <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center justify-between gap-4 bg-[#1a1f2e] p-6 rounded-[2rem] border border-[#1a1f2e] mx-4 shadow-2xl relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-transparent opacity-30 pointer-events-none" />
+                    <div className="flex items-center gap-4 relative z-10">
                         <Button 
-                            variant="ghost" 
+                            variant="primary" 
                             onClick={goBackToCategories}
-                            className="px-4 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold flex items-center gap-2"
+                            className="px-6 h-12 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black flex items-center gap-2 shadow-xl shadow-orange-500/30 border-none transition-all active:scale-95"
+                            style={{ background: '#f97316', color: 'white' }}
                         >
                             <FaChevronLeft /> Back
                         </Button>
                         <div className="h-6 w-[1px] bg-white/10 mx-2" />
-                        <h3 className="text-xl font-bold flex items-center gap-2">
-                            <span className="text-primary"><FaFolder /></span>
+                        <h3 className="text-2xl font-black flex items-center gap-3 text-white tracking-tight relative">
+                            <span className="text-orange-500 filter drop-shadow-[0_0_8px_rgba(249,115,22,0.3)]"><FaFolder /></span>
                             {currentCategory.name}
                         </h3>
                     </div>
                 </div>
             )}
 
+            {/* Pagination controls */}
+            <div className="px-4">
+                <Pagination 
+                    currentPage={currentPage}
+                    totalItems={totalItems}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                    isMobile={isMobile}
+                    style={{ 
+                        marginTop: '-1rem',
+                        marginBottom: '1rem',
+                        maxWidth: isMobile ? '100%' : '400px'
+                    }}
+                />
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {/* CATEGORIES SECTION (Only in categories view) */}
-                {view === 'categories' && categories
-                    .filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()))
-                    .map(category => (
-                        <div
-                            key={category._id}
-                            className="bg-[#1a1f2e] rounded-2xl flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
-                            style={{ margin: '0 0.5rem 1.5rem 0.5rem', padding: '1.5rem' }}
-                        >
-                            {/* Card Header */}
-                            <div className="flex justify-between items-center">
-                                <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md bg-primary/10 text-primary">
-                                    Category
-                                </span>
-                            </div>
+                {/* CATEGORIES & UN-CATEGORIZED TOPICS SECTION */}
+                {view === 'categories' && currentItems.map(item => {
+                    const isCategory = categories.some(c => c._id === item._id);
+                    
+                    if (isCategory) {
+                        return (
+                            <div
+                                key={item._id}
+                                className="bg-[#1a1f2e] rounded-[2rem] flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
+                                style={{ padding: '30px' }}
+                            >
+                                {/* Card Header */}
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md bg-orange-500/10 text-orange-500">
+                                        Category
+                                    </span>
+                                </div>
 
-                            {/* Title & Description */}
-                            <div className="flex flex-col gap-2">
-                                <h3 className="font-bold text-xl text-white tracking-tight line-clamp-1 group-hover:text-primary transition-colors">
-                                    {category.name}
-                                </h3>
-                                <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
-                                    Organized group of quiz topics for better management and navigation.
-                                </p>
-                            </div>
+                                {/* Title & Description */}
+                                <div className="flex flex-col gap-2">
+                                    <h3 className="font-bold text-xl text-white tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors uppercase">
+                                        {item.name}
+                                    </h3>
+                                    <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
+                                        Organized group of quiz topics for better management and navigation.
+                                    </p>
+                                </div>
 
-                            {/* Footer Actions */}
-                            <div className="flex items-center justify-between mt-auto pt-8 border-t border-white/5">
-                                <div className="flex gap-3" style={{ marginTop: '1.5rem' }}>
-                                    <button 
-                                        onClick={() => manageCategory(category)}
-                                        className="rounded-lg font-black uppercase text-[11px] tracking-widest transition-all hover:opacity-90 active:scale-95 shadow-lg"
-                                        style={{ backgroundColor: 'var(--primary)', color: 'white', padding: '0.85rem 2rem' }}
+                                {/* Footer Actions */}
+                                <div className="flex items-center gap-4 mt-auto pt-6 border-t border-white/5">
+                                    <Button 
+                                        variant="primary" 
+                                        onClick={() => manageCategory(item)}
+                                        className="h-11 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all shadow-lg"
+                                        style={{ background: '#f97316' }}
                                     >
                                         Manage
-                                    </button>
-                                    <button 
-                                        onClick={() => copyCategory(category._id)}
-                                        className="rounded-lg font-black uppercase text-[11px] tracking-widest transition-all hover:bg-slate-900 active:scale-95 shadow-lg"
-                                        style={{ backgroundColor: 'black', color: 'white', padding: '0.85rem 2rem' }}
+                                    </Button>
+                                    <Button 
+                                        onClick={() => copyCategory(item._id)}
+                                        className="h-11 px-8 rounded-xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-tight text-[10px] border border-white/10 transition-all shadow-lg"
+                                        style={{ background: 'black', color: 'white' }}
                                     >
                                         Copy
+                                    </Button>
+                                    <button 
+                                        onClick={() => deleteCategory(item._id)}
+                                        className="p-2.5 bg-transparent hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-xl transition-all ml-auto"
+                                    >
+                                        <FaTrash size={14} />
                                     </button>
                                 </div>
-                                <button 
-                                    onClick={() => deleteCategory(category._id)}
-                                    className="p-2 text-slate-500 hover:text-red-500 transition-colors"
-                                    title="Delete Category"
-                                >
-                                    <FaTrash size={14} />
-                                </button>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    } else {
+                        // RENDER TOPIC (Uncategorized)
+                        const topic = item;
+                        const isActive = topic.status === 'active';
+                        return (
+                            <div
+                                key={topic._id}
+                                className="bg-[#1a1f2e] rounded-[2rem] flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
+                                style={{ padding: '30px' }}
+                            >
+                                {/* Card Header */}
+                                <div className="flex justify-between items-center">
+                                    <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md ${isActive ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                                        {isActive ? 'Active' : 'Inactive'}
+                                    </span>
+                                </div>
+
+                                {/* Title & Description */}
+                                <div className="flex flex-col gap-2">
+                                    <h3 className="font-bold text-xl text-white tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors uppercase">
+                                        {topic.name}
+                                    </h3>
+                                    <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
+                                        {topic.description || "Master questions about this topic and test your knowledge."}
+                                    </p>
+                                </div>
+
+                                {/* Stats Column */}
+                                <div className="flex flex-wrap gap-3">
+                                    <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                        <FaClock className="text-orange-500" /> {topic.timeLimit}S
+                                    </div>
+                                    <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                        <FaMinusCircle className="text-red-400" /> {topic.negativeMarking}
+                                    </div>
+                                    <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                        <FaStar className="text-yellow-400" /> {topic.passingMarks} MARKS
+                                    </div>
+                                </div>
+
+                                {/* Footer Actions */}
+                                <div className="flex items-center gap-4 mt-auto pt-6 border-t border-white/5">
+                                    <Link href={`/users/topic/${topic._id}`}>
+                                        <Button 
+                                            variant="primary" 
+                                            className="h-11 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all shadow-lg"
+                                            style={{ background: '#f97316' }}
+                                        >
+                                            Manage
+                                        </Button>
+                                    </Link>
+                                    <Button 
+                                        onClick={() => copyTopic(topic._id)}
+                                        className="h-11 px-8 rounded-xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-tight text-[10px] border border-white/10 transition-all shadow-lg"
+                                        style={{ background: 'black', color: 'white' }}
+                                    >
+                                        Copy
+                                    </Button>
+                                    <button 
+                                        onClick={() => deleteTopic(topic._id)}
+                                        className="p-2.5 bg-transparent hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-xl transition-all ml-auto"
+                                    >
+                                        <FaTrash size={14} />
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    }
+                })}
 
                 {/* TOPICS SECTION */}
-                {topics.filter(topic => {
-                    if (view === 'categories') {
-                        // In main view, show topics with NO category OR stale category
-                        if (!topic.categoryId) return true;
-                        const catId = typeof topic.categoryId === 'object' ? topic.categoryId._id : topic.categoryId;
-                        return !categories.find(c => c._id === catId);
-                    }
-                    // In topics view, topics are already filtered by backend query parameter
-                    return true; 
-                })
-                .filter(topic => topic.name.toLowerCase().includes(searchQuery.toLowerCase()) || (topic.description && topic.description.toLowerCase().includes(searchQuery.toLowerCase())))
-                .map(topic => {
+                {view === 'topics' && currentItems.map(topic => {
                     const isActive = topic.status === 'active';
                     return (
                         <div
                             key={topic._id}
-                            className="bg-[#1a1f2e] rounded-2xl flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
-                            style={{ margin: '0 0.5rem 1.5rem 0.5rem', padding: '1.5rem' }}
+                            className="bg-[#1a1f2e] rounded-[2rem] flex flex-col gap-5 border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-xl"
+                            style={{ padding: '30px' }}
                         >
                             {/* Card Header */}
                             <div className="flex justify-between items-center">
@@ -348,42 +476,40 @@ export default function TopicManagement() {
                                 </p>
                             </div>
 
-                            {/* Stats */}
+                            {/* Stats Section */}
                             <div className="flex flex-wrap gap-3">
-                                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0d1117] rounded-lg border border-white/5 text-[11px] font-bold text-slate-300" style={{padding:5,fontSize:12}}>
-                                    <FaClock className="text-primary/70" /> {topic.timeLimit}S
+                                <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                    <FaClock className="text-orange-500" /> {topic.timeLimit}S
                                 </div>
-                                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0d1117] rounded-lg border border-white/5 text-[11px] font-bold text-slate-300" style={{padding:5,fontSize:12}}>
-                                    <FaMinusCircle className="text-red-400/70" /> -{topic.negativeMarking}
+                                <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                    <FaMinusCircle className="text-red-400" /> {topic.negativeMarking}
                                 </div>
-                                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0d1117] rounded-lg border border-white/5 text-[11px] font-bold text-slate-300" style={{padding:5,fontSize:12}}>
-                                    <FaStar className="text-yellow-400/70" /> {topic.passingMarks} MARKS
+                                <div className="flex items-center gap-2 px-4 py-2 bg-black/40 rounded-lg border border-white/5 text-[12px] font-bold text-slate-200">
+                                    <FaStar className="text-yellow-400" /> {topic.passingMarks} MARKS
                                 </div>
                             </div>
 
                             {/* Footer Actions */}
-                            <div className="flex items-center justify-between mt-8 pt-8 border-t border-white/5">
-                                <div className="flex gap-3" style={{ marginTop: '1.5rem' }}>
-                                    <Link href={`/users/topic/${topic._id}`}>
-                                        <button 
-                                            className="rounded-lg font-black uppercase text-[11px] tracking-widest transition-all hover:opacity-90 active:scale-95 shadow-lg"
-                                            style={{ backgroundColor: 'var(--primary)', color: 'white', padding: '0.85rem 2rem' }}
-                                        >
-                                            Manage
-                                        </button>
-                                    </Link>
-                                    <button 
-                                        onClick={() => copyTopic(topic._id)}
-                                        className="rounded-lg font-black uppercase text-[11px] tracking-widest transition-all hover:bg-slate-900 active:scale-95 shadow-lg"
-                                        style={{ backgroundColor: 'black', color: 'white', padding: '0.85rem 2rem' }}
+                            <div className="flex items-center gap-4 mt-auto pt-6 border-t border-white/5">
+                                <Link href={`/users/topic/${topic._id}`}>
+                                    <Button 
+                                        variant="primary" 
+                                        className="h-11 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all shadow-lg"
+                                        style={{ background: '#f97316' }}
                                     >
-                                        Copy
-                                    </button>
-                                </div>
+                                        Manage
+                                    </Button>
+                                </Link>
+                                <Button 
+                                    onClick={() => copyTopic(topic._id)}
+                                    className="h-11 px-8 rounded-xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-tight text-[10px] border border-white/10 transition-all shadow-lg"
+                                    style={{ background: 'black', color: 'white' }}
+                                >
+                                    Copy
+                                </Button>
                                 <button 
                                     onClick={() => deleteTopic(topic._id)}
-                                    className="p-2 text-slate-500 hover:text-red-500 transition-colors"
-                                    title="Delete Topic"
+                                    className="p-2.5 bg-transparent hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-xl transition-all ml-auto"
                                 >
                                     <FaTrash size={14} />
                                 </button>
@@ -417,14 +543,14 @@ export default function TopicManagement() {
             {/* CREATE TOPIC MODAL */}
             {showTopicModal && (
                 <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', padding: '1rem' }}>
-                    <Card style={{ width: '100%', maxWidth: '500px', background: 'var(--card-bg)', padding: '2rem', borderRadius: '1.5rem' }}>
+                    <Card style={{ width: '100%', maxWidth: '500px', background: '#1a1f2e', padding: '2rem', borderRadius: '1.5rem', border: '1px solid rgba(255,255,255,0.1)' }}>
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-2xl font-bold">New Topic {currentCategory ? `in ${currentCategory.name}` : ''}</h3>
                             <button onClick={() => setShowTopicModal(false)}><FaPlus className="rotate-45" /></button>
                         </div>
                         <div className="flex flex-col gap-4">
                             <label className="flex flex-col gap-2">
-                                <span className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Topic Name</span>
+                                <span className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1" style={{marginTop:10}}>Topic Name</span>
                                 <Input
                                     value={newTopic.name}
                                     onChange={e => setNewTopic({ ...newTopic, name: e.target.value })}
@@ -435,8 +561,9 @@ export default function TopicManagement() {
                             {!currentCategory && (
                                 <label className="flex flex-col gap-2">
                                     <span className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Category</span>
+                                <div className="relative group">
                                     <select 
-                                        className="bg-[#0f172a] border border-white/20 rounded-xl px-4 py-3 text-white outline-none focus:border-primary transition-all font-bold appearance-none cursor-pointer"
+                                        className="w-full bg-[#0f172a] border border-white/20 rounded-xl px-4 py-3 text-white outline-none focus:border-orange-500 transition-all font-bold appearance-none cursor-pointer"
                                         value={newTopic.categoryId}
                                         onChange={e => setNewTopic({ ...newTopic, categoryId: e.target.value })}
                                         style={{ background: '#0f172a', color: 'white' }}
@@ -446,6 +573,10 @@ export default function TopicManagement() {
                                             <option key={c._id} value={c._id} style={{ background: '#0f172a', color: 'white' }}>{c.name}</option>
                                         ))}
                                     </select>
+                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 group-hover:text-white transition-colors">
+                                        <FaChevronDown size={14} />
+                                    </div>
+                                </div>
                                 </label>
                             )}
 
@@ -505,8 +636,8 @@ export default function TopicManagement() {
             {showCategoryModal && (
                 <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', padding: '1rem' }}>
                     <Card 
-                        className="w-full max-w-[420px] p-10 md:p-14 rounded-[1.5rem] flex flex-col gap-8 shadow-2xl" 
-                        style={{ background: 'var(--card-bg)' ,padding:30}}
+                        className="w-full max-w-[420px] p-10 md:p-14 rounded-[1.5rem] flex flex-col gap-8 shadow-2xl border border-white/10" 
+                        style={{ background: '#1a1f2e' ,padding:30}}
                     >
                         <div className="flex justify-between items-center mb-2">
                             <h3 className="text-2xl font-bold tracking-tight">New Category</h3>

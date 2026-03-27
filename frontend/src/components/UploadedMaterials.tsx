@@ -14,11 +14,24 @@ import {
 } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
+import Pagination from './Pagination';
 
 export default function UploadedMaterials() {
     const [topics, setTopics] = useState<any[]>([]);
     const [materials, setMaterials] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isMobile = windowWidth < 768;
 
     // Management Modal State
     const [showAdminMaterialsModal, setShowAdminMaterialsModal] = useState(false);
@@ -90,6 +103,11 @@ export default function UploadedMaterials() {
         );
     }
 
+    const filteredTopics = topics.filter(t => materials.some(m => (m.topicId?._id || m.topicId) === t._id));
+    const totalItems = filteredTopics.length;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentTopics = filteredTopics.slice(startIndex, startIndex + itemsPerPage);
+
     return (
         <div className="flex flex-col gap-10 md:gap-16" style={{ padding: '2rem 1.5rem 4rem 1.5rem', margin: '0 auto', maxWidth: '1600px' }}>
             {materials.length === 0 ? (
@@ -99,12 +117,26 @@ export default function UploadedMaterials() {
                     <p className="text-slate-500 mb-8 max-w-md mx-auto">Upload materials through individual topic settings to help your students.</p>
                 </Card>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {topics.filter(t => materials.some(m => (m.topicId?._id || m.topicId) === t._id)).map((topic) => (
+                <>
+                    {/* Pagination Controls */}
+                    <div className="px-4 mb-8">
+                        <Pagination 
+                            currentPage={currentPage}
+                            totalItems={totalItems}
+                            itemsPerPage={itemsPerPage}
+                            onPageChange={setCurrentPage}
+                            isMobile={isMobile}
+                            style={{ 
+                                maxWidth: isMobile ? '100%' : '400px'
+                            }}
+                        />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    {currentTopics.map((topic) => (
                         <Card
                             key={topic._id}
                             className="group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-[#0a0e1a]/80 backdrop-blur-xl hover:bg-[#0f172a] rounded-[2rem] flex flex-col h-full shadow-2xl overflow-hidden relative border"
-                            style={{ padding:30, margin: '0.75rem' }}
+                            style={{ padding: '30px' }}
                         >
                             {/* NEW DESIGN: Top Icon Area */}
                             <div className="h-40 bg-[#060910] flex items-center justify-center relative overflow-hidden">
@@ -139,13 +171,14 @@ export default function UploadedMaterials() {
                         </Card>
                     ))}
                 </div>
+                </>
             )}
 
             {/* ADMIN STUDY MATERIALS MODAL */}
             {showAdminMaterialsModal && (
-                <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)} style={{ padding: '2rem' }}>
-                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={(e) => e.stopPropagation()} style={{ padding: '0', margin: '1rem' }}>
-                        <div className="p-10 border-b border-white/5 bg-slate-900/40 flex justify-between items-center max-md:!p-6" style={{ padding: '2.5rem', marginBottom: '0' }}>
+                <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in" onClick={() => setShowAdminMaterialsModal(false)}>
+                    <Card className="max-w-4xl w-full p-0 bg-[#0f172a] border-white/10 shadow-3xl rounded-[3rem] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                        <div className="border-b border-white/5 bg-slate-900/40 flex justify-between items-center" style={{ padding: '30px' }}>
                             <div>
                                 <h3 className="text-3xl font-black text-white max-md:text-2xl">{selectedTopicName}</h3>
                                 <p className="text-primary font-bold text-sm mt-1 uppercase tracking-widest max-md:text-xs">Study Resource Management</p>
@@ -154,7 +187,7 @@ export default function UploadedMaterials() {
                                 <FaTimes size={20} />
                             </button>
                         </div>
-                        <div className="p-10 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6 max-md:p-6" style={{ padding: '2.5rem' }}>
+                        <div className="max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-6" style={{ padding: '30px' }}>
                             {selectedTopicMaterials.length === 0 ? (
                                 <p className="text-center py-20 text-slate-500 font-bold italic">No materials found for this topic.</p>
                             ) : (

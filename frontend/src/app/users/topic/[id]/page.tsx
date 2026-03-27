@@ -89,7 +89,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                 <Link href="/users" className="text-slate-500 hover:text-emerald-400 text-sm flex items-center gap-2 transition-colors mb-6">
                     &larr; Back to Dashboard
                 </Link>
-                <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight" style={{color:'orange'}}>
                     {topic.name}
                 </h1>
             </div>
@@ -103,7 +103,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
                         {/* Header + Add Button */}
                         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
-                            <h2 className="text-3xl font-bold">Questions ({questions.length})</h2>
+                            <h2 className="text-3xl font-bold" style={{color:'orange'}}>Questions ({questions.length})</h2>
                             <Button onClick={() => setShowAddForm(true)} disabled={showAddForm}>Add Question</Button>
                         </div>
 
@@ -111,7 +111,11 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                         {showAddForm && (
                             <QuestionForm
                                 topicId={id}
-                                onQuestionAdded={() => { setShowAddForm(false); fetchData(); }}
+                                onQuestionAdded={() => { 
+                                    setShowAddForm(false); 
+                                    fetchData(); 
+                                    setAlertModal({ isOpen: true, message: 'Question created successfully!', type: 'success' });
+                                }}
                                 onCancel={() => setShowAddForm(false)}
                             />
                         )}

@@ -58,11 +58,11 @@ export default function UserLeaderboard({ params }: { params: Promise<{ id: stri
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-xl md:text-2xl shrink-0">
                         🏆
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-black tracking-tight">Leaderboard</h1>
+                    <h1 className="text-3xl md:text-4xl font-black tracking-tight" style={{color:'orange'}}>Leaderboard</h1>
                 </div>
             </div>
 
-            <Card className="p-6 md:p-10 border border-white/5 bg-slate-900/40 backdrop-blur-xl rounded-[32px]">
+            <Card className="p-6 md:p-10 border border-white/5 bg-slate-900/40 backdrop-blur-xl rounded-[32px]" style={{padding:10}}>
                 <div className="flex flex-col gap-6">
                     {loading && (
                         <div className="flex flex-col items-center py-20 gap-4">

@@ -94,12 +94,12 @@ export default function StudentCertificates() {
 
     if (certificates.length === 0) {
         return (
-            <Card className="p-20 text-center border-dashed border-2 border-white/5 rounded-[40px] mt-12" style={{ background: '#1a1f2e' }}>
+            <Card className="p-20 text-center border-dashed border-2 border-white/5 rounded-[40px] mt-12" style={{ background: '#1a1f2e',padding:30 }}>
                 <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner shadow-white/5">📜</div>
                 <h3 className="text-4xl font-black mb-4">No certificates earned</h3>
                 <p className="text-slate-500 mb-12 text-xl max-w-md mx-auto leading-relaxed">Complete quiz topics with at least one correct answer to earn yours!</p>
                 <Link href="/dashboard/student/explore">
-                    <Button className="px-16 py-6 rounded-[2rem] text-xl font-black bg-primary shadow-xl shadow-primary/20">Start a Quiz</Button>
+                    <Button className="px-16 py-6  rounded-[2rem] text-xl font-black bg-primary shadow-xl shadow-primary/20" style={{marginTop:20}}>Start a Quiz</Button>
                 </Link>
             </Card>
         );

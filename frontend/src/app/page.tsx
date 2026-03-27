@@ -6,7 +6,6 @@ import api from "@/lib/api";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import ThemeToggle from "@/components/ThemeToggle";
 import { FaLock, FaUser, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export default function Home() {
@@ -108,7 +107,7 @@ export default function Home() {
     return (
         <main
             className="min-h-screen flex flex-col"
-            style={{ background: 'var(--background)' }}
+            style={{ background: '#ffffff' }}
         >
 
             {/* CENTERED CONTENT */}
@@ -116,7 +115,6 @@ export default function Home() {
                 <div className="w-full max-w-[520px] animate-fade-in py-10 md:py-12">
 
                     <div className="flex justify-end mb-12 md:absolute md:top-8 md:right-8 md:mb-0" style={{ margin: '1rem 1rem 2.5rem 1rem' }}>
-                        <ThemeToggle />
                     </div>
 
                     {/* ---------- HEADER ---------- */}
@@ -124,7 +122,7 @@ export default function Home() {
                         <h1
                             className="text-2xl md:text-[3.75rem] font-black mb-4 leading-tight"
                             style={{
-                                backgroundImage: 'linear-gradient(to right, var(--primary), var(--secondary))',
+                                backgroundImage: 'linear-gradient(to right, #f97316, #fb923c)',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 backgroundClip: 'text',
@@ -142,7 +140,7 @@ export default function Home() {
                     </div>
 
                     {/* ---------- CARD ---------- */}
-                    <Card className="overflow-hidden" style={{ padding: '2.5rem', borderRadius: '2rem', maxWidth: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', background: 'rgba(15, 23, 42, 0.9)', margin: '0 1rem 1rem 1rem' }}>
+                    <Card className="overflow-hidden" style={{ padding: '2.5rem', borderRadius: '2rem', maxWidth: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.05)', background: '#ffffff', border: '1px solid #e2e8f0', margin: '0 1rem 1rem 1rem' }}>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-10">
 
                             {/* ---------- MESSAGE ---------- */}
@@ -187,7 +185,7 @@ export default function Home() {
                                         marginTop: '1rem',
                                         fontSize: '0.75rem',
                                         fontWeight: 800,
-                                        color: 'var(--text-muted)',
+                                        color: '#475569',
                                         textTransform: 'uppercase',
                                         letterSpacing: '0.15em',
                                         paddingLeft: '1.5rem'
@@ -205,8 +203,8 @@ export default function Home() {
                                                 paddingBottom: '1.25rem',
                                                 borderRadius: 'var(--radius-lg)',
                                                 border: '1px solid var(--border-color)',
-                                                background: 'var(--glass-bg)',
-                                                color: 'var(--text-primary)',
+                                                background: '#f8fafc',
+                                                color: '#0f172a',
                                                 outline: 'none',
                                                 fontSize: '1rem',
                                                 transition: 'var(--transition)'
@@ -227,7 +225,7 @@ export default function Home() {
                                             right: '1.5rem',
                                             top: '50%',
                                             transform: 'translateY(-50%)',
-                                            color: 'var(--text-muted)',
+                                            color: '#475569',
                                             pointerEvents: 'none',
                                             transition: 'var(--transition)'
                                         }}
@@ -245,7 +243,7 @@ export default function Home() {
                                             marginBottom: '1rem',
                                             fontSize: '0.75rem',
                                             fontWeight: 800,
-                                            color: 'var(--text-muted)',
+                                            color: '#475569',
                                             textTransform: 'uppercase',
                                             letterSpacing: '0.15em',
                                             paddingLeft: '1.5rem'
@@ -263,8 +261,8 @@ export default function Home() {
                                                     paddingBottom: '1.25rem',
                                                     borderRadius: 'var(--radius-lg)',
                                                     border: '1px solid var(--border-color)',
-                                                    background: 'var(--glass-bg)',
-                                                    color: 'var(--text-primary)',
+                                                    background: '#f8fafc',
+                                                    color: '#0f172a',
                                                     outline: 'none',
                                                     fontSize: '1rem',
                                                     transition: 'var(--transition)'
@@ -284,7 +282,7 @@ export default function Home() {
                                                 right: '1.5rem',
                                                 top: '50%',
                                                 transform: 'translateY(-50%)',
-                                                color: 'var(--text-muted)',
+                                                color: '#475569',
                                                 pointerEvents: 'none',
                                                 transition: 'var(--transition)'
                                             }} className="group-focus-within:text-[var(--primary)]">
@@ -301,7 +299,7 @@ export default function Home() {
                                         marginBottom: '1rem',
                                         fontSize: '0.75rem',
                                         fontWeight: 800,
-                                        color: 'var(--text-muted)',
+                                        color: '#475569',
                                         textTransform: 'uppercase',
                                         letterSpacing: '0.15em',
                                         paddingLeft: '1.5rem'
@@ -319,8 +317,8 @@ export default function Home() {
                                                 paddingBottom: '1.25rem',
                                                 borderRadius: 'var(--radius-lg)',
                                                 border: '1px solid var(--border-color)',
-                                                background: 'var(--glass-bg)',
-                                                color: 'var(--text-primary)',
+                                                background: '#f8fafc',
+                                                color: '#0f172a',
                                                 outline: 'none',
                                                 fontSize: '1rem',
                                                 transition: 'var(--transition)'
@@ -340,7 +338,7 @@ export default function Home() {
                                             right: '1.5rem',
                                             top: '50%',
                                             transform: 'translateY(-50%)',
-                                            color: 'var(--text-muted)',
+                                            color: '#475569',
                                             display: 'flex',
                                             alignItems: 'center',
                                             gap: '1rem'
@@ -372,6 +370,7 @@ export default function Home() {
                                                 type="button"
                                                 onClick={() => setShowReferralInput(true)}
                                                 className="text-xs font-black uppercase tracking-widest text-primary hover:text-secondary transition-colors underline underline-offset-4 ml-6"
+                                                style={{color:'black'}}
                                             >
                                                 + Have a referral code?
                                             </button>
@@ -382,7 +381,7 @@ export default function Home() {
                                                     marginBottom: '1rem',
                                                     fontSize: '0.75rem',
                                                     fontWeight: 800,
-                                                    color: 'var(--text-muted)',
+                                                    color: '#475569',
                                                     textTransform: 'uppercase',
                                                     letterSpacing: '0.15em',
                                                     paddingLeft: '1.5rem'
@@ -399,8 +398,8 @@ export default function Home() {
                                                             paddingBottom: '1.25rem',
                                                             borderRadius: 'var(--radius-lg)',
                                                             border: '1px solid var(--border-color)',
-                                                            background: 'var(--glass-bg)',
-                                                            color: 'var(--text-primary)',
+                                                            background: '#f8fafc',
+                                                            color: '#0f172a',
                                                             outline: 'none',
                                                             fontSize: '1rem',
                                                             transition: 'var(--transition)'
@@ -472,7 +471,7 @@ export default function Home() {
             <div
                 className="text-center py-10 border-t border-white/10"
                 style={{
-                    color: 'var(--text-muted)',
+                    color: '#64748b',
                     fontSize: '0.875rem',
                     fontWeight: 500,
                     width: '100%'

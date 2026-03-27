@@ -5,6 +5,7 @@ import api from '@/lib/api';
 import Card from './Card';
 import Button from './Button';
 import { FaRegClone, FaSearch, FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import Pagination from './Pagination';
 
 interface QuestionBankModalProps {
     onSelect: (question: any) => void;
@@ -16,7 +17,7 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -129,29 +130,20 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
                 </div>
 
                 {/* Sticky Pagination Footer */}
-                {!loading && filteredQuestions.length > 5 && (
-                    <div className="px-12 md:px-20 h-28 md:h-36 bg-black/60 backdrop-blur-md border-t border-white/10 flex items-center justify-between shrink-0 overflow-visible" style={{ padding: 30 }}>
-                        <div className="flex-1 flex items-center pl-8 md:pl-12">
-                            <div className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em]">
-                                Page <span className="text-violet-400 ml-4 font-black text-base">{currentPage}</span> <span className="mx-4 text-white/5">|</span> <span className="text-slate-600">{totalPages}</span>
-                            </div>
-                        </div>
-                        <div className="flex gap-4 md:gap-6">
-                            <button
-                                disabled={currentPage === 1}
-                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                className="px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 hover:border-violet-500/50 transition-all disabled:opacity-10 disabled:cursor-not-allowed font-black uppercase tracking-[0.2em] text-[10px] md:text-[11px] flex items-center gap-2 md:gap-3 group"
-                            >
-                                <FaChevronLeft className="group-hover:-translate-x-1 transition-transform" /> Prev
-                            </button>
-                            <button
-                                disabled={currentPage === totalPages}
-                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                className="px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 hover:border-violet-500/50 transition-all disabled:opacity-10 disabled:cursor-not-allowed font-black uppercase tracking-[0.2em] text-[10px] md:text-[11px] flex items-center gap-2 md:gap-3 group"
-                            >
-                                Next <FaChevronRight className="group-hover:translate-x-1 transition-transform" />
-                            </button>
-                        </div>
+                {!loading && filteredQuestions.length > 0 && (
+                    <div className="px-12 md:px-20 py-8 bg-black/60 backdrop-blur-md border-t border-white/10 flex items-center justify-center shrink-0 overflow-visible">
+                        <Pagination 
+                            currentPage={currentPage}
+                            totalItems={filteredQuestions.length}
+                            itemsPerPage={itemsPerPage}
+                            onPageChange={setCurrentPage}
+                            isMobile={false}
+                            className="!shadow-none !border-white/5 !bg-white/5 !rounded-2xl"
+                            style={{ 
+                                padding: '1rem',
+                                maxWidth: '400px'
+                            }}
+                        />
                     </div>
                 )}
             </div>

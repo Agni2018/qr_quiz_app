@@ -58,7 +58,7 @@ export default function StudentBadges() {
                 </div>
 
                 {earnedBadges.length === 0 ? (
-                    <Card className="p-16 text-center border-dashed border-2 border-white/5 rounded-[40px]" style={{ background: '#1a1f2e' }}>
+                    <Card className="p-16 text-center border-dashed border-2 border-white/5 rounded-[40px]" style={{ background: '#1a1f2e',padding:30 }}>
                         <div className="w-20 h-20 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-4xl grayscale opacity-30">🏆</div>
                         <h4 className="text-xl font-bold mb-2">No badges earned yet</h4>
                         <p className="text-slate-500 max-w-sm mx-auto">Complete quizzes and achieve high scores to start your collection!</p>

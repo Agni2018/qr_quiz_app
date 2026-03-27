@@ -56,15 +56,15 @@ export default function WeeklyChallenges() {
     return (
         <div className="space-y-8">
             <div className="flex flex-col gap-2 mb-10">
-                <h2 className="text-5xl font-black text-white tracking-tighter uppercase" style={{margin:"2rem 1rem 1rem 1rem"}}>Weekly Challenges</h2>
-                <p className="text-slate-500 font-bold uppercase tracking-[0.3em] text-xs" style={{margin:"2rem 1rem 4rem 1rem"}}>Complete tasks to earn bonus points every week</p>
+                <h2 className="text-5xl font-black text-[#0a0f1e] tracking-tighter uppercase" style={{margin:"2rem 1rem 1rem 1rem"}}>Weekly Challenges</h2>
+                <p className="text-slate-600 font-bold uppercase tracking-[0.3em] text-xs" style={{margin:"1rem 1rem 4rem 1rem"}}>Complete tasks to earn bonus points every week</p>
             </div>
 
             {challenges.length === 0 ? (
-                <Card className="p-12 text-center border-dashed border-2 border-white/5 opacity-50" style={{margin:"2rem 1rem 1rem 1rem",padding:"2.5rem", background: '#1a1f2e'}}>
-                    <FaClock className="text-5xl mx-auto mb-6 text-slate-700" />
-                    <h3 className="text-2xl font-black text-slate-500 uppercase tracking-widest">No Active Challenges</h3>
-                    <p className="text-slate-600 font-bold mt-2">Check back soon for new weekly goals!</p>
+                <Card className="p-12 text-center border-dashed border-2 border-slate-200 bg-slate-50 opacity-100 shadow-inner" style={{margin:"2rem 1rem 1rem 1rem",padding:"2.5rem"}}>
+                    <FaClock className="text-5xl mx-auto mb-6 text-slate-300" />
+                    <h3 className="text-2xl font-black text-slate-400 uppercase tracking-widest">No Active Challenges</h3>
+                    <p className="text-slate-500 font-bold mt-2">Check back soon for new weekly goals!</p>
                 </Card>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

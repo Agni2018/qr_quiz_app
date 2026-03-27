@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Button from '@/components/Button';
-import ThemeToggle from '@/components/ThemeToggle';
 import {
     FaSignOutAlt,
     FaBars,
@@ -11,6 +10,7 @@ import {
     FaChartPie,
     FaGraduationCap,
     FaBook,
+    FaMedal,
     FaAward,
     FaUpload,
     FaPlus,
@@ -18,9 +18,11 @@ import {
     FaChevronUp,
     FaChevronLeft,
     FaChevronRight,
-    FaStar,
-    FaFolderPlus,
-    FaUser
+    FaUser,
+    FaSearch,
+    FaBell,
+    FaQuestionCircle,
+    FaFolderPlus
 } from 'react-icons/fa';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -36,9 +38,21 @@ export default function UsersLayout({
     const [authLoading, setAuthLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(0);
+
     const router = useRouter();
     const pathname = usePathname();
- // Keep it here if it's used elsewhere, but we'll see
+
+    useEffect(() => {
+        setWindowWidth(window.innerWidth);
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isMobile = windowWidth < 1024;
+    const mainPaddingLeft = isMobile ? '1.5rem' : '8.5rem';
+    const mainPaddingRight = isMobile ? '1.5rem' : '4rem';
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -67,196 +81,228 @@ export default function UsersLayout({
 
     if (authLoading) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--background)' }}>
-                <div style={{ width: '3rem', height: '3rem', border: '4px solid var(--border-color)', borderTopColor: 'var(--primary)', borderRadius: '50%' }} className="animate-spin" />
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0b10' }}>
+                <div style={{ width: '3rem', height: '3rem', border: '4px solid #1a1f2e', borderTopColor: '#10b981', borderRadius: '50%' }} className="animate-spin" />
             </div>
         );
     }
 
-    return (
-        <div style={{ minHeight: '100vh', background: 'var(--background)', color: 'var(--text-primary)' }}>
-            {/* MOBILE HEADER */}
-            <header style={{
-                position: 'sticky',
-                top: 0,
-                zIndex: 40,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '1rem 1.5rem',
-                borderBottom: '1px solid var(--border-color)',
-                background: 'var(--glass-bg)',
-                backdropFilter: 'blur(var(--blur))'
-            }} className="mobile-only lg:hidden">
-                <h1 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Dashboard</h1>
-                <button onClick={() => setSidebarOpen(true)} style={{ color: 'var(--text-primary)' }}>
-                    <FaBars />
-                </button>
-            </header>
+    const navItems = [
+        { label: 'Analytics', icon: FaChartPie, href: '/users' },
+        { label: 'Manage Topics', icon: FaGraduationCap, href: '/users/manage-topics' },
+        { label: 'Question Bank', icon: FaBook, href: '/users/question-bank' },
+        { label: 'Badges & Challenges', icon: (props: any) => <span {...props}>🏅</span>, href: '/users/badges' },
+        { label: 'Uploaded Files', icon: FaUpload, href: '/users/uploaded-files' },
+    ];
 
-            {sidebarOpen && (
+    const sidebarWidth = isSidebarCollapsed ? '100px' : '360px';
+    const sidebarPadding = '4rem';
+
+    return (
+        <div style={{ minHeight: '100vh', background: '#ffffff', color: '#0f172a', overflowX: 'hidden', position: 'relative' }}>
+            {/* MOBILE HEADER */}
+            {isMobile && (
+                <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60, height: '70px', borderBottom: '1px solid rgba(255,255,255,0.05)', backgroundColor: 'rgba(5,5,5,0.95)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+                    <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#f97316', letterSpacing: '-0.05em', textTransform: 'uppercase' }}>QR QUIZ PLATFORM</h1>
+                    <button onClick={() => setSidebarOpen(true)} style={{ padding: '0.5rem', color: '#ffffff', background: 'none', border: 'none', cursor: 'pointer' }}>
+                        <FaBars size={24} />
+                    </button>
+                </header>
+            )}
+
+            {/* Backdrop for mobile */}
+            {sidebarOpen && isMobile && (
                 <div
-                    style={{ position: 'fixed', inset: 0, background: 'rgba(0, 0, 0, 0.6)', zIndex: 40 }}
-                    className="lg:hidden"
+                    style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 70, backdropFilter: 'blur(8px)' }}
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
 
-            {/* GRID */}
-            <div className={`lg:grid ${isSidebarCollapsed ? 'lg:grid-cols-[80px_1fr]' : 'lg:grid-cols-[280px_1fr]'} lg:gap-10 transition-all duration-300`}>
-
+            <div style={{ display: 'flex', minHeight: '100vh' }}>
                 {/* SIDEBAR */}
                 <aside
-                    className={`
-                        fixed lg:static top-0 left-0 z-50
-                        h-screen w-[280px] ${isSidebarCollapsed ? 'lg:w-[80px]' : 'lg:w-[280px]'}
-                        border-r
-                        ${isSidebarCollapsed ? 'px-4' : 'px-8'} py-12
-                        transform transition-all duration-300
-                        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-                        lg:translate-x-0
-
-                        flex flex-col
-                    `}
                     style={{
-                        background: 'var(--glass-bg)',
-                        backdropFilter: 'blur(var(--blur))',
-                        borderColor: 'var(--border-color)'
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        height: '100vh',
+                        zIndex: 80,
+                        width: isMobile ? (sidebarOpen ? '300px' : '0px') : sidebarWidth,
+                        backgroundColor: '#f97316',
+                        borderRight: '1px solid rgba(255,255,255,0.05)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                        overflow: 'hidden',
+                        transform: isMobile && !sidebarOpen ? 'translateX(-100%)' : 'translateX(0)'
                     }}
                 >
-                    <button
-                        className="absolute top-6 right-6 lg:hidden"
-                        onClick={() => setSidebarOpen(false)}
-                        style={{ color: 'var(--text-primary)' }}
-                    >
-                        <FaTimes />
-                    </button>
+                    {isMobile && (
+                        <button
+                            style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', color: '#ffffff', background: 'none', border: 'none', cursor: 'pointer', zIndex: 90 }}
+                            onClick={() => setSidebarOpen(false)}
+                        >
+                            <FaTimes size={24} />
+                        </button>
+                    )}
 
-                    {/* Branding Section - Stylized Greeting */}
-                    <div className={`mb-14 mt-10 px-6 flex flex-col items-center text-center relative group ${isSidebarCollapsed ? 'hidden lg:block lg:opacity-0 lg:h-0 overflow-hidden' : ''} transition-all duration-300`}>
-                        <div className="w-24 h-24 rounded-full bg-slate-800/50 border-2 border-orange-500/30 flex items-center justify-center mb-6 overflow-hidden shadow-2xl group-hover:border-orange-500 transition-all duration-500 relative" style={{marginTop:10}}>
-                            <div className="absolute inset-0 bg-orange-500/5 blur-xl group-hover:bg-orange-500/10 transition-all duration-500" />
-                            <FaUser className="text-4xl text-slate-400 group-hover:text-orange-500 transition-colors relative z-10" />
+                    {/* Profile Section */}
+                    <div style={{ 
+                        paddingTop: '5rem', 
+                        paddingBottom: '3rem', 
+                        paddingLeft: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding, 
+                        paddingRight: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding, 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start', 
+                        gap: '1.5rem', 
+                        marginBottom: '2rem' 
+                    }}>
+                        <div style={{ width: '70px', height: '70px', borderRadius: '50%', backgroundColor: '#1a1f2e', border: '2px solid rgba(249,115,22,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', position: 'relative', flexShrink: 0 }}>
+                            <FaUser size={28} style={{ color: '#4b5563' }} />
                         </div>
-                        <h2 className="text-xl font-black tracking-tighter uppercase leading-tight px-4 w-full">
-                            <span className="text-orange-500 block mb-1" style={{marginTop:10}}>WELCOME,</span> 
-                            <span className="text-white break-all">{user?.username || 'ADMIN'}</span>
-                        </h2>
-
-
+                        
+                        {(!isSidebarCollapsed || isMobile) && (
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                <span style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Authenticated as</span>
+                                <h2 style={{ fontSize: '20px', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', textTransform: 'uppercase', lineHeight: 1 }}>
+                                    {user?.username || 'ADMIN'}
+                                </h2>
+                            </div>
+                        )}
                     </div>
 
-                    {isSidebarCollapsed && (
-                        <div className="hidden lg:flex items-center justify-center mb-10 pt-6">
-                            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-                                <span className="text-white font-black">A</span>
+                    {/* Navigation */}
+                    <nav style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            {navItems.map((item) => {
+                                const active = isActive(item.href);
+                                return (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
+                                            gap: '1.25rem',
+                                            paddingTop: '1.15rem',
+                                            paddingBottom: '1.15rem',
+                                            paddingLeft: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding,
+                                            paddingRight: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding,
+                                            transition: 'all 0.3s',
+                                            textDecoration: 'none',
+                                            borderLeft: active ? '4px solid #ffffff' : '4px solid transparent',
+                                            backgroundColor: active ? 'rgba(255,255,255,0.15)' : 'transparent',
+                                            color: active ? '#ffffff' : 'rgba(255,255,255,0.7)',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                        onClick={() => setSidebarOpen(false)}
+                                    >
+                                        <item.icon size={20} />
+                                        {(!isSidebarCollapsed || isMobile) && (
+                                            <span style={{ fontWeight: 900, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.15em' }}>{item.label}</span>
+                                        )}
+                                    </Link>
+                                );
+                            })}
+                        </div>
+
+                        {/* UTILITIES */}
+                        <div style={{ 
+                            marginTop: 'auto', 
+                            paddingTop: '2rem',
+                            paddingBottom: '2rem',
+                            paddingLeft: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding, 
+                            paddingRight: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding, 
+                            borderTop: '1px solid rgba(255,255,255,0.1)', 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            gap: '0.75rem' 
+                        }}>
+                            {!isMobile && (
+                                <button
+                                    onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                                    style={{ 
+                                        background: 'none', 
+                                        border: 'none', 
+                                        padding: 0, 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
+                                        gap: '1.25rem', 
+                                        color: 'rgba(255,255,255,0.7)', 
+                                        cursor: 'pointer' 
+                                    }}
+                                >
+                                    <FaBars size={18} style={isSidebarCollapsed ? {} : { transition: 'transform 0.5s', transform: 'rotate(90deg)' }} />
+                                    {!isSidebarCollapsed && <span style={{ fontWeight: 900, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Collapse</span>}
+                                </button>
+                            )}
+                            <button
+                                onClick={async () => {
+                                    try { await api.post('/auth/logout'); } catch {}
+                                    localStorage.clear();
+                                    window.location.href = '/';
+                                }}
+                                style={{ 
+                                    background: 'none', 
+                                    border: 'none', 
+                                    padding: 0, 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
+                                    gap: '1.25rem', 
+                                    color: 'rgba(255,255,255,0.7)', 
+                                    cursor: 'pointer' 
+                                }}
+                            >
+                                <FaSignOutAlt size={18} />
+                                {(!isSidebarCollapsed || isMobile) && <span style={{ fontWeight: 900, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Sign Out</span>}
+                            </button>
+                        </div>
+                    </nav>
+                </aside>
+
+                {/* MAIN CONTENT AREA */}
+                <main 
+                    style={{ 
+                        flex: 1,
+                        marginLeft: isMobile ? '0' : sidebarWidth,
+                        backgroundColor: '#ffffff',
+                        minHeight: '100vh',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        overflowX: 'hidden',
+                        transition: 'margin 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                        paddingTop: isMobile ? '70px' : '0'
+                    }}
+                >
+                    {/* Admin Actions Bar */}
+                    {!isMobile && (
+                        <div style={{ height: '90px', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4rem', paddingRight: '4rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <span style={{ color: '#f97316', fontWeight: 900, fontSize: '16px', textTransform: 'uppercase', letterSpacing: '0.2em' }}>QR Quiz Platform</span>
                             </div>
+                            <Suspense fallback={<div style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.05)', borderRadius: '50%' }} />}>
+                                <AdminTopBarButtons />
+                            </Suspense>
                         </div>
                     )}
 
-                    <div className="h-14 lg:h-16" />
-
-                    <nav className="flex flex-col gap-4 flex-grow">
-                        <Link href="/users" onClick={() => setSidebarOpen(false)}>
-                            <Button
-                                variant={isActive('/users') ? 'primary' : 'ghost'}
-                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                                title={isSidebarCollapsed ? "Analytics" : ""}
-                            >
-                                <FaChartPie className={isActive('/users') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className="text-white">Analytics</span>}
-                            </Button>
-                        </Link>
-
-                        <Link href="/users/manage-topics" onClick={() => setSidebarOpen(false)}>
-                            <Button
-                                variant={isActive('/users/manage-topics') ? 'primary' : 'ghost'}
-                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/manage-topics') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                                title={isSidebarCollapsed ? "Manage Topics" : ""}
-                            >
-                                <FaGraduationCap className={isActive('/users/manage-topics') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className="text-white">Manage Topics</span>}
-                            </Button>
-                        </Link>
-
-                        <Link href="/users/question-bank" onClick={() => setSidebarOpen(false)}>
-                            <Button
-                                variant={isActive('/users/question-bank') ? 'primary' : 'ghost'}
-                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/question-bank') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                                title={isSidebarCollapsed ? "Question Bank" : ""}
-                            >
-                                <FaBook className={isActive('/users/question-bank') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className="text-white">Question Bank</span>}
-                            </Button>
-                        </Link>
-
-                        <Link href="/users/badges" onClick={() => setSidebarOpen(false)}>
-                            <Button
-                                variant={(isActive('/users/badges') || isActive('/users/challenges')) ? 'primary' : 'ghost'}
-                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${(isActive('/users/badges') || isActive('/users/challenges')) ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                                title={isSidebarCollapsed ? "Badge & Challenges" : ""}
-                            >
-                                <FaAward className={(isActive('/users/badges') || isActive('/users/challenges')) ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className="text-white">Badge & Challenges</span>}
-                            </Button>
-                        </Link>
-
-                        <Link href="/users/uploaded-files" onClick={() => setSidebarOpen(false)}>
-                            <Button
-                                variant={isActive('/users/uploaded-files') ? 'secondary' : 'ghost'}
-                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl border-none font-bold text-lg transition-all ${isActive('/users/uploaded-files') ? 'bg-rose-500/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                                title={isSidebarCollapsed ? "Uploaded Files" : ""}
-                            >
-                                <FaUpload className={isActive('/users/uploaded-files') ? 'text-rose-400' : 'text-[#94a3b8] group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className={isActive('/users/uploaded-files') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Uploaded Files</span>}
-                            </Button>
-                        </Link>
-                    </nav>
-
-                    {/* Collapse & Logout at bottom */}
-                    <div className="mt-auto pt-6 border-t flex flex-col gap-2" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
-                        <Button
-                            variant="ghost"
-                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-[#94a3b8] hover:text-white hover:bg-white/5 border-none hidden lg:flex`}
-                            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                            title={isSidebarCollapsed ? "Expand Menu" : "Collapse Menu"}
-                        >
-                            {isSidebarCollapsed ? <FaChevronRight /> : <><FaChevronLeft /> Collapse Menu</>}
-                        </Button>
-
-                        <Button
-                            variant="ghost"
-                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-[#94a3b8] hover:text-white hover:bg-white/5 border-none`}
-                            title={isSidebarCollapsed ? "Logout" : ""}
-                            onClick={async () => {
-                                try {
-                                    await api.post('/auth/logout');
-                                } catch (err) {
-                                    console.error('Logout error:', err);
-                                }
-                                localStorage.clear();
-                                window.location.href = '/';
-                            }}
-                        >
-                            <FaSignOutAlt /> {!isSidebarCollapsed && "Logout"}
-                        </Button>
-                    </div>
-                </aside>
-
-                {/* MAIN */}
-                <main className="py-8 lg:pt-20 lg:pb-12 overflow-y-auto max-h-screen w-full">
-                    <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16">
-                        {/* TOP BAR */}
-                        <div className="flex justify-end items-center mb-12">
-                            <div className="flex items-center gap-4" style={{ margin: '1rem 1rem 2rem 1rem' }}>
-                                    <Suspense fallback={<div className="w-40 h-10 bg-white/5 animate-pulse rounded-xl" />}>
-                                        <AdminTopBarButtons />
-                                    </Suspense>
-                                <ThemeToggle />
-                                <div className="h-6 w-[1px] bg-white/10 mx-2" />
-                            </div>
-                        </div>
-
+                    <div 
+                        style={{ 
+                            width: '100%',
+                            maxWidth: '1600px',
+                            paddingTop: isMobile ? '2.5rem' : '5rem',
+                            paddingBottom: '5rem',
+                            paddingLeft: mainPaddingLeft,
+                            paddingRight: mainPaddingRight,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: isMobile ? '2.5rem' : '4rem'
+                        }}
+                    >
                         {children}
                     </div>
                 </main>
@@ -272,7 +318,7 @@ function AdminTopBarButtons() {
     if (pathname !== '/users/manage-topics') return null;
 
     return (
-        <div className="flex items-center gap-2 md:gap-3">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             {!searchParams.has('category') && (
                 <Button
                     onClick={() => {

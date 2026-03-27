@@ -162,7 +162,7 @@ export default function QuestionForm({
     };
 
     return (
-        <Card className="p-8 md:p-12 rounded-[32px] border border-white/10 bg-[#1e293b] shadow-2xl overflow-hidden relative">
+        <Card className="p-4 sm:p-8 md:p-12 rounded-[32px] border border-white/10 shadow-2xl overflow-hidden relative" style={{ background: '#1a1f2e' }}>
 
             {showBankModal && (
                 <QuestionBankModal
@@ -180,7 +180,7 @@ export default function QuestionForm({
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-bold uppercase tracking-widest text-[11px] group"
+                        className="flex items-center gap-2 text-white/70 hover:text-white transition-colors font-bold uppercase tracking-widest text-[11px] group"
                     >
                         <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Question Bank
                     </button>
@@ -198,18 +198,18 @@ export default function QuestionForm({
                     </div>
                 )}
 
-                <div className="flex flex-col gap-8 px-8 md:px-12" style={{ padding: 30 }}>
-                    <h5 className="text-2xl font-black text-white border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em]">Questions Details</h5>
+                <div className="flex flex-col gap-8 px-4 sm:px-8 md:px-12" style={{ padding: '30px 15px' }}>
+                    <h5 className="text-2xl font-black text-white border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em] shadow-sm">Questions Details</h5>
                     <div className={`grid grid-cols-1 ${topicId ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-8 md:gap-12`}>
                         <div className="flex flex-col gap-4">
-                            <label className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 px-1">
+                            <label className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90 px-1">
                                 Question Type <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <select
                                     value={type}
                                     onChange={e => handleTypeChange(e.target.value)}
-                                    className="w-full h-[64px] p-4 px-8 rounded-2xl bg-black/30 border-2 border-white/5 text-slate-200 focus:border-violet-500/50 transition-all outline-none appearance-none cursor-pointer shadow-inner font-bold"
+                                    className="w-full h-[64px] p-4 px-8 rounded-2xl bg-[#0f172a] border-2 border-white/10 text-white focus:border-violet-500/50 transition-all outline-none appearance-none cursor-pointer shadow-inner font-bold"
                                 >
                                     {questionTypes.map(t => (
                                         <option key={t.value} value={t.value} className="bg-[#1e293b]">
@@ -217,14 +217,14 @@ export default function QuestionForm({
                                         </option>
                                     ))}
                                 </select>
-                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-white/50">
                                     <FaChevronDown size={14} />
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-4">
-                            <label className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 px-1">
+                            <label className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90 px-1">
                                 Difficulty / Marks <span className="text-red-500">*</span>
                             </label>
                             <Input
@@ -232,14 +232,14 @@ export default function QuestionForm({
                                 value={marks}
                                 onChange={e => setMarks(Number(e.target.value))}
                                 containerClassName="!mb-0"
-                                className="!p-4 !px-8 !rounded-2xl !border-2 !border-white/5 bg-black/30 focus:!border-violet-500/50 h-[64px] shadow-inner !font-bold"
+                                className="!p-4 !px-8 !rounded-2xl !border-2 !border-white/20 bg-[#0f172a] focus:!border-violet-500/50 h-[64px] shadow-inner !font-bold !text-white"
                                 placeholder="Points"
                             />
                         </div>
 
                         {topicId && (
                             <div className="flex flex-col gap-4">
-                                <label className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 px-1">
+                                <label className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90 px-1">
                                     Library Access
                                 </label>
                                 <Button
@@ -247,6 +247,7 @@ export default function QuestionForm({
                                     variant="secondary"
                                     onClick={() => setShowBankModal(true)}
                                     className="w-full h-[64px] !p-0 bg-violet-500/10 text-violet-400 border-2 border-violet-500/20 hover:bg-violet-500 hover:text-white rounded-2xl flex items-center justify-center transition-all group font-black uppercase tracking-widest text-xs"
+                                    
                                 >
                                     <FaUniversity className="mr-3 group-hover:scale-110 transition-transform text-lg" /> Question Bank
                                 </Button>
@@ -256,31 +257,31 @@ export default function QuestionForm({
                 </div>
 
                 {/* QUESTION CONTENT */}
-                <div className="flex flex-col gap-8 px-8 md:px-12" style={{ padding: 30 }}>
-                    <h5 className="text-2xl font-black text-white border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em]">Question Content</h5>
+                <div className="flex flex-col gap-8 px-4 sm:px-8 md:px-12" style={{ padding: '30px 15px' }}>
+                    <h5 className="text-2xl font-black text-white border-l-8 border-violet-500 pl-6 mb-4 uppercase tracking-[0.2em] shadow-sm">Question Content</h5>
                     <div className="flex flex-col gap-4">
-                        <label className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 px-1">
+                        <label className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90 px-1">
                             Main Content <span className="text-red-500">*</span>
                         </label>
                         <TextArea
                             value={content}
                             onChange={e => setContent(e.target.value)}
                             placeholder="Write your question here..."
-                            className="!p-8 !px-10 !rounded-3xl bg-black/30 border-2 border-white/5 !min-h-[180px]"
+                            className="!p-8 !px-10 !rounded-3xl bg-[#0f172a] border-2 border-white/10 !min-h-[180px] !text-white"
                         />
                     </div>
                 </div>
 
                 {/* OPTIONS */}
                 {(type === 'single_choice' || type === 'multi_select') && (
-                    <div className="flex flex-col gap-6 px-8 md:px-12" style={{ padding: 30 }}>
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 px-1">
+                    <div className="flex flex-col gap-6 px-4 sm:px-8 md:px-12" style={{ padding: '30px 15px' }}>
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/90 px-1">
                             Answer Options <span className="text-red-500">*</span>
                         </label>
 
                         <div className="p-6 md:p-10 rounded-[32px] bg-black/10 border border-white/5 flex flex-col gap-8" style={{ padding: 30 }}>
 
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                                 <span className="text-xs text-slate-500 font-bold uppercase tracking-widest ml-2">Define Choices</span>
                                 <Button
                                     variant="secondary"
@@ -294,19 +295,19 @@ export default function QuestionForm({
 
                             <div className="flex flex-col gap-5">
                                 {options.map((opt, idx) => (
-                                    <div key={idx} className="flex gap-4 items-center group">
+                                    <div key={idx} className="flex gap-2 sm:gap-4 items-center group">
                                         <div className="flex-1 relative">
                                             <Input
                                                 value={opt}
                                                 onChange={e => handleOptionChange(idx, e.target.value)}
                                                 placeholder={`Choice ${idx + 1}`}
-                                                className="!mb-0 !p-5 !px-8 border-2"
+                                                className="!mb-0 !p-4 sm:!p-5 !px-6 sm:!px-8 border-white/20 bg-[#0f172a] !text-white rounded-2xl"
                                             />
                                         </div>
                                         <Button
                                             variant="danger"
                                             onClick={() => handleRemoveOption(idx)}
-                                            className="p-5 rounded-2xl opacity-40 group-hover:opacity-100 transition-opacity bg-red-500/10 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white shrink-0"
+                                            className="p-4 sm:p-5 rounded-2xl opacity-40 group-hover:opacity-100 transition-opacity bg-red-500/10 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white shrink-0"
                                         >
                                             <FaTrash size={16} />
                                         </Button>
@@ -321,13 +322,13 @@ export default function QuestionForm({
                 {/* MATCH */}
                 {type === 'match' && (
                     <div className="flex flex-col gap-6 px-8 md:px-12" style={{padding:30}}>
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 px-1">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/80 px-1">
                             Matching Pairs <span className="text-red-500">*</span>
                         </label>
 
                         <div className="p-6 md:p-10 rounded-[32px] bg-black/10 border border-white/5 flex flex-col gap-8">
 
-                            <div className="flex justify-between items-center" style={{padding:30}}>
+                            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 px-4 sm:px-8" style={{padding: '30px 15px'}}>
                                 <span className="text-xs text-slate-500 font-bold uppercase tracking-widest ml-2">Specify Pairs</span>
                                 <Button
                                     variant="secondary"
@@ -341,28 +342,31 @@ export default function QuestionForm({
 
                             <div className="flex flex-col gap-5" style={{padding:30}}>
                                 {matchPairs.map((pair, idx) => (
-                                    <div key={idx} className="flex gap-4 items-center group">
-                                        <Input
-                                            value={pair.left}
-                                            onChange={e => handleMatchPairChange(idx, 'left', e.target.value)}
-                                            placeholder="Term"
-                                            className="!mb-0 flex-1 !p-5 !px-8 border-2"
-                                        />
-                                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
-                                            <span className="text-slate-400 text-lg font-bold">↔</span>
+                                    <div key={idx} className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center group bg-white/5 p-4 sm:p-0 rounded-3xl sm:bg-transparent">
+                                        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 flex-1">
+                                            <Input
+                                                value={pair.left}
+                                                onChange={e => handleMatchPairChange(idx, 'left', e.target.value)}
+                                                placeholder="Term"
+                                                className="w-full !mb-0 flex-1 !p-4 sm:!p-5 !px-6 sm:!px-8 border-white/20 bg-[#0f172a] !text-white rounded-2xl"
+                                            />
+                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/10 rotate-90 sm:rotate-0">
+                                                <span className="text-white text-sm sm:text-lg font-bold">↔</span>
+                                            </div>
+                                            <Input
+                                                value={pair.right}
+                                                onChange={e => handleMatchPairChange(idx, 'right', e.target.value)}
+                                                placeholder="Definition"
+                                                className="w-full !mb-0 flex-1 !p-4 sm:!p-5 !px-6 sm:!px-8 border-white/20 bg-[#0f172a] !text-white rounded-2xl"
+                                            />
                                         </div>
-                                        <Input
-                                            value={pair.right}
-                                            onChange={e => handleMatchPairChange(idx, 'right', e.target.value)}
-                                            placeholder="Definition"
-                                            className="!mb-0 flex-1 !p-5 !px-8 border-2"
-                                        />
                                         <Button
                                             variant="danger"
                                             onClick={() => handleRemoveMatchPair(idx)}
-                                            className="p-5 rounded-2xl opacity-40 group-hover:opacity-100 transition-opacity bg-red-500/10 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white shrink-0"
+                                            className="w-full sm:w-auto p-4 sm:p-5 rounded-2xl opacity-40 group-hover:opacity-100 transition-opacity bg-red-500/10 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white shrink-0"
                                         >
-                                            <FaTrash size={16} />
+                                            <FaTrash size={16} className="sm:inline mr-2 sm:mr-0" />
+                                            <span className="sm:hidden font-black uppercase tracking-widest text-[10px]">Remove Pair</span>
                                         </Button>
                                     </div>
                                 ))}
@@ -373,7 +377,7 @@ export default function QuestionForm({
                 )}
 
                 {/* CORRECT ANSWER */}
-                <div className="flex flex-col gap-4 px-8 md:px-12" style={{ padding: 30 }}>
+                <div className="flex flex-col gap-4 px-4 sm:px-8 md:px-12" style={{ padding: '30px 15px' }}>
                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-400/70 px-1">
                         Set Correct Answer <span className="text-red-500">*</span>
                     </label>
@@ -450,11 +454,11 @@ export default function QuestionForm({
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-8 pt-12 border-t border-white/10 px-8 md:px-12 mt-4" style={{ padding: 30 }}>
+                <div className="flex flex-col md:flex-row gap-8 pt-12 border-t border-white/10 px-4 sm:px-8 md:px-12 mt-4" style={{ padding: '30px 15px' }}>
                     <Button onClick={handleSubmit} className="flex-[2] py-6 rounded-[32px] text-2xl font-black shadow-2xl shadow-violet-500/40 hover:scale-[1.02] transition-transform">
                         ✨ Save Question
                     </Button>
-                    <Button variant="outline" onClick={onCancel} className="flex-1 py-6 rounded-[32px] border-white/10 text-slate-400 hover:bg-white/5 font-black text-lg">
+                    <Button variant="outline" onClick={onCancel} className="flex-1 py-6 rounded-[32px] border-white/20 text-white hover:bg-white/10 font-black text-lg">
                         Discard
                     </Button>
                 </div>
