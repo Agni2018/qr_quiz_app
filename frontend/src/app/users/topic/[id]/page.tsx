@@ -9,13 +9,16 @@ import QuestionForm from '@/components/QuestionForm';
 import UploadMaterialModal from '@/components/UploadMaterialModal';
 import Link from 'next/link';
 import AlertModal from '@/components/AlertModal';
+import Pagination from '@/components/Pagination';
 
 import { useRouter } from 'next/navigation';
 
 export default function TopicDetails({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
+    const ITEMS_PER_PAGE = 10;
     const [topic, setTopic] = useState<any>(null);
     const [questions, setQuestions] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
     const [showAddForm, setShowAddForm] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
@@ -124,24 +127,46 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                         {questions.length === 0 ? (
                             <p className="text-slate-400 text-sm">No questions created yet.</p>
                         ) : (
-                            questions.map((q, i) => (
-                                <Card key={q._id} className="p-6 border border-slate-200 hover:border-slate-300 transition-all flex flex-col gap-4" style={{ background: 'white',padding:10 }}>
-                                    <div className="flex justify-between items-start mb-4">
-                                        <h4 className="text-xl font-bold text-black" style={{ color: '#000' }}>Q{i + 1}. {q.content.text}</h4>
-                                        <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100">{q.marks} Marks</span>
+                            <>
+                                {questions
+                                    .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+                                    .map((q, i) => (
+                                        <Card key={q._id} className="p-6 border border-slate-200 hover:border-slate-300 transition-all flex flex-col gap-4" style={{ background: 'white', padding: 10 }}>
+                                            <div className="flex justify-between items-start mb-4 gap-3">
+                                                <h4 className="text-base sm:text-xl font-bold text-black" style={{ color: '#000' }}>Q{(currentPage - 1) * ITEMS_PER_PAGE + i + 1}. {q.content.text}</h4>
+                                                <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100 shrink-0">{q.marks} Marks</span>
+                                            </div>
+                                            <div className="flex flex-wrap gap-4 sm:gap-6">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Type</span>
+                                                    <span className="text-sm font-medium text-slate-700 capitalize">{q.type.replace('_', ' ')}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Answer</span>
+                                                    <span className="text-sm font-medium text-emerald-600">{String(q.correctAnswer)}</span>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    ))
+                                }
+
+                                {/* Pagination — only shown when there are more than 10 questions */}
+                                {questions.length > ITEMS_PER_PAGE && (
+                                    <div className="flex justify-center sm:justify-start mt-2">
+                                        <Pagination
+                                            currentPage={currentPage}
+                                            totalItems={questions.length}
+                                            itemsPerPage={ITEMS_PER_PAGE}
+                                            onPageChange={(page) => {
+                                                setCurrentPage(page);
+                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                            }}
+                                            isMobile={false}
+                                            style={{ width: '100%', maxWidth: '100%', minWidth: 0 }}
+                                        />
                                     </div>
-                                    <div className="flex gap-6">
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Type</span>
-                                            <span className="text-sm font-medium text-slate-700 capitalize">{q.type.replace('_', ' ')}</span>
-                                        </div>
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Answer</span>
-                                            <span className="text-sm font-medium text-emerald-600">{String(q.correctAnswer)}</span>
-                                        </div>
-                                    </div>
-                                </Card>
-                            ))
+                                )}
+                            </>
                         )}
 
                     </div>

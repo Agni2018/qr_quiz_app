@@ -3,11 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Card from '@/components/Card';
+import Pagination from '@/components/Pagination';
 import { FaBell } from 'react-icons/fa';
 
 export default function StudentNotifications() {
     const [messages, setMessages] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -37,18 +40,31 @@ export default function StudentNotifications() {
 
     if (messages.length === 0) {
         return (
-            <Card className="p-20 text-center bg-slate-950/40 border-dashed border-2 border-white/5 rounded-[40px] mt-12">
-                <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl">📭</div>
-                <h3 className="text-3xl font-black mb-4">No notifications yet</h3>
+            <Card 
+                noGlass={true}
+                className="p-20 text-center border-dashed border-2 border-slate-200 bg-white rounded-[40px] mt-12" 
+                style={{ margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10)', background: 'white' }}
+            >
+                <div className="w-24 h-24 bg-slate-100 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl">📭</div>
+                <h3 className="text-3xl font-black mb-4 text-black">No notifications yet</h3>
                 <p className="text-slate-500 max-w-md mx-auto leading-relaxed">You'll receive updates here when admins message you about your performance.</p>
             </Card>
         );
     }
 
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentMessages = messages.slice(indexOfFirstItem, indexOfLastItem);
+
     return (
-        <div className="max-w-4xl mx-auto flex flex-col gap-6 mt-12">
-            {messages.map((msg) => (
-                <Card key={msg._id} className="p-10 border-white/5 bg-slate-950/40 hover:bg-slate-900/60 rounded-[2.5rem] transition-all group relative overflow-hidden">
+        <div className="max-w-4xl mx-auto flex flex-col gap-6 mt-12 pb-20">
+            {currentMessages.map((msg) => (
+                <Card 
+                    key={msg._id} 
+                    noGlass={true}
+                    className="p-10 border-slate-200 bg-white hover:bg-slate-50 rounded-[2.5rem] transition-all group relative overflow-hidden" 
+                    style={{ margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)', background: 'white' }}
+                >
                     {!msg.isRead && (
                         <div className="absolute top-8 right-8 w-4 h-4 bg-red-500 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.6)] animate-pulse z-10" />
                     )}
@@ -58,20 +74,30 @@ export default function StudentNotifications() {
                         </div>
                         <div className="flex flex-col gap-4 flex-1">
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-4">
-                                <h4 className="text-xl font-black text-white group-hover:text-blue-400 transition-colors uppercase tracking-tight">
+                                <h4 className="text-xl font-black transition-colors uppercase tracking-tight" style={{ color: '#000000' }}>
                                     {msg.sender?.username || 'Admin'}
                                 </h4>
-                                <span className="text-[0.65rem] font-black uppercase tracking-widest text-slate-500">
+                                <span className="text-[0.65rem] font-black uppercase tracking-widest" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
                                     {new Date(msg.createdAt).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             </div>
-                            <div className="bg-white/5 rounded-2xl p-6 border border-white/5" style={{ padding: 10 }}>
-                                <p className="text-slate-300 text-lg leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100" style={{ padding: 10 }}>
+                                <p className="text-lg leading-relaxed whitespace-pre-wrap font-medium" style={{ color: '#000000' }}>{msg.text}</p>
                             </div>
                         </div>
                     </div>
                 </Card>
             ))}
+            {messages.length > 0 && (
+                <div className="flex justify-center mt-12 mb-8">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalItems={messages.length}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={setCurrentPage}
+                    />
+                </div>
+            )}
         </div>
     );
 }

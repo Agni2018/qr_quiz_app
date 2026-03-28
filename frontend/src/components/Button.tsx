@@ -16,7 +16,6 @@ export default function Button({ children, variant = 'primary', className = '', 
         justifyContent: 'center',
         gap: '0.5rem',
         opacity: disabled ? 0.6 : 1,
-        ...style
     };
 
     if (variant === 'primary') {
@@ -39,6 +38,9 @@ export default function Button({ children, variant = 'primary', className = '', 
         baseStyle.background = 'transparent';
         baseStyle.color = 'inherit';
     }
+
+    // Apply custom style at the end to allow overrides
+    baseStyle = { ...baseStyle, ...style };
 
     return (
         <button

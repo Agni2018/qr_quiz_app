@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { useRouter, usePathname } from 'next/navigation';
 import Button from '@/components/Button';
-import LevelCard from '@/components/LevelCard';
 import {
     FaGraduationCap,
     FaHistory,
@@ -146,9 +145,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     return (
         <div style={{ minHeight: '100vh', background: '#ffffff', color: '#0f172a', overflowX: 'hidden' }}>
             {/* MOBILE HEADER */}
-            <header className="lg:hidden sticky top-0 z-40 flex items-center justify-between p-4 border-b border-white/5 bg-slate-900/60 backdrop-blur-xl">
-                <h1 className="text-xl font-black">Student Portal</h1>
-                <button onClick={() => setSidebarOpen(true)} className="p-2">
+            <header className="lg:hidden sticky top-0 z-40 flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white shadow-sm">
+                <h1 style={{ color: '#f97316', fontWeight: 900, fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '-0.03em' }}>QR Quiz Platform</h1>
+                <button onClick={() => setSidebarOpen(true)} className="p-2" style={{ color: '#0f172a' }}>
                     <FaBars />
                 </button>
             </header>
@@ -210,98 +209,145 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                     <nav className="flex flex-col gap-5 flex-1 w-full">
                         <Link href="/dashboard/student/progress" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/dashboard/student/progress') ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/progress') ? 'bg-white text-orange-600 border-none shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
+                                variant="ghost"
+                                style={{ 
+                                    background: isActive('/dashboard/student/progress') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    border: 'none'
+                                }}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/progress') ? 'text-white' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                                 title={isSidebarCollapsed ? "Manage Topics" : ""}
                             >
-                                <FaHistory className={isActive('/dashboard/student/progress') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'} /> 
+                                <FaHistory className={isActive('/dashboard/student/progress') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
                                 {!isSidebarCollapsed && <span className="text-white">Manage Topics</span>}
                             </Button>
                         </Link>
 
+
                         <Link href="/dashboard/student/explore" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/dashboard/student/explore') ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/explore') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
+                                variant="ghost"
+                                style={{ 
+                                    background: isActive('/dashboard/student/explore') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    border: 'none'
+                                }}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/explore') ? 'text-white' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                                 title={isSidebarCollapsed ? "Explore Quiz" : ""}
                             >
                                 <FaCompass className={isActive('/dashboard/student/explore') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/explore') ? 'text-white' : 'text-white'}>Explore Quiz</span>}
+                                {!isSidebarCollapsed && <span className="text-white">Explore Quiz</span>}
                             </Button>
                         </Link>
+
+
 
                         <Link href="/dashboard/student/leaderboard" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/dashboard/student/leaderboard') ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/leaderboard') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
+                                variant="ghost"
+                                style={{ 
+                                    background: isActive('/dashboard/student/leaderboard') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    border: 'none'
+                                }}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/leaderboard') ? 'text-white' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                                 title={isSidebarCollapsed ? "Leaderboard" : ""}
                             >
                                 <FaTrophy className={isActive('/dashboard/student/leaderboard') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/leaderboard') ? 'text-white' : 'text-white'}>Leaderboard</span>}
+                                {!isSidebarCollapsed && <span className="text-white">Leaderboard</span>}
                             </Button>
                         </Link>
+
+
 
                         <Link href="/dashboard/student/referral" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/dashboard/student/referral') ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/referral') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
+                                variant="ghost"
+                                style={{ 
+                                    background: isActive('/dashboard/student/referral') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    border: 'none'
+                                }}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/referral') ? 'text-white' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                                 title={isSidebarCollapsed ? "Referral" : ""}
                             >
                                 <FaUserPlus className={isActive('/dashboard/student/referral') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/referral') ? 'text-white' : 'text-white'}>Referral</span>}
+                                {!isSidebarCollapsed && <span className="text-white">Referral</span>}
                             </Button>
                         </Link>
+
+
 
                         <Link href="/dashboard/student/badges" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'primary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
+                                variant="ghost"
+                                style={{ 
+                                    background: (isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    border: 'none'
+                                }}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'text-white' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                                 title={isSidebarCollapsed ? "Badge & Challenges" : ""}
                             >
                                 <FaAward className={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className={(isActive('/dashboard/student/badges') || isActive('/dashboard/student/challenges')) ? 'text-white' : 'text-white'}>Badge & Challenges</span>}
+                                {!isSidebarCollapsed && <span className="text-white">Badge & Challenges</span>}
                             </Button>
                         </Link>
+
+
 
                         <Link href="/dashboard/student/certificates" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/dashboard/student/certificates') ? 'secondary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/certificates') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
+                                variant="ghost"
+                                style={{ 
+                                    background: isActive('/dashboard/student/certificates') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    border: 'none'
+                                }}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/certificates') ? 'text-white' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                                 title={isSidebarCollapsed ? "Certificates" : ""}
                             >
                                 <FaGraduationCap className={isActive('/dashboard/student/certificates') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/certificates') ? 'text-white' : 'text-white'}>Certificates</span>}
+                                {!isSidebarCollapsed && <span className="text-white">Certificates</span>}
                             </Button>
                         </Link>
+
+
 
                         <Link href="/dashboard/student/materials" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/dashboard/student/materials') ? 'secondary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/materials') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
+                                variant="ghost"
+                                style={{ 
+                                    background: isActive('/dashboard/student/materials') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    border: 'none'
+                                }}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all w-full ${isActive('/dashboard/student/materials') ? 'text-white' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                                 title={isSidebarCollapsed ? "Study Materials" : ""}
                             >
                                 <FaBookOpen className={isActive('/dashboard/student/materials') ? 'text-white' : 'text-white/70 group-hover:text-white'} /> 
-                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/materials') ? 'text-white' : 'text-white'}>Study Materials</span>}
+                                {!isSidebarCollapsed && <span className="text-white">Study Materials</span>}
                             </Button>
                         </Link>
 
+
+
                         <Link href="/dashboard/student/notifications" onClick={() => setSidebarOpen(false)}>
                             <Button
-                                variant={isActive('/dashboard/student/notifications') ? 'secondary' : 'ghost'}
-                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all relative w-full ${isActive('/dashboard/student/notifications') ? 'bg-white/15 text-white border-none shadow-none' : 'text-white/70 hover:text-white hover:bg-white/10 border-none'}`}
+                                variant="ghost"
+                                style={{ 
+                                    background: isActive('/dashboard/student/notifications') ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    border: 'none'
+                                }}
+                                className={`${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-4 h-12 rounded-xl text-lg font-bold transition-all relative w-full ${isActive('/dashboard/student/notifications') ? 'text-white' : 'text-white group-hover:text-white'}`}
                                 title={isSidebarCollapsed ? "Notifications" : ""}
                             >
                                 <div className="relative">
-                                    <FaBell className={isActive('/dashboard/student/notifications') ? 'text-white' : 'text-white/70 group-hover:text-white'} />
+                                    <FaBell className="text-white" />
                                     {unreadCount > 0 && (
                                         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-pulse">
                                             {unreadCount}
                                         </span>
                                     )}
                                 </div>
-                                {!isSidebarCollapsed && <span className={isActive('/dashboard/student/notifications') ? 'text-white' : 'text-[#94a3b8] group-hover:text-white'}>Notifications</span>}
+                                {!isSidebarCollapsed && <span className="text-white font-bold">Notifications</span>}
                             </Button>
                         </Link>
+
+
                     </nav>
 
                     <div className="mt-auto pt-8 border-t border-white/10 flex flex-col gap-2">
@@ -327,27 +373,47 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                 </aside>
 
                 {/* MAIN CONTENT */}
-                <main className="flex-1 py-8 lg:p-14 xl:py-24 overflow-y-auto">
-                    <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-20" style={{ margin: '1rem 1rem 2rem 1rem' }}>
-                        {/* TOP BAR */}
-                        <div className="flex flex-wrap items-center justify-end gap-6 mb-16">
-                            <LevelCard points={user?.points || 0} />
-                            <div className="bg-slate-900/60 border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-3 backdrop-blur-xl shadow-lg" style={{padding:10}}>
-                                <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-500">🔥</div>
-                                <div className="flex flex-col leading-none">
-                                    <span className="text-[0.6rem] font-bold text-slate-500 uppercase">Streak</span>
-                                    <span className="text-xl font-black">{user?.loginStreak || 0} days</span>
+                <main className="flex-1 overflow-y-auto" style={{ display: 'flex', flexDirection: 'column' }}>
+
+                    {/* DESKTOP HEADER BAR */}
+                    <div className="hidden lg:flex items-center justify-between px-10 border-b border-slate-200 bg-white shadow-sm" style={{ height: '80px', flexShrink: 0 }}>
+                        <span style={{ color: '#f97316', fontWeight: 900, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.15em' }}>QR Quiz Platform</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            {/* Level Card */}
+                            <LevelCardWhite points={user?.points || 0} />
+                            {/* Streak */}
+                            <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '1rem', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+                                <span style={{ fontSize: '1.3rem' }}>🔥</span>
+                                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+                                    <span style={{ fontSize: '0.55rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '3px' }}>Streak</span>
+                                    <span style={{ fontSize: '1rem', fontWeight: 900, color: '#0f172a' }}>{user?.loginStreak || 0} <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b' }}>days</span></span>
                                 </div>
                             </div>
-                            <div className="bg-slate-900/60 border border-white/10 px-8 py-4 rounded-[2rem] flex items-center gap-5 backdrop-blur-xl shadow-2xl group" style={{padding:15}}>
-                                <FaTrophy className="text-yellow-500 text-3xl animate-pulse" />
-                                <div className="flex flex-col leading-tight">
-                                    <span className="text-[0.7rem] font-black text-slate-500 uppercase tracking-widest mb-1">Total Points</span>
-                                    <span className="text-3xl font-black text-white">{user?.points || 0}</span>
+                            {/* Total Points */}
+                            <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '1rem', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+                                <FaTrophy style={{ color: '#f59e0b', fontSize: '1.2rem' }} />
+                                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+                                    <span style={{ fontSize: '0.55rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '3px' }}>Total Points</span>
+                                    <span style={{ fontSize: '1.1rem', fontWeight: 900, color: '#0f172a' }}>{user?.points || 0}</span>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
+                    {/* MOBILE STATS BAR */}
+                    <div className="lg:hidden flex items-center justify-center gap-3 px-4 py-3 border-b border-slate-200 bg-white" style={{ flexWrap: 'wrap' }}>
+                        <MobileLevelBadge points={user?.points || 0} />
+                        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '0.75rem', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+                            <span style={{ fontSize: '1rem' }}>🔥</span>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#0f172a' }}>{user?.loginStreak || 0} <span style={{ color: '#64748b', fontWeight: 600 }}>days</span></span>
+                        </div>
+                        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '0.75rem', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+                            <FaTrophy style={{ color: '#f59e0b', fontSize: '0.9rem' }} />
+                            <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#0f172a' }}>{user?.points || 0} <span style={{ color: '#64748b', fontWeight: 600 }}>pts</span></span>
+                        </div>
+                    </div>
+
+                    <div className="max-w-[1400px] w-full mx-auto px-6 sm:px-10 lg:px-16" style={{ paddingTop: '2.5rem', paddingBottom: '4rem' }}>
                         {children}
                     </div>
                 </main>
@@ -416,6 +482,264 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                         </div>
                     </div>
                 </div>
+            )}
+        </div>
+    );
+}
+
+// ── White-themed Level Card for desktop header ──────────────────────────────
+function LevelCardWhite({ points }: { points: number }) {
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    const levels = Array.from({ length: 11 }, (_, i) => ({
+        level: i + 1,
+        minPoints: i * 50
+    }));
+
+    const currentLevel = Math.min(Math.floor(points / 50) + 1, 11);
+    const nextLevel = currentLevel < 11 ? currentLevel + 1 : null;
+    const pointsInCurrentLevel = points % 50;
+    const progress = currentLevel === 11 ? 100 : (pointsInCurrentLevel / 50) * 100;
+
+    return (
+        <div style={{ position: 'relative' }}>
+            {/* Trigger */}
+            <div
+                onClick={() => setIsOpen(!isOpen)}
+                style={{
+                    background: '#ffffff',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '1rem',
+                    padding: '8px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+                    cursor: 'pointer',
+                    userSelect: 'none'
+                }}
+            >
+                <div style={{ width: '28px', height: '28px', background: '#eff6ff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaStar style={{ color: '#3b82f6', fontSize: '0.85rem' }} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+                    <span style={{ fontSize: '0.55rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '3px' }}>Level</span>
+                    <span style={{ fontSize: '1rem', fontWeight: 900, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {currentLevel}
+                        {isOpen
+                            ? <FaChevronUp style={{ fontSize: '0.6rem', color: '#64748b' }} />
+                            : <FaChevronDown style={{ fontSize: '0.6rem', color: '#64748b' }} />
+                        }
+                    </span>
+                </div>
+            </div>
+
+            {/* Dropdown */}
+            {isOpen && (
+                <div style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    width: '280px',
+                    background: '#fff',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '1.25rem',
+                    padding: '1.25rem',
+                    boxShadow: '0 12px 40px rgba(0,0,0,0.12)',
+                    zIndex: 200
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '0.75rem' }}>
+                        <div>
+                            <div style={{ fontWeight: 900, fontSize: '1rem', color: '#0f172a' }}>Level {currentLevel}</div>
+                            <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                {currentLevel === 11 ? 'Max level reached!' : `${50 - pointsInCurrentLevel} pts to Level ${nextLevel}`}
+                            </div>
+                        </div>
+                        <span style={{ fontSize: '1.1rem', fontWeight: 900, color: '#3b82f6' }}>{Math.round(progress)}%</span>
+                    </div>
+                    {/* Progress Bar */}
+                    <div style={{ width: '100%', height: '8px', background: '#f1f5f9', borderRadius: '99px', overflow: 'hidden', marginBottom: '1rem' }}>
+                        <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #2563eb, #38bdf8)', borderRadius: '99px', transition: 'width 0.8s ease' }} />
+                    </div>
+                    {/* Levels list */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '200px', overflowY: 'auto' }}>
+                        {levels.map((l) => (
+                            <div key={l.level} style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                padding: '6px 10px',
+                                borderRadius: '8px',
+                                background: l.level === currentLevel ? '#eff6ff' : 'transparent',
+                                border: l.level === currentLevel ? '1px solid #bfdbfe' : '1px solid transparent',
+                                opacity: l.level > currentLevel ? 0.5 : 1
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div style={{ width: '14px', height: '14px', borderRadius: '50%', background: l.level <= currentLevel ? '#3b82f6' : '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        {l.level <= currentLevel && <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fff' }} />}
+                                    </div>
+                                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: l.level === currentLevel ? '#1d4ed8' : '#475569' }}>Level {l.level}</span>
+                                </div>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#94a3b8' }}>{l.minPoints} PTS</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ── Interactive level badge for mobile stats bar ─────────────────────────────
+function MobileLevelBadge({ points }: { points: number }) {
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    const levels = Array.from({ length: 11 }, (_, i) => ({
+        level: i + 1,
+        minPoints: i * 50
+    }));
+
+    const currentLevel = Math.min(Math.floor(points / 50) + 1, 11);
+    const nextLevel = currentLevel < 11 ? currentLevel + 1 : null;
+    const pointsInCurrentLevel = points % 50;
+    const progress = currentLevel === 11 ? 100 : (pointsInCurrentLevel / 50) * 100;
+
+    return (
+        <div style={{ position: 'relative' }}>
+            {/* Trigger */}
+            <div
+                onClick={() => setIsOpen(!isOpen)}
+                style={{
+                    background: '#eff6ff',
+                    border: '1px solid #bfdbfe',
+                    borderRadius: '0.75rem',
+                    padding: '6px 12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    cursor: 'pointer',
+                    userSelect: 'none'
+                }}
+            >
+                <FaStar style={{ color: '#3b82f6', fontSize: '0.75rem' }} />
+                <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#1d4ed8', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    Lvl {currentLevel}
+                    {isOpen 
+                        ? <FaChevronUp style={{ fontSize: '0.5rem', color: '#3b82f6' }} /> 
+                        : <FaChevronDown style={{ fontSize: '0.5rem', color: '#3b82f6' }} />
+                    }
+                </span>
+            </div>
+
+            {/* Dropdown / Modal Overlay for Mobile */}
+            {isOpen && (
+                <>
+                    {/* Backdrop */}
+                    <div 
+                        onClick={() => setIsOpen(false)}
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[998]"
+                    />
+                    
+                    {/* Centered Modal-style Dropdown */}
+                    <div style={{
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 'calc(100vw - 40px)',
+                        maxWidth: '320px',
+                        background: '#fff',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '2rem',
+                        padding: '2rem',
+                        boxShadow: '0 25px 60px rgba(0,0,0,0.4)',
+                        zIndex: 999,
+                        maxHeight: '80vh',
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                            <div className="text-left">
+                                <div style={{ fontWeight: 900, fontSize: '1.25rem', color: '#0f172a', marginBottom: '4px' }}>Level {currentLevel}</div>
+                                <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                    {currentLevel === 11 ? 'Max level reached!' : `${50 - pointsInCurrentLevel} points to Lvl ${nextLevel}`}
+                                </div>
+                            </div>
+                            <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#3b82f6' }}>{Math.round(progress)}%</span>
+                        </div>
+
+                        {/* Progress Bar */}
+                        <div style={{ width: '100%', height: '12px', background: '#f1f5f9', borderRadius: '99px', overflow: 'hidden', marginBottom: '2rem', flexShrink: 0 }}>
+                            <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #2563eb, #38bdf8)', borderRadius: '99px' }} />
+                        </div>
+
+                        {/* Title for levels list */}
+                        <div style={{ fontSize: '0.7rem', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '1rem', flexShrink: 0 }} className="text-left">
+                            All Levels
+                        </div>
+
+                        {/* Levels list with scrolling */}
+                        <div style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            gap: '8px', 
+                            overflowY: 'auto', 
+                            paddingRight: '4px',
+                            flex: 1
+                        }}>
+                            {levels.map((l) => (
+                                <div key={l.level} style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    padding: '12px 16px',
+                                    borderRadius: '16px',
+                                    background: l.level === currentLevel ? '#eff6ff' : '#f8fafc',
+                                    border: l.level === currentLevel ? '1px solid #bfdbfe' : '1px solid #f1f5f9',
+                                    opacity: l.level > currentLevel ? 0.5 : 1
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <div style={{ 
+                                            width: '18px', 
+                                            height: '18px', 
+                                            borderRadius: '50%', 
+                                            background: l.level <= currentLevel ? '#3b82f6' : '#e2e8f0', 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            boxShadow: l.level <= currentLevel ? '0 0 10px rgba(59,130,246,0.3)' : 'none'
+                                        }}>
+                                            {l.level <= currentLevel && <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fff' }} />}
+                                        </div>
+                                        <span style={{ fontSize: '1rem', fontWeight: 800, color: l.level === currentLevel ? '#1d4ed8' : '#334155' }}>Lvl {l.level}</span>
+                                    </div>
+                                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: l.level === currentLevel ? '#1d4ed8' : '#94a3b8' }}>{l.minPoints} pts</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Close Button for Better UX */}
+                        <button 
+                            onClick={() => setIsOpen(false)}
+                            style={{
+                                marginTop: '1.5rem',
+                                padding: '12px',
+                                background: '#f1f5f9',
+                                border: 'none',
+                                borderRadius: '1rem',
+                                fontWeight: 900,
+                                fontSize: '0.75rem',
+                                color: '#475569',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.1em',
+                                width: '100%',
+                                flexShrink: 0
+                            }}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </>
             )}
         </div>
     );

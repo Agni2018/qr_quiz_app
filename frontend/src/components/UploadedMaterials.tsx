@@ -10,7 +10,6 @@ import {
     FaBookOpen,
     FaVideo,
     FaTimes,
-    FaBook
 } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
@@ -132,44 +131,46 @@ export default function UploadedMaterials() {
                         />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {currentTopics.map((topic) => (
-                        <Card
-                            key={topic._id}
-                            className="group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-[#0a0e1a]/80 backdrop-blur-xl hover:bg-[#0f172a] rounded-[2rem] flex flex-col h-full shadow-2xl overflow-hidden relative border"
-                            style={{ padding: '30px' }}
-                        >
-                            {/* NEW DESIGN: Top Icon Area */}
-                            <div className="h-40 bg-[#060910] flex items-center justify-center relative overflow-hidden">
-                                <FaBook className="text-6xl text-primary/20 group-hover:scale-110 group-hover:text-primary/40 transition-all duration-700" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e1a] to-transparent opacity-60" />
-                                
-                                {/* Badge */}
-                                <div className="absolute top-4 left-4 z-10">
-                                    <span className="bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md border border-primary/20 backdrop-blur-md" style={{padding:5,fontSize:12,marginBottom:5}}>
-                                        {materials.filter(m => (m.topicId?._id || m.topicId) === topic._id).length} Items
+                    {currentTopics.map((topic) => {
+                        const itemCount = materials.filter(m => (m.topicId?._id || m.topicId) === topic._id).length;
+                        return (
+                            <div
+                                key={topic._id}
+                                className="bg-white rounded-[2rem] flex flex-col gap-5 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-xl"
+                                style={{ padding: '30px' }}
+                            >
+                                {/* Card Header */}
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md bg-orange-500/10 text-orange-500">
+                                        Topic
+                                    </span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md bg-slate-100 text-slate-500">
+                                        {itemCount} {itemCount === 1 ? 'Item' : 'Items'}
                                     </span>
                                 </div>
-                            </div>
 
-                            <div className="flex flex-col flex-1 p-8 gap-4 relative z-10" style={{marginTop:30}}>
-                                <h3 className="text-xl font-black group-hover:text-primary transition-colors uppercase tracking-tight text-white leading-tight">
-                                    {topic.name}
-                                </h3>
-                                <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed font-medium">
-                                    {topic.description || "Access and manage the curated collections of knowledge for this topic."}
-                                </p>
+                                {/* Title & Description */}
+                                <div className="flex flex-col gap-2">
+                                    <h3 className="font-bold text-xl tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors uppercase" style={{ color: '#000' }}>
+                                        {topic.name}
+                                    </h3>
+                                    <p className="text-sm leading-relaxed line-clamp-2 min-h-[40px]" style={{ color: '#333' }}>
+                                        {topic.description || 'Access and manage the curated study materials for this topic.'}
+                                    </p>
+                                </div>
 
-                                <div className="pt-6 border-t border-white/5 mt-auto" style={{marginTop:10}}>
+                                {/* Footer Button */}
+                                <div className="mt-auto pt-4 border-t border-slate-100">
                                     <Button
                                         onClick={() => handleViewMaterials(topic._id, topic.name)}
                                         className="w-full py-4 rounded-xl bg-primary/10 hover:bg-primary text-primary hover:text-white font-black uppercase tracking-widest text-[10px] transition-all border border-primary/20 shadow-lg shadow-primary/5 group-hover:shadow-primary/10"
                                     >
-                                        View & Manage
+                                        View &amp; Manage
                                     </Button>
                                 </div>
                             </div>
-                        </Card>
-                    ))}
+                        );
+                    })}
                 </div>
                 </>
             )}

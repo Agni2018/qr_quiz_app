@@ -129,6 +129,7 @@ export default function BadgeManagement() {
                                     onChange={e => setNewBadge({ ...newBadge, name: e.target.value })}
                                     placeholder="e.g. Points Warrior"
                                     className="!px-8 h-[64px] !rounded-2xl border-slate-200 bg-white !text-black shadow-inner"
+                                    style={{ background: '#ffffff', color: '#000000' }}
                                 />
                                 <Input
                                     label={<span className="text-slate-700 font-bold" style={{ color: '#333' }}>Requirement Threshold <span className="text-rose-500">*</span></span>}
@@ -137,6 +138,7 @@ export default function BadgeManagement() {
                                     onChange={e => setNewBadge({ ...newBadge, threshold: Number(e.target.value) })}
                                     className="!px-8 h-[64px] !rounded-2xl border-slate-200 bg-white !text-black shadow-inner"
                                     placeholder="Value"
+                                    style={{ background: '#ffffff', color: '#000000' }}
                                 />
                             </div>
                         </div>
@@ -148,6 +150,7 @@ export default function BadgeManagement() {
                                 onChange={e => setNewBadge({ ...newBadge, description: e.target.value })}
                                 placeholder="Clearly explain how to earn this badge..."
                                 className="!p-8 !px-10 !rounded-[2rem] bg-white border-2 border-slate-200 !min-h-[160px] hover:border-slate-300 !text-black shadow-inner"
+                                style={{ background: '#ffffff', color: '#000000' }}
                             />
                         </div>
 

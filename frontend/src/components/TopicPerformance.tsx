@@ -196,7 +196,8 @@ export default function TopicPerformance() {
                 className="relative w-full"
                 style={{ 
                     maxWidth: isMobile ? '100%' : '800px',
-                    marginBottom: '1rem' 
+                    marginBottom: '1rem',
+                    margin: '0 1rem 1rem 1rem'
                 }}
             >
                 <input 

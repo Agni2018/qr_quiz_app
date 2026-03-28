@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
+import Pagination from '@/components/Pagination';
 import { FaGraduationCap, FaDownload, FaTimes, FaMedal } from 'react-icons/fa';
 import CertificateTemplate from '@/components/CertificateTemplate';
 import Link from 'next/link';
@@ -14,6 +15,16 @@ export default function StudentCertificates() {
     const [selectedCertificate, setSelectedCertificate] = useState<any>(null);
     const [showCertificateModal, setShowCertificateModal] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    const isMobile = windowWidth < 768;
 
     useEffect(() => {
         const fetchCertificates = async () => {
@@ -94,10 +105,10 @@ export default function StudentCertificates() {
 
     if (certificates.length === 0) {
         return (
-            <Card className="p-20 text-center border-dashed border-2 border-white/5 rounded-[40px] mt-12" style={{ background: '#1a1f2e',padding:30 }}>
-                <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner shadow-white/5">📜</div>
-                <h3 className="text-4xl font-black mb-4">No certificates earned</h3>
-                <p className="text-slate-500 mb-12 text-xl max-w-md mx-auto leading-relaxed">Complete quiz topics with at least one correct answer to earn yours!</p>
+            <Card className="p-20 text-center border-dashed border-2 border-slate-200 rounded-[40px] mt-12" style={{ background: 'white', padding:30, margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10)' }}>
+                <div className="w-24 h-24 bg-slate-100 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner border border-slate-100">📜</div>
+                <h3 className="text-4xl font-black mb-4" style={{ color: '#000' }}>No certificates earned</h3>
+                <p className="mb-12 text-xl max-w-md mx-auto leading-relaxed" style={{ color: '#444' }}>Complete quiz topics with at least one correct answer to earn yours!</p>
                 <Link href="/dashboard/student/explore">
                     <Button className="px-16 py-6  rounded-[2rem] text-xl font-black bg-primary shadow-xl shadow-primary/20" style={{marginTop:20}}>Start a Quiz</Button>
                 </Link>
@@ -105,32 +116,37 @@ export default function StudentCertificates() {
         );
     }
 
+    // Pagination
+    const indexOfLast = currentPage * itemsPerPage;
+    const indexOfFirst = indexOfLast - itemsPerPage;
+    const paginatedCertificates = certificates.slice(indexOfFirst, indexOfLast);
+
     return (
-        <>
+        <div className="flex flex-col">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-                {certificates.map((cert) => (
+                {paginatedCertificates.map((cert) => (
                     <Card
                         key={cert._id}
-                        className="border-white/5 hover:bg-slate-900/60 rounded-[2rem] flex flex-col h-full shadow-2xl transition-all group"
-                        style={{ padding: '2.5rem', background: '#1a1f2e' }}
+                        className="border-slate-200 hover:bg-slate-50 rounded-[2.5rem] flex flex-col h-full transition-all group"
+                        style={{ padding: '2.5rem', background: 'white', margin: '1.25rem 1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}
                     >
                         <div className="flex justify-between items-start mb-8">
-                            <div className="text-indigo-400 text-3xl opacity-50 group-hover:opacity-100 transition-opacity">
+                            <div className="text-indigo-500 text-3xl opacity-60 group-hover:opacity-100 transition-opacity">
                                 <FaGraduationCap />
                             </div>
-                            <div className="bg-indigo-500/10 text-indigo-400 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-500/20">
+                            <div className="bg-indigo-500/10 text-indigo-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-500/20">
                                 Verified
                             </div>
                         </div>
                         <div className="flex-1 flex flex-col gap-3">
-                            <h4 className="text-xl font-black text-white group-hover:text-indigo-400 transition-colors leading-tight">{cert.topicId?.name}</h4>
-                            <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{cert.topicId?.description}</p>
+                            <h4 className="text-xl font-black group-hover:text-indigo-500 transition-colors leading-tight" style={{ color: '#000' }}>{cert.topicId?.name}</h4>
+                            <p className="text-sm leading-relaxed line-clamp-2 font-medium" style={{ color: '#444' }}>{cert.topicId?.description}</p>
                         </div>
 
-                        <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between" style={{ marginTop: 30 }}>
+                        <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between" style={{ marginTop: 30 }}>
                             <div className="flex flex-col">
-                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Earned On</span>
-                                <span className="text-xs font-bold text-slate-300">{new Date(cert.certifiedAt).toLocaleDateString()}</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: '#666' }}>Earned On</span>
+                                <span className="text-xs font-bold" style={{ color: '#333' }}>{new Date(cert.certifiedAt).toLocaleDateString()}</span>
                             </div>
                             <Button
                                 className="px-4 py-2 text-xs font-black uppercase tracking-widest bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-900/20 rounded-xl flex items-center gap-2"
@@ -146,18 +162,31 @@ export default function StudentCertificates() {
                 ))}
             </div>
 
+            {/* Pagination */}
+            {certificates.length > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'center', padding: isMobile ? '1.5rem 1rem 2rem' : '1.5rem 1.5rem 2.5rem',marginTop:20 }}>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalItems={certificates.length}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={setCurrentPage}
+                        isMobile={isMobile}
+                    />
+                </div>
+            )}
+
             {/* CONTINUE YOUR JOURNEY */}
             <Card
-                className="flex flex-col sm:flex-row items-center sm:items-center justify-between border-white/5 rounded-[2rem] shadow-2xl transition-all"
-                style={{ margin: '50px 0', padding: 30, background: '#1a1f2e' }}
+                className="flex flex-col sm:flex-row items-center sm:items-center justify-between border-slate-200 rounded-[2.5rem] transition-all"
+                style={{ margin: '50px 1rem', padding: 30, background: 'white', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}
             >
                 <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 text-center sm:text-left">
-                    <div className="w-16 h-16 rounded-2xl bg-[#1b4332] text-[#34d399] flex items-center justify-center flex-shrink-0 shadow-inner shadow-white/5">
+                    <div className="w-16 h-16 rounded-2xl bg-[#d1fae5] text-[#059669] flex items-center justify-center flex-shrink-0 shadow-inner">
                         <FaMedal size={28} />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                        <h3 className="text-2xl font-black text-white">Continue your journey</h3>
-                        <p className="text-slate-400 text-base font-medium">You have obtained {certificates.length} certificate{certificates.length !== 1 ? 's' : ''}.</p>
+                        <h3 className="text-2xl font-black" style={{ color: '#000' }}>Continue your journey</h3>
+                        <p className="text-base font-medium" style={{ color: '#444' }}>You have obtained {certificates.length} certificate{certificates.length !== 1 ? 's' : ''}.</p>
                     </div>
                 </div>
                 <div className="mt-6 sm:mt-0 flex-shrink-0 w-full sm:w-auto">
@@ -244,6 +273,6 @@ export default function StudentCertificates() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

@@ -282,6 +282,26 @@ export default function TopicManagement() {
                     <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-[#4b5563] transition-colors size-6" />
                 </div>
             </div>
+
+            {/* CREATE BUTTONS ROW - mobile only */}
+            <div className="flex flex-col sm:flex-row gap-3 px-4 md:hidden">
+                {view === 'categories' && (
+                    <Button
+                        onClick={() => setShowCategoryModal(true)}
+                        className="flex items-center justify-center gap-2 h-12 px-6 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-xs shadow-lg transition-all w-full sm:w-auto"
+                        style={{ background: '#f97316', color: 'white' }}
+                    >
+                        <FaPlus size={12} /> Create Category
+                    </Button>
+                )}
+                <Button
+                    onClick={() => setShowTopicModal(true)}
+                    className="flex items-center justify-center gap-2 h-12 px-6 rounded-2xl bg-black hover:bg-slate-900 text-white font-black uppercase tracking-widest text-xs shadow-lg border border-black/10 transition-all w-full sm:w-auto"
+                    style={{ background: '#111', color: 'white' }}
+                >
+                    <FaPlus size={12} /> Create Topic
+                </Button>
+            </div>
             
             {view === 'topics' && currentCategory && (
                 <div className="flex flex-wrap items-center justify-between gap-4 bg-[#1a1f2e] p-6 rounded-[2rem] border border-[#1a1f2e] mx-4 shadow-2xl relative overflow-hidden">

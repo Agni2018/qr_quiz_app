@@ -81,16 +81,16 @@ export default function LeaderboardPage() {
                     {/* Left Column: Leaderboard Rows */}
                     <div className="flex-1 w-full order-2 lg:order-1">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 mb-8" style={{marginBottom:20}}>
-                            <h3 className="text-2xl font-bold flex items-center gap-3 text-slate-500 uppercase tracking-widest pl-2 m-0">
+                            <h3 className="text-2xl font-bold flex items-center gap-3 text-slate-500 uppercase tracking-widest pl-2 m-0" style={{color:'orange'}}>
                                 <FaTrophy className="text-yellow-500" /> Top Performers
                             </h3>
-                            <Link href="/dashboard/student/referral-leads" className="w-full sm:w-auto">
+                            <Link href="/dashboard/student/referral-leads" className="w-full sm:w-auto flex justify-center sm:justify-start">
                                 <Button
                                     variant="secondary"
-                                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all text-sm shadow-xl backdrop-blur-md border border-emerald-500/20"
+                                    className="w-[calc(100%-2rem)] sm:w-auto mx-auto sm:mx-0 flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-black transition-all text-base shadow-xl backdrop-blur-md border border-emerald-500/20"
                                     style={{ background: '#10b981', color: 'white' }}
                                 >
-                                    <FaUsers className="text-base text-white" />
+                                    <FaUsers className="text-xl text-white" />
                                     <span>Referral Leads</span>
                                 </Button>
                             </Link>
@@ -101,13 +101,13 @@ export default function LeaderboardPage() {
                                 <Card
                                     key={i}
                                     className={`
-                                        p-6 flex items-center justify-between rounded-[1.5rem] transition-all hover:-translate-y-1 duration-300
-                                        ${i === 0 ? 'bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border-yellow-500/30' :
-                                            i === 1 ? 'border-slate-500/20' :
-                                            i === 2 ? 'border-amber-600/20' :
-                                                'border-white/5 hover:bg-white/10'}
+                                        p-6 flex items-center justify-between rounded-[1.5rem] transition-all hover:-translate-y-1 duration-300 border
+                                        ${i === 0 ? 'bg-gradient-to-r from-yellow-500/5 to-orange-500/5 border-yellow-500/30' :
+                                            i === 1 ? 'border-slate-200 hover:bg-slate-50' :
+                                            i === 2 ? 'border-slate-200 hover:bg-slate-50' :
+                                                'border-slate-100 hover:bg-slate-50'}
                                     `}
-                                    style={{ background: '#1a1f2e',padding:10 }}
+                                    style={{ background: 'white', padding: 10, margin: '0 1rem' }}
                                 >
                                     <div className="flex items-center gap-6">
                                         <div className={`
@@ -115,20 +115,20 @@ export default function LeaderboardPage() {
                                             ${i === 0 ? 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/40' :
                                                 i === 1 ? 'bg-slate-300 text-slate-800' :
                                                     i === 2 ? 'bg-amber-600 text-white' :
-                                                        'bg-slate-800/50 text-slate-500'}
+                                                        'bg-slate-100 text-slate-500'}
                                         `}>
                                             {i + 1}
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className={`font-bold text-lg ${i === 0 ? 'text-yellow-500' : 'text-slate-200'}`}>
+                                            <span className={`font-bold text-lg ${i < 3 ? 'text-yellow-500' : 'text-black'}`}>
                                                 {u.username}
                                             </span>
-                                            {i === 0 && <span className="text-[0.65rem] font-bold uppercase tracking-wider text-yellow-500/60">Current Champion</span>}
+                                            {i === 0 && <span className="text-[0.65rem] font-bold uppercase tracking-wider text-yellow-500/80">Current Champion</span>}
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col items-end">
-                                        <span className={`text-2xl font-black ${i === 0 ? 'text-yellow-500' : 'text-white'}`}>
+                                        <span className={`text-2xl font-black ${i < 3 ? 'text-yellow-500' : 'text-black'}`}>
                                             {u.points}
                                         </span>
                                         <span className="text-[0.65rem] font-bold uppercase tracking-wider text-slate-500">Points</span>
@@ -140,10 +140,10 @@ export default function LeaderboardPage() {
                     
                     {/* Right Column: Your Momentum Card */}
                     {leaderboard?.userRank && (
-                        <div className="w-full lg:w-[320px] shrink-0 order-1 lg:order-2 animate-in fade-in slide-in-from-right duration-700">
+                        <div className="w-full lg:w-[320px] shrink-0 order-1 lg:order-2 animate-in fade-in slide-in-from-right duration-700 flex justify-center">
                             <Card 
-                                className="border border-white/10 rounded-[2.5rem] shadow-2xl backdrop-blur-xl relative overflow-hidden group/momentum w-full"
-                                style={{ padding: '30px', marginTop: 50, background: '#1a1f2e' }}
+                                className="border border-slate-200 rounded-[2.5rem] shadow-2xl backdrop-blur-xl relative overflow-hidden group/momentum w-[calc(100%-2rem)] lg:w-full mx-auto"
+                                style={{ padding: '30px', marginTop: 50, background: 'white' }}
                             >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full -mr-16 -mt-16 blur-2xl" />
                                 

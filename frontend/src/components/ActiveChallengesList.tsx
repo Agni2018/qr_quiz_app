@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Card from './Card';
+import Pagination from './Pagination';
 import { FaTrash, FaStar, FaCalendarAlt, FaTrophy } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
@@ -10,8 +11,18 @@ import ConfirmModal from '@/components/ConfirmModal';
 export default function ActiveChallengesList() {
     const [challenges, setChallenges] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', onConfirm: () => {} });
+
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    const isMobile = windowWidth < 768;
 
     const fetchChallenges = async () => {
         try {
@@ -59,13 +70,30 @@ export default function ActiveChallengesList() {
                 Active <span className="text-orange-600">Challenges</span>
             </h3>
 
+            {challenges.length > 0 && (
+                <div style={{ 
+                    marginTop: '1.5rem', 
+                    marginBottom: '2rem',
+                    display: 'flex',
+                    justifyContent: 'flex-start'
+                }}>
+                    <Pagination 
+                        currentPage={currentPage}
+                        totalItems={challenges.length}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={setCurrentPage}
+                        isMobile={isMobile}
+                    />
+                </div>
+            )}
+
             {challenges.length === 0 ? (
                 <Card className="p-20 text-center border-dashed border-2 border-slate-200 bg-slate-50 opacity-100 shadow-inner" style={{ background: 'white', padding: 40 }}>
                     <h3 className="text-xl font-bold text-slate-400 uppercase tracking-widest">No Challenges Created</h3>
                 </Card>
             ) : (
                 <div className="grid grid-cols-1 gap-4">
-                    {challenges.map((c) => (
+                    {challenges.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((c) => (
                         <Card 
                             key={c._id} 
                             className="group relative border border-slate-200 bg-white hover:bg-slate-50 hover:border-primary/40 transition-all duration-300 rounded-2xl overflow-hidden" 

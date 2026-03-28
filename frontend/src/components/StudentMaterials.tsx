@@ -5,6 +5,7 @@ import api from '@/lib/api';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import { FaBookOpen, FaFileAlt, FaVideo, FaTimes, FaBook } from 'react-icons/fa';
+import Pagination from '@/components/Pagination';
 
 export default function StudentMaterials() {
     const [materials, setMaterials] = useState<any[]>([]);
@@ -13,6 +14,17 @@ export default function StudentMaterials() {
     const [selectedTopicMaterials, setSelectedTopicMaterials] = useState<any[]>([]);
     const [viewingTopicName, setViewingTopicName] = useState('');
     const [showMaterialsModal, setShowMaterialsModal] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isMobile = windowWidth < 768;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,6 +55,10 @@ export default function StudentMaterials() {
         materials.some(m => (m.topicId?._id || m.topicId) === q._id)
     );
 
+    const totalItems = topicsWithMaterials.length;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentTopics = topicsWithMaterials.slice(startIndex, startIndex + itemsPerPage);
+
     const getFileUrl = (url: string) => {
         if (!url) return '';
         if (url.startsWith('http')) return url;
@@ -70,38 +86,65 @@ export default function StudentMaterials() {
 
     return (
         <div style={{ padding: '2rem 1.5rem 4rem 1.5rem', margin: '0 auto', maxWidth: '1600px' }}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mt-12">
-                {topicsWithMaterials.map((topic) => (
-                    <Card
-                        key={topic._id}
-                        className="group hover:-translate-y-3 transition-all duration-500 border-white/5 bg-[#0a0e1a]/80 backdrop-blur-xl hover:bg-[#0f172a] rounded-[2rem] flex flex-col h-full shadow-2xl overflow-hidden relative border"
-                        style={{ padding: 20, margin: '0.75rem' }}
-                    >
-                        {/* TOP ICON AREA */}
-                        <div className="h-40 bg-[#060910] flex items-center justify-center relative overflow-hidden">
-                            <FaBook className="text-6xl text-primary/20 group-hover:scale-110 group-hover:text-primary/40 transition-all duration-700" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e1a] to-transparent opacity-60" />
-                        </div>
+            {/* Pagination Controls */}
+            {topicsWithMaterials.length > 0 && (
+                <div className="px-4 mb-12">
+                    <Pagination 
+                        currentPage={currentPage}
+                        totalItems={totalItems}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={setCurrentPage}
+                        isMobile={isMobile}
+                        style={{ 
+                            maxWidth: isMobile ? '100%' : '400px'
+                        }}
+                    />
+                </div>
+            )}
 
-                        <div className="flex flex-col flex-1 p-8 gap-4 relative z-10" style={{marginTop:20}}>
-                            <h3 className="text-xl font-black group-hover:text-primary transition-colors uppercase tracking-tight text-white leading-tight">
-                                {topic.name}
-                            </h3>
-                            <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed font-medium">
-                                {topic.description || "Browse the study materials and resources for this topic."}
-                            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mt-20" style={{marginTop:20}}>
+                {currentTopics.map((topic) => {
+                    const itemCount = materials.filter(m => (m.topicId?._id || m.topicId) === topic._id).length;
+                    return (
+                        <Card
+                            key={topic._id}
+                            className="rounded-[2.5rem] flex flex-col gap-6 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-2xl"
+                            style={{ padding: '32px', margin: '0.5rem', background: '#fff' }}
+                        >
+                            {/* Card Header */}
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md bg-orange-500/10 text-orange-500">
+                                    Topic
+                                </span>
+                                <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md bg-slate-100 text-slate-500 border border-slate-200/50">
+                                    {itemCount} {itemCount === 1 ? 'Item' : 'Items'}
+                                </span>
+                            </div>
 
-                            <div className="pt-6 border-t border-white/5 mt-auto">
+                            {/* Content */}
+                            <div className="flex flex-col flex-1 gap-4">
+                                <h3 className="text-2xl font-black group-hover:text-primary transition-colors uppercase tracking-tight text-black leading-tight line-clamp-1" style={{color:'black'
+                        
+                                }}>
+                                    {topic.name}
+                                </h3>
+                                <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed font-medium min-h-[40px]" style={{color:'black'}}>
+                                    {topic.description || "Browse the study materials and resources for this topic."}
+                                </p>
+                            </div>
+
+                            {/* Footer Action */}
+                            <div className="pt-8 border-t border-slate-100 mt-6 box-border">
                                 <Button
                                     onClick={() => handleViewMaterials(topic._id, topic.name)}
-                                    className="w-full py-4 rounded-xl bg-primary/10 hover:bg-primary text-primary hover:text-white font-black uppercase tracking-widest text-[10px] transition-all border border-primary/20 shadow-lg shadow-primary/5 group-hover:shadow-primary/10"
+                                    className="w-full py-5 rounded-2xl bg-primary/10 hover:bg-primary text-primary hover:text-white font-black uppercase tracking-widest text-xs transition-all border border-primary/20 shadow-lg shadow-primary/5 group-hover:shadow-primary/10"
                                 >
                                     View Materials
                                 </Button>
                             </div>
-                        </div>
-                    </Card>
-                ))}
+                        </Card>
+                    );
+                })}
             </div>
 
             {/* MATERIALS MODAL */}

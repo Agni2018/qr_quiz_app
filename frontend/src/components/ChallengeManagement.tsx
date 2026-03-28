@@ -88,7 +88,7 @@ export default function ChallengeManagement() {
                             
                             {/* SECTOR 01: IDENTITY */}
                             <div className="p-8 md:p-14 lg:p-20 border-b border-slate-100" style={{ marginBottom: '20px' }}>
-                                <h5 className="text-xl font-black text-black border-l-4 border-orange-500 pl-4 mb-10 uppercase tracking-widest" style={{ color: '#000' }}>Challenge Identity</h5>
+                               
                                 <div className="flex flex-col gap-12">
                                     <div style={{ marginBottom: '30px' }}>
                                         <Input
@@ -98,6 +98,7 @@ export default function ChallengeManagement() {
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                             placeholder="e.g. Quiz Enthusiast"
                                             className="!px-10 h-[80px] !rounded-2xl border-slate-200 bg-white text-2xl font-black placeholder:opacity-40 focus:border-emerald-500/50 transition-all !text-black"
+                                            style={{ background: '#ffffff', color: '#000000' }}
                                             required
                                         />
                                     </div>
@@ -110,6 +111,7 @@ export default function ChallengeManagement() {
                                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                             placeholder="Detail the requirements, constraints, and objective for this elite challenge..."
                                             className="!p-10 !rounded-[2.5rem] bg-white border-slate-200 !min-h-[250px] text-lg font-medium leading-relaxed focus:border-emerald-500/50 transition-all !text-black"
+                                            style={{ background: '#ffffff', color: '#000000' }}
                                             required
                                         />
                                     </div>
@@ -118,7 +120,7 @@ export default function ChallengeManagement() {
 
                             {/* SECTOR 02: STRATEGY */}
                             <div className="p-8 md:p-14 lg:p-20 border-b border-slate-100" style={{ marginTop: '20px', marginBottom: '20px' }}>
-                                <h5 className="text-xl font-black text-black border-l-4 border-orange-500 pl-4 mb-10 uppercase tracking-widest" style={{ color: '#000' }}>Strategy</h5>
+                               
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                     <div className="flex flex-col gap-4" style={{ marginBottom: '30px' }}>
                                         <label className="text-[11px] font-black uppercase text-slate-600 tracking-widest px-4">
@@ -148,6 +150,7 @@ export default function ChallengeManagement() {
                                             value={formData.threshold}
                                             onChange={(e) => setFormData({ ...formData, threshold: e.target.value })}
                                             className="!px-10 h-[80px] !rounded-2xl border-slate-200 bg-white font-black text-3xl text-emerald-600 shadow-inner"
+                                            style={{ background: '#ffffff', color: '#000000' }}
                                             required
                                         />
                                     </div>
@@ -159,6 +162,7 @@ export default function ChallengeManagement() {
                                         value={formData.rewardPoints}
                                         onChange={(e) => setFormData({ ...formData, rewardPoints: e.target.value })}
                                         className="!px-10 h-[80px] !rounded-2xl border-slate-200 bg-white font-black text-4xl text-yellow-600 shadow-inner"
+                                        style={{ background: '#ffffff', color: '#000000' }}
                                         required
                                     />
                                 </div>
@@ -166,7 +170,7 @@ export default function ChallengeManagement() {
 
                             {/* SECTOR 03: LOGISTICS */}
                             <div className="p-8 md:p-14 lg:p-20" style={{ marginTop: '20px' }}>
-                                <h5 className="text-xl font-black text-black border-l-4 border-orange-500 pl-4 mb-10 uppercase tracking-widest" style={{ color: '#000' }}>Logistics</h5>
+                                
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10" style={{ marginBottom: '60px' }}>
                                     <div style={{ marginBottom: '30px' }}>
                                         <Input
@@ -175,6 +179,7 @@ export default function ChallengeManagement() {
                                             value={formData.startDate}
                                             onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                                             className="!px-8 h-[80px] !rounded-2xl border-slate-200 bg-white font-black text-black tracking-widest"
+                                            style={{ background: '#ffffff', color: '#000000' }}
                                             required
                                         />
                                     </div>
@@ -185,6 +190,7 @@ export default function ChallengeManagement() {
                                             value={formData.endDate}
                                             onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                                             className="!px-8 h-[80px] !rounded-2xl border-slate-200 bg-white font-black text-black tracking-widest"
+                                            style={{ background: '#ffffff', color: '#000000' }}
                                             required
                                         />
                                     </div>

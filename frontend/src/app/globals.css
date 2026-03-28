@@ -517,3 +517,18 @@ a:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
+
+/* ============================================
+   FORM INPUT OVERRIDES - White background forms
+   ============================================ */
+
+/* Ensure placeholder text is dark on white-background inputs */
+input[style*="background: rgb(255, 255, 255)"]::placeholder,
+input[style*="background: #ffffff"]::placeholder,
+input[style*="background:#ffffff"]::placeholder,
+textarea[style*="background: rgb(255, 255, 255)"]::placeholder,
+textarea[style*="background: #ffffff"]::placeholder,
+textarea[style*="background:#ffffff"]::placeholder {
+  color: #64748b;
+  opacity: 1;
+}

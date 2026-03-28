@@ -71,11 +71,11 @@ export default function ReferralLeaderboardPage() {
                         </div>
                     </div>
 
-                    <div className="w-full lg:w-[320px] flex lg:justify-start">
-                        <Link href="/dashboard/student/leaderboard" className="block w-full lg:w-auto">
+                    <div className="w-full lg:w-[320px] flex justify-center lg:justify-start">
+                        <Link href="/dashboard/student/leaderboard" className="block w-full lg:w-auto flex justify-center lg:block">
                             <Button
                                 variant="secondary"
-                                className="w-full lg:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black transition-all text-base shadow-xl backdrop-blur-md"
+                                className="w-[calc(100%-1rem)] lg:w-auto mx-auto lg:mx-0 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black transition-all text-base shadow-xl backdrop-blur-md"
                                 style={{ background: '#10b981', color: 'white' }}
                             >
                                 <FaArrowLeft />
@@ -86,7 +86,7 @@ export default function ReferralLeaderboardPage() {
                     </div>
                 </div>
                 <div className="mt-12 w-full">
-                    <h3 className="text-2xl font-bold mb-8 flex items-center gap-3 text-slate-500 uppercase tracking-widest pl-2" style={{ marginBottom: 30 }}>
+                    <h3 className="text-2xl font-bold mb-8 flex items-center gap-3 text-slate-500 uppercase tracking-widest pl-2" style={{ marginBottom: 30,color:'green' }}>
                         <FaUsers className="text-emerald-500" /> Top Referral Masters
                     </h3>
 
@@ -96,43 +96,51 @@ export default function ReferralLeaderboardPage() {
                                 <Card
                                     key={i}
                                     className={`
-                                        p-6 flex items-center justify-between rounded-[1.5rem] transition-all hover:-translate-y-1 duration-300
-                                        ${i === 0 ? 'border-emerald-500/30' :
-                                            i === 1 ? 'border-slate-500/20' :
-                                                i === 2 ? 'border-teal-600/20' :
-                                                    'border-white/5 hover:bg-white/10'}
+                                        p-6 flex items-center justify-between rounded-[1.5rem] transition-all hover:-translate-y-1 duration-300 border
+                                        ${i === 0 ? 'bg-emerald-50/20 border-emerald-500/30' :
+                                            i === 1 ? 'border-slate-200 hover:bg-slate-50' :
+                                                i === 2 ? 'border-slate-200 hover:bg-slate-50' :
+                                                    'border-slate-100 hover:bg-slate-50'}
                                     `}
-                                    style={{ background: '#1a1f2e',padding:10 }}
+                                    style={{ background: 'white', padding: 10, margin: '0 1rem', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
                                 >
                                     <div className="flex items-center gap-6">
                                         <div className={`
                                             w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-black
                                             ${i === 0 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40' :
-                                                i === 1 ? 'bg-slate-300 text-slate-800' :
+                                                i === 1 ? 'bg-slate-200 text-slate-800' :
                                                     i === 2 ? 'bg-teal-600 text-white' :
-                                                        'bg-slate-800/50 text-slate-500'}
+                                                        'bg-slate-100 text-slate-500'}
                                         `}>
                                             {i + 1}
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className={`font-bold text-lg ${i === 0 ? 'text-emerald-500' : 'text-slate-200'}`}>
+                                            <span className={`font-bold text-lg ${
+                                                i === 0 ? 'text-emerald-500' : 
+                                                i === 1 ? 'text-yellow-500' : 
+                                                i === 2 ? 'text-teal-600' : 'text-black'
+                                            }`}>
                                                 {u.username}
                                             </span>
-                                            {i === 0 && <span className="text-[0.65rem] font-bold uppercase tracking-wider text-emerald-500/60">Top Referrer</span>}
+                                            {i === 0 && <span className="text-[0.65rem] font-bold uppercase tracking-wider text-emerald-600">Top Referrer</span>}
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col items-end">
-                                        <span className={`text-2xl font-black ${i === 0 ? 'text-emerald-500' : 'text-white'}`}>
+                                        <span className={`text-2xl font-black ${
+                                            i === 0 ? 'text-emerald-500' : 
+                                            i === 1 ? 'text-yellow-500' : 
+                                            i === 2 ? 'text-teal-600' : 'text-black'
+                                        }`}>
                                             {u.referralCount}
                                         </span>
-                                        <span className="text-[0.65rem] font-bold uppercase tracking-wider text-slate-500">Referrals</span>
+                                        <span className="text-[0.65rem] font-bold uppercase tracking-wider text-black">Referrals</span>
                                     </div>
                                 </Card>
                             ))
                         ) : (
-                            <div className="text-center py-20 rounded-[2rem] border border-white/5" style={{ background: '#1a1f2e' }}>
-                                <p className="text-slate-400 font-bold text-lg">No referrals documented yet. Be the first!</p>
+                            <div className="text-center py-20 rounded-[2rem] border border-slate-200 bg-white shadow-lg">
+                                <p className="text-black font-bold text-lg">No referrals documented yet. Be the first!</p>
                             </div>
                         )}
                     </div>

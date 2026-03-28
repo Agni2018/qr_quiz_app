@@ -6,7 +6,7 @@ import api from "@/lib/api";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { FaLock, FaUser, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaLock, FaUser, FaEnvelope, FaEye, FaEyeSlash, FaQuestionCircle } from 'react-icons/fa';
 
 export default function Home() {
     const [mode, setMode] = useState<'login' | 'register'>('login');
@@ -107,18 +107,54 @@ export default function Home() {
     return (
         <main
             className="min-h-screen flex flex-col"
-            style={{ background: '#ffffff' }}
+            style={{ background: '#f1f5f9' }}
         >
 
-            {/* CENTERED CONTENT */}
-            <div className="flex flex-1 items-center justify-center px-10 py-16 md:p-12 relative text-balance">
-                <div className="w-full max-w-[520px] animate-fade-in py-10 md:py-12">
+            {/* ===== BLACK HEADER ===== */}
+            <header style={{
+                position: 'sticky',
+                top: 0,
+                zIndex: 100,
+                background: '#000000',
+                width: '100%',
+                padding: '0 1.5rem',
+                height: '56px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
+            }}>
+                <span style={{
+                    color: '#f97316',
+                    fontWeight: 900,
+                    fontSize: '1rem',
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    fontFamily: 'inherit'
+                }}>
+                    QR Quiz Platform
+                </span>
 
-                    <div className="flex justify-end mb-12 md:absolute md:top-8 md:right-8 md:mb-0" style={{ margin: '1rem 1rem 2.5rem 1rem' }}>
-                    </div>
+                {/* Orange question mark icon — right side */}
+                <FaQuestionCircle
+                    style={{
+                        color: '#f97316',
+                        fontSize: 'clamp(1.25rem, 4vw, 1.6rem)',
+                        flexShrink: 0
+                    }}
+                    aria-label="Help"
+                />
+            </header>
+
+            {/* PAGE CONTENT */}
+            <div
+                className="flex flex-1 flex-col items-center px-4 sm:px-6 text-balance"
+                style={{ paddingTop: mode === 'login' ? '3.5rem' : '2rem', paddingBottom: '3rem' }}
+            >
+                <div className="w-full max-w-[520px] animate-fade-in">
 
                     {/* ---------- HEADER ---------- */}
-                    <div className="text-center mb-16 md:mb-20">
+                    <div className="text-center" style={{ marginBottom: '2rem' }}>
                         <h1
                             className="text-2xl md:text-[3.75rem] font-black mb-4 leading-tight"
                             style={{
@@ -140,7 +176,20 @@ export default function Home() {
                     </div>
 
                     {/* ---------- CARD ---------- */}
-                    <Card className="overflow-hidden" style={{ padding: '2.5rem', borderRadius: '2rem', maxWidth: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.05)', background: '#ffffff', border: '1px solid #e2e8f0', margin: '0 1rem 1rem 1rem' }}>
+                    <Card
+                        className="overflow-hidden"
+                        style={{
+                            padding: '2rem 2rem',
+                            margin:'1rem 1rem 1rem 1rem',
+                            borderRadius: '1.5rem',
+                            maxWidth: '100%',
+                            boxShadow: '0 20px 50px rgba(0,0,0,0.08)',
+                            background: '#ffffff',
+                            border: '1px solid #e2e8f0',
+                            marginTop: mode === 'login' ? '1rem' : '1.5rem',
+                            marginBottom: '1rem',
+                        }}
+                    >
                         <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-10">
 
                             {/* ---------- MESSAGE ---------- */}

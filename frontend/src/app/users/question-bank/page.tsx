@@ -11,34 +11,13 @@ export default function QuestionBankPage() {
                 fontWeight: 900,
                 letterSpacing: '-0.03em',
                 marginBottom: '0.75rem',
+                marginLeft:12,
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1.5rem',
-                color: 'var(--text-primary)'
+                color: 'orange'
             }}>
-                <span style={{
-                    width: '4rem',
-                    height: '4rem',
-                    borderRadius: '1.25rem',
-                    background: 'linear-gradient(135deg, #3b82f6, #10b981)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '1.75rem',
-                    boxShadow: '0 8px 30px rgba(59, 130, 246, 0.4)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    marginLeft:'15px'
-                }}>
-                    📚
-                </span>
-                <span style={{
-                    backgroundImage: 'linear-gradient(to right, #3b82f6, #10b981)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                }}>
-                    Reusable Questions
-                </span>
+                Reusable Questions
             </h2>
             <ReusableLibrary />
         </section>

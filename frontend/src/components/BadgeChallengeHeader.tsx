@@ -23,7 +23,7 @@ export default function BadgeChallengeHeader({ type, activeTab }: BadgeChallenge
     return (
         <div 
             className="flex flex-col gap-8 md:gap-12 animate-fade-in"
-            style={{ marginTop: '50px', marginBottom: '50px', marginLeft: '10px', marginRight: '10px' }}
+            style={{ marginTop: '50px', marginBottom: '50px' }}
         >
             {/* Main Header */}
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6 group">
