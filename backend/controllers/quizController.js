@@ -156,9 +156,13 @@ exports.submitQuiz = async (req, res) => {
         let totalScore = rawScore;
         let timeBonus = 0;
 
+        let timeSavedRatio = 0;
+        if (topic.timeLimit > 0) {
+            timeSavedRatio = (topic.timeLimit - timeTaken) / topic.timeLimit;
+        }
+
         // Time-based scoring: Bonus for finishing fast
         if (topic.timeBasedScoring && topic.timeLimit > 0 && timeTaken < topic.timeLimit) {
-            const timeSavedRatio = (topic.timeLimit - timeTaken) / topic.timeLimit;
             timeBonus = Math.round(rawScore * 0.1 * timeSavedRatio); // up to 10% bonus
             totalScore += timeBonus;
         }
@@ -230,21 +234,27 @@ exports.submitQuiz = async (req, res) => {
         if (finalUserId) {
             const userDoc = await User.findById(finalUserId);
             if (userDoc && userDoc.role === 'student') {
-                // Points for quiz performance: Exactly +1 for completing the quiz with at least one correct answer
                 const passingMarks = topic.passingMarks || 0;
                 const matchesPassingMark = totalScore >= passingMarks;
 
                 if (matchesPassingMark) {
-                    pointsEarned = 3;
+                    // Base points 3 + optional time bonus
+                    // Guaranteed +1 extra point (total +4) if saving more than 50% of time in time-based scoring mode
+                    let extraPoints = timeBonus || 0;
+                    if (topic.timeBasedScoring && timeSavedRatio > 0.5 && extraPoints === 0) {
+                        extraPoints = 1;
+                    }
+
+                    pointsEarned = 3 + extraPoints;
                     userDoc.points += pointsEarned;
                     await userDoc.save();
 
                     // Update attempt with points earned
-                    attempt.pointsEarned = 3;
+                    attempt.pointsEarned = pointsEarned;
                     await attempt.save();
 
                     // --- Challenge Progress: Quiz Points ---
-                    await challengeController.updateProgress(finalUserId, 'points_earned', 3);
+                    await challengeController.updateProgress(finalUserId, 'points_earned', pointsEarned);
                     // ---------------------------------------
                 }
             }
@@ -309,7 +319,7 @@ exports.getStudentAttempts = async (req, res) => {
                 }
             ]
         })
-            .populate('topicId', 'name description passingMarks')
+            .populate('topicId', 'name description passingMarks timeBasedScoring')
             .sort({ completedAt: -1 });
 
         // Filter out attempts where the topic no longer exists

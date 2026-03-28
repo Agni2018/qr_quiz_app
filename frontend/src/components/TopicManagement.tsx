@@ -10,7 +10,7 @@ import TextArea from '@/components/TextArea';
 import { 
     FaPlus, FaTrash, FaCopy, FaArrowRight, FaFolder, 
     FaChevronLeft, FaSearch, FaTimes, FaQuestionCircle,
-    FaFolderPlus, FaClock, FaMinusCircle, FaStar, FaChevronDown
+    FaFolderPlus, FaClock, FaMinusCircle, FaStar, FaChevronDown, FaBolt
 } from 'react-icons/fa';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AlertModal from '@/components/AlertModal';
@@ -437,6 +437,11 @@ export default function TopicManagement() {
                                     <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
                                         <FaStar className="text-yellow-400" /> {topic.passingMarks} MARKS
                                     </div>
+                                    {topic.timeBasedScoring && (
+                                        <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
+                                            <FaBolt className="text-orange-500" /> TS-ENABLED
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Footer Actions */}
@@ -515,6 +520,11 @@ export default function TopicManagement() {
                                 <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
                                     <FaStar className="text-yellow-400" /> {topic.passingMarks} MARKS
                                 </div>
+                                {topic.timeBasedScoring && (
+                                    <div className="flex items-center gap-2 text-[12px] font-bold text-black" style={{ color: '#111' }}>
+                                        <FaBolt className="text-orange-500" /> TS-ENABLED
+                                    </div>
+                                )}
                             </div>
 
                             {/* Footer Actions */}

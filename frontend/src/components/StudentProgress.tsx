@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Pagination from '@/components/Pagination';
-import { FaCheckCircle, FaSearch } from 'react-icons/fa';
+import { FaCheckCircle, FaSearch, FaBolt } from 'react-icons/fa';
 
 export default function StudentProgress({ titleComponent }: { titleComponent?: React.ReactNode }) {
     const [attempts, setAttempts] = useState<any[]>([]);
@@ -137,7 +137,12 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                         >
                             <div className="flex flex-col shrink-0">
                                 <span className="text-[9px] font-black uppercase tracking-widest leading-none mb-1.5" style={{ color: '#555' }}>Performance</span>
-                                <span className="text-2xl font-black" style={{ color: '#000' }}>{attempt.score} <span className="text-xs font-bold ml-1" style={{ color: '#777' }}>PTS</span></span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-2xl font-black" style={{ color: '#000' }}>{attempt.score} <span className="text-xs font-bold ml-1" style={{ color: '#777' }}>PTS</span></span>
+                                    {attempt.topicId?.timeBasedScoring && (
+                                        <FaBolt className="text-orange-500" title="Time-based Scoring" size={14} />
+                                    )}
+                                </div>
                             </div>
                             {(() => {
                                 const isPassed = attempt.pointsEarned > 0 || 
@@ -146,7 +151,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                                     <div className="flex flex-col items-end text-right min-w-0">
                                         <span className="text-[9px] font-black uppercase tracking-widest leading-none mb-1.5" style={{ color: '#555' }}>Status</span>
                                         <span className={`text-sm font-black leading-tight ${isPassed ? 'text-green-500' : 'text-red-500'}`}>
-                                            {isPassed ? '+3 Points' : 'FAILED'}
+                                            {isPassed ? `+${attempt.pointsEarned || 3} Points` : 'FAILED'}
                                         </span>
                                     </div>
                                 );

@@ -32,6 +32,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
     // Daily Points Modal State
     const [showPointsModal, setShowPointsModal] = useState(false);
@@ -120,7 +121,13 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             sessionStorage.removeItem('streakStatus');
         }
 
-        return () => window.removeEventListener('messages-read', handleMessagesRead);
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('messages-read', handleMessagesRead);
+            window.removeEventListener('resize', handleResize);
+        };
     }, [router]);
 
     const handleLogout = async () => {
@@ -347,27 +354,32 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                             </Button>
                         </Link>
 
-
                     </nav>
 
                     <div className="mt-auto pt-8 border-t border-white/10 flex flex-col gap-2">
 
-                        <Button
-                            variant="ghost"
-                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-white/70 hover:text-white hover:bg-white/10 border-none hidden lg:flex rounded-xl`}
-                            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                            title={isSidebarCollapsed ? "Expand Menu" : "Collapse Menu"}
-                        >
-                            {isSidebarCollapsed ? <FaChevronRight /> : <><FaChevronLeft /> Collapse Menu</>}
-                        </Button>
+                        {windowWidth >= 1024 && (
+                            <Button
+                                variant="ghost"
+                                className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-white hover:text-white hover:bg-white/10 border-none hidden lg:flex rounded-xl`}
+                                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                                title={isSidebarCollapsed ? "Expand Menu" : "Collapse Menu"}
+                            >
+                                <span className="text-white flex items-center gap-3">
+                                    {isSidebarCollapsed ? <FaChevronRight /> : <><FaChevronLeft /> Collapse Menu</>}
+                                </span>
+                            </Button>
+                        )}
 
                         <Button
                             variant="ghost"
-                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-white/70 hover:text-red-200 hover:bg-white/10 border-none rounded-xl`}
+                            className={`w-full ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start px-4'} gap-3 h-12 text-white hover:text-red-200 hover:bg-white/10 border-none rounded-xl`}
                             title={isSidebarCollapsed ? "Sign Out" : ""}
                             onClick={handleLogout}
                         >
-                            <FaSignOutAlt /> {!isSidebarCollapsed && "Sign Out"}
+                            <span className="text-white flex items-center gap-3">
+                                <FaSignOutAlt /> {!isSidebarCollapsed && "Sign Out"}
+                            </span>
                         </Button>
                     </div>
                 </aside>
