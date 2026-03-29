@@ -87,7 +87,7 @@ export default function WeeklyChallenges() {
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {paginatedChallenges.map((challenge) => (
-                            <Card key={challenge._id} className={`group relative overflow-hidden border border-slate-200 transition-all duration-500 ${challenge.isCompleted ? 'border-emerald-500/30' : 'hover:border-primary/30'}`} style={{ padding: '2.5rem', margin: "0", boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)', background: '#fff' }}>
+                            <Card key={challenge._id} className={`group relative overflow-hidden border border-slate-200 transition-all duration-500 ${challenge.isCompleted ? 'border-emerald-500/30' : 'hover:border-primary/30'}`} style={{ padding: '30px', margin: "0", boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)', background: '#fff' }}>
                                 {/* Time Remaining Indicator */}
                                 <div className={`absolute top-4 right-6 font-black text-[0.6rem] sm:text-[0.7rem] uppercase tracking-widest z-20 ${challenge.isCompleted ? 'text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full' : 'text-slate-500'}`}>
                                     {challenge.isCompleted ? 'Completed' : getTimeRemaining(challenge.endDate)}

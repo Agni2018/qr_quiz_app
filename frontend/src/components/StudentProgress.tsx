@@ -131,7 +131,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                                 background: '#fff', 
                                 border: '1.5px solid #e2e8f0', 
                                 boxShadow: '0 2px 12px rgba(0,0,0,0.08)', 
-                                padding: '14px 18px',
+                                padding: '30px',
                                 marginTop: 4
                             }}
                         >

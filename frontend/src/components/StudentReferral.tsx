@@ -67,7 +67,7 @@ export default function StudentReferral() {
                 <div className="w-full lg:flex-1 flex flex-col gap-0">
                     <Card
                         className="p-8 sm:p-12 border-slate-200 rounded-[3rem] shadow-2xl overflow-hidden relative group bg-white"
-                        style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem', background: 'white', color: '#000', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
+                        style={{ padding: '30px', margin: '0 1rem 1rem 1rem', background: 'white', color: '#000', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
                     >
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] rounded-full -mr-32 -mt-32 group-hover:bg-primary/20 transition-all duration-1000" />
                         
@@ -128,7 +128,7 @@ export default function StudentReferral() {
                                 <div className="animate-fade-in">
                                     <div 
                                         className="bg-slate-50 border border-slate-200 rounded-[2.5rem] p-10 text-center relative overflow-hidden group/code" 
-                                        style={{ padding: '2.5rem', marginTop: '2rem', marginBottom: '3rem' }}
+                                        style={{ padding: '30px', marginTop: '2rem', marginBottom: '3rem' }}
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-primary/5 opacity-0 group-hover/code:opacity-100 transition-opacity duration-1000" />
                                         <span className="text-black text-[0.7rem] font-black uppercase tracking-[0.3em] mb-4 block relative z-10" style={{ marginTop: 10 }}>Your Unique Referral Code</span>
@@ -170,7 +170,7 @@ export default function StudentReferral() {
                             { title: "Register", desc: "Friend signs up with code", icon: "📝" },
                             { title: "Earn", desc: "Both get reward points", icon: "💎" }
                         ].map((step, i) => (
-                            <Card key={i} className="p-8 text-center border-slate-200 rounded-[2rem] hover:bg-slate-50 transition-all bg-white" style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem', background: 'white', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)' }}>
+                            <Card key={i} className="p-8 text-center border-slate-200 rounded-[2rem] hover:bg-slate-50 transition-all bg-white" style={{ padding: '30px', margin: '0 1rem 1rem 1rem', background: 'white', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)' }}>
                                 <div className="text-4xl mb-4">{step.icon}</div>
                                 <h4 className="text-lg font-black mb-1 text-black" style={{ color: '#000' }}>{step.title}</h4>
                                 <p className="text-black text-sm font-medium" style={{ color: '#000' }}>{step.desc}</p>
@@ -183,7 +183,7 @@ export default function StudentReferral() {
                 <div className="w-full lg:w-[450px] shrink-0">
                         <Card
                             className="border-slate-200 rounded-[3rem] shadow-2xl overflow-hidden relative group h-full bg-white"
-                            style={{ padding: '2.5rem', margin: '0 1rem 1rem 1rem', background: 'white', color: '#000', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
+                            style={{ padding: '30px', margin: '0 1rem 1rem 1rem', background: 'white', color: '#000', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
                         >
                         <div className="flex justify-between items-center mb-8">
                              <h3 className="text-2xl font-black text-black" style={{ color: '#000' }}>Your Recent Referrals</h3>

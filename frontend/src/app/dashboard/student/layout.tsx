@@ -434,7 +434,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             {/* DAILY POINTS MODAL */}
             {showPointsModal && (
                 <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl animate-fade-in">
-                    <div className="max-w-md w-full bg-slate-950 border border-white/10 rounded-[3rem] p-12 text-center shadow-[0_0_100px_rgba(234,179,8,0.2)] relative overflow-hidden group">
+                <div className="max-w-md w-full bg-slate-950 border border-white/10 rounded-[3rem] text-center shadow-[0_0_100px_rgba(234,179,8,0.2)] relative overflow-hidden group" style={{ padding: '30px' }}>
                         <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
                         <div className="relative z-10">
@@ -445,7 +445,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                             <h2 className="text-5xl font-black text-white mb-4 tracking-tighter">CONGRATULATIONS!</h2>
                             <p className="text-yellow-500 font-black text-xl uppercase tracking-[0.2em] mb-8">Awesome!</p>
 
-                            <div className="bg-white/5 rounded-3xl p-8 mb-10 border border-white/5">
+                            <div className="bg-white/5 rounded-3xl mb-10 border border-white/5" style={{ padding: '30px' }}>
                                 <p className="text-slate-400 font-bold mb-2 uppercase text-xs tracking-widest">You've Earned</p>
                                 <h3 className="text-6xl font-black text-white">+{pointsAwarded} <span className="text-2xl text-yellow-500 font-black">PTS</span></h3>
                                 {streakInfo && (
@@ -466,7 +466,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             {/* LEVEL UP MODAL */}
             {showLevelModal && (
                 <div className="fixed inset-0 z-[1100] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl animate-fade-in">
-                    <div className="max-w-md w-full bg-slate-950 border border-white/10 rounded-[3rem] p-12 text-center shadow-[0_0_100px_rgba(59,130,246,0.2)] relative overflow-hidden group">
+                <div className="max-w-md w-full bg-slate-950 border border-white/10 rounded-[3rem] text-center shadow-[0_0_100px_rgba(59,130,246,0.2)] relative overflow-hidden group" style={{ padding: '30px' }}>
                         <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                         
                         <div className="relative z-10">
@@ -477,7 +477,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                             <h2 className="text-5xl font-black text-white mb-4 tracking-tighter">LEVEL UP!</h2>
                             <p className="text-blue-500 font-black text-xl uppercase tracking-[0.2em] mb-8">Legendary Progress!</p>
 
-                            <div className="bg-white/5 rounded-3xl p-8 mb-10 border border-white/5">
+                            <div className="bg-white/5 rounded-3xl mb-10 border border-white/5" style={{ padding: '30px' }}>
                                 <p className="text-slate-400 font-bold mb-2 uppercase text-xs tracking-widest">You've reached</p>
                                 <h3 className="text-6xl font-black text-white">LEVEL {levelInfo?.new}</h3>
                                 {levelInfo?.old && (
