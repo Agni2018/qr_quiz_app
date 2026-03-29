@@ -2,10 +2,11 @@
 
 import { useState, useEffect, use } from 'react';
 import api from '@/lib/api';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import AlertModal from '@/components/AlertModal';
 
 export default function QuizLanding({
     params
@@ -24,8 +25,17 @@ export default function QuizLanding({
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const searchParams = useSearchParams();
+    const isDirect = searchParams.get('direct') === 'true';
 
     useEffect(() => {
+        const storedUser = sessionStorage.getItem('quizUser');
+        if (storedUser && !isDirect) {
+            router.replace(`/quiz/${topicId}/play?back=true`);
+            return;
+        }
+
         // Fetch topic and question count
         api.get(`/topics/${topicId}`)
             .then(res => setTopic(res.data))
@@ -41,19 +51,47 @@ export default function QuizLanding({
         // Check if user is logged in to pre-fill the form
         api.get('/auth/status')
             .then(res => {
-                // ONLY pre-fill if the user is a student
-                if (res.data.user && res.data.user.role === 'student') {
-                    setUser({
-                        name: res.data.user.username || '',
-                        email: res.data.user.email || '',
-                        phone: ''
-                    });
+                // Pre-fill logic
+                if (res.data.user) {
+                    const authUser = res.data.user;
+                    // Case 1: Direct attempt (Bypass form) - Pre-fill everything with fallbacks
+                    if (isDirect) {
+                        setUser({
+                            name: authUser.username || '',
+                            email: authUser.email || `${authUser.username}@internal`,
+                            phone: 'N/A'
+                        });
+                    } 
+                    // Case 2: Regular link but user is a student - Pre-fill known info only
+                    else if (authUser.role === 'student') {
+                        setUser({
+                            name: authUser.username || '',
+                            email: authUser.email || '',
+                            phone: ''
+                        });
+                    }
+                    // Case 3: Admin or other role on regular link - Keep form empty for testing/guest flow
                 }
             })
             .catch(() => {
                 // Not logged in, no problem
             });
-    }, [topicId]);
+    }, [topicId, isDirect]);
+
+    // Auto-start if direct and questions exist
+    useEffect(() => {
+        if (isDirect && topic && questionCount !== null && questionCount > 0 && user.name && user.email && user.phone === 'N/A') {
+            const startForm = {
+                preventDefault: () => { },
+                target: {}
+            } as any;
+            handleStart(startForm);
+        }
+        
+        if (questionCount === 0) {
+            setIsAlertOpen(true);
+        }
+    }, [isDirect, topic, questionCount, user.name]);
 
     const handleStart = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -63,9 +101,9 @@ export default function QuizLanding({
             return;
         }
 
-        // Phone number validation: 10 digits only
+        // Phone number validation: 10 digits only (or N/A for direct)
         const phoneRegex = /^\d{10}$/;
-        if (!phoneRegex.test(user.phone)) {
+        if (user.phone !== 'N/A' && !phoneRegex.test(user.phone)) {
             setError('Phone number must be exactly 10 digits (e.g., 9876543210)');
             return;
         }
@@ -113,21 +151,27 @@ export default function QuizLanding({
     return (
         <main className="container flex items-center justify-center py-24 sm:py-32">
             <Card
-                className="max-w-[550px] w-full rounded-[3.5rem] border border-white/5 bg-slate-900/60 backdrop-blur-3xl shadow-3xl relative overflow-hidden"
-                style={{ padding: '3.5rem 2.5rem' }}
+                className="max-w-[550px] w-full rounded-[3.5rem] border border-slate-100 bg-white shadow-2xl relative overflow-hidden"
+                style={{ 
+                    padding: '3.5rem 2.5rem',
+                    '--glass-bg': '#f8fafc',
+                    '--text-primary': '#0f172a',
+                    '--text-secondary': '#64748b',
+                    '--border-color': '#e2e8f0'
+                } as any }
             >
                 {/* Background accent */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
                 {/* Topic Header */}
                 <div className="text-center mb-20 leading-relaxed">
-                    <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mx-auto mb-8 border border-primary/20">
+                    <div className="w-16 h-16 rounded-2xl bg-slate-100/50 flex items-center justify-center text-3xl mx-auto mb-8 border border-slate-200 shadow-sm">
                         🎯
                     </div>
-                    <h1 className="text-3xl font-black text-white leading-tight mb-3">
+                    <h1 className="text-3xl font-black text-slate-900 leading-tight mb-3">
                         {topic.name}
                     </h1>
-                    <p className="text-slate-400 font-medium leading-relaxed" style={{marginBottom:30}}>
+                    <p className="text-slate-500 font-medium leading-relaxed" style={{marginBottom:30}}>
                         {topic.description}
                     </p>
                 </div>
@@ -184,7 +228,7 @@ export default function QuizLanding({
                         </div>
 
                         {error && (
-                            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center font-bold">
+                            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center font-bold">
                                 {error}
                             </div>
                         )}
@@ -197,12 +241,20 @@ export default function QuizLanding({
                             {loading ? 'Preparing Session...' : '🚀 Start Quiz Challenge'}
                         </Button>
 
-                        <p className="text-center text-[0.65rem] font-black uppercase tracking-[0.2em] text-slate-500 mt-2">
+                        <p className="text-center text-[0.65rem] font-black uppercase tracking-[0.2em] text-slate-400 mt-2">
                             One attempt allowed per person
                         </p>
                     </form>
                 )}
             </Card>
+
+            <AlertModal
+                isOpen={isAlertOpen}
+                onClose={() => setIsAlertOpen(false)}
+                title="Quiz Not Ready"
+                message="questions haven't been created"
+                type="info"
+            />
         </main>
     );
 }

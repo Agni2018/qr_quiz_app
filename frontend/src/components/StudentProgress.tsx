@@ -76,7 +76,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
     return (
         <div className="flex flex-col gap-10 md:gap-16">
             {/* SEARCH BAR & HEADER */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 px-4 w-full">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pl-4 pr-10 md:pr-14 w-full">
                 {titleComponent && (
                     <div className="shrink-0">
                         {titleComponent}
@@ -96,14 +96,14 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 px-4" >
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 pl-4 pr-10 md:pr-14" >
                 {paginatedAttempts.map((attempt) => (
                 <Card
                     key={attempt._id}
                     className="group hover:-translate-y-2 transition-all duration-500 border-slate-200 hover:bg-slate-50 rounded-[2.5rem] flex flex-col h-full"
-                    style={{ padding: '24px', margin: '0.75rem 0.5rem', background: 'white', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}
+                    style={{ padding: '20px 24px', margin: '0.6rem 0.5rem', background: 'white', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}
                 >
-                    <div className="flex justify-between items-start mb-8">
+                    <div className="flex justify-between items-start mb-6">
                         <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border border-primary/20 group-hover:scale-110 transition-transform" style={{color:'green', background:'rgba(0,128,0,0.08)'}}>
                             <FaCheckCircle />
                         </div>
@@ -112,10 +112,10 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                         </span>
                     </div>
                     <div className="flex-1 flex flex-col gap-3">
-                        <h3 className="text-2xl font-black group-hover:text-primary transition-colors leading-tight" style={{ color: '#000', marginTop: 10 }}>
+                        <h3 className="text-2xl font-black group-hover:text-primary transition-colors leading-tight" style={{ color: '#000', marginTop: 6 }}>
                             {attempt.topicId?.name}
                         </h3>
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-2 mb-1">
                             <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#222' }}>Global Rank</span>
                             <span className={`text-xl font-black ${attempt.rank <= 3 ? 'text-yellow-500' : 'text-red-500'}`}>
                                 #{attempt.rank || '-'}
@@ -124,7 +124,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                         <p className="text-sm line-clamp-2 leading-relaxed font-medium" style={{ color: '#444' }}>{attempt.topicId?.description}</p>
                     </div>
 
-                    <div className="flex flex-col gap-4" style={{ marginTop: 28, paddingTop: 20, borderTop: '1px solid #e2e8f0', marginBottom: 8 }}>
+                    <div className="flex flex-col gap-4" style={{ marginTop: 22, paddingTop: 16, borderTop: '1px solid #e2e8f0', marginBottom: 4 }}>
                         <div 
                             className="flex flex-row items-center justify-between rounded-2xl gap-4"
                             style={{ 
@@ -132,7 +132,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                                 border: '1.5px solid #e2e8f0', 
                                 boxShadow: '0 2px 12px rgba(0,0,0,0.08)', 
                                 padding: '14px 18px',
-                                marginTop: 8
+                                marginTop: 4
                             }}
                         >
                             <div className="flex flex-col shrink-0">
@@ -158,7 +158,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                             })()}
                         </div>
                         <Link href={`/quiz/${attempt.topicId?._id}/result?attemptId=${attempt._id}`}>
-                            <Button variant="secondary" className="w-full h-14 rounded-2xl font-black text-xs uppercase tracking-widest bg-primary hover:scale-[1.02] transition-all shadow-xl shadow-primary/20">
+                            <Button variant="secondary" className="w-full h-12 rounded-2xl font-black text-xs uppercase tracking-widest bg-primary hover:scale-[1.02] transition-all shadow-xl shadow-primary/20">
                                 View Details
                             </Button>
                         </Link>

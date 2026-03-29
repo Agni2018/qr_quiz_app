@@ -14,8 +14,8 @@ exports.startQuiz = async (req, res) => {
         return res.status(400).json({ message: 'Missing details' });
     }
 
-    // Phone number validation: 10 digits
-    if (!/^\d{10}$/.test(phone)) {
+    // Phone number validation: 10 digits or 'N/A' for direct dashboard attempts
+    if (phone !== 'N/A' && !/^\d{10}$/.test(phone)) {
         return res.status(400).json({ message: 'Invalid phone number. Must be 10 digits.' });
     }
 
@@ -26,12 +26,12 @@ exports.startQuiz = async (req, res) => {
         }
 
         // 1. Check for existing attempt FIRST (Priority)
-        // Only include phone in check if it's not 'N/A' to avoid collisions for logged-in users
+        // Only include phone in check if it's a valid 10-digit number
         const attemptFilter = {
             topicId,
             $or: [{ "user.email": email }]
         };
-        if (phone && phone !== 'N/A') {
+        if (phone && phone !== 'N/A' && /^\d{10}$/.test(phone)) {
             attemptFilter.$or.push({ "user.phone": phone });
         }
 
@@ -57,8 +57,8 @@ exports.submitQuiz = async (req, res) => {
         return res.status(400).json({ message: 'Invalid submission data' });
     }
 
-    // Phone number validation: 10 digits
-    if (user?.phone && !/^\d{10}$/.test(user.phone)) {
+    // Phone number validation: 10 digits or 'N/A' for direct dashboard attempts
+    if (user?.phone && user.phone !== 'N/A' && !/^\d{10}$/.test(user.phone)) {
         return res.status(400).json({ message: 'Invalid phone number. Must be 10 digits.' });
     }
 
@@ -71,8 +71,23 @@ exports.submitQuiz = async (req, res) => {
     let foundByEmail = false;
 
     try {
-        // 1. ALWAYS prefer matching by the explicitly provided email if it belongs to a User
-        if (user && user.email) {
+        // 1. Identify User ID
+        // Priority: Explicitly passed userId > matching logged-in session (if name/email matches) > matching database by email
+        if (userId && mongoose.Types.ObjectId.isValid(userId)) {
+            finalUserId = userId;
+        } else if (req.user && req.user.id) {
+            // Check if the provided name/email matches the logged-in person
+            const loggedUser = await User.findById(req.user.id);
+            if (loggedUser && (
+                (user.email && loggedUser.email === user.email) || 
+                (user.name && loggedUser.username === user.name)
+            )) {
+                finalUserId = loggedUser._id;
+            }
+        }
+        
+        // 2. Fallback to matching by provided email if still no ID found
+        if (!finalUserId && user && user.email) {
             const matchedUser = await User.findOne({ email: user.email });
             if (matchedUser) {
                 finalUserId = matchedUser._id;
@@ -80,21 +95,17 @@ exports.submitQuiz = async (req, res) => {
             }
         }
 
-        // 2. Fallback to provided userId ONLY if no email was provided
-        if (!finalUserId && !user?.email && userId && mongoose.Types.ObjectId.isValid(userId)) {
-            finalUserId = userId;
-        }
-
         const topic = await Topic.findById(topicId);
         if (!topic) return res.status(404).json({ message: 'Topic not found' });
 
-        const existingAttempt = await UserAttempt.findOne({
+        const duplicateQuery = {
             topicId,
-            $or: [
-                { "user.email": user.email },
-                { "user.phone": user.phone }
-            ]
-        });
+            $or: [{ "user.email": user.email }]
+        };
+        if (user.phone && user.phone !== 'N/A' && /^\d{10}$/.test(user.phone)) {
+            duplicateQuery.$or.push({ "user.phone": user.phone });
+        }
+        const existingAttempt = await UserAttempt.findOne(duplicateQuery);
 
         if (existingAttempt) {
             return res.status(400).json({ message: 'Duplicate submission detected' });
@@ -271,7 +282,11 @@ exports.submitQuiz = async (req, res) => {
         });
 
     } catch (err) {
-        console.error('Quiz Submission Error:', err);
+        console.error('Quiz Submission Error Details:', {
+            message: err.message,
+            stack: err.stack,
+            body: req.body
+        });
         res.status(500).json({ message: err.message });
     }
 };

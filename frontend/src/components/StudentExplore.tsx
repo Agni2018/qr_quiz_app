@@ -5,7 +5,9 @@ import api from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Card from '@/components/Card';
 import Pagination from '@/components/Pagination';
-import { FaPlus, FaCheckCircle } from 'react-icons/fa';
+import { FaPlus, FaCheckCircle, FaRocket } from 'react-icons/fa';
+import AlertModal from '@/components/AlertModal';
+import Button from '@/components/Button';
 
 export default function StudentExplore() {
     const [availableQuizzes, setAvailableQuizzes] = useState<any[]>([]);
@@ -13,6 +15,8 @@ export default function StudentExplore() {
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
     const itemsPerPage = 10;
     const router = useRouter();
 
@@ -79,9 +83,31 @@ export default function StudentExplore() {
                             style={{ padding: 30, background: 'white', margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}
                         >
                             <div className="flex justify-between items-start mb-8">
-                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border transition-all duration-700 ${hasAttempted ? 'bg-slate-100 border-slate-200' : 'bg-primary/10 border-primary/20'}`} style={{ marginBottom: 30, color: hasAttempted ? '#64748b' : 'var(--primary)' }}>
-                                    {hasAttempted ? <FaCheckCircle /> : <FaPlus />}
-                                </div>
+                                {hasAttempted ? (
+                                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border bg-slate-100 border-slate-200" style={{ marginBottom: 30, color: '#64748b' }}>
+                                        <FaCheckCircle />
+                                    </div>
+                                ) : (
+                                    <Button
+                                        onClick={() => {
+                                            if (quiz.questionCount === 0) {
+                                                setAlertMessage("questions haven't been created");
+                                                setIsAlertOpen(true);
+                                            } else {
+                                                router.push(`/quiz/${quiz._id}?direct=true`);
+                                            }
+                                        }}
+                                        className="h-14 px-6 rounded-2xl flex items-center gap-3 text-lg font-black group/btn transition-all duration-300"
+                                        style={{
+                                            background: 'var(--primary)',
+                                            boxShadow: '0 8px 20px -6px var(--primary)',
+                                            marginBottom: 30
+                                        }}
+                                    >
+                                        <FaRocket className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                                        <span>Attempt</span>
+                                    </Button>
+                                )}
                                 {hasAttempted && (
                                     <div className="px-3 py-1.5 rounded-lg" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
                                         <span className="font-black uppercase tracking-widest text-[10px]" style={{ color: '#ef4444' }}>
@@ -111,6 +137,14 @@ export default function StudentExplore() {
                     />
                 </div>
             )}
+
+            <AlertModal
+                isOpen={isAlertOpen}
+                onClose={() => setIsAlertOpen(false)}
+                title="Quiz Not Ready"
+                message={alertMessage}
+                type="info"
+            />
         </div>
     );
 }

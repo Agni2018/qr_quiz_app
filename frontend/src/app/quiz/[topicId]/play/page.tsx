@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use, useMemo } from 'react';
 import api from '@/lib/api';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import TextArea from '@/components/TextArea';
@@ -32,25 +32,39 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
     useEffect(() => {
         const checkUser = async () => {
             try {
-                // 1. Check if user is a logged-in student
-                const statusRes = await api.get('/auth/status');
-                if (statusRes.data.authenticated && statusRes.data.user?.role === 'student') {
-                    const student = statusRes.data.user;
-                    setUser({
-                        name: student.username,
-                        email: student.email,
-                        phone: 'N/A' // Student session already has info
-                    });
-                } else {
-                    // 2. Not a student session, check if it's a guest in sessionStorage
-                    const storedUser = sessionStorage.getItem('quizUser');
-                    if (storedUser) {
-                        setUser(JSON.parse(storedUser));
+                // 1. ALWAYS check sessionStorage first (Manual form fill)
+                const storedUser = sessionStorage.getItem('quizUser');
+                const searchParams = new URLSearchParams(window.location.search);
+                const isDirect = searchParams.get('direct') === 'true';
+                const isBack = searchParams.get('back') === 'true';
+
+                if (isBack) {
+                    setAlertModal({ isOpen: true, message: 'You cannot go back during the quiz!', type: 'error' });
+                }
+
+                if (storedUser) {
+                    setUser(JSON.parse(storedUser));
+                } 
+                // 2. ONLY if no sessionStorage, check if it's a DIRECT attempt bypass
+                else if (isDirect) {
+                    const statusRes = await api.get('/auth/status');
+                    if (statusRes.data.authenticated && statusRes.data.user) {
+                        const authUser = statusRes.data.user;
+                        setUser({
+                            name: authUser.username,
+                            email: authUser.email || `${authUser.username}@internal`,
+                            phone: 'N/A',
+                            userId: authUser._id
+                        });
                     } else {
-                        // 3. No transient session found, redirect back
                         router.push(`/quiz/${topicId}`);
                         return;
                     }
+                } 
+                // 3. Neither? Redirect back
+                else {
+                    router.push(`/quiz/${topicId}`);
+                    return;
                 }
 
                 // 4. Fetch quiz data
@@ -141,9 +155,14 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
             try {
                 const res = await api.post('/quiz/submit', {
                     topicId: topicId,
-                    user,
+                    user: {
+                        name: user.name,
+                        email: user.email,
+                        phone: user.phone
+                    },
                     answers,
-                    timeTaken
+                    timeTaken,
+                    userId: user.userId
                 });
 
                 if (res.data.message && (res.data.message.includes('already attempted') || res.data.message.includes('duplicate'))) {
@@ -151,17 +170,18 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                     await new Promise(resolve => setTimeout(resolve, 2000));
                 }
 
+                sessionStorage.removeItem('quizUser');
                 router.replace(`/quiz/${topicId}/result?attemptId=${res.data.attemptId || ''}`);
             } catch (err: any) {
                 console.error(err);
-                if (err.response?.data?.message?.includes('already attempted')) {
+                if (err.response?.data?.message?.toLowerCase().includes('already attempted') || err.response?.data?.message?.toLowerCase().includes('duplicate')) {
                     setDuplicateDetected(true);
                     await new Promise(resolve => setTimeout(resolve, 2000));
                     router.replace(`/quiz/${topicId}`);
                     return;
                 }
                 if (!isAuto) {
-                    setAlertModal({ isOpen: true, message: 'Submission failed! Please try again.', type: 'error' });
+                    setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Submission failed! Please try again.', type: 'error' });
                     setSubmitting(false);
                 }
             }

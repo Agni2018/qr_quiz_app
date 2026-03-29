@@ -13,7 +13,17 @@ exports.getAllTopics = async (req, res) => {
         const topics = await Topic.find(query)
             .populate('categoryId', 'name')
             .sort({ createdAt: -1 });
-        res.json(topics);
+
+        // Add question count for each topic
+        const topicsWithCount = await Promise.all(topics.map(async (topic) => {
+            const count = await Question.countDocuments({ topicId: topic._id });
+            return {
+                ...topic.toObject(),
+                questionCount: count
+            };
+        }));
+
+        res.json(topicsWithCount);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

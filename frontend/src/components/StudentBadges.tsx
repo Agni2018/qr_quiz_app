@@ -124,7 +124,7 @@ export default function StudentBadges() {
                     <div className="w-full flex flex-col gap-8 animate-in slide-in-from-top-8 duration-500">
                         <div className="flex items-center gap-4">
                             <div className="w-1.5 h-8 bg-slate-300 rounded-full"></div>
-                            <h3 className="text-3xl font-black tracking-tight text-slate-400">Available Rewards</h3>
+                            <h3 className="text-3xl font-black tracking-tight text-slate-400" style={{ color: 'black' }}>Available Rewards</h3>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -8,21 +8,7 @@ export default function ProgressPage() {
         <div className="animate-fade-in mb-24" >
             <StudentProgress titleComponent={
                 <div className="flex items-center gap-8 group" style={{ margin: '30px 0 50px 0' }}>
-                    <div style={{
-                        width: '5rem',
-                        height: '5rem',
-                        borderRadius: '1.5rem',
-                        background: 'linear-gradient(135deg, var(--secondary), var(--primary))',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '2.25rem',
-                        boxShadow: '0 10px 40px rgba(59, 130, 246, 0.4)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        transform: 'rotate(-3deg)'
-                    }} className="group-hover:rotate-0 transition-transform duration-500">
-                        📝
-                    </div>
+                    
                     <div className="flex flex-col" >
                         <h2
                             className="text-7xl font-black tracking-tighter"
@@ -31,6 +17,7 @@ export default function ProgressPage() {
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 backgroundClip: 'text',
+                                marginLeft:10
 
                             }}
                         >
