@@ -7,6 +7,7 @@ import Card from '@/components/Card';
 import Pagination from '@/components/Pagination';
 import { FaPlus, FaCheckCircle, FaRocket } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
+import ConfirmModal from '@/components/ConfirmModal';
 import Button from '@/components/Button';
 
 export default function StudentExplore() {
@@ -16,6 +17,8 @@ export default function StudentExplore() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
     const [alertMessage, setAlertMessage] = useState('');
     const itemsPerPage = 10;
     const router = useRouter();
@@ -94,7 +97,8 @@ export default function StudentExplore() {
                                                 setAlertMessage("questions haven't been created");
                                                 setIsAlertOpen(true);
                                             } else {
-                                                router.push(`/quiz/${quiz._id}?direct=true`);
+                                                setSelectedQuizId(quiz._id);
+                                                setIsConfirmOpen(true);
                                             }
                                         }}
                                         className="h-14 px-6 rounded-2xl flex items-center gap-3 text-lg font-black group/btn transition-all duration-300"
@@ -144,6 +148,20 @@ export default function StudentExplore() {
                 title="Quiz Not Ready"
                 message={alertMessage}
                 type="info"
+            />
+
+            <ConfirmModal
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={() => {
+                    if (selectedQuizId) {
+                        router.push(`/quiz/${selectedQuizId}?direct=true`);
+                    }
+                }}
+                title="Start Quiz"
+                message="Are you sure you want to attempt this quiz?"
+                confirmText="Yes, Start"
+                cancelText="Not Now"
             />
         </div>
     );
