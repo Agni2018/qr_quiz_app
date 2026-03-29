@@ -5,7 +5,7 @@ import api from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Card from '@/components/Card';
 import Pagination from '@/components/Pagination';
-import { FaPlus, FaCheckCircle, FaRocket } from 'react-icons/fa';
+import { FaPlus, FaCheckCircle, FaRocket, FaClock, FaMinusCircle, FaStar, FaBolt } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
 import Button from '@/components/Button';
@@ -123,7 +123,25 @@ export default function StudentExplore() {
                             <h3 className="text-2xl font-black mb-3 transition-colors" style={{ color: '#000' }}>
                                 {quiz.name}
                             </h3>
-                            <p className="text-lg mb-10 line-clamp-2 leading-relaxed flex-1 font-medium" style={{ color: '#444' }}>{quiz.description}</p>
+                            <p className="text-lg mb-6 line-clamp-2 leading-relaxed font-medium" style={{ color: '#444' }}>{quiz.description}</p>
+                            
+                            {/* Stats Section */}
+                            <div className="flex flex-wrap gap-4 mb-8">
+                                <div className="flex items-center gap-2 text-sm font-bold text-black" style={{ color: '#111' }}>
+                                    <FaClock className="text-orange-500" /> {quiz.timeLimit}S
+                                </div>
+                                <div className="flex items-center gap-2 text-sm font-bold text-black" style={{ color: '#111' }}>
+                                    <FaMinusCircle className="text-red-400" /> {quiz.negativeMarking} NEG
+                                </div>
+                                <div className="flex items-center gap-2 text-sm font-bold text-black" style={{ color: '#111' }}>
+                                    <FaStar className="text-yellow-400" /> {quiz.passingMarks} PASS
+                                </div>
+                                {quiz.timeBasedScoring && (
+                                    <div className="flex items-center gap-2 text-sm font-bold text-black" style={{ color: '#111' }}>
+                                        <FaBolt className="text-orange-500" /> TS-ENABLED
+                                    </div>
+                                )}
+                            </div>
                         </Card>
                     );
                 })}
