@@ -215,7 +215,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                     <Card className="flex flex-col gap-6 p-9 relative overflow-hidden group border border-slate-200" style={{padding:30,background: 'white'}}>
                         <div className="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 blur-2xl rounded-full translate-x-8 -translate-y-8 group-hover:bg-orange-500/10 transition-colors" />
                         <h3 className="text-xl font-bold mb-2 text-black" style={{ color: '#000' }}>Study Materials</h3>
-                        <p className="text-slate-500 text-sm leading-relaxed">
+                        <p className="text-slate-500 text-sm leading-relaxed" style={{ color: '#000' }}>
                             Upload PDFs, videos, or documents to help students prepare for this quiz.
                         </p>
                         <Button

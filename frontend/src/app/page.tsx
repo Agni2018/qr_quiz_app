@@ -167,7 +167,7 @@ export default function Home() {
                             Quiz Platform
                         </h1>
 
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 600, letterSpacing: '0.02em' }} className="md:text-[1.125rem]">
+                        <p style={{ color: 'black', fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 600, letterSpacing: '0.02em' }} className="md:text-[1.125rem]">
                             {mode === 'login'
                                 ? 'Welcome back! Please enter your details.'
                                 : 'Create an account to start your journey.'
@@ -246,7 +246,7 @@ export default function Home() {
                                         <input
                                             style={{
                                                 width: '100%',
-                                                paddingRight: '3rem',
+                                                paddingRight: '3.5rem',
                                                 paddingLeft: '1.5rem',
                                                 paddingTop: '1.25rem',
                                                 paddingBottom: '1.25rem',
@@ -276,7 +276,8 @@ export default function Home() {
                                             transform: 'translateY(-50%)',
                                             color: '#475569',
                                             pointerEvents: 'none',
-                                            transition: 'var(--transition)'
+                                            transition: 'var(--transition)',
+                                            flexShrink: 0
                                         }}
                                             className="group-focus-within:text-[var(--primary)]">
                                             <FaUser className="w-[16px] h-[16px]" />
@@ -304,7 +305,7 @@ export default function Home() {
                                             <input
                                                 style={{
                                                     width: '100%',
-                                                    paddingRight: '3rem',
+                                                    paddingRight: '3.5rem',
                                                     paddingLeft: '1.5rem',
                                                     paddingTop: '1.25rem',
                                                     paddingBottom: '1.25rem',
@@ -333,7 +334,8 @@ export default function Home() {
                                                 transform: 'translateY(-50%)',
                                                 color: '#475569',
                                                 pointerEvents: 'none',
-                                                transition: 'var(--transition)'
+                                                transition: 'var(--transition)',
+                                                flexShrink: 0
                                             }} className="group-focus-within:text-[var(--primary)]">
                                                 <FaEnvelope className="w-[16px] h-[16px]" />
                                             </div>
@@ -360,7 +362,7 @@ export default function Home() {
                                         <input
                                             style={{
                                                 width: '100%',
-                                                paddingRight: '3rem',
+                                                paddingRight: '5.5rem',
                                                 paddingLeft: '1.5rem',
                                                 paddingTop: '1.25rem',
                                                 paddingBottom: '1.25rem',
@@ -390,7 +392,8 @@ export default function Home() {
                                             color: '#475569',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            gap: '1rem'
+                                            gap: '1rem',
+                                            flexShrink: 0
                                         }} className="group-focus-within:text-[var(--primary)]">
                                             <button
                                                 type="button"
@@ -401,7 +404,8 @@ export default function Home() {
                                                     padding: 0,
                                                     cursor: 'pointer',
                                                     color: 'inherit',
-                                                    display: 'flex'
+                                                    display: 'flex',
+                                                    flexShrink: 0
                                                 }}
                                                 title={showPassword ? "Hide password" : "Show password"}
                                             >
@@ -441,7 +445,7 @@ export default function Home() {
                                                     <input
                                                         style={{
                                                             width: '100%',
-                                                            paddingRight: '3rem',
+                                                            paddingRight: '3.5rem',
                                                             paddingLeft: '1.5rem',
                                                             paddingTop: '1.25rem',
                                                             paddingBottom: '1.25rem',
@@ -492,7 +496,7 @@ export default function Home() {
                             </Button>
 
                             {/* TOGGLE */}
-                            <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem' }} className="mt-2">
+                            <p style={{ textAlign: 'center', color: 'black', fontSize: '0.9rem' }} className="mt-2">
                                 {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
                                 <button
                                     type="button"

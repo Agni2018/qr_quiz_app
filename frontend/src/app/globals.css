@@ -532,3 +532,19 @@ textarea[style*="background:#ffffff"]::placeholder {
   color: #64748b;
   opacity: 1;
 }
+
+/* Aggressively hide all browser-default input ornaments (Eye icons, clear buttons, etc.) */
+input::-webkit-reveal, 
+input::-webkit-clear-button, 
+input::-webkit-inner-spin-button, 
+input::-webkit-outer-spin-button,
+input::-ms-reveal,
+input::-ms-clear {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+}
+
