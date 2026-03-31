@@ -33,12 +33,12 @@ export default function BadgeManagement() {
 
     const isMobile = windowWidth < 768;
 
-    const [newBadge, setNewBadge] = useState({
+    const [newBadge, setNewBadge] = useState<any>({
         name: '',
         description: '',
         icon: 'FaAward',
         type: 'points',
-        threshold: 100
+        threshold: ''
     });
 
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
@@ -81,9 +81,10 @@ export default function BadgeManagement() {
     const handleSubmit = async () => {
         if (!newBadge.name) return setAlertModal({ isOpen: true, message: 'Name is required', type: 'error' });
         try {
-            await api.post('/badges', newBadge);
+            const payload = { ...newBadge, threshold: Number(newBadge.threshold) || 0 };
+            await api.post('/badges', payload);
             setShowForm(false);
-            setNewBadge({ name: '', description: '', icon: 'FaAward', type: 'points', threshold: 100 });
+            setNewBadge({ name: '', description: '', icon: 'FaAward', type: 'points', threshold: '' });
             setAlertModal({ isOpen: true, message: 'Badge created successfully', type: 'success' });
             fetchBadges();
         } catch (err) {
@@ -160,7 +161,7 @@ export default function BadgeManagement() {
                                     value={newBadge.name}
                                     onChange={e => setNewBadge({ ...newBadge, name: e.target.value })}
                                     placeholder="e.g. Speed Demon"
-                                    style={{ background: 'white', color: 'black' }}
+                                    style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                 />
                             </label>
 
@@ -183,8 +184,8 @@ export default function BadgeManagement() {
                                     <Input
                                         type="number"
                                         value={newBadge.threshold}
-                                        onChange={e => setNewBadge({ ...newBadge, threshold: Number(e.target.value) })}
-                                        style={{ background: 'white', color: 'black' }}
+                                        onChange={e => setNewBadge({ ...newBadge, threshold: e.target.value })}
+                                        style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                     />
                                 </label>
                             </div>
@@ -195,7 +196,7 @@ export default function BadgeManagement() {
                                     value={newBadge.description}
                                     onChange={e => setNewBadge({ ...newBadge, description: e.target.value })}
                                     placeholder="Explain how this badge is earned..."
-                                    style={{ background: 'white', color: '#1e293b' }}
+                                    style={{ background: 'white', color: '#1e293b', border: '1px solid #e2e8f0' }}
                                 />
                             </label>
 

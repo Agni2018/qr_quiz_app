@@ -233,7 +233,7 @@ export default function QuestionForm({
                                 onChange={e => setMarks(Number(e.target.value))}
                                 containerClassName="!mb-0"
                                 className="!p-4 !px-8 !rounded-2xl !border-2 !border-slate-200 focus:!border-violet-500/50 h-[64px] shadow-inner !font-bold"
-                                style={{ background: 'white', color: 'black' }}
+                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                             />
                         </div>
 
@@ -267,7 +267,7 @@ export default function QuestionForm({
                             onChange={e => setContent(e.target.value)}
                             placeholder="Write your question here..."
                             className="!p-8 !px-10 !rounded-3xl border-2 border-slate-200 !min-h-[180px]"
-                            style={{ background: 'white', color: 'black' }}
+                            style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                         />
                     </div>
                 </div>
@@ -302,7 +302,7 @@ export default function QuestionForm({
                                                 onChange={e => handleOptionChange(idx, e.target.value)}
                                                 placeholder={`Choice ${idx + 1}`}
                                                 className="!mb-0 !p-4 sm:!p-5 !px-6 sm:!px-8 border-slate-200 rounded-2xl"
-                                                style={{ background: 'white', color: 'black' }}
+                                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                             />
                                         </div>
                                         <Button
@@ -350,7 +350,7 @@ export default function QuestionForm({
                                                 onChange={e => handleMatchPairChange(idx, 'left', e.target.value)}
                                                 placeholder="Term"
                                                 className="w-full !mb-0 flex-1 !p-4 sm:!p-5 !px-6 sm:!px-8 border-slate-200 rounded-2xl"
-                                                style={{ background: 'white', color: 'black' }}
+                                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                             />
                                             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 flex items-center justify-center shrink-0 border border-slate-300 rotate-90 sm:rotate-0">
                                                 <span className="text-black text-sm sm:text-lg font-bold">↔</span>
@@ -360,7 +360,7 @@ export default function QuestionForm({
                                                 onChange={e => handleMatchPairChange(idx, 'right', e.target.value)}
                                                 placeholder="Definition"
                                                 className="w-full !mb-0 flex-1 !p-4 sm:!p-5 !px-6 sm:!px-8 border-slate-200 rounded-2xl"
-                                                style={{ background: 'white', color: 'black' }}
+                                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                             />
                                         </div>
                                         <Button
@@ -393,7 +393,7 @@ export default function QuestionForm({
                                 onChange={e => setCorrectAnswer(e.target.value)}
                                 placeholder="Enter the exact correct answer"
                                 className="!p-6 !px-10 border-2 border-slate-200 text-lg rounded-[24px]"
-                                style={{ background: 'white', color: 'black' }}
+                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                             />
                         )}
 

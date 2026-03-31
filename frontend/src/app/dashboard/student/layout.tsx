@@ -11,7 +11,7 @@ import {
     FaSignOutAlt,
     FaBars,
     FaTimes,
-    FaAward,
+    FaMedal,
     FaBookOpen,
     FaBell,
     FaCompass,
@@ -185,7 +185,7 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
         { label: 'Explore Topics', icon: FaCompass, href: '/dashboard/student/explore' },
         { label: 'Leaderboard', icon: FaTrophy, href: '/dashboard/student/leaderboard' },
         { label: 'Referral', icon: FaUserPlus, href: '/dashboard/student/referral' },
-        { label: 'Badge & Challenges', icon: FaAward, href: '/dashboard/student/badges' },
+        { label: 'Badge & Challenges', icon: FaMedal, href: '/dashboard/student/badges' },
         { label: 'Certificate', icon: FaGraduationCap, href: '/dashboard/student/certificates' },
         { label: 'Study Materials', icon: FaBookOpen, href: '/dashboard/student/materials' },
         { label: 'Notifications', icon: FaBell, href: '/dashboard/student/notifications', count: unreadCount },
@@ -355,7 +355,9 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                                         }}
                                         onClick={() => setSidebarOpen(false)}
                                     >
-                                        <item.icon size={20} style={{ opacity: 1 }} />
+                                        <div style={{ width: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <item.icon size={20} style={{ opacity: 1 }} />
+                                        </div>
                                         {(!isSidebarCollapsed || isMobile) && (
                                             <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                                 {item.label}

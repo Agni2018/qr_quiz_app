@@ -234,7 +234,7 @@ export default function TopicPerformance() {
             {/* Topic Performance Grid Container */}
             <div className="flex flex-col gap-8">
                 <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-bold uppercase tracking-tight text-slate-800">Topic Performance</h3>
+                    <h3 className="text-xl font-bold uppercase tracking-tight text-slate-800" >Topic Performance</h3>
                 </div>
 
                 {/* Cards Grid */}
@@ -266,7 +266,7 @@ export default function TopicPerformance() {
                                 </h3>
                             </div>
 
-                            <div className="flex-1 flex flex-col" style={{ padding: '30px' }}>
+                            <div className="flex-1 flex flex-col" style={{ padding: '50px' }}>
                                 {/* Stats Section */}
                                 <div className="flex flex-col gap-8 mb-12">
                                     <div className="flex flex-col gap-5">
@@ -408,7 +408,7 @@ export default function TopicPerformance() {
                                                     <div className="bg-slate-50 rounded-2xl border border-orange-500/10 p-6 flex flex-col gap-4">
                                                          <TextArea
                                                             className="w-full !p-6 !bg-white !text-slate-900 border border-slate-200 !min-h-[120px] rounded-2xl focus:border-orange-500 transition-all font-bold text-sm shadow-inner"
-                                                            style={{ backgroundColor: '#ffffff', color: '#0f172a', padding: '24px' }}
+                                                            style={{ backgroundColor: '#ffffff', color: '#0f172a', padding: '24px', border: '1px solid #e2e8f0' }}
                                                             placeholder={`Direct message to ${p.name}...`}
                                                             value={messageText}
                                                             onChange={e => setMessageText(e.target.value)}

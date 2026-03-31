@@ -17,7 +17,9 @@ import {
     FaBell,
     FaQuestionCircle,
     FaFolderPlus,
-    FaCog
+    FaCog,
+    FaHistory,
+    FaMedal
 } from 'react-icons/fa';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -61,7 +63,7 @@ function UsersDashboardContent({
     }, []);
 
     const isMobile = windowWidth < 1024;
-    const sidebarWidth = isSidebarCollapsed ? '100px' : '300px';
+    const sidebarWidth = isSidebarCollapsed ? '100px' : '270px';
 
     const SEARCH_BAR_PATHS = [
         '/users',
@@ -113,7 +115,7 @@ function UsersDashboardContent({
         { label: 'Analytics', icon: FaChartPie, href: '/users' },
         { label: 'Manage Topics', icon: FaGraduationCap, href: '/users/manage-topics' },
         { label: 'Question Bank', icon: FaBook, href: '/users/question-bank' },
-        { label: 'Badges & Challenges', icon: (props: any) => <span {...props}>🏅</span>, href: '/users/badges' },
+        { label: 'Badges & Challenges', icon: FaMedal, href: '/users/badges' },
         { label: 'Uploaded Files', icon: FaUpload, href: '/users/uploaded-files' },
     ];
 
@@ -185,7 +187,7 @@ function UsersDashboardContent({
                         left: 0,
                         height: '100vh',
                         zIndex: 80,
-                        width: isMobile ? (sidebarOpen ? '300px' : '0px') : sidebarWidth,
+                        width: isMobile ? (sidebarOpen ? '260px' : '0px') : sidebarWidth,
                         backgroundColor: '#ffffff',
                         borderRight: '1px solid #f1f5f9',
                         display: 'flex',
@@ -272,7 +274,9 @@ function UsersDashboardContent({
                                         }}
                                         onClick={() => setSidebarOpen(false)}
                                     >
-                                        <item.icon size={20} style={{ opacity: 1 }} />
+                                        <div style={{ width: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <item.icon size={20} style={{ opacity: 1 }} />
+                                        </div>
                                         {(!isSidebarCollapsed || isMobile) && (
                                             <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.label}</span>
                                         )}

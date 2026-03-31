@@ -47,13 +47,13 @@ export default function TopicManagement() {
     const [showTopicModal, setShowTopicModal] = useState(false);
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     
-    const [newTopic, setNewTopic] = useState({
+    const [newTopic, setNewTopic] = useState<any>({
         name: '',
         description: '',
-        timeLimit: 0,
-        negativeMarking: 0,
+        timeLimit: '',
+        negativeMarking: '',
         timeBasedScoring: false,
-        passingMarks: 0,
+        passingMarks: '',
         categoryId: ''
     });
 
@@ -112,7 +112,12 @@ export default function TopicManagement() {
     const createTopic = async () => {
         if (!newTopic.name.trim()) return;
         try {
-            const payload = { ...newTopic };
+            const payload = { 
+                ...newTopic,
+                timeLimit: Number(newTopic.timeLimit) || 0,
+                negativeMarking: Number(newTopic.negativeMarking) || 0,
+                passingMarks: Number(newTopic.passingMarks) || 0
+            };
             if (currentCategory) {
                 payload.categoryId = currentCategory._id;
             }
@@ -121,10 +126,10 @@ export default function TopicManagement() {
             setNewTopic({
                 name: '',
                 description: '',
-                timeLimit: 0,
-                negativeMarking: 0,
+                timeLimit: '',
+                negativeMarking: '',
                 timeBasedScoring: false,
-                passingMarks: 0,
+                passingMarks: '',
                 categoryId: ''
             });
             setAlertModal({ isOpen: true, message: 'Topic created successfully', type: 'success' });
@@ -492,6 +497,7 @@ export default function TopicManagement() {
                                     value={newTopic.name}
                                     onChange={e => setNewTopic({ ...newTopic, name: e.target.value })}
                                     placeholder="e.g. Modern Web Architecture"
+                                    style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                 />
                             </label>
                             
@@ -500,13 +506,13 @@ export default function TopicManagement() {
                                     <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Category</span>
                                     <div className="relative">
                                         <select 
-                                            className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-orange-500 transition-all font-bold appearance-none cursor-pointer"
+                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 outline-none focus:border-orange-500 transition-all font-bold appearance-none cursor-pointer"
                                             value={newTopic.categoryId}
                                             onChange={e => setNewTopic({ ...newTopic, categoryId: e.target.value })}
                                         >
-                                            <option value="" className="bg-[#0f172a] text-white">None</option>
+                                            <option value="" className="bg-white text-slate-900">None</option>
                                             {categories.map(c => (
-                                                <option key={c._id} value={c._id} className="bg-[#0f172a] text-white">{c.name}</option>
+                                                <option key={c._id} value={c._id} className="bg-white text-slate-900">{c.name}</option>
                                             ))}
                                         </select>
                                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
@@ -522,6 +528,7 @@ export default function TopicManagement() {
                                     value={newTopic.description}
                                     onChange={e => setNewTopic({ ...newTopic, description: e.target.value })}
                                     placeholder="Describe the quiz scope..."
+                                    style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                 />
                             </label>
                             
@@ -531,7 +538,8 @@ export default function TopicManagement() {
                                     <Input
                                         type="number"
                                         value={newTopic.timeLimit}
-                                        onChange={e => setNewTopic({ ...newTopic, timeLimit: parseInt(e.target.value) || 0 })}
+                                        onChange={e => setNewTopic({ ...newTopic, timeLimit: e.target.value })}
+                                        style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                     />
                                 </label>
                                 <label className="flex flex-col gap-2">
@@ -539,7 +547,8 @@ export default function TopicManagement() {
                                     <Input
                                         type="number"
                                         value={newTopic.passingMarks}
-                                        onChange={e => setNewTopic({ ...newTopic, passingMarks: parseFloat(e.target.value) || 0 })}
+                                        onChange={e => setNewTopic({ ...newTopic, passingMarks: e.target.value })}
+                                        style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                     />
                                 </label>
                             </div>
@@ -551,13 +560,14 @@ export default function TopicManagement() {
                                         type="number"
                                         step="0.1"
                                         value={newTopic.negativeMarking}
-                                        onChange={e => setNewTopic({ ...newTopic, negativeMarking: parseFloat(e.target.value) || 0 })}
+                                        onChange={e => setNewTopic({ ...newTopic, negativeMarking: e.target.value })}
                                         placeholder="e.g. 0.25"
+                                        style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                     />
                                 </label>
                                 <div className="flex flex-col gap-2">
                                     <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Scoring Mode</span>
-                                    <label className="flex items-center gap-4 bg-[#0f172a] border border-white/10 rounded-xl px-6 py-4 cursor-pointer hover:border-orange-500 transition-all shadow-sm" style={{padding:5}}>
+                                    <label className="flex items-center gap-4 bg-white border border-slate-200 rounded-xl px-6 py-4 cursor-pointer hover:border-orange-500 transition-all shadow-sm" style={{padding:5}}>
                                         <input 
                                             type="checkbox" 
                                             className="w-5 h-5 accent-orange-500 rounded border-slate-300 cursor-pointer"
@@ -565,7 +575,7 @@ export default function TopicManagement() {
                                             onChange={e => setNewTopic({ ...newTopic, timeBasedScoring: e.target.checked })}
                                         />
                                         <div className="flex flex-col" >
-                                            <span className="text-[11px] font-black text-white uppercase tracking-tight">Enable Time Bonus</span>
+                                            <span className="text-[11px] font-black text-slate-900 uppercase tracking-tight">Enable Time Bonus</span>
                                             <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Award extra points for speed</span>
                                         </div>
                                     </label>
@@ -596,6 +606,7 @@ export default function TopicManagement() {
                                     value={newCategory.name}
                                     onChange={e => setNewCategory({ ...newCategory, name: e.target.value })}
                                     placeholder="e.g. Computer Science"
+                                    style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                 />
                             </label>
                             <div className="flex gap-4 mt-2">
