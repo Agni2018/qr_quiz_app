@@ -166,10 +166,11 @@ export default function UploadedMaterials() {
                                         </p>
                                     </div>
 
-                                    <div className="mt-8 pt-6 border-t border-slate-50">
+                                    <div className="mt-8 pt-6 border-t border-slate-50" style={{marginTop:0}}>
                                         <button
                                             onClick={() => handleViewMaterials(topic._id, topic.name)}
                                             className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-black text-white font-black uppercase tracking-widest text-[11px] transition-all flex items-center justify-center gap-3 active:scale-95 shadow-lg shadow-slate-900/10"
+                                            
                                         >
                                             View Folder <FaChevronRight size={10} />
                                         </button>
