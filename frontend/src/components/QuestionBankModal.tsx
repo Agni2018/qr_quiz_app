@@ -72,7 +72,7 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
                             placeholder="Search questions or types..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="w-full bg-black/30 border-2 border-white/5 rounded-2xl py-4 h-14 pl-6 pr-14 focus:border-violet-500/50 transition-all outline-none text-slate-200"
+                            className="w-full bg-white border-2 border-slate-200 rounded-2xl py-4 h-14 pl-6 pr-14 focus:border-violet-500/50 transition-all outline-none text-black"
                         />
                         <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
                     </div>

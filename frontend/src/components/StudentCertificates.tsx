@@ -8,10 +8,12 @@ import Pagination from '@/components/Pagination';
 import { FaGraduationCap, FaDownload, FaTimes, FaMedal } from 'react-icons/fa';
 import CertificateTemplate from '@/components/CertificateTemplate';
 import Link from 'next/link';
+import { useSearch } from '@/contexts/SearchContext';
 
 export default function StudentCertificates() {
     const [certificates, setCertificates] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const { searchTerm } = useSearch();
     const [selectedCertificate, setSelectedCertificate] = useState<any>(null);
     const [showCertificateModal, setShowCertificateModal] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
@@ -116,10 +118,16 @@ export default function StudentCertificates() {
         );
     }
 
+    // Filtering
+    const filteredCertificates = certificates.filter(cert => 
+        cert.topicId?.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        cert.topicId?.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     // Pagination
     const indexOfLast = currentPage * itemsPerPage;
     const indexOfFirst = indexOfLast - itemsPerPage;
-    const paginatedCertificates = certificates.slice(indexOfFirst, indexOfLast);
+    const paginatedCertificates = filteredCertificates.slice(indexOfFirst, indexOfLast);
 
     return (
         <div className="flex flex-col">
@@ -163,15 +171,21 @@ export default function StudentCertificates() {
             </div>
 
             {/* Pagination */}
-            {certificates.length > 0 && (
+            {filteredCertificates.length > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'center', padding: isMobile ? '1.5rem 1rem 2rem' : '1.5rem 1.5rem 2.5rem',marginTop:20 }}>
                     <Pagination
                         currentPage={currentPage}
-                        totalItems={certificates.length}
+                        totalItems={filteredCertificates.length}
                         itemsPerPage={itemsPerPage}
                         onPageChange={setCurrentPage}
                         isMobile={isMobile}
                     />
+                </div>
+            )}
+
+            {filteredCertificates.length === 0 && (
+                <div className="col-span-full py-20 text-center flex flex-col items-center gap-4" style={{ color: '#555' }}>
+                    <p className="font-bold text-xl">No certificates found matching "{searchTerm}"</p>
                 </div>
             )}
 

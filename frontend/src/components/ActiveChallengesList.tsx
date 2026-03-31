@@ -70,22 +70,7 @@ export default function ActiveChallengesList() {
                 Active <span className="text-orange-600">Challenges</span>
             </h3>
 
-            {challenges.length > 0 && (
-                <div style={{ 
-                    marginTop: '1.5rem', 
-                    marginBottom: '2rem',
-                    display: 'flex',
-                    justifyContent: 'flex-start'
-                }}>
-                    <Pagination 
-                        currentPage={currentPage}
-                        totalItems={challenges.length}
-                        itemsPerPage={itemsPerPage}
-                        onPageChange={setCurrentPage}
-                        isMobile={isMobile}
-                    />
-                </div>
-            )}
+            {/* Pagination moved to bottom */}
 
             {challenges.length === 0 ? (
                 <Card className="p-20 text-center border-dashed border-2 border-slate-200 bg-slate-50 opacity-100 shadow-inner" style={{ background: 'white', padding: 40 }}>
@@ -140,11 +125,24 @@ export default function ActiveChallengesList() {
                 </div>
             )}
 
+            {challenges.length > 0 && (
+                <div className="flex justify-center mt-12 mb-8">
+                    <Pagination 
+                        currentPage={currentPage}
+                        totalItems={challenges.length}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={setCurrentPage}
+                        isMobile={isMobile}
+                    />
+                </div>
+            )}
+
             <ConfirmModal
                 isOpen={confirmModal.isOpen}
                 onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
                 onConfirm={confirmModal.onConfirm}
                 message={confirmModal.message}
+                isDanger={true}
             />
             <AlertModal
                 isOpen={alertModal.isOpen}

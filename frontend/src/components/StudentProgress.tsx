@@ -7,11 +7,12 @@ import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Pagination from '@/components/Pagination';
 import { FaCheckCircle, FaSearch, FaBolt } from 'react-icons/fa';
+import { useSearch } from '@/contexts/SearchContext';
 
 export default function StudentProgress({ titleComponent }: { titleComponent?: React.ReactNode }) {
     const [attempts, setAttempts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchQuery, setSearchQuery] = useState('');
+    const { searchTerm: searchQuery } = useSearch();
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
@@ -82,18 +83,6 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                         {titleComponent}
                     </div>
                 )}
-                
-                <div className="relative w-full lg:max-w-md group" style={{marginLeft:5,marginRight:25}}>
-                    <input
-                        type="text"
-                        placeholder="Filter topics..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-2xl py-4 pr-16 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all font-bold shadow-xl"
-                        style={{ paddingLeft: '1.5rem' }}
-                    />
-                    <FaSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors size-5" />
-                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 pl-4 pr-10 md:pr-14" >

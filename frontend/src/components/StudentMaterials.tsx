@@ -6,11 +6,13 @@ import Card from '@/components/Card';
 import Button from '@/components/Button';
 import { FaBookOpen, FaFileAlt, FaVideo, FaTimes, FaBook } from 'react-icons/fa';
 import Pagination from '@/components/Pagination';
+import { useSearch } from '@/contexts/SearchContext';
 
 export default function StudentMaterials() {
     const [materials, setMaterials] = useState<any[]>([]);
     const [availableQuizzes, setAvailableQuizzes] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const { searchTerm: searchQuery } = useSearch();
     const [selectedTopicMaterials, setSelectedTopicMaterials] = useState<any[]>([]);
     const [viewingTopicName, setViewingTopicName] = useState('');
     const [showMaterialsModal, setShowMaterialsModal] = useState(false);
@@ -51,13 +53,16 @@ export default function StudentMaterials() {
         setShowMaterialsModal(true);
     };
 
-    const topicsWithMaterials = availableQuizzes.filter(q =>
+    // Filtering
+    const filteredTopics = availableQuizzes.filter(q =>
+        (q.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+         q.description?.toLowerCase().includes(searchQuery.toLowerCase())) &&
         materials.some(m => (m.topicId?._id || m.topicId) === q._id)
     );
 
-    const totalItems = topicsWithMaterials.length;
+    const totalItems = filteredTopics.length;
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentTopics = topicsWithMaterials.slice(startIndex, startIndex + itemsPerPage);
+    const currentTopics = filteredTopics.slice(startIndex, startIndex + itemsPerPage);
 
     const getFileUrl = (url: string) => {
         if (!url) return '';
@@ -74,7 +79,7 @@ export default function StudentMaterials() {
         );
     }
 
-    if (topicsWithMaterials.length === 0) {
+    if (filteredTopics.length === 0 && searchQuery === '') {
         return (
             <Card className="p-32 text-center bg-slate-950/40 border-dashed border-2 border-white/5 rounded-[40px] mt-12">
                 <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl">📚</div>
@@ -86,19 +91,9 @@ export default function StudentMaterials() {
 
     return (
         <div style={{ padding: '2rem 1.5rem 4rem 1.5rem', margin: '0 auto', maxWidth: '1600px' }}>
-            {/* Pagination Controls */}
-            {topicsWithMaterials.length > 0 && (
-                <div className="px-4 mb-12">
-                    <Pagination 
-                        currentPage={currentPage}
-                        totalItems={totalItems}
-                        itemsPerPage={itemsPerPage}
-                        onPageChange={setCurrentPage}
-                        isMobile={isMobile}
-                        style={{ 
-                            maxWidth: isMobile ? '100%' : '400px'
-                        }}
-                    />
+            {filteredTopics.length === 0 && (
+                <div className="col-span-full py-20 text-center flex flex-col items-center gap-4" style={{ color: '#555' }}>
+                    <p className="font-bold text-xl">No materials found matching "{searchQuery}"</p>
                 </div>
             )}
 
@@ -146,6 +141,23 @@ export default function StudentMaterials() {
                     );
                 })}
             </div>
+
+            {/* Pagination Controls */}
+            {filteredTopics.length > 0 && (
+                <div className="px-4 mt-20 flex justify-center">
+                    <Pagination 
+                        currentPage={currentPage}
+                        totalItems={totalItems}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={setCurrentPage}
+                        isMobile={isMobile}
+                        style={{ 
+                            maxWidth: isMobile ? '100%' : '400px',
+                            marginTop:40
+                        }}
+                    />
+                </div>
+            )}
 
             {/* MATERIALS MODAL */}
             {showMaterialsModal && (

@@ -11,11 +11,11 @@ export default function QuestionBankPage() {
                 fontWeight: 900,
                 letterSpacing: '-0.03em',
                 marginBottom: '0.75rem',
-                marginLeft:12,
+                marginLeft:5,
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1.5rem',
-                color: 'orange'
+                color: 'var(--primary)'
             }}>
                 Reusable Questions
             </h2>

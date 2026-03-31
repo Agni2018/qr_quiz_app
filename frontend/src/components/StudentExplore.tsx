@@ -9,12 +9,14 @@ import { FaPlus, FaCheckCircle, FaRocket, FaClock, FaMinusCircle, FaStar, FaBolt
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
 import Button from '@/components/Button';
+import { useSearch } from '@/contexts/SearchContext';
 
 export default function StudentExplore() {
     const [availableQuizzes, setAvailableQuizzes] = useState<any[]>([]);
     const [attempts, setAttempts] = useState<any[]>([]);
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const { searchTerm: searchQuery } = useSearch();
     const [currentPage, setCurrentPage] = useState(1);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -69,10 +71,16 @@ export default function StudentExplore() {
         );
     }
 
+    // Filtering
+    const filteredQuizzes = availableQuizzes.filter(quiz => 
+        quiz.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        quiz.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     // Pagination
     const indexOfLast = currentPage * itemsPerPage;
     const indexOfFirst = indexOfLast - itemsPerPage;
-    const paginatedQuizzes = availableQuizzes.slice(indexOfFirst, indexOfLast);
+    const paginatedQuizzes = filteredQuizzes.slice(indexOfFirst, indexOfLast);
 
     return (
         <div className="flex flex-col">
@@ -148,15 +156,21 @@ export default function StudentExplore() {
             </div>
 
             {/* Pagination */}
-            {availableQuizzes.length > 0 && (
+            {filteredQuizzes.length > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'center', margin: '2rem 1rem', padding: isMobile ? '1.5rem 1rem 2rem' : '1.5rem 1.5rem 2.5rem' }}>
                     <Pagination
                         currentPage={currentPage}
-                        totalItems={availableQuizzes.length}
+                        totalItems={filteredQuizzes.length}
                         itemsPerPage={itemsPerPage}
                         onPageChange={setCurrentPage}
                         isMobile={isMobile}
                     />
+                </div>
+            )}
+            
+            {filteredQuizzes.length === 0 && (
+                <div className="col-span-full py-20 text-center flex flex-col items-center gap-4" style={{ color: '#555' }}>
+                    <p className="font-bold text-xl">No quizzes found matching "{searchQuery}"</p>
                 </div>
             )}
 

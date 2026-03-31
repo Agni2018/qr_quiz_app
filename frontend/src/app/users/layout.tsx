@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import api from '@/lib/api';
 import Button from '@/components/Button';
 import {
@@ -10,26 +10,33 @@ import {
     FaChartPie,
     FaGraduationCap,
     FaBook,
-    FaMedal,
-    FaAward,
     FaUpload,
     FaPlus,
-    FaChevronDown,
-    FaChevronUp,
-    FaChevronLeft,
-    FaChevronRight,
     FaUser,
     FaSearch,
     FaBell,
     FaQuestionCircle,
-    FaFolderPlus
+    FaFolderPlus,
+    FaCog
 } from 'react-icons/fa';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Suspense } from 'react';
+import { SearchProvider, useSearch } from '@/contexts/SearchContext';
 
 export default function UsersLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <SearchProvider>
+            <UsersDashboardContent>{children}</UsersDashboardContent>
+        </SearchProvider>
+    );
+}
+
+function UsersDashboardContent({
     children,
 }: {
     children: React.ReactNode;
@@ -39,20 +46,35 @@ export default function UsersLayout({
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [windowWidth, setWindowWidth] = useState(0);
+    const { searchTerm, setSearchTerm } = useSearch();
 
     const router = useRouter();
     const pathname = usePathname();
 
     useEffect(() => {
-        setWindowWidth(window.innerWidth);
-        const handleResize = () => setWindowWidth(window.innerWidth);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        if (typeof window !== 'undefined') {
+            setWindowWidth(window.innerWidth);
+            const handleResize = () => setWindowWidth(window.innerWidth);
+            window.addEventListener('resize', handleResize);
+            return () => window.removeEventListener('resize', handleResize);
+        }
     }, []);
 
     const isMobile = windowWidth < 1024;
-    const mainPaddingLeft = isMobile ? '1.5rem' : '8.5rem';
-    const mainPaddingRight = isMobile ? '1.5rem' : '4rem';
+    const sidebarWidth = isSidebarCollapsed ? '100px' : '300px';
+
+    const SEARCH_BAR_PATHS = [
+        '/users',
+        '/users/analytics',
+        '/users/manage-topics',
+        '/users/question-bank',
+        '/users/badges',
+        '/users/uploaded-files'
+    ];
+
+    const showSearchBar = SEARCH_BAR_PATHS.some(path => 
+        pathname === path || pathname === `${path}/`
+    );
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -95,25 +117,61 @@ export default function UsersLayout({
         { label: 'Uploaded Files', icon: FaUpload, href: '/users/uploaded-files' },
     ];
 
-    const sidebarWidth = isSidebarCollapsed ? '100px' : '280px';
-    const sidebarPadding = '2rem';
-
     return (
         <div style={{ minHeight: '100vh', background: '#ffffff', color: '#0f172a', overflowX: 'hidden', position: 'relative' }}>
             {/* MOBILE HEADER */}
             {isMobile && (
-                <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60, height: '70px', borderBottom: '1px solid rgba(255,255,255,0.05)', backgroundColor: 'rgba(5,5,5,0.95)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-                    <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#f97316', letterSpacing: '-0.05em', textTransform: 'uppercase' }}>QR QUIZ PLATFORM</h1>
-                    <button onClick={() => setSidebarOpen(true)} style={{ padding: '0.5rem', color: '#ffffff', background: 'none', border: 'none', cursor: 'pointer' }}>
-                        <FaBars size={24} />
-                    </button>
-                </header>
+                <>
+                    <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60, height: '70px', borderBottom: '1px solid #f1f5f9', backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+                        <h1 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#f97316', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>QR QUIZ</h1>
+                        <button onClick={() => setSidebarOpen(true)} style={{ padding: '0.5rem', color: '#0f172a', background: 'none', border: 'none', cursor: 'pointer' }}>
+                            <FaBars size={24} />
+                        </button>
+                    </header>
+                    
+                    {/* MOBILE SEARCH BAR */}
+                    {showSearchBar && (
+                        <div style={{ 
+                            position: 'fixed', 
+                            top: '70px', 
+                            left: 0, 
+                            right: 0, 
+                            zIndex: 50, 
+                            backgroundColor: '#ffffff', 
+                            padding: '0.75rem 1.5rem',
+                            borderBottom: '1px solid #f1f5f9'
+                        }}>
+                            <div style={{ position: 'relative', width: '100%' }}>
+                                <input 
+                                    type="text"
+                                    placeholder="Search..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    style={{ 
+                                        width: '100%',
+                                        height: '44px',
+                                        backgroundColor: '#f1f5f9',
+                                        border: 'none',
+                                        borderRadius: '22px',
+                                        paddingLeft: '3rem',
+                                        paddingRight: '1.25rem',
+                                        fontSize: '14px',
+                                        fontWeight: 500,
+                                        color: '#334155',
+                                        outline: 'none'
+                                    }}
+                                />
+                                <FaSearch style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '16px' }} />
+                            </div>
+                        </div>
+                    )}
+                </>
             )}
 
             {/* Backdrop for mobile */}
             {sidebarOpen && isMobile && (
                 <div
-                    style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 70, backdropFilter: 'blur(8px)' }}
+                    style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 70, backdropFilter: 'blur(4px)' }}
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
@@ -128,8 +186,8 @@ export default function UsersLayout({
                         height: '100vh',
                         zIndex: 80,
                         width: isMobile ? (sidebarOpen ? '300px' : '0px') : sidebarWidth,
-                        backgroundColor: '#f97316',
-                        borderRight: '1px solid rgba(255,255,255,0.05)',
+                        backgroundColor: '#ffffff',
+                        borderRight: '1px solid #f1f5f9',
                         display: 'flex',
                         flexDirection: 'column',
                         transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -139,42 +197,59 @@ export default function UsersLayout({
                 >
                     {isMobile && (
                         <button
-                            style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', color: '#ffffff', background: 'none', border: 'none', cursor: 'pointer', zIndex: 90 }}
+                            style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', color: '#0f172a', background: 'none', border: 'none', cursor: 'pointer', zIndex: 90 }}
                             onClick={() => setSidebarOpen(false)}
                         >
                             <FaTimes size={24} />
                         </button>
                     )}
 
-                    {/* Profile Section */}
+                    {/* Admin Profile Section - Branding moved to Header */}
                     <div style={{ 
-                        paddingTop: '5rem', 
-                        paddingBottom: '3rem', 
-                        paddingLeft: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding, 
-                        paddingRight: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding, 
+                        paddingTop: '3rem', 
+                        paddingBottom: '2.5rem', 
+                        paddingLeft: (isSidebarCollapsed && !isMobile) ? '0' : '2.5rem',
                         display: 'flex', 
                         flexDirection: 'column', 
-                        alignItems: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start', 
-                        gap: '1.5rem', 
-                        marginBottom: '2rem' 
+                        alignItems: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
+                        gap: '0.25rem'
                     }}>
-                        <div style={{ width: '70px', height: '70px', borderRadius: '50%', backgroundColor: '#1a1f2e', border: '2px solid rgba(249,115,22,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', position: 'relative', flexShrink: 0 }}>
-                            <FaUser size={28} style={{ color: '#4b5563' }} />
+                        <div style={{ 
+                            width: '72px', 
+                            height: '72px', 
+                            borderRadius: '50%', 
+                            backgroundColor: '#f8fafc', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            boxShadow: '0 8px 16px rgba(0,0,0,0.06)',
+                            border: '3px solid #f97316',
+                            padding: '4px',
+                            marginBottom: '0.75rem',
+                            position: 'relative'
+                        }}>
+                            <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', backgroundColor: '#f1f5f9', display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
+                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f97316' }}>
+                                    <FaUser size={32} />
+                                </div>
+                            </div>
                         </div>
                         
                         {(!isSidebarCollapsed || isMobile) && (
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                <span style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Authenticated as</span>
-                                <h2 style={{ fontSize: '20px', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', textTransform: 'uppercase', lineHeight: 1 }}>
-                                    {user?.username || 'ADMIN'}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                <h2 style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a', letterSpacing: '-0.02em', textTransform: 'lowercase', margin: 0 }}>
+                                    {user?.username || 'admin'}
                                 </h2>
+                                <p style={{ fontSize: '10px', fontWeight: 800, color: '#f97316', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+                                    Authenticated as Admin
+                                </p>
                             </div>
                         )}
                     </div>
 
                     {/* Navigation */}
-                    <nav style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <nav style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', overflowX: 'hidden', padding: '1rem 0.75rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                             {navItems.map((item) => {
                                 const active = isActive(item.href);
                                 return (
@@ -186,22 +261,20 @@ export default function UsersLayout({
                                             alignItems: 'center',
                                             justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
                                             gap: '1.25rem',
-                                            paddingTop: '1.15rem',
-                                            paddingBottom: '1.15rem',
-                                            paddingLeft: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding,
-                                            paddingRight: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding,
-                                            transition: 'all 0.3s',
+                                            padding: '1rem 1.5rem',
+                                            transition: 'all 0.3s ease',
                                             textDecoration: 'none',
-                                            borderLeft: active ? '4px solid #ffffff' : '4px solid transparent',
-                                            backgroundColor: active ? 'rgba(255,255,255,0.15)' : 'transparent',
-                                            color: active ? '#ffffff' : 'rgba(255,255,255,0.7)',
-                                            whiteSpace: 'nowrap'
+                                            backgroundColor: active ? '#f97316' : 'transparent',
+                                            color: active ? '#ffffff' : '#475569',
+                                            whiteSpace: 'nowrap',
+                                            borderRadius: '16px',
+                                            boxShadow: active ? '0 10px 15px -3px rgba(249, 115, 22, 0.3)' : 'none'
                                         }}
                                         onClick={() => setSidebarOpen(false)}
                                     >
-                                        <item.icon size={20} />
+                                        <item.icon size={20} style={{ opacity: 1 }} />
                                         {(!isSidebarCollapsed || isMobile) && (
-                                            <span style={{ fontWeight: 900, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.15em' }}>{item.label}</span>
+                                            <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.label}</span>
                                         )}
                                     </Link>
                                 );
@@ -212,31 +285,29 @@ export default function UsersLayout({
                         <div style={{ 
                             marginTop: 'auto', 
                             paddingTop: '2rem',
-                            paddingBottom: '2rem',
-                            paddingLeft: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding, 
-                            paddingRight: (isSidebarCollapsed && !isMobile) ? '0' : sidebarPadding, 
-                            borderTop: '1px solid rgba(255,255,255,0.1)', 
                             display: 'flex', 
                             flexDirection: 'column', 
-                            gap: '0.75rem' 
+                            gap: '0.5rem'
                         }}>
-                            {!isMobile && (
+                             {!isMobile && (
                                 <button
                                     onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                                     style={{ 
                                         background: 'none', 
                                         border: 'none', 
-                                        padding: 0, 
+                                        padding: '1rem 1.5rem', 
                                         display: 'flex', 
                                         alignItems: 'center', 
                                         justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
                                         gap: '1.25rem', 
-                                        color: 'rgba(255,255,255,0.7)', 
-                                        cursor: 'pointer' 
+                                        color: '#475569', 
+                                        cursor: 'pointer',
+                                        borderRadius: '16px',
+                                        transition: 'all 0.2s ease'
                                     }}
                                 >
-                                    <FaBars size={18} style={isSidebarCollapsed ? {} : { transition: 'transform 0.5s', transform: 'rotate(90deg)' }} />
-                                    {!isSidebarCollapsed && <span style={{ fontWeight: 900, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Collapse</span>}
+                                    <FaBars size={20} />
+                                    {!isSidebarCollapsed && <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Collapse</span>}
                                 </button>
                             )}
                             <button
@@ -248,17 +319,19 @@ export default function UsersLayout({
                                 style={{ 
                                     background: 'none', 
                                     border: 'none', 
-                                    padding: 0, 
+                                    padding: '1rem 1.5rem', 
                                     display: 'flex', 
                                     alignItems: 'center', 
                                     justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
                                     gap: '1.25rem', 
-                                    color: 'rgba(255,255,255,0.7)', 
-                                    cursor: 'pointer' 
+                                    color: '#475569', 
+                                    cursor: 'pointer',
+                                    borderRadius: '16px',
+                                    transition: 'all 0.2s ease'
                                 }}
                             >
-                                <FaSignOutAlt size={18} />
-                                {(!isSidebarCollapsed || isMobile) && <span style={{ fontWeight: 900, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Sign Out</span>}
+                                <FaSignOutAlt size={20} />
+                                {(!isSidebarCollapsed || isMobile) && <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sign Out</span>}
                             </button>
                         </div>
                     </nav>
@@ -269,24 +342,55 @@ export default function UsersLayout({
                     style={{ 
                         flex: 1,
                         marginLeft: isMobile ? '0' : sidebarWidth,
-                        backgroundColor: '#ffffff',
+                        backgroundColor: '#f8fafc',
                         minHeight: '100vh',
                         display: 'flex',
                         flexDirection: 'column',
                         overflowX: 'hidden',
                         transition: 'margin 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                        paddingTop: isMobile ? '70px' : '0'
+                        paddingTop: isMobile ? (showSearchBar ? '130px' : '70px') : '0'
                     }}
                 >
-                    {/* Admin Actions Bar */}
+                    {/* Header Bar */}
                     {!isMobile && (
-                        <div style={{ height: '90px', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4rem', paddingRight: '4rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <span style={{ color: '#f97316', fontWeight: 900, fontSize: '16px', textTransform: 'uppercase', letterSpacing: '0.2em' }}>QR Quiz Platform</span>
+                        <div style={{ height: '90px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4rem', paddingRight: '4rem', backgroundColor: '#ffffff' }}>
+                            {/* App Heading */}
+                            <div style={{ display: 'flex', alignItems: 'center', minWidth: '240px' }}>
+                                <span style={{ color: '#f97316', fontWeight: 950, fontSize: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>QR Quiz Platform</span>
                             </div>
-                            <Suspense fallback={<div style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.05)', borderRadius: '50%' }} />}>
-                                <AdminTopBarButtons />
-                            </Suspense>
+
+                            {/* Global Search Bar */}
+                            {showSearchBar && (
+                                <div style={{ position: 'relative', width: '100%', maxWidth: '600px', margin: '0 4rem' }}>
+                                    <input 
+                                        type="text"
+                                        placeholder="Search across all elements..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        style={{ 
+                                            width: '100%',
+                                            height: '50px',
+                                            backgroundColor: '#f1f5f9',
+                                            border: 'none',
+                                            borderRadius: '25px',
+                                            paddingLeft: '3.5rem',
+                                            paddingRight: '1.5rem',
+                                            fontSize: '15px',
+                                            fontWeight: 500,
+                                            color: '#334155',
+                                            outline: 'none'
+                                        }}
+                                    />
+                                    <FaSearch style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '18px' }} />
+                                </div>
+                            )}
+
+                            {/* Admin Page Actions */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', minWidth: 'max-content' }}>
+                                <Suspense fallback={<div style={{ width: '40px', height: '40px', background: 'rgba(0,0,0,0.05)', borderRadius: '50%' }} />}>
+                                    <AdminTopBarButtons />
+                                </Suspense>
+                            </div>
                         </div>
                     )}
 
@@ -294,10 +398,10 @@ export default function UsersLayout({
                         style={{ 
                             width: '100%',
                             maxWidth: '1600px',
-                            paddingTop: isMobile ? '2.5rem' : '5rem',
+                            paddingTop: isMobile ? '2rem' : '4rem',
                             paddingBottom: '5rem',
-                            paddingLeft: mainPaddingLeft,
-                            paddingRight: mainPaddingRight,
+                            paddingLeft: isMobile ? '1.5rem' : '8.5rem',
+                            paddingRight: isMobile ? '1.5rem' : '4rem',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: isMobile ? '2.5rem' : '4rem'
@@ -326,7 +430,7 @@ function AdminTopBarButtons() {
                     }}
                     variant="ghost"
                     title="Create Category"
-                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-white/5 hover:bg-white/10 border border-white/10 flex items-center gap-2 whitespace-nowrap text-slate-300 font-bold"
+                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center gap-2 whitespace-nowrap text-slate-700 font-bold"
                 >
                     <FaFolderPlus className="text-xs md:text-sm" />
                     <span className="hidden sm:inline text-[10px] md:text-xs">Create Category</span>
@@ -339,7 +443,7 @@ function AdminTopBarButtons() {
                     window.dispatchEvent(new CustomEvent('open-create-topic-modal'));
                 }}
                 title="Create Topic"
-                className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 flex items-center gap-2 whitespace-nowrap"
+                className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-[#f97316] hover:bg-[#ea580c] shadow-lg shadow-orange-500/10 flex items-center gap-2 whitespace-nowrap text-white"
             >
                 <FaPlus /> <span className="hidden sm:inline">Create Topic</span>
             </Button>

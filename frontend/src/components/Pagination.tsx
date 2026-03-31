@@ -29,41 +29,40 @@ export default function Pagination({
 
     return (
         <div 
-            className={`flex items-center justify-between bg-white border border-slate-200 rounded-3xl shadow-lg w-fit min-w-[300px] max-w-full ${className}`}
+            className={`flex items-center gap-12 bg-white rounded-full ${className}`}
             style={{ 
-                padding: isMobile ? '1rem 1.5rem' : '1.25rem 2rem',
-                gap: '2rem',
+                padding: '0.75rem 2.5rem',
+                border: '1px solid #f1f5f9',
+                boxShadow: '0 5px 20px rgba(0,0,0,0.02)',
                 ...style
             }}
         >
             <div className="shrink-0">
-                <span className="text-sm font-black text-[#4b5563] uppercase tracking-widest whitespace-nowrap">
+                <span className="text-[13px] font-bold tracking-tight" style={{ color: '#1e293b' }}>
                     {displayRange}
                 </span>
             </div>
 
-            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <div className="flex items-center gap-8 shrink-0">
                 <button
                     onClick={() => onPageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    style={{padding:5}}
-                    className={`px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap shrink-0 transition-all active:scale-95 ${
-                        currentPage === 1 
-                            ? 'bg-slate-50 text-slate-300 cursor-not-allowed border border-slate-100' 
-                            : 'bg-white border border-slate-200 text-orange-500 hover:bg-orange-50 hover:border-orange-200 shadow-sm'
-                    }`}
+                    className="text-[11px] font-bold uppercase tracking-[0.2em] transition-all active:scale-95 cursor-pointer"
+                    style={{ 
+                        color: currentPage === 1 ? '#cbd5e1' : '#94a3b8',
+                        cursor: currentPage === 1 ? 'not-allowed' : 'pointer'
+                    }}
                 >
                     Prev
                 </button>
                 <button
                     onClick={() => onPageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    style={{padding:5}}
-                    className={`px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap shrink-0 transition-all active:scale-95 ${
-                        currentPage === totalPages 
-                            ? 'bg-slate-50 text-slate-300 cursor-not-allowed border border-slate-100' 
-                            : 'bg-white border border-slate-200 text-orange-500 hover:bg-orange-50 hover:border-orange-200 shadow-sm'
-                    }`}
+                    className="text-[11px] font-bold uppercase tracking-[0.2em] transition-all active:scale-95 cursor-pointer"
+                    style={{ 
+                        color: currentPage === totalPages ? '#cbd5e1' : '#94a3b8',
+                        cursor: currentPage === totalPages ? 'not-allowed' : 'pointer'
+                    }}
                 >
                     Next
                 </button>
@@ -72,3 +71,4 @@ export default function Pagination({
         </div>
     );
 }
+
