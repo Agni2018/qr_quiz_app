@@ -10,6 +10,7 @@ import UploadMaterialModal from '@/components/UploadMaterialModal';
 import Link from 'next/link';
 import AlertModal from '@/components/AlertModal';
 import Pagination from '@/components/Pagination';
+import { FaChevronLeft, FaFolder, FaFileAlt, FaTimes } from 'react-icons/fa';
 
 import { useRouter } from 'next/navigation';
 
@@ -88,13 +89,36 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
     return (
         <main className="container">
-            <div className="mb-12">
-                <Link href="/users" className="text-slate-500 hover:text-emerald-400 text-sm flex items-center gap-2 transition-colors mb-6">
-                    &larr; Back to Dashboard
-                </Link>
-                <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight" style={{color:'orange'}}>
-                    {topic.name}
-                </h1>
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm relative overflow-hidden z-10" style={{ marginBottom: '40px' }}>
+                <div className="flex items-center gap-4 relative z-10 overflow-x-auto w-full no-scrollbar pb-1 sm:pb-0">
+                    <Button 
+                        variant="primary" 
+                        onClick={() => router.push(topic?.categoryId ? `/users/manage-topics?category=${topic.categoryId._id}` : '/users/manage-topics')}
+                        className="px-6 h-12 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black flex items-center gap-2 shadow-xl shadow-orange-500/10 border-none transition-all active:scale-95 shrink-0"
+                        style={{ background: '#f97316', color: 'white' }}
+                    >
+                        <FaChevronLeft /> Back
+                    </Button>
+                    <div className="h-6 w-[1px] bg-slate-200 mx-1 sm:mx-2 shrink-0" />
+                    <h3 className="text-xl sm:text-2xl font-black flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-3 text-slate-900 tracking-tight whitespace-nowrap sm:whitespace-normal" style={{color:'orange'}}>
+                        <Link href="/users/manage-topics" className="hover:text-orange-600 transition-colors">Manage Topics</Link>
+                        
+                        {topic?.categoryId && (
+                            <>
+                                <span className="text-slate-300 mx-1">/</span>
+                                <Link href={`/users/manage-topics?category=${topic.categoryId._id}`} className="flex items-center gap-2 hover:text-orange-600 transition-colors">
+                                    <span className="text-orange-500" style={{color:'orange'}}><FaFolder /></span>
+                                    {topic.categoryId.name}
+                                </Link>
+                            </>
+                        )}
+                        
+                        <span className="text-slate-300 mx-1">/</span>
+                        <span className="flex items-center gap-2 text-slate-700" style={{color: '#333'}}>
+                            {topic?.name}
+                        </span>
+                    </h3>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
@@ -112,15 +136,25 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
                         {/* Question Form */}
                         {showAddForm && (
-                            <QuestionForm
-                                topicId={id}
-                                onQuestionAdded={() => { 
-                                    setShowAddForm(false); 
-                                    fetchData(); 
-                                    setAlertModal({ isOpen: true, message: 'Question created successfully!', type: 'success' });
-                                }}
-                                onCancel={() => setShowAddForm(false)}
-                            />
+                            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-6 overflow-hidden">
+                                <div className="relative w-[calc(100%-2rem)] sm:w-full max-w-4xl max-h-[95vh] overflow-y-auto rounded-[32px] shadow-2xl mx-auto">
+                                    <button 
+                                        onClick={() => setShowAddForm(false)}
+                                        className="absolute top-6 right-6 z-[110] text-slate-400 hover:text-black hover:bg-slate-100 p-2 rounded-full transition-colors bg-white/50 backdrop-blur-md border-none cursor-pointer"
+                                    >
+                                        <FaTimes size={24} />
+                                    </button>
+                                    <QuestionForm
+                                        topicId={id}
+                                        onQuestionAdded={() => { 
+                                            setShowAddForm(false); 
+                                            fetchData(); 
+                                            setAlertModal({ isOpen: true, message: 'Question created successfully!', type: 'success' });
+                                        }}
+                                        onCancel={() => setShowAddForm(false)}
+                                    />
+                                </div>
+                            </div>
                         )}
 
                         {/* Questions List */}

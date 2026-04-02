@@ -15,7 +15,7 @@ export default function QuestionBankPage() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1.5rem',
-                color: 'var(--primary)'
+                color: 'black'
             }}>
                 Reusable Questions
             </h2>

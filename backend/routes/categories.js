@@ -12,6 +12,9 @@ router.post('/', protect, categoriesController.createCategory);
 // DELETE category
 router.delete('/:id', protect, categoriesController.deleteCategory);
 
+// PUT update category
+router.put('/:id', protect, categoriesController.updateCategory);
+
 // POST copy category
 router.post('/:id/copy', protect, categoriesController.copyCategory);
 

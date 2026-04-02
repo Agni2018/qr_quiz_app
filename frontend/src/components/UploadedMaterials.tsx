@@ -124,10 +124,10 @@ export default function UploadedMaterials() {
 
     return (
         <div className="flex flex-col gap-10">
-            <div className="flex flex-col">
-                <span className="text-[12px] font-bold text-orange-500 uppercase tracking-[0.2em] mb-2">Resource Library</span>
-                <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">Uploaded Files</h3>
-                <p className="text-sm font-bold text-slate-400 mt-2" style={{color:'darkorange'}}>Manage study materials and educational resources for all topics.</p>
+            <div className="flex flex-col gap-1">
+                
+                <h3 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter" style={{color:'black'}}>Uploaded Files</h3>
+                
             </div>
 
             {materials.length === 0 ? (
@@ -146,9 +146,9 @@ export default function UploadedMaterials() {
                                 <div
                                     key={topic._id}
                                     className="bg-white rounded-[2.5rem] flex flex-col group relative overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100"
-                                    style={{ padding: '30px', minHeight: '340px' }}
+                                    style={{ padding: '20px', minHeight: '240px' }}
                                 >
-                                    <div className="flex justify-between items-center mb-6">
+                                    <div className="flex justify-between items-center mb-4">
                                         <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-orange-50 text-orange-500 rounded-md">
                                             Topic Folder
                                         </span>
@@ -158,7 +158,7 @@ export default function UploadedMaterials() {
                                     </div>
 
                                     <div className="flex flex-col gap-3 flex-1">
-                                        <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight uppercase group-hover:text-orange-500 transition-colors" style={{marginTop:20,color:'black'}}>
+                                        <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight uppercase group-hover:text-orange-500 transition-colors" style={{marginTop:10,color:'black'}}>
                                             {topic.name}
                                         </h3>
                                         <p className="text-sm font-bold text-slate-400 line-clamp-3 leading-relaxed" style={{color:'black'}}>
@@ -166,10 +166,10 @@ export default function UploadedMaterials() {
                                         </p>
                                     </div>
 
-                                    <div className="mt-8 pt-6 border-t border-slate-50" style={{marginTop:0}}>
+                                    <div className="mt-4 pt-4 border-t border-slate-50" style={{marginTop: 6}}>
                                         <button
                                             onClick={() => handleViewMaterials(topic._id, topic.name)}
-                                            className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-black text-white font-black uppercase tracking-widest text-[11px] transition-all flex items-center justify-center gap-3 active:scale-95 shadow-lg shadow-slate-900/10"
+                                            className="w-full h-12 rounded-2xl bg-slate-900 hover:bg-black text-white font-black uppercase tracking-widest text-[11px] transition-all flex items-center justify-center gap-3 active:scale-95 shadow-lg shadow-slate-900/10"
                                             
                                         >
                                             View Folder <FaChevronRight size={10} />
@@ -203,17 +203,17 @@ export default function UploadedMaterials() {
             {showAdminMaterialsModal && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-200" onClick={() => setShowAdminMaterialsModal(false)}>
                     <Card className="max-w-4xl w-full p-0 bg-white shadow-2xl rounded-[3rem] overflow-hidden border border-slate-100 flex flex-col gap-0" onClick={(e) => e.stopPropagation()} style={{margin:'1rem 1rem 1rem 1rem'}}>
-                        <div className="border-b border-slate-50 bg-white flex justify-between items-center" style={{ padding: '40px' }}>
+                        <div className="border-b border-slate-50 bg-white flex justify-between items-center" style={{ padding: '24px 32px' }}>
                             <div className="flex flex-col gap-1">
                                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Asset Management</span>
-                                <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tight" style={{color:'darkorange'}}>{selectedTopicName}</h3>
+                                <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight" style={{color:'darkorange'}}>{selectedTopicName}</h3>
                             </div>
                             <button onClick={() => setShowAdminMaterialsModal(false)} className="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full transition-all text-slate-400 flex items-center justify-center shadow-sm">
                                 <FaTimes size={20} />
                             </button>
                         </div>
 
-                        <div className="max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-4" style={{ padding: '40px' }}>
+                        <div className="max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-4" style={{ padding: '24px 32px' }}>
                             {selectedTopicMaterials.length === 0 ? (
                                 <p className="text-center py-20 text-slate-400 font-bold italic">This folder is currently empty.</p>
                             ) : (

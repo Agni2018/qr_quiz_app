@@ -91,11 +91,11 @@ export default function StudentExplore() {
                         <Card
                             key={quiz._id}
                             className={`transition-all duration-500 border-slate-200 rounded-[2.5rem] flex flex-col h-full ${hasAttempted ? 'opacity-70' : ''}`}
-                            style={{ padding: 30, background: 'white', margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}
+                            style={{ padding: 20, background: 'white', margin: '0.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}
                         >
                             <div className="flex justify-between items-start mb-8">
                                 {hasAttempted ? (
-                                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border bg-slate-100 border-slate-200" style={{ marginBottom: 30, color: '#64748b' }}>
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl border bg-slate-100 border-slate-200" style={{ marginBottom: 20, color: '#64748b' }}>
                                         <FaCheckCircle />
                                     </div>
                                 ) : (
@@ -109,11 +109,11 @@ export default function StudentExplore() {
                                                 setIsConfirmOpen(true);
                                             }
                                         }}
-                                        className="h-14 px-6 rounded-2xl flex items-center gap-3 text-lg font-black group/btn transition-all duration-300"
+                                        className="h-10 px-4 rounded-xl flex items-center gap-2 text-sm font-black group/btn transition-all duration-300"
                                         style={{
                                             background: 'var(--primary)',
-                                            boxShadow: '0 8px 20px -6px var(--primary)',
-                                            marginBottom: 30
+                                            boxShadow: '0 6px 16px -4px var(--primary)',
+                                            marginBottom: 20
                                         }}
                                     >
                                         <FaRocket className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
@@ -128,25 +128,25 @@ export default function StudentExplore() {
                                     </div>
                                 )}
                             </div>
-                            <h3 className="text-2xl font-black mb-3 transition-colors" style={{ color: '#000' }}>
+                            <h3 className="text-xl font-black mb-2 transition-colors" style={{ color: '#000' }}>
                                 {quiz.name}
                             </h3>
-                            <p className="text-lg mb-6 line-clamp-2 leading-relaxed font-medium" style={{ color: '#444' }}>{quiz.description}</p>
+                            <p className="text-sm mb-4 line-clamp-2 leading-relaxed font-medium" style={{ color: '#444' }}>{quiz.description}</p>
                             
                             {/* Stats Section */}
-                            <div className="flex flex-wrap gap-4 mb-8">
-                                <div className="flex items-center gap-2 text-sm font-bold text-black" style={{ color: '#111' }}>
+                            <div className="flex flex-wrap gap-3 mb-2 mt-auto">
+                                <div className="flex items-center gap-1.5 text-[11px] font-black text-black" style={{ color: '#111' }}>
                                     <FaClock className="text-orange-500" /> {quiz.timeLimit}S
                                 </div>
-                                <div className="flex items-center gap-2 text-sm font-bold text-black" style={{ color: '#111' }}>
+                                <div className="flex items-center gap-1.5 text-[11px] font-black text-black" style={{ color: '#111' }}>
                                     <FaMinusCircle className="text-red-400" /> {quiz.negativeMarking} NEG
                                 </div>
-                                <div className="flex items-center gap-2 text-sm font-bold text-black" style={{ color: '#111' }}>
+                                <div className="flex items-center gap-1.5 text-[11px] font-black text-black" style={{ color: '#111' }}>
                                     <FaStar className="text-yellow-400" /> {quiz.passingMarks} PASS
                                 </div>
                                 {quiz.timeBasedScoring && (
-                                    <div className="flex items-center gap-2 text-sm font-bold text-black" style={{ color: '#111' }}>
-                                        <FaBolt className="text-orange-500" /> TS-ENABLED
+                                    <div className="flex items-center gap-1.5 text-[11px] font-black text-black" style={{ color: '#111' }}>
+                                        <FaBolt className="text-orange-500" /> TS
                                     </div>
                                 )}
                             </div>

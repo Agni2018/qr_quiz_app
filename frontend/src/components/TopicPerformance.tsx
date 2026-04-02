@@ -47,6 +47,10 @@ export default function TopicPerformance() {
     const [messageText, setMessageText] = useState('');
     const [isSendingMessage, setIsSendingMessage] = useState(false);
 
+    // Certify States
+    const [selectedCertifyOption, setSelectedCertifyOption] = useState<'' | 'one' | 'few' | 'all'>('');
+    const [selectedParticipantIds, setSelectedParticipantIds] = useState<string[]>([]);
+
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
 
     const fetchData = async () => {
@@ -96,6 +100,8 @@ export default function TopicPerformance() {
         setSelectedTopicName(topicName);
         setShowCertifyModal(true);
         setLoadingParticipants(true);
+        setSelectedCertifyOption('');
+        setSelectedParticipantIds([]);
         try {
             const res = await api.get(`/analytics/topic/${topicId}/participants`);
             setParticipants(res.data.participants);
@@ -111,7 +117,9 @@ export default function TopicPerformance() {
     const handleGenerateCertificates = async () => {
         setCertifying(true);
         try {
-            await api.post(`/quiz/certify/${selectedTopicId}`);
+            await api.post(`/quiz/certify/${selectedTopicId}`, {
+                participantIds: selectedParticipantIds
+            });
             setAlertModal({ isOpen: true, message: 'Certificates generated successfully!', type: 'success' });
             setShowCertifyModal(false);
             fetchData();
@@ -175,19 +183,19 @@ export default function TopicPerformance() {
         <div 
             className="flex flex-col"
             style={{ 
-                gap: isMobile ? '2rem' : '3.5rem',
+                gap: isMobile ? '1.5rem' : '2.5rem',
                 paddingBottom: '4rem'
             }}
         >
             {/* Page Title Section */}
             <div 
-                className="flex flex-col lg:flex-row lg:items-end justify-between"
+                className="flex flex-col lg:flex-row lg:items-center justify-between"
                 style={{ gap: '2rem' }}
             >
                 <div className="flex flex-col">
                     <h1 
-                        className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-[#f97316] leading-none"
-                        style={{color:'darkorange'}}
+                        className="text-3xl md:text-4xl font-black tracking-tighter text-black leading-none"
+                        style={{color:'black'}}
                     >
                         Analytics
                     </h1>
@@ -232,7 +240,7 @@ export default function TopicPerformance() {
             </div>
 
             {/* Topic Performance Grid Container */}
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                     <h3 className="text-xl font-bold uppercase tracking-tight text-slate-800" >Topic Performance</h3>
                 </div>
@@ -240,39 +248,39 @@ export default function TopicPerformance() {
                 {/* Cards Grid */}
                 <div 
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-                    style={{ gap: '1.5rem' }}
+                    style={{ gap: '2.5rem' }}
                 >
                     {currentItems.map((stat: any) => (
                         <div
                             key={stat.topicId}
-                            className="bg-white rounded-[2rem] flex flex-col group relative overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100"
-                            style={{ minHeight: '380px' }}
+                            className="bg-white rounded-3xl flex flex-col group relative overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100"
+                            style={{ minHeight: '300px' }}
                         >
                             {/* Card Header Area (Dark with Book Icon) */}
-                            <div className="relative h-60 w-full flex flex-col items-center justify-center p-8 overflow-hidden bg-[#0f172a]">
+                            <div className="relative h-44 w-full flex flex-col items-center justify-center p-6 overflow-hidden bg-[#0f172a]">
                                 <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
                                 
                                 {/* Admin Status Badge in Card */}
                                 <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
                                     <FaUser className="text-orange-500 text-[10px]" />
-                                    <span className="text-[9px] font-black text-white uppercase tracking-[0.1em]">Admin authenticated</span>
+                                    <span className="text-[9px] font-black text-white uppercase tracking-[0.1em]" >Admin authenticated</span>
                                 </div>
 
-                                <div className="relative z-10 w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-500 shadow-xl" style={{marginTop:10}}>
-                                    <FaBook size={32} />
+                                <div className="relative z-10 w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-3 group-hover:scale-110 transition-transform duration-500 shadow-xl" style={{marginBottom:17,marginTop:30}}>
+                                    <FaBook size={24} />
                                 </div>
-                                <h3 className="relative z-10 text-center font-bold text-2xl text-white uppercase tracking-tight leading-tight max-w-[240px]" style={{marginTop:25}}>
+                                <h3 className="relative z-10 text-center font-bold text-xl text-white uppercase tracking-tight leading-tight max-w-[200px]">
                                     {stat.topicName}
                                 </h3>
                             </div>
 
-                            <div className="flex-1 flex flex-col" style={{ padding: '50px' }}>
+                            <div className="flex-1 flex flex-col" style={{ padding: '27px' }}>
                                 {/* Stats Section */}
-                                <div className="flex flex-col gap-8 mb-12">
-                                    <div className="flex flex-col gap-5">
-                                        <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-4 mb-6">
+                                    <div className="flex flex-col gap-3">
+                                        <div className="flex flex-col gap-1">
                                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Participant Engagement</span>
-                                            <span className="text-xl font-bold text-slate-900 tracking-tight">{stat.participantCount} Participants</span>
+                                            <span className="text-lg font-bold text-slate-900 tracking-tight">{stat.participantCount} Participants</span>
                                         </div>
                                         {/* Progress Line */}
                                         <div className="h-[6px] w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
@@ -285,16 +293,16 @@ export default function TopicPerformance() {
                                 </div>
 
                                 {/* Action Buttons */}
-                                <div className="mt-auto flex items-center gap-3" style={{ marginTop: '30px' }}>
+                                <div className="mt-auto flex items-center gap-3" style={{ marginTop: '25px' }}>
                                     <button
                                         onClick={() => handleOpenCertify(stat.topicId, stat.topicName)}
-                                        className="flex-1 h-14 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[11px] transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-lg shadow-orange-500/10"
+                                        className="flex-1 h-11 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[10px] transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-lg shadow-orange-500/10"
                                     >
                                         Certify
                                     </button>
                                     <button
                                         onClick={() => handleViewParticipants(stat.topicId, stat.topicName)}
-                                        className="flex-1 h-14 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-black uppercase tracking-widest text-[11px] transition-all active:scale-95 cursor-pointer flex items-center justify-center border border-slate-200"
+                                        className="flex-1 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all active:scale-95 cursor-pointer flex items-center justify-center border border-slate-200"
                                     >
                                         Details
                                     </button>
@@ -343,7 +351,7 @@ export default function TopicPerformance() {
                             >
                             <div className="flex flex-col gap-1">
                                 <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest leading-none">Performance Review</span>
-                                <h2 className="font-bold text-2xl md:text-4xl text-[#0f172a] tracking-tight uppercase leading-none" style={{color:'black'}}>{selectedTopicName}</h2>
+                                <h2 className="font-bold text-2xl md:text-3xl text-[#0f172a] tracking-tight uppercase leading-none" style={{color:'black'}}>{selectedTopicName}</h2>
                             </div>
                             <button
                                 onClick={() => setShowParticipantsModal(false)}
@@ -455,7 +463,7 @@ export default function TopicPerformance() {
                                 </div>
                                 <div className="flex flex-col gap-0.5 md:gap-1">
                                     <span className="text-[9px] md:text-[10px] font-black text-orange-500 uppercase tracking-widest leading-none">Credential Authority</span>
-                                    <h2 className="font-bold text-[#0f172a] text-xl md:text-3xl tracking-tight uppercase leading-none" style={{color:'black'}}>Certify Students</h2>
+                                    <h2 className="font-bold text-[#0f172a] text-xl md:text-2xl tracking-tight uppercase leading-none" style={{color:'black'}}>Certify Students</h2>
                                 </div>
                             </div>
                             <button onClick={() => setShowCertifyModal(false)} className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 cursor-pointer transition-all">
@@ -472,6 +480,43 @@ export default function TopicPerformance() {
                                 </p>
                             </div>
 
+                            {participants.filter(p => !p.isCertified && p.isQualified).length > 0 && (
+                                <div className="flex flex-wrap gap-2 md:gap-4 lg:gap-6" style={{ marginTop: '15px', marginBottom: '20px' }}>
+                                    <button 
+                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'one' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                        onClick={() => {
+                                            setSelectedCertifyOption('one');
+                                            setSelectedParticipantIds([]);
+                                        }}
+                                        style={{ padding: '0 10px' }}
+                                    >
+                                        Select One
+                                    </button>
+                                    <button 
+                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'few' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                        onClick={() => {
+                                            setSelectedCertifyOption('few');
+                                            setSelectedParticipantIds([]);
+                                        }}
+                                        style={{ padding: '0 10px' }}
+                                    >
+                                        Select Few
+                                    </button>
+                                    <button 
+                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'all' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                        onClick={() => {
+                                            setSelectedCertifyOption('all');
+                                            setSelectedParticipantIds(
+                                                participants.filter(p => !p.isCertified && p.isQualified).map(p => p.id)
+                                            );
+                                        }}
+                                        style={{ padding: '0 10px' }}
+                                    >
+                                        Select All
+                                    </button>
+                                </div>
+                            )}
+
                             {loadingParticipants ? (
                                 <div className="flex flex-col items-center justify-center py-10 gap-3">
                                     <div className="w-8 h-8 border-3 border-slate-100 border-t-orange-500 rounded-full animate-spin" />
@@ -480,9 +525,26 @@ export default function TopicPerformance() {
                             ) : (
                                 <div className="flex flex-col gap-3">
                                     {participants.filter(p => !p.isCertified && p.isQualified).map((p, idx) => (
-                                        <div key={idx} className="flex items-center justify-between bg-white border border-slate-100 rounded-2xl hover:border-orange-500/20 transition-all group shadow-sm" style={{ padding: '30px', marginBottom: '12px' }}>
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm">
+                                        <div key={idx} className="flex items-center justify-between bg-white border border-slate-100 rounded-2xl hover:border-orange-500/20 transition-all group shadow-sm" style={{ padding: '20px 30px', marginBottom: '12px' }}>
+                                            <div className="flex items-center gap-3 md:gap-4">
+                                                {(selectedCertifyOption === 'one' || selectedCertifyOption === 'few') && (
+                                                    <input 
+                                                        type="checkbox"
+                                                        className="w-5 h-5 md:w-6 md:h-6 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer accent-orange-500 transition-all hover:scale-110"
+                                                        style={{ marginRight: '10px' }}
+                                                        checked={selectedParticipantIds.includes(p.id)}
+                                                        onChange={(e) => {
+                                                            if (selectedCertifyOption === 'one') {
+                                                                if (e.target.checked) setSelectedParticipantIds([p.id]);
+                                                                else setSelectedParticipantIds([]);
+                                                            } else {
+                                                                if (e.target.checked) setSelectedParticipantIds([...selectedParticipantIds, p.id]);
+                                                                else setSelectedParticipantIds(selectedParticipantIds.filter(id => id !== p.id));
+                                                            }
+                                                        }}
+                                                    />
+                                                )}
+                                                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm md:text-md">
                                                     {p.name.charAt(0).toUpperCase()}
                                                 </div>
                                                 <span className="font-bold text-slate-900 text-sm tracking-tight">{p.name}</span>
@@ -496,12 +558,12 @@ export default function TopicPerformance() {
 
                         <div className="border-t border-slate-100 flex gap-4 md:gap-6" style={{ padding: isMobile ? '20px' : '30px' }}>
                             <button
-                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[12px] disabled:opacity-40 transition-all shadow-xl shadow-orange-500/20 active:scale-95"
-                                onClick={handleGenerateCertificates}
-                                disabled={certifying || participants.filter(p => !p.isCertified && p.isQualified).length === 0}
-                            >
-                                {certifying ? 'Transmitting...' : 'Authorize'}
-                            </button>
+                                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[12px] disabled:opacity-40 transition-all shadow-xl shadow-orange-500/20 active:scale-95 disabled:cursor-not-allowed"
+                                                onClick={handleGenerateCertificates}
+                                                disabled={certifying || participants.filter(p => !p.isCertified && p.isQualified).length === 0 || !selectedCertifyOption || selectedParticipantIds.length === 0}
+                                            >
+                                                {certifying ? 'Transmitting...' : 'Authorize'}
+                                            </button>
                             <button
                                 className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-slate-100 hover:bg-slate-200 text-slate-900 font-black uppercase tracking-widest text-[10px] md:text-[12px] border border-slate-200 transition-all active:scale-95"
                                 onClick={() => setShowCertifyModal(false)}

@@ -3,12 +3,15 @@
 import { useState, useEffect, use } from 'react';
 import api from '@/lib/api';
 import Card from '@/components/Card';
+import Button from '@/components/Button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { FaChevronLeft, FaFolder, FaTrophy } from 'react-icons/fa';
 
 export default function UserLeaderboard({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
     const [leaderboard, setLeaderboard] = useState<any[]>([]);
+    const [topic, setTopic] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [authLoading, setAuthLoading] = useState(true);
     const router = useRouter();
@@ -25,9 +28,13 @@ export default function UserLeaderboard({ params }: { params: Promise<{ id: stri
 
         checkAuth();
 
-        api.get(`/quiz/leaderboard/${id}`)
-            .then(res => {
-                setLeaderboard(res.data);
+        Promise.all([
+            api.get(`/quiz/leaderboard/${id}`),
+            api.get(`/topics/${id}`)
+        ])
+            .then(([lbRes, topicRes]) => {
+                setLeaderboard(lbRes.data);
+                setTopic(topicRes.data);
                 setLoading(false);
             })
             .catch(err => {
@@ -50,15 +57,40 @@ export default function UserLeaderboard({ params }: { params: Promise<{ id: stri
 
     return (
         <main className="container py-12 px-6 sm:px-10 lg:px-16">
-            <div style={{ marginBottom: '2.5rem' }}>
-                <Link href={`/users/topic/${id}`} className="text-slate-500 hover:text-white transition-colors text-sm font-medium flex items-center gap-2" style={{ marginBottom: '2.5rem' }}>
-                    &larr; Back to Topic Details
-                </Link>
-                <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-xl md:text-2xl shrink-0">
-                        🏆
-                    </div>
-                    <h1 className="text-3xl md:text-4xl font-black tracking-tight" style={{color:'orange'}}>Leaderboard</h1>
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm relative overflow-hidden z-10" style={{ marginBottom: '40px' }}>
+                <div className="flex items-center gap-4 relative z-10 overflow-x-auto w-full no-scrollbar pb-1 sm:pb-0">
+                    <Button 
+                        variant="primary" 
+                        onClick={() => router.push(`/users/topic/${id}`)}
+                        className="px-6 h-12 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black flex items-center gap-2 shadow-xl shadow-orange-500/10 border-none transition-all active:scale-95 shrink-0"
+                        style={{ background: '#f97316', color: 'white' }}
+                    >
+                        <FaChevronLeft /> Back
+                    </Button>
+                    <div className="h-6 w-[1px] bg-slate-200 mx-1 sm:mx-2 shrink-0" />
+                    <h3 className="text-xl sm:text-2xl font-black flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-3 text-slate-900 tracking-tight whitespace-nowrap sm:whitespace-normal" style={{color:'orange'}}>
+                        <Link href="/users/manage-topics" className="hover:text-orange-600 transition-colors">Manage Topics</Link>
+                        
+                        {topic?.categoryId && (
+                            <>
+                                <span className="text-slate-300 mx-1">/</span>
+                                <Link href={`/users/manage-topics?category=${topic.categoryId._id}`} className="flex items-center gap-2 hover:text-orange-600 transition-colors">
+                                    <span className="text-orange-500" style={{color:'orange'}}><FaFolder /></span>
+                                    {topic.categoryId.name}
+                                </Link>
+                            </>
+                        )}
+                        
+                        <span className="text-slate-300 mx-1">/</span>
+                        <Link href={`/users/topic/${id}`} className="flex items-center gap-2 hover:text-orange-600 transition-colors" style={{color: '#333'}}>
+                            {topic?.name}
+                        </Link>
+                        
+                        <span className="text-slate-300 mx-1">/</span>
+                        <span className="flex items-center gap-2 text-slate-700">
+                            🏆 Leaderboard
+                        </span>
+                    </h3>
                 </div>
             </div>
 

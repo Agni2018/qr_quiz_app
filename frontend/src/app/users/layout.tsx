@@ -63,7 +63,7 @@ function UsersDashboardContent({
     }, []);
 
     const isMobile = windowWidth < 1024;
-    const sidebarWidth = isSidebarCollapsed ? '100px' : '270px';
+    const sidebarWidth = isSidebarCollapsed ? '100px' : '240px';
 
     const SEARCH_BAR_PATHS = [
         '/users',
@@ -208,8 +208,8 @@ function UsersDashboardContent({
 
                     {/* Admin Profile Section - Branding moved to Header */}
                     <div style={{ 
-                        paddingTop: '3rem', 
-                        paddingBottom: '2.5rem', 
+                        paddingTop: '1rem', 
+                        paddingBottom: '1.5rem', 
                         paddingLeft: (isSidebarCollapsed && !isMobile) ? '0' : '2.5rem',
                         display: 'flex', 
                         flexDirection: 'column', 
@@ -250,8 +250,18 @@ function UsersDashboardContent({
                     </div>
 
                     {/* Navigation */}
-                    <nav style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', overflowX: 'hidden', padding: '1rem 0.75rem' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <nav 
+                        style={{ 
+                            flex: 1, 
+                            overflowY: 'auto', 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            overflowX: 'hidden', 
+                            padding: '1.5rem 0.5rem',
+                        }}
+                        className="custom-scrollbar"
+                    >
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                             {navItems.map((item) => {
                                 const active = isActive(item.href);
                                 return (
@@ -262,14 +272,14 @@ function UsersDashboardContent({
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
-                                            gap: '1.25rem',
-                                            padding: '1rem 1.5rem',
+                                            gap: '0.75rem',
+                                            padding: '0.75rem 1.25rem',
                                             transition: 'all 0.3s ease',
                                             textDecoration: 'none',
                                             backgroundColor: active ? '#f97316' : 'transparent',
                                             color: active ? '#ffffff' : '#475569',
-                                            whiteSpace: 'nowrap',
-                                            borderRadius: '16px',
+                                            whiteSpace: 'normal',
+                                            borderRadius: '12px',
                                             boxShadow: active ? '0 10px 15px -3px rgba(249, 115, 22, 0.3)' : 'none'
                                         }}
                                         onClick={() => setSidebarOpen(false)}
@@ -284,46 +294,27 @@ function UsersDashboardContent({
                                 );
                             })}
                         </div>
+                    </nav>
 
-                        {/* UTILITIES */}
-                        <div style={{ 
-                            marginTop: 'auto', 
-                            paddingTop: '2rem',
-                            display: 'flex', 
-                            flexDirection: 'column', 
-                            gap: '0.5rem'
-                        }}>
-                             {!isMobile && (
-                                <button
-                                    onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                                    style={{ 
-                                        background: 'none', 
-                                        border: 'none', 
-                                        padding: '1rem 1.5rem', 
-                                        display: 'flex', 
-                                        alignItems: 'center', 
-                                        justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
-                                        gap: '1.25rem', 
-                                        color: '#475569', 
-                                        cursor: 'pointer',
-                                        borderRadius: '16px',
-                                        transition: 'all 0.2s ease'
-                                    }}
-                                >
-                                    <FaBars size={20} />
-                                    {!isSidebarCollapsed && <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Collapse</span>}
-                                </button>
-                            )}
+                    {/* UTILITIES */}
+                    <div style={{ 
+                        marginTop: 'auto', 
+                        paddingBottom: '1rem',
+                        paddingLeft: '0.25rem',
+                        paddingRight: '0.5rem',
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        gap: '0.15rem',
+                        borderTop: '1px solid #f1f5f9',
+                        paddingTop: '0.75rem'
+                    }}>
+                         {!isMobile && (
                             <button
-                                onClick={async () => {
-                                    try { await api.post('/auth/logout'); } catch {}
-                                    localStorage.clear();
-                                    window.location.href = '/';
-                                }}
+                                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                                 style={{ 
                                     background: 'none', 
                                     border: 'none', 
-                                    padding: '1rem 1.5rem', 
+                                    padding: '0.75rem 1.25rem', 
                                     display: 'flex', 
                                     alignItems: 'center', 
                                     justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
@@ -334,11 +325,35 @@ function UsersDashboardContent({
                                     transition: 'all 0.2s ease'
                                 }}
                             >
-                                <FaSignOutAlt size={20} />
-                                {(!isSidebarCollapsed || isMobile) && <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sign Out</span>}
+                                <FaBars size={20} />
+                                {!isSidebarCollapsed && <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Collapse</span>}
                             </button>
-                        </div>
-                    </nav>
+                        )}
+                        <button
+                            onClick={async () => {
+                                try { await api.post('/auth/logout'); } catch {}
+                                localStorage.clear();
+                                window.location.href = '/';
+                            }}
+                            style={{ 
+                                background: 'none', 
+                                border: 'none', 
+                                padding: '0.75rem 1.25rem', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
+                                gap: '1.25rem', 
+                                color: '#475569', 
+                                cursor: 'pointer',
+                                borderRadius: '16px',
+                                transition: 'all 0.2s ease'
+                            }}
+                        >
+                            <FaSignOutAlt size={20} />
+                            {(!isSidebarCollapsed || isMobile) && <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sign Out</span>}
+                        </button>
+                    </div>
+
                 </aside>
 
                 {/* MAIN CONTENT AREA */}
@@ -357,7 +372,7 @@ function UsersDashboardContent({
                 >
                     {/* Header Bar */}
                     {!isMobile && (
-                        <div style={{ height: '90px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4rem', paddingRight: '4rem', backgroundColor: '#ffffff' }}>
+                        <div style={{ height: '70px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4rem', paddingRight: '4rem', backgroundColor: '#ffffff' }}>
                             {/* App Heading */}
                             <div style={{ display: 'flex', alignItems: 'center', minWidth: '240px' }}>
                                 <span style={{ color: '#f97316', fontWeight: 950, fontSize: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>QR Quiz Platform</span>
@@ -402,13 +417,13 @@ function UsersDashboardContent({
                         style={{ 
                             width: '100%',
                             maxWidth: '1600px',
-                            paddingTop: isMobile ? '2rem' : '4rem',
+                            paddingTop: isMobile ? '2rem' : '0.75rem',
                             paddingBottom: '5rem',
-                            paddingLeft: isMobile ? '1.5rem' : '8.5rem',
+                            paddingLeft: isMobile ? '1.5rem' : '4.5rem',
                             paddingRight: isMobile ? '1.5rem' : '4rem',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: isMobile ? '2.5rem' : '4rem'
+                            gap: isMobile ? '2rem' : '2.5rem'
                         }}
                     >
                         {children}
@@ -427,30 +442,30 @@ function AdminTopBarButtons() {
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            {!searchParams.has('category') && (
+            {!searchParams.has('category') ? (
                 <Button
                     onClick={() => {
                         window.dispatchEvent(new CustomEvent('open-create-category-modal'));
                     }}
-                    variant="ghost"
                     title="Create Category"
-                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center gap-2 whitespace-nowrap text-slate-700 font-bold"
+                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-[#f97316] hover:bg-[#ea580c] shadow-lg shadow-orange-500/10 flex items-center gap-2 whitespace-nowrap text-white font-bold"
                 >
-                    <FaFolderPlus className="text-xs md:text-sm" />
+                    <FaPlus className="text-xs md:text-sm" />
                     <span className="hidden sm:inline text-[10px] md:text-xs">Create Category</span>
                     <span className="sm:hidden text-[10px]">Category</span>
                 </Button>
+            ) : (
+                <Button
+                    onClick={() => {
+                        // Emit custom event to trigger modal in manage-topics/page.tsx
+                        window.dispatchEvent(new CustomEvent('open-create-topic-modal'));
+                    }}
+                    title="Create Topic"
+                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-[#f97316] hover:bg-[#ea580c] shadow-lg shadow-orange-500/10 flex items-center gap-2 whitespace-nowrap text-white"
+                >
+                    <FaPlus /> <span className="hidden sm:inline">Create Topic</span>
+                </Button>
             )}
-            <Button
-                onClick={() => {
-                    // Emit custom event to trigger modal in manage-topics/page.tsx
-                    window.dispatchEvent(new CustomEvent('open-create-topic-modal'));
-                }}
-                title="Create Topic"
-                className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-[#f97316] hover:bg-[#ea580c] shadow-lg shadow-orange-500/10 flex items-center gap-2 whitespace-nowrap text-white"
-            >
-                <FaPlus /> <span className="hidden sm:inline">Create Topic</span>
-            </Button>
         </div>
     );
 }

@@ -32,7 +32,7 @@ exports.getAllTopics = async (req, res) => {
 // GET single topic
 exports.getTopicById = async (req, res) => {
     try {
-        const topic = await Topic.findById(req.params.id);
+        const topic = await Topic.findById(req.params.id).populate('categoryId', 'name');
         if (!topic) return res.status(404).json({ message: 'Topic not found' });
         res.json(topic);
     } catch (err) {

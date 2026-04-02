@@ -10,7 +10,7 @@ import TextArea from '@/components/TextArea';
 import { 
     FaPlus, FaTrash, FaCopy, FaArrowRight, FaFolder, 
     FaChevronLeft, FaSearch, FaTimes, FaQuestionCircle,
-    FaFolderPlus, FaClock, FaMinusCircle, FaStar, FaChevronDown, FaBolt
+    FaFolderPlus, FaClock, FaMinusCircle, FaStar, FaChevronDown, FaBolt, FaPen
 } from 'react-icons/fa';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AlertModal from '@/components/AlertModal';
@@ -63,6 +63,11 @@ export default function TopicManagement() {
 
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', title: 'Confirm Action', isDanger: false, onConfirm: () => {} });
+
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editItem, setEditItem] = useState<any>(null);
+    const [editType, setEditType] = useState<'category' | 'topic'>('category');
+    const [editName, setEditName] = useState('');
 
     const fetchData = async () => {
         setLoading(true);
@@ -236,6 +241,26 @@ export default function TopicManagement() {
         router.push('/users/manage-topics');
     };
 
+    const openEditModal = (item: any, type: 'category' | 'topic') => {
+        setEditItem(item);
+        setEditType(type);
+        setEditName(item.name || '');
+        setShowEditModal(true);
+    };
+
+    const handleEditSave = async () => {
+        if (!editName.trim() || !editItem) return;
+        try {
+            const endpoint = editType === 'category' ? `/categories/${editItem._id}` : `/topics/${editItem._id}`;
+            await api.put(endpoint, { name: editName });
+            setShowEditModal(false);
+            setAlertModal({ isOpen: true, message: `${editType === 'category' ? 'Category' : 'Topic'} renamed successfully`, type: 'success' });
+            fetchData();
+        } catch (err: any) {
+            setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Failed to rename', type: 'error' });
+        }
+    };
+
     useEffect(() => {
         setCurrentPage(1);
     }, [searchTerm, view]);
@@ -280,7 +305,7 @@ export default function TopicManagement() {
             {/* HEADER */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
                 <div className="flex flex-col">
-                    <h1 className="text-3xl md:text-5xl font-black text-[#f97316] tracking-tighter uppercase shrink-0" style={{color:'darkorange'}}>
+                    <h1 className="text-3xl md:text-5xl font-black text-[#f97316] tracking-tighter shrink-0" style={{color:'black'}}>
                         Manage Topics
                     </h1>
                 </div>
@@ -288,7 +313,7 @@ export default function TopicManagement() {
 
             {/* CREATE BUTTONS ROW - mobile only */}
             <div className="flex flex-col sm:flex-row gap-3 md:hidden">
-                {view === 'categories' && (
+                {view === 'categories' ? (
                     <Button
                         onClick={() => setShowCategoryModal(true)}
                         className="flex items-center justify-center gap-2 h-12 px-6 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-xs shadow-lg transition-all w-full sm:w-auto"
@@ -296,13 +321,15 @@ export default function TopicManagement() {
                     >
                         <FaPlus size={12} /> Create Category
                     </Button>
+                ) : (
+                    <Button
+                        onClick={() => setShowTopicModal(true)}
+                        className="flex items-center justify-center gap-2 h-12 px-6 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-xs shadow-lg transition-all w-full sm:w-auto"
+                        style={{ background: '#f97316', color: 'white' }}
+                    >
+                        <FaPlus size={12} /> Create Topic
+                    </Button>
                 )}
-                <Button
-                    onClick={() => setShowTopicModal(true)}
-                    className="flex items-center justify-center gap-2 h-12 px-6 rounded-2xl bg-slate-900 hover:bg-black text-white font-black uppercase tracking-widest text-xs shadow-lg transition-all w-full sm:w-auto"
-                >
-                    <FaPlus size={12} /> Create Topic
-                </Button>
             </div>
             
             {view === 'topics' && currentCategory && (
@@ -334,14 +361,22 @@ export default function TopicManagement() {
                         return (
                             <div
                                 key={item._id}
-                                className="bg-white rounded-[2rem] flex flex-col gap-6 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-sm hover:shadow-xl"
-                                style={{ padding: '30px', marginTop: '10px', marginBottom: '10px' }}
+                                className="bg-white rounded-[2rem] flex flex-col gap-4 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-sm hover:shadow-xl"
+                                style={{ padding: '20px', marginTop: '10px', marginBottom: '10px' }}
                             >
                                 {/* Card Header */}
-                                <div className="flex justify-between items-center">
+                                <div className="flex justify-between items-center relative">
                                     <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md bg-orange-500/10 text-orange-500">
                                         Category
                                     </span>
+                                    <div 
+                                        onClick={() => openEditModal(item, 'category')}
+                                        className="text-slate-400 hover:text-orange-500 transition-colors cursor-pointer p-1"
+                                        title="Edit"
+                                        style={{ position: 'absolute', top: 0, right: 0 }}
+                                    >
+                                        <FaPen size={14} />
+                                    </div>
                                 </div>
 
                                 {/* Title & Description */}
@@ -355,7 +390,7 @@ export default function TopicManagement() {
                                 </div>
 
                                 {/* Footer Actions */}
-                                <div className="mt-auto pt-6 border-t border-slate-50" style={{ marginTop: '30px' }}>
+                                <div className="mt-auto pt-4 border-t border-slate-50" style={{ marginTop: '20px' }}>
                                     <div className="flex items-center justify-between w-full">
                                         <div className="flex items-center gap-3">
                                             <Button 
@@ -390,14 +425,22 @@ export default function TopicManagement() {
                         return (
                             <div
                                 key={topic._id}
-                                className="bg-white rounded-[2rem] flex flex-col gap-6 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-sm hover:shadow-xl"
-                                style={{ padding: '30px', marginTop: '10px', marginBottom: '10px' }}
+                                className="bg-white rounded-[2rem] flex flex-col gap-4 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-sm hover:shadow-xl"
+                                style={{ padding: '20px', marginTop: '10px', marginBottom: '10px' }}
                             >
                                 {/* Card Header */}
-                                <div className="flex justify-between items-center">
+                                <div className="flex justify-between items-center relative">
                                     <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md ${statusActive ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
                                         {statusActive ? 'Active' : 'Inactive'}
                                     </span>
+                                    <div 
+                                        onClick={() => openEditModal(topic, 'topic')}
+                                        className="text-slate-400 hover:text-orange-500 transition-colors cursor-pointer p-1"
+                                        title="Edit"
+                                        style={{ position: 'absolute', top: 0, right: 0 }}
+                                    >
+                                        <FaPen size={14} />
+                                    </div>
                                 </div>
 
                                 {/* Title & Description */}
@@ -431,7 +474,7 @@ export default function TopicManagement() {
                                 </div>
 
                                 {/* Footer Actions */}
-                                <div className="mt-auto pt-6 border-t border-slate-50" style={{ marginTop: '30px' }}>
+                                <div className="mt-auto pt-4 border-t border-slate-50" style={{ marginTop: '20px' }}>
                                     <div className="flex items-center justify-between w-full">
                                         <div className="flex items-center gap-3">
                                             <Link href={`/users/topic/${topic._id}`}>
@@ -497,7 +540,7 @@ export default function TopicManagement() {
                                     value={newTopic.name}
                                     onChange={e => setNewTopic({ ...newTopic, name: e.target.value })}
                                     placeholder="e.g. Modern Web Architecture"
-                                    style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                    style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                 />
                             </label>
                             
@@ -523,12 +566,12 @@ export default function TopicManagement() {
                             )}
 
                             <label className="flex flex-col gap-2">
-                                <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Description</span>
+                                <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Description <span className="text-red-500">*</span></span>
                                 <TextArea
                                     value={newTopic.description}
                                     onChange={e => setNewTopic({ ...newTopic, description: e.target.value })}
                                     placeholder="Describe the quiz scope..."
-                                    style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                    style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                 />
                             </label>
                             
@@ -537,18 +580,22 @@ export default function TopicManagement() {
                                     <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Time (s)</span>
                                     <Input
                                         type="number"
+                                        min="0"
+                                        onKeyDown={e => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
                                         value={newTopic.timeLimit}
                                         onChange={e => setNewTopic({ ...newTopic, timeLimit: e.target.value })}
-                                        style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                        style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                     />
                                 </label>
                                 <label className="flex flex-col gap-2">
-                                    <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Passing Pts</span>
+                                    <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Passing Pts <span className="text-red-500">*</span></span>
                                     <Input
                                         type="number"
+                                        min="0"
+                                        onKeyDown={e => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
                                         value={newTopic.passingMarks}
                                         onChange={e => setNewTopic({ ...newTopic, passingMarks: e.target.value })}
-                                        style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                        style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                     />
                                 </label>
                             </div>
@@ -559,15 +606,17 @@ export default function TopicManagement() {
                                     <Input
                                         type="number"
                                         step="0.1"
+                                        min="0"
+                                        onKeyDown={e => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
                                         value={newTopic.negativeMarking}
                                         onChange={e => setNewTopic({ ...newTopic, negativeMarking: e.target.value })}
                                         placeholder="e.g. 0.25"
-                                        style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                        style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                     />
                                 </label>
                                 <div className="flex flex-col gap-2">
                                     <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Scoring Mode</span>
-                                    <label className="flex items-center gap-4 bg-white border border-slate-200 rounded-xl px-6 py-4 cursor-pointer hover:border-orange-500 transition-all shadow-sm" style={{padding:5}}>
+                                    <label className="flex items-center gap-4 bg-white cursor-pointer hover:border-orange-500 transition-all shadow-sm" style={{ padding: '0.875rem 1.5rem', background: 'white', border: '1px solid #cbd5e1', borderRadius: '0.5rem', height: '100%' }}>
                                         <input 
                                             type="checkbox" 
                                             className="w-5 h-5 accent-orange-500 rounded border-slate-300 cursor-pointer"
@@ -584,7 +633,7 @@ export default function TopicManagement() {
                             
                             <div className="flex gap-4 mt-4">
                                 <Button variant="ghost" className="flex-1 h-12 text-slate-400 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowTopicModal(false)}>Cancel</Button>
-                                <Button className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 uppercase font-black tracking-widest text-[11px]" onClick={createTopic} disabled={!newTopic.name.trim()}>Create Topic</Button>
+                                <Button className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 uppercase font-black tracking-widest text-[11px]" onClick={createTopic} disabled={!(newTopic.name.trim() && newTopic.description.trim() && newTopic.passingMarks !== '')}>Create Topic</Button>
                             </div>
                         </div>
                     </Card>
@@ -606,12 +655,40 @@ export default function TopicManagement() {
                                     value={newCategory.name}
                                     onChange={e => setNewCategory({ ...newCategory, name: e.target.value })}
                                     placeholder="e.g. Computer Science"
-                                    style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                    style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                 />
                             </label>
                             <div className="flex gap-4 mt-2">
                                 <Button variant="ghost" className="flex-1 h-12 text-slate-400 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowCategoryModal(false)}>Cancel</Button>
                                 <Button className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 uppercase font-black tracking-widest text-[11px]" onClick={createCategory} disabled={!newCategory.name.trim()}>Create Category</Button>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            )}
+
+            {/* EDIT MODAL */}
+            {showEditModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+                    <Card className="w-full max-w-[420px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-col gap-6" style={{ padding: '30px', margin: '1rem' }}>
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Rename {editType === 'category' ? 'Category' : 'Topic'}</h2>
+                            <button onClick={() => setShowEditModal(false)} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all"><FaTimes size={18} /></button>
+                        </div>
+                        <div className="flex flex-col gap-6">
+                            <label className="flex flex-col gap-3">
+                                <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">New Name <span className="text-red-500">*</span></span>
+                                <Input
+                                    value={editName}
+                                    onChange={e => setEditName(e.target.value)}
+                                    placeholder={`Enter new ${editType} name...`}
+                                    style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
+                                    autoFocus
+                                />
+                            </label>
+                            <div className="flex gap-4 mt-2">
+                                <Button variant="ghost" className="flex-1 h-12 text-slate-400 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowEditModal(false)}>Cancel</Button>
+                                <Button className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 uppercase font-black tracking-widest text-[11px]" onClick={handleEditSave} disabled={!editName.trim()}>Save Changes</Button>
                             </div>
                         </div>
                     </Card>

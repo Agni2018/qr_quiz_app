@@ -38,39 +38,19 @@ export default function LeaderboardPage() {
             {/* Main Container - same width as leaderboard list */}
             <div className="max-w-5xl w-full px-4 sm:px-6">
                 
-                {/* Header Row: Title and Referral Leads Button */}
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-6 mb-12 group w-full" style={{ margin: '30px 0 30px 0' }}>
+                {/* Header Row: Title */}
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-6 group w-full" style={{ margin: '10px 0 20px 0' }}>
                     <div className="flex items-center gap-6 lg:gap-8">
-                        <div style={{
-                            minWidth: '4rem',
-                            minHeight: '4rem',
-                            width: '4rem',
-                            height: '4rem',
-                            borderRadius: '1.25rem',
-                            background: 'linear-gradient(135deg, #f59e0b, #f97316)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '1.75rem',
-                            boxShadow: '0 10px 40px rgba(245, 158, 11, 0.4)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            transform: 'rotate(-3deg)'
-                        }} className="group-hover:rotate-0 transition-transform duration-500 lg:w-16 lg:h-16 lg:text-3xl lg:rounded-[1.25rem]">
-                            🏅
-                        </div>
                         <div className="flex flex-col">
                             <h2
-                                className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter"
+                                className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter"
                                 style={{
-                                    backgroundImage: 'linear-gradient(to right, #f59e0b, #f97316)',
-                                    WebkitBackgroundClip: 'text',
-                                    WebkitTextFillColor: 'transparent',
-                                    backgroundClip: 'text',
+                                    color: '#000',
+                                    marginLeft: '1rem'
                                 }}
                             >
                                 Leaderboard
                             </h2>
-                            <div className="h-1.5 lg:h-2 w-24 lg:w-32 rounded-full mt-2 opacity-40 bg-gradient-to-r from-[#f59e0b] to-transparent" />
                         </div>
                     </div>
                 </div>
@@ -80,20 +60,10 @@ export default function LeaderboardPage() {
                     
                     {/* Left Column: Leaderboard Rows */}
                     <div className="flex-1 w-full order-2 lg:order-1">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 mb-8" style={{marginBottom:20}}>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-start gap-5 mb-8" style={{marginBottom:20}}>
                             <h3 className="text-2xl font-bold flex items-center gap-3 text-slate-500 uppercase tracking-widest pl-2 m-0" style={{color:'orange'}}>
                                 <FaTrophy className="text-yellow-500" /> Top Performers
                             </h3>
-                            <Link href="/dashboard/student/referral-leads" className="w-full sm:w-auto flex justify-center sm:justify-start">
-                                <Button
-                                    variant="secondary"
-                                    className="w-[calc(100%-2rem)] sm:w-auto mx-auto sm:mx-0 flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-black transition-all text-base shadow-xl backdrop-blur-md border border-emerald-500/20"
-                                    style={{ background: '#10b981', color: 'white' }}
-                                >
-                                    <FaUsers className="text-xl text-white" />
-                                    <span>Referral Leads</span>
-                                </Button>
-                            </Link>
                         </div>
 
                         <div className="flex flex-col gap-4">

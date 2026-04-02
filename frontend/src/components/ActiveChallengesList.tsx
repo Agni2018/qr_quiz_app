@@ -66,9 +66,6 @@ export default function ActiveChallengesList() {
 
     return (
         <div className="flex flex-col gap-4">
-            <h3 className="text-2xl font-black text-[#0a0f1e] mb-2 uppercase tracking-tight" style={{color:'orange'}}>
-                Active <span className="text-orange-600">Challenges</span>
-            </h3>
 
             {/* Pagination moved to bottom */}
 

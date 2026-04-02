@@ -79,15 +79,15 @@ export default function StudentBadges() {
                     <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {earnedBadges.slice((earnedPage - 1) * itemsPerPage, earnedPage * itemsPerPage).map(badge => (
-                            <Card key={badge._id} className="p-8 border-none hover:from-pink-500/10 transition-all group relative overflow-hidden flex flex-col items-center text-center gap-2 rounded-[2.5rem] shadow-xl" style={{padding:30, background: 'white', margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}>
+                            <Card key={badge._id} className="p-6 border-none hover:from-pink-500/10 transition-all group relative overflow-hidden flex flex-col items-center text-center gap-2 rounded-[1.5rem] shadow-xl" style={{padding:20, background: 'white', margin: '0.4rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
                                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-pink-500/10 blur-3xl rounded-full group-hover:bg-pink-500/20 transition-all"></div>
 
-                                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-500/30 flex items-center justify-center text-4xl text-pink-400 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl shadow-pink-500/10">
+                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-500/30 flex items-center justify-center text-2xl text-pink-400 mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl shadow-pink-500/10">
                                     {icons[badge.icon] || <FaAward />}
                                 </div>
 
-                                <h4 className="text-2xl font-black group-hover:text-pink-500 transition-colors" style={{ color: '#000' }}>{badge.name}</h4>
-                                <p className="text-sm mb-6 flex-1 leading-relaxed px-4" style={{ color: '#555' }}>{badge.description}</p>
+                                <h4 className="text-xl font-black group-hover:text-pink-500 transition-colors" style={{ color: '#000' }}>{badge.name}</h4>
+                                <p className="text-[13px] mb-4 flex-1 leading-relaxed px-4" style={{ color: '#555' }}>{badge.description}</p>
 
                                 <div className="px-6 py-2 rounded-full bg-pink-500/10 border border-pink-500/20">
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-pink-500">Achieved</span>
@@ -129,7 +129,7 @@ export default function StudentBadges() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                             {lockedBadges.slice((lockedPage - 1) * itemsPerPage, lockedPage * itemsPerPage).map(badge => (
-                                <Card key={badge._id} className="p-8 border-slate-200 grayscale opacity-60 flex flex-col items-center text-center gap-2 rounded-[2.5rem] relative group overflow-hidden" style={{padding:30, background: 'white', margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
+                                <Card key={badge._id} className="p-6 border-slate-200 grayscale opacity-60 flex flex-col items-center text-center gap-2 rounded-[1.5rem] relative group overflow-hidden" style={{padding:20, background: 'white', margin: '0.4rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
                                     <div className="absolute inset-0 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                                         <div className="px-6 py-3 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 flex items-center gap-3">
                                             <FaLock className="text-pink-500 text-xs" />
@@ -137,7 +137,7 @@ export default function StudentBadges() {
                                         </div>
                                     </div>
 
-                                    <div className="w-20 h-20 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-3xl text-slate-400 mb-6">
+                                    <div className="w-14 h-14 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-2xl text-slate-400 mb-4">
                                         {icons[badge.icon] || <FaAward />}
                                     </div>
 

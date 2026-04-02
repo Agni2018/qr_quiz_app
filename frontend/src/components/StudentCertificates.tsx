@@ -107,10 +107,10 @@ export default function StudentCertificates() {
 
     if (certificates.length === 0) {
         return (
-            <Card className="p-20 text-center border-dashed border-2 border-slate-200 rounded-[40px] mt-12" style={{ background: 'white', padding:30, margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10)' }}>
-                <div className="w-24 h-24 bg-slate-100 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-inner border border-slate-100">📜</div>
-                <h3 className="text-4xl font-black mb-4" style={{ color: '#000' }}>No certificates earned</h3>
-                <p className="mb-12 text-xl max-w-md mx-auto leading-relaxed" style={{ color: '#444' }}>Complete quiz topics with at least one correct answer to earn yours!</p>
+            <Card className="p-12 text-center border-dashed border-2 border-slate-200 rounded-[24px] mt-8" style={{ background: 'white', padding:24, margin: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
+                <div className="w-16 h-16 bg-slate-100 rounded-[1.25rem] flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner border border-slate-100">📜</div>
+                <h3 className="text-2xl font-black mb-2" style={{ color: '#000' }}>No certificates earned</h3>
+                <p className="mb-8 text-base max-w-md mx-auto leading-relaxed" style={{ color: '#444' }}>Complete quiz topics with at least one correct answer to earn yours!</p>
                 <Link href="/dashboard/student/explore">
                     <Button className="px-16 py-6  rounded-[2rem] text-xl font-black bg-primary shadow-xl shadow-primary/20" style={{marginTop:20}}>Start a Quiz</Button>
                 </Link>
@@ -135,23 +135,23 @@ export default function StudentCertificates() {
                 {paginatedCertificates.map((cert) => (
                     <Card
                         key={cert._id}
-                        className="border-slate-200 hover:bg-slate-50 rounded-[2.5rem] flex flex-col h-full transition-all group"
-                        style={{ padding: '2.5rem', background: 'white', margin: '1.25rem 1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}
+                        className="border-slate-200 hover:bg-slate-50 rounded-[1.5rem] flex flex-col h-full transition-all group"
+                        style={{ padding: '1rem 1.25rem', background: 'white', margin: '0.4rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}
                     >
-                        <div className="flex justify-between items-start mb-8">
-                            <div className="text-indigo-500 text-3xl opacity-60 group-hover:opacity-100 transition-opacity">
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="text-indigo-500 text-2xl opacity-60 group-hover:opacity-100 transition-opacity">
                                 <FaGraduationCap />
                             </div>
                             <div className="bg-indigo-500/10 text-indigo-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-500/20">
                                 Verified
                             </div>
                         </div>
-                        <div className="flex-1 flex flex-col gap-3">
-                            <h4 className="text-xl font-black group-hover:text-indigo-500 transition-colors leading-tight" style={{ color: '#000' }}>{cert.topicId?.name}</h4>
-                            <p className="text-sm leading-relaxed line-clamp-2 font-medium" style={{ color: '#444' }}>{cert.topicId?.description}</p>
+                        <div className="flex-1 flex flex-col gap-1.5">
+                            <h4 className="text-lg font-black group-hover:text-indigo-500 transition-colors leading-tight" style={{ color: '#000' }}>{cert.topicId?.name}</h4>
+                            <p className="text-[13px] leading-relaxed line-clamp-2 font-medium" style={{ color: '#444' }}>{cert.topicId?.description}</p>
                         </div>
 
-                        <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between" style={{ marginTop: 30 }}>
+                        <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between" style={{ marginTop: 12 }}>
                             <div className="flex flex-col">
                                 <span className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: '#666' }}>Earned On</span>
                                 <span className="text-xs font-bold" style={{ color: '#333' }}>{new Date(cert.certifiedAt).toLocaleDateString()}</span>
@@ -191,16 +191,16 @@ export default function StudentCertificates() {
 
             {/* CONTINUE YOUR JOURNEY */}
             <Card
-                className="flex flex-col sm:flex-row items-center sm:items-center justify-between border-slate-200 rounded-[2.5rem] transition-all"
-                style={{ margin: '50px 1rem', padding: 30, background: 'white', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}
+                className="flex flex-col sm:flex-row items-center sm:items-center justify-between border-slate-200 rounded-[1.25rem] transition-all"
+                style={{ margin: '20px 0.5rem', padding: '12px 20px', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}
             >
-                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 text-center sm:text-left">
-                    <div className="w-16 h-16 rounded-2xl bg-[#d1fae5] text-[#059669] flex items-center justify-center flex-shrink-0 shadow-inner">
-                        <FaMedal size={28} />
+                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 text-center sm:text-left">
+                    <div className="w-12 h-12 rounded-xl bg-[#d1fae5] text-[#059669] flex items-center justify-center flex-shrink-0 shadow-inner">
+                        <FaMedal size={20} />
                     </div>
-                    <div className="flex flex-col gap-1.5">
-                        <h3 className="text-2xl font-black" style={{ color: '#000' }}>Continue your journey</h3>
-                        <p className="text-base font-medium" style={{ color: '#444' }}>You have obtained {certificates.length} certificate{certificates.length !== 1 ? 's' : ''}.</p>
+                    <div className="flex flex-col gap-1">
+                        <h3 className="text-xl font-black" style={{ color: '#000' }}>Continue your journey</h3>
+                        <p className="text-sm font-medium" style={{ color: '#444' }}>You have obtained {certificates.length} certificate{certificates.length !== 1 ? 's' : ''}.</p>
                     </div>
                 </div>
                 <div className="mt-6 sm:mt-0 flex-shrink-0 w-full sm:w-auto">

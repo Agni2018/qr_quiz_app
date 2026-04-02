@@ -178,7 +178,7 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
     }
 
     const isMobile = windowWidth < 1024;
-    const sidebarWidth = isSidebarCollapsed ? '100px' : '300px';
+    const sidebarWidth = isSidebarCollapsed ? '100px' : '240px';
 
     const navItems = [
         { label: 'Manage Topics', icon: FaHistory, href: '/dashboard/student/progress' },
@@ -204,8 +204,8 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
             {/* MOBILE HEADER */}
             {isMobile && (
                 <>
-                    <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60, height: '70px', borderBottom: '1px solid #f1f5f9', backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-                        <h1 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#f97316', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>QR QUIZ</h1>
+                    <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60, height: '60px', borderBottom: '1px solid #f1f5f9', backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+                        <h1 style={{ fontSize: '1.125rem', fontWeight: 900, color: '#f97316', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>QR QUIZ</h1>
                         <button onClick={() => setSidebarOpen(true)} style={{ padding: '0.5rem', color: '#0f172a', background: 'none', border: 'none', cursor: 'pointer' }}>
                             <FaBars size={24} />
                         </button>
@@ -215,12 +215,12 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                     {showSearchBar && (
                         <div style={{ 
                             position: 'fixed', 
-                            top: '70px', 
+                            top: '60px', 
                             left: 0, 
                             right: 0, 
                             zIndex: 50, 
                             backgroundColor: '#ffffff', 
-                            padding: '0.75rem 1.5rem',
+                            padding: '0.625rem 1.5rem',
                             borderBottom: '1px solid #f1f5f9'
                         }}>
                             <div style={{ position: 'relative', width: '100%' }}>
@@ -267,7 +267,7 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                         left: 0,
                         height: '100vh',
                         zIndex: 80,
-                        width: isMobile ? (sidebarOpen ? '300px' : '0px') : sidebarWidth,
+                        width: isMobile ? (sidebarOpen ? '260px' : '0px') : sidebarWidth,
                         backgroundColor: '#ffffff',
                         borderRight: '1px solid #f1f5f9',
                         display: 'flex',
@@ -288,8 +288,8 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
 
                     {/* Branding section */}
                     <div style={{ 
-                        paddingTop: '3rem', 
-                        paddingBottom: '2.5rem', 
+                        paddingTop: '1rem', 
+                        paddingBottom: '1.5rem', 
                         paddingLeft: (isSidebarCollapsed && !isMobile) ? '0' : '1rem',
                         paddingRight: (isSidebarCollapsed && !isMobile) ? '0' : '1rem',
                         display: 'flex', 
@@ -300,29 +300,29 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                     }}>
                         {/* Welcome Message / Profile section */}
                         <div style={{ 
-                            width: '85px', 
-                            height: '85px', 
+                            width: '56px', 
+                            height: '56px', 
                             borderRadius: '50%', 
                             backgroundColor: '#f8fafc', 
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center', 
-                            boxShadow: '0 12px 24px rgba(0,0,0,0.08)',
-                            border: '4px solid #f97316',
-                            padding: '4px',
-                            marginBottom: '1.25rem',
+                            boxShadow: '0 10px 20px rgba(0,0,0,0.06)',
+                            border: '3px solid #f97316',
+                            padding: '3px',
+                            marginBottom: '0.5rem',
                             position: 'relative'
                         }}>
                             <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', backgroundColor: '#f1f5f9', display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
                                 <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f97316' }}>
-                                    <FaUser size={40} />
+                                    <FaUser size={32} />
                                 </div>
                             </div>
                         </div>
                         
                         {(!isSidebarCollapsed || isMobile) && (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
-                                <h2 style={{ fontSize: '22px', fontWeight: 1000, color: '#0f172a', letterSpacing: '-0.03em', textTransform: 'lowercase', margin: 0, lineHeight: '1.1' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'center' }}>
+                                <h2 style={{ fontSize: '16px', fontWeight: 1000, color: '#0f172a', letterSpacing: '-0.03em', textTransform: 'lowercase', margin: 0, lineHeight: '1.1' }}>
                                     welcome, {user?.username || 'student'}
                                 </h2>
                             </div>
@@ -330,8 +330,18 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                     </div>
 
                     {/* Navigation */}
-                    <nav style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', overflowX: 'hidden', padding: '1rem 0.75rem' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <nav 
+                        style={{ 
+                            flex: 1, 
+                            overflowY: 'auto', 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            overflowX: 'hidden', 
+                            padding: '1.5rem 0.5rem',
+                        }}
+                        className="custom-scrollbar"
+                    >
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                             {navItems.map((item) => {
                                 const active = isActive(item.href);
                                 return (
@@ -342,14 +352,14 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
-                                            gap: '1.25rem',
-                                            padding: '1rem 1.5rem',
+                                            gap: '0.75rem',
+                                            padding: '0.625rem 1.25rem',
                                             transition: 'all 0.3s ease',
                                             textDecoration: 'none',
                                             backgroundColor: active ? '#f97316' : 'transparent',
                                             color: active ? '#ffffff' : '#475569',
                                             whiteSpace: 'nowrap',
-                                            borderRadius: '16px',
+                                            borderRadius: '12px',
                                             boxShadow: active ? '0 10px 15px -3px rgba(249, 115, 22, 0.3)' : 'none',
                                             position: 'relative'
                                         }}
@@ -359,7 +369,7 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                                             <item.icon size={20} style={{ opacity: 1 }} />
                                         </div>
                                         {(!isSidebarCollapsed || isMobile) && (
-                                            <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                            <span style={{ fontWeight: 700, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                                 {item.label}
                                                 {item.count ? item.count > 0 && (
                                                     <span style={{ 
@@ -379,42 +389,27 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                                 );
                             })}
                         </div>
+                    </nav>
 
-                        {/* UTILITIES */}
-                        <div style={{ 
-                            marginTop: 'auto', 
-                            paddingTop: '2rem',
-                            display: 'flex', 
-                            flexDirection: 'column', 
-                            gap: '0.5rem'
-                        }}>
-                             {!isMobile && (
-                                <button
-                                    onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                                    style={{ 
-                                        background: 'none', 
-                                        border: 'none', 
-                                        padding: '1rem 1.5rem', 
-                                        display: 'flex', 
-                                        alignItems: 'center', 
-                                        justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
-                                        gap: '1.25rem', 
-                                        color: '#475569', 
-                                        cursor: 'pointer',
-                                        borderRadius: '16px',
-                                        transition: 'all 0.2s ease'
-                                    }}
-                                >
-                                    <FaBars size={20} />
-                                    {!isSidebarCollapsed && <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Collapse</span>}
-                                </button>
-                            )}
+                    {/* UTILITIES */}
+                    <div style={{ 
+                        marginTop: 'auto', 
+                        paddingBottom: '1rem',
+                        paddingLeft: '0.25rem',
+                        paddingRight: '0.5rem',
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        gap: '0.15rem',
+                        borderTop: '1px solid #f1f5f9',
+                        paddingTop: '0.75rem'
+                    }}>
+                         {!isMobile && (
                             <button
-                                onClick={handleLogout}
+                                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                                 style={{ 
                                     background: 'none', 
                                     border: 'none', 
-                                    padding: '1rem 1.5rem', 
+                                    padding: '0.625rem 1.25rem', 
                                     display: 'flex', 
                                     alignItems: 'center', 
                                     justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
@@ -425,11 +420,31 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                                     transition: 'all 0.2s ease'
                                 }}
                             >
-                                <FaSignOutAlt size={20} />
-                                {(!isSidebarCollapsed || isMobile) && <span style={{ fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sign Out</span>}
+                                <FaBars size={18} />
+                                {!isSidebarCollapsed && <span style={{ fontWeight: 700, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Collapse</span>}
                             </button>
-                        </div>
-                    </nav>
+                        )}
+                        <button
+                            onClick={handleLogout}
+                            style={{ 
+                                background: 'none', 
+                                border: 'none', 
+                                padding: '0.625rem 1.25rem', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: (isSidebarCollapsed && !isMobile) ? 'center' : 'flex-start',
+                                gap: '1.25rem', 
+                                color: '#475569', 
+                                cursor: 'pointer',
+                                borderRadius: '16px',
+                                transition: 'all 0.2s ease'
+                            }}
+                        >
+                            <FaSignOutAlt size={18} />
+                            {(!isSidebarCollapsed || isMobile) && <span style={{ fontWeight: 700, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sign Out</span>}
+                        </button>
+                    </div>
+
                 </aside>
 
                 {/* MAIN CONTENT AREA */}
@@ -443,15 +458,15 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                         flexDirection: 'column',
                         overflowX: 'hidden',
                         transition: 'margin 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                        paddingTop: isMobile ? (showSearchBar ? '130px' : '70px') : '0'
+                        paddingTop: isMobile ? (showSearchBar ? '110px' : '60px') : '0'
                     }}
                 >
                     {/* Header Bar */}
                     {!isMobile && (
-                        <div style={{ height: '90px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4rem', paddingRight: '4rem', backgroundColor: '#ffffff' }}>
+                        <div style={{ height: '70px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '2.5rem', paddingRight: '2.5rem', backgroundColor: '#ffffff' }}>
                             {/* App Heading */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', minWidth: 'max-content' }}>
-                                <span style={{ color: '#f97316', fontWeight: 950, fontSize: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>QR Quiz Platform</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', minWidth: 'max-content' }}>
+                                <span style={{ color: '#f97316', fontWeight: 950, fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>QR Quiz Platform</span>
                             </div>
 
                             {/* Global Search Bar */}
@@ -464,12 +479,12 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         style={{ 
                                             width: '100%',
-                                            height: '50px',
+                                            height: '44px',
                                             backgroundColor: '#f1f5f9',
                                             border: 'none',
-                                            borderRadius: '25px',
-                                            paddingLeft: '3.5rem',
-                                            paddingRight: '1.5rem',
+                                            borderRadius: '22px',
+                                            paddingLeft: '3rem',
+                                            paddingRight: '1.25rem',
                                             fontSize: '15px',
                                             fontWeight: 500,
                                             color: '#334155',
@@ -483,18 +498,18 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                             {/* Stats */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 'max-content' }}>
                                 <LevelCardWhite points={user?.points || 0} />
-                                <div style={{ background: '#ffffff', border: '1px solid #f1f5f9', borderRadius: '1rem', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-                                    <span style={{ fontSize: '1.1rem' }}>🔥</span>
+                                <div style={{ background: '#ffffff', border: '1px solid #f1f5f9', borderRadius: '0.75rem', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+                                    <span style={{ fontSize: '1rem' }}>🔥</span>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span style={{ fontSize: '9px', fontWeight: 800, color: '#f97316', textTransform: 'uppercase' }}>Streak</span>
-                                        <span style={{ fontSize: '13px', fontWeight: 900, color: '#0f172a' }}>{user?.loginStreak || 0} days</span>
+                                        <span style={{ fontSize: '8px', fontWeight: 800, color: '#f97316', textTransform: 'uppercase' }}>Streak</span>
+                                        <span style={{ fontSize: '12px', fontWeight: 900, color: '#0f172a' }}>{user?.loginStreak || 0} days</span>
                                     </div>
                                 </div>
-                                <div style={{ background: '#ffffff', border: '1px solid #f1f5f9', borderRadius: '1rem', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-                                    <FaTrophy style={{ color: '#f59e0b', fontSize: '1.1rem' }} />
+                                <div style={{ background: '#ffffff', border: '1px solid #f1f5f9', borderRadius: '0.75rem', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+                                    <FaTrophy style={{ color: '#f59e0b', fontSize: '1rem' }} />
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span style={{ fontSize: '9px', fontWeight: 800, color: '#f97316', textTransform: 'uppercase' }}>Points</span>
-                                        <span style={{ fontSize: '13px', fontWeight: 900, color: '#0f172a' }}>{user?.points || 0}</span>
+                                        <span style={{ fontSize: '8px', fontWeight: 800, color: '#f97316', textTransform: 'uppercase' }}>Points</span>
+                                        <span style={{ fontSize: '12px', fontWeight: 900, color: '#0f172a' }}>{user?.points || 0}</span>
                                     </div>
                                 </div>
                             </div>
@@ -519,9 +534,9 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                             width: '100%',
                             maxWidth: '1600px',
                             margin: '0 auto',
-                            paddingTop: isMobile ? '1.5rem' : '3.5rem',
+                            paddingTop: isMobile ? '1rem' : '0.75rem',
                             paddingBottom: '5rem',
-                            paddingLeft: isMobile ? '1.5rem' : '4rem',
+                            paddingLeft: isMobile ? '1.5rem' : '4.5rem',
                             paddingRight: isMobile ? '1.5rem' : '4rem',
                             flex: 1
                         }}
@@ -538,11 +553,11 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                         <div style={{ width: '80px', height: '80px', backgroundColor: '#fef3c7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
                             <FaTrophy style={{ fontSize: '2.5rem', color: '#f59e0b' }} />
                         </div>
-                        <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0f172a', marginBottom: '0.5rem' }}>CONGRATULATIONS!</h2>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#0f172a', marginBottom: '0.25rem' }}>CONGRATULATIONS!</h2>
                         <p style={{ color: '#f59e0b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1.5rem' }}>Awesome!</p>
                         <div style={{ backgroundColor: '#f8fafc', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '1.5rem', border: '1px solid #f1f5f9' }}>
-                            <p style={{ fontSize: '10px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '4px' }}>You've Earned</p>
-                            <h3 style={{ fontSize: '3rem', fontWeight: 950, color: '#0f172a' }}>+{pointsAwarded} <span style={{ fontSize: '1.25rem', color: '#f59e0b' }}>PTS</span></h3>
+                            <p style={{ fontSize: '9px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '4px' }}>You've Earned</p>
+                            <h3 style={{ fontSize: '2.25rem', fontWeight: 950, color: '#0f172a' }}>+{pointsAwarded} <span style={{ fontSize: '1.1rem', color: '#f59e0b' }}>PTS</span></h3>
                             {streakInfo && <p style={{ marginTop: '0.5rem', fontSize: '11px', color: '#10b981', fontWeight: 700, fontStyle: 'italic' }}>{streakInfo}</p>}
                         </div>
                         <Button onClick={() => setShowPointsModal(false)} style={{ width: '100%', padding: '1.25rem', borderRadius: '1.25rem', backgroundColor: '#f59e0b', border: 'none', color: '#ffffff', fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer' }}>
@@ -559,11 +574,11 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                         <div style={{ width: '80px', height: '80px', backgroundColor: '#dbeafe', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
                             <FaStar style={{ fontSize: '2.5rem', color: '#3b82f6' }} />
                         </div>
-                        <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0f172a', marginBottom: '0.5rem' }}>LEVEL UP!</h2>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#0f172a', marginBottom: '0.25rem' }}>LEVEL UP!</h2>
                         <p style={{ color: '#3b82f6', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1.5rem' }}>Legendary Progress!</p>
                         <div style={{ backgroundColor: '#f8fafc', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '1.5rem', border: '1px solid #f1f5f9' }}>
-                            <p style={{ fontSize: '10px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '4px' }}>You've reached</p>
-                            <h3 style={{ fontSize: '3rem', fontWeight: 950, color: '#0f172a' }}>LEVEL {levelInfo?.new}</h3>
+                            <p style={{ fontSize: '9px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '4px' }}>You've reached</p>
+                            <h3 style={{ fontSize: '2.25rem', fontWeight: 950, color: '#0f172a' }}>LEVEL {levelInfo?.new}</h3>
                             {levelInfo?.old && <p style={{ marginTop: '0.5rem', fontSize: '11px', color: '#94a3b8', fontWeight: 700, fontStyle: 'italic' }}>Advanced from Level {levelInfo.old}</p>}
                         </div>
                         <Button onClick={() => setShowLevelModal(false)} style={{ width: '100%', padding: '1.25rem', borderRadius: '1.25rem', backgroundColor: '#3b82f6', border: 'none', color: '#ffffff', fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer' }}>

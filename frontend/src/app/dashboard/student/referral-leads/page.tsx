@@ -36,28 +36,28 @@ export default function ReferralLeaderboardPage() {
     return (
         <div className="animate-fade-in mb-24 w-full flex flex-col items-center">
             <div className="max-w-5xl w-full px-4 sm:px-6">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-6 mb-12 group w-full" style={{ margin: '30px 0 30px 0' }}>
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-6 mb-8 group w-full" style={{ margin: '20px 0 20px 0' }}>
                     <div className="flex items-center gap-6 lg:gap-8">
                         <div style={{
-                            minWidth: '4rem',
-                            minHeight: '4rem',
-                            width: '4rem',
-                            height: '4rem',
-                            borderRadius: '1.25rem',
+                            minWidth: '3.5rem',
+                            minHeight: '3.5rem',
+                            width: '3.5rem',
+                            height: '3.5rem',
+                            borderRadius: '1rem',
                             background: 'linear-gradient(135deg, #10b981, #14b8a6)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            fontSize: '1.75rem',
-                            boxShadow: '0 10px 40px rgba(16, 185, 129, 0.4)',
+                            fontSize: '1.5rem',
+                            boxShadow: '0 8px 30px rgba(16, 185, 129, 0.3)',
                             border: '1px solid rgba(255, 255, 255, 0.1)',
                             transform: 'rotate(-3deg)'
-                        }} className="group-hover:rotate-0 transition-transform duration-500 lg:w-16 lg:h-16 lg:text-3xl lg:rounded-[1.25rem]">
+                        }} className="group-hover:rotate-0 transition-transform duration-500 lg:w-14 lg:h-14 lg:text-2xl lg:rounded-[1rem]">
                             👥
                         </div>
                         <div className="flex flex-col">
                             <h2
-                                className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter"
+                                className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter"
                                 style={{
                                     backgroundImage: 'linear-gradient(to right, #10b981, #14b8a6)',
                                     WebkitBackgroundClip: 'text',

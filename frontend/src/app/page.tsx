@@ -156,7 +156,7 @@ export default function Home() {
                     {/* ---------- HEADER ---------- */}
                     <div className="text-center" style={{ marginBottom: '2rem' }}>
                         <h1
-                            className="text-2xl md:text-[3.75rem] font-black mb-4 leading-tight"
+                            className="text-2xl md:text-[3rem] font-black mb-4 leading-tight"
                             style={{
                                 backgroundImage: 'linear-gradient(to right, #f97316, #fb923c)',
                                 WebkitBackgroundClip: 'text',
@@ -179,10 +179,10 @@ export default function Home() {
                     <Card
                         className="overflow-hidden"
                         style={{
-                            padding: '2rem 2rem',
+                            padding: '1.75rem 1.75rem',
                             margin:'1rem 1rem 1rem 1rem',
-                            borderRadius: '1.5rem',
-                            maxWidth: '100%',
+                            borderRadius: '1.25rem',
+                            maxWidth: '480px',
                             boxShadow: '0 20px 50px rgba(0,0,0,0.08)',
                             background: '#ffffff',
                             border: '1px solid #e2e8f0',
@@ -248,8 +248,8 @@ export default function Home() {
                                                 width: '100%',
                                                 paddingRight: '3.5rem',
                                                 paddingLeft: '1.5rem',
-                                                paddingTop: '1.25rem',
-                                                paddingBottom: '1.25rem',
+                                                paddingTop: '1rem',
+                                                paddingBottom: '1rem',
                                                 borderRadius: 'var(--radius-lg)',
                                                 border: '1px solid var(--border-color)',
                                                 background: '#f8fafc',
@@ -307,8 +307,8 @@ export default function Home() {
                                                     width: '100%',
                                                     paddingRight: '3.5rem',
                                                     paddingLeft: '1.5rem',
-                                                    paddingTop: '1.25rem',
-                                                    paddingBottom: '1.25rem',
+                                                    paddingTop: '1rem',
+                                                    paddingBottom: '1rem',
                                                     borderRadius: 'var(--radius-lg)',
                                                     border: '1px solid var(--border-color)',
                                                     background: '#f8fafc',
@@ -364,8 +364,8 @@ export default function Home() {
                                                 width: '100%',
                                                 paddingRight: '5.5rem',
                                                 paddingLeft: '1.5rem',
-                                                paddingTop: '1.25rem',
-                                                paddingBottom: '1.25rem',
+                                                paddingTop: '1rem',
+                                                paddingBottom: '1rem',
                                                 borderRadius: 'var(--radius-lg)',
                                                 border: '1px solid var(--border-color)',
                                                 background: '#f8fafc',
@@ -447,8 +447,8 @@ export default function Home() {
                                                             width: '100%',
                                                             paddingRight: '3.5rem',
                                                             paddingLeft: '1.5rem',
-                                                            paddingTop: '1.25rem',
-                                                            paddingBottom: '1.25rem',
+                                                            paddingTop: '1rem',
+                                                            paddingBottom: '1rem',
                                                             borderRadius: 'var(--radius-lg)',
                                                             border: '1px solid var(--border-color)',
                                                             background: '#f8fafc',
@@ -484,8 +484,8 @@ export default function Home() {
                                 disabled={loading}
                                 style={{
                                     width: '100%',
-                                    padding: '1.25rem',
-                                    fontSize: '1.125rem',
+                                    padding: '1rem',
+                                    fontSize: '1rem',
                                     fontWeight: 800,
                                     borderRadius: 'var(--radius-lg)',
                                     background: 'var(--primary)',

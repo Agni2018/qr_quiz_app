@@ -42,12 +42,12 @@ export default function StudentNotifications() {
         return (
             <Card 
                 noGlass={true}
-                className="p-20 text-center border-dashed border-2 border-slate-200 bg-white rounded-[40px] mt-12" 
-                style={{ margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10)', background: 'white' }}
+                className="p-12 text-center border-dashed border-2 border-slate-200 bg-white rounded-[24px] mt-8" 
+                style={{ margin: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', background: 'white', padding: 30 }}
             >
-                <div className="w-24 h-24 bg-slate-100 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl">📭</div>
-                <h3 className="text-3xl font-black mb-4 text-black">No notifications yet</h3>
-                <p className="text-slate-500 max-w-md mx-auto leading-relaxed">You'll receive updates here when admins message you about your performance.</p>
+                <div className="w-16 h-16 bg-slate-100 rounded-[1.25rem] flex items-center justify-center mx-auto mb-6 text-3xl">📭</div>
+                <h3 className="text-2xl font-black mb-2 text-black">No notifications yet</h3>
+                <p className="text-slate-500 max-w-sm mx-auto text-sm leading-relaxed">You'll receive updates here when admins message you about your performance.</p>
             </Card>
         );
     }
@@ -62,27 +62,27 @@ export default function StudentNotifications() {
                 <Card 
                     key={msg._id} 
                     noGlass={true}
-                    className="p-10 border-slate-200 bg-white hover:bg-slate-50 rounded-[2.5rem] transition-all group relative overflow-hidden" 
-                    style={{ margin: '1rem', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)', background: 'white' }}
+                    className="p-10 border-slate-200 bg-white hover:bg-slate-50 rounded-[1.5rem] transition-all group relative overflow-hidden" 
+                    style={{ margin: '0.75rem 1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08), 0 1.5px 6px rgba(0,0,0,0.04)', background: 'white' }}
                 >
                     {!msg.isRead && (
                         <div className="absolute top-8 right-8 w-4 h-4 bg-red-500 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.6)] animate-pulse z-10" />
                     )}
-                    <div className="flex gap-8" style={{ padding: 30 }}>
-                        <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 text-3xl border border-blue-500/20 shrink-0">
+                    <div className="flex gap-6" style={{ padding: 18 }}>
+                        <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 text-2xl border border-blue-500/20 shrink-0">
                             <FaBell />
                         </div>
                         <div className="flex flex-col gap-4 flex-1">
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-4">
-                                <h4 className="text-xl font-black transition-colors uppercase tracking-tight" style={{ color: '#000000' }}>
+                                <h4 className="text-lg font-black transition-colors uppercase tracking-tight" style={{ color: '#000000' }}>
                                     {msg.sender?.username || 'Admin'}
                                 </h4>
-                                <span className="text-[0.65rem] font-black uppercase tracking-widest" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                                <span className="text-[0.6rem] font-black uppercase tracking-widest" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
                                     {new Date(msg.createdAt).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             </div>
-                            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100" style={{ padding: 10 }}>
-                                <p className="text-lg leading-relaxed whitespace-pre-wrap font-medium" style={{ color: '#000000' }}>{msg.text}</p>
+                            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100" style={{ padding: 10 }}>
+                                <p className="text-base leading-relaxed whitespace-pre-wrap font-medium" style={{ color: '#000000' }}>{msg.text}</p>
                             </div>
                         </div>
                     </div>

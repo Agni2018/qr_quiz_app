@@ -43,6 +43,23 @@ exports.deleteCategory = async (req, res) => {
     }
 };
 
+// PUT update category
+exports.updateCategory = async (req, res) => {
+    try {
+        const category = await Category.findById(req.params.id);
+        if (!category) return res.status(404).json({ message: 'Category not found' });
+
+        if (req.body.name) {
+            category.name = req.body.name;
+        }
+
+        const updatedCategory = await category.save();
+        res.json(updatedCategory);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
+
 // POST copy category (duplicates category and all its topics)
 exports.copyCategory = async (req, res) => {
     try {

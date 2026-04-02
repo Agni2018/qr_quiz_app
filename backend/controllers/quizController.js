@@ -367,6 +367,11 @@ exports.getStudentAttempts = async (req, res) => {
 exports.certifyStudents = async (req, res) => {
     try {
         const { topicId } = req.params;
+        const { participantIds } = req.body;
+
+        if (!participantIds || !Array.isArray(participantIds) || participantIds.length === 0) {
+            return res.status(400).json({ message: 'No participants selected for certification' });
+        }
 
         const Topic = require('../models/Topic');
         const topic = await Topic.findById(topicId);
@@ -374,7 +379,8 @@ exports.certifyStudents = async (req, res) => {
 
         const attempts = await UserAttempt.find({
             topicId,
-            isCertified: { $ne: true }
+            isCertified: { $ne: true },
+            _id: { $in: participantIds }
         });
 
         const qualifiedAttempts = attempts.filter(attempt => {
@@ -386,7 +392,7 @@ exports.certifyStudents = async (req, res) => {
         });
 
         if (qualifiedAttempts.length === 0) {
-            return res.json({ message: 'No new students to certify', count: 0 });
+            return res.json({ message: 'No valid qualified students found from the selection', count: 0 });
         }
 
         const attemptIds = qualifiedAttempts.map(a => a._id);

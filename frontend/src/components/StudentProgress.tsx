@@ -90,7 +90,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                 <Card
                     key={attempt._id}
                     className="group hover:-translate-y-2 transition-all duration-500 border-slate-200 hover:bg-slate-50 rounded-[2.5rem] flex flex-col h-full"
-                    style={{ padding: '20px 24px', margin: '0.6rem 0.5rem', background: 'white', boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.06)' }}
+                    style={{ padding: '16px 20px', margin: '0.4rem 0.5rem', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}
                 >
                     <div className="flex justify-between items-start mb-6">
                         <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border border-primary/20 group-hover:scale-110 transition-transform" style={{color:'green', background:'rgba(0,128,0,0.08)'}}>
@@ -100,8 +100,8 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                             {new Date(attempt.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                     </div>
-                    <div className="flex-1 flex flex-col gap-3">
-                        <h3 className="text-2xl font-black group-hover:text-primary transition-colors leading-tight" style={{ color: '#000', marginTop: 6 }}>
+                    <div className="flex-1 flex flex-col gap-1.5">
+                        <h3 className="text-xl font-black group-hover:text-primary transition-colors leading-tight" style={{ color: '#000', marginTop: 4 }}>
                             {attempt.topicId?.name}
                         </h3>
                         <div className="flex items-center gap-2 mb-1">
@@ -113,15 +113,15 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                         <p className="text-sm line-clamp-2 leading-relaxed font-medium" style={{ color: '#444' }}>{attempt.topicId?.description}</p>
                     </div>
 
-                    <div className="flex flex-col gap-4" style={{ marginTop: 22, paddingTop: 16, borderTop: '1px solid #e2e8f0', marginBottom: 4 }}>
+                    <div className="flex flex-col gap-3" style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid #e2e8f0', marginBottom: 2 }}>
                         <div 
                             className="flex flex-row items-center justify-between rounded-2xl gap-4"
                             style={{ 
                                 background: '#fff', 
                                 border: '1.5px solid #e2e8f0', 
                                 boxShadow: '0 2px 12px rgba(0,0,0,0.08)', 
-                                padding: '30px',
-                                marginTop: 4
+                                padding: '12px 20px',
+                                marginTop: 2
                             }}
                         >
                             <div className="flex flex-col shrink-0">

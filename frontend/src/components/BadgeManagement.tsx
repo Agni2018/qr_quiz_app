@@ -127,9 +127,9 @@ export default function BadgeManagement() {
         <div className="flex flex-col gap-10">
             <div className="flex flex-col lg:flex-row justify-between items-end gap-6">
                 <div className="flex flex-col gap-1">
-                    <span className="text-[12px] font-bold text-orange-500 uppercase tracking-[0.2em] mb-2">Gamification Engine</span>
-                    <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">System Badges</h3>
-                    <p className="text-sm font-bold text-slate-400 mt-2" style={{ color: 'orange' }}>Define achievement milestones and rewards for the platform.</p>
+                   
+                    <h3 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter" style={{color:'black'}}>System Badges</h3>
+                   
                 </div>
                 <Button
                     onClick={() => setShowForm(true)}
@@ -142,7 +142,7 @@ export default function BadgeManagement() {
 
             {showForm && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300" >
-                    <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[2.5rem] shadow-2xl bg-white p-10 flex flex-col gap-8" style={{ padding: 30, margin: '1rem 1rem 1rem 1rem' }}>
+                    <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[2rem] shadow-2xl bg-white p-8 mb-4 flex flex-col gap-8" style={{ padding: '24px 32px', margin: '1rem 1rem 1rem 1rem' }}>
                         <div className="flex justify-between items-center">
                             <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight" style={{color:'black'}}>New Badge Definition</h3>
                             <button
@@ -231,10 +231,10 @@ export default function BadgeManagement() {
                     <div
                         key={badge._id}
                         className="bg-white rounded-[2.5rem] flex flex-col group relative overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100"
-                        style={{ padding: '30px', minHeight: '360px' }}
+                        style={{ padding: '20px', minHeight: '260px' }}
                     >
-                        <div className="flex justify-between items-start mb-8">
-                            <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl text-orange-500 group-hover:scale-110 transition-transform" style={{ marginBottom: 10 }}>
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-2xl text-orange-500 group-hover:scale-110 transition-transform" style={{ marginBottom: 6 }}>
                                 {icons.find(i => i.name === badge.icon)?.icon || <FaAward />}
                             </div>
                             <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-slate-50 text-slate-400 rounded-md" style={{ color: 'green' }}>
@@ -247,7 +247,7 @@ export default function BadgeManagement() {
                             <p className="text-sm font-bold text-slate-400 line-clamp-3 leading-relaxed" style={{ color: 'black' }}>{badge.description}</p>
                         </div>
 
-                        <div className="mt-8 pt-6 border-t border-slate-50 flex flex-col gap-6">
+                        <div className="mt-4 pt-4 border-t border-slate-50 flex flex-col gap-4">
                             <div className="flex justify-between items-center">
                                 <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest" style={{ color: 'black' }}>Requirement</span>
                                 <span className="text-lg font-black text-slate-900 tracking-tighter">
@@ -255,7 +255,7 @@ export default function BadgeManagement() {
                                 </span>
                             </div>
                             <button
-                                className="w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all text-[11px] font-black uppercase tracking-widest border border-red-100"
+                                className="w-full h-10 flex items-center justify-center gap-2 rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all text-[11px] font-black uppercase tracking-widest border border-red-100"
                                 onClick={() => deleteBadge(badge._id)}
                             >
                                 <FaTrash size={12} /> Remove Badge

@@ -22,34 +22,22 @@ export default function BadgeChallengeHeader({ type, activeTab }: BadgeChallenge
 
     return (
         <div 
-            className="flex flex-col gap-8 md:gap-12 animate-fade-in"
-            style={{ marginTop: '50px', marginBottom: '50px' }}
+            className="flex flex-col gap-6 md:gap-8 animate-fade-in"
+            style={{ marginTop: '20px', marginBottom: '40px' }}
         >
             {/* Main Header */}
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6 group">
-                <div 
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-xl transition-all duration-500 transform group-hover:rotate-6 ${
-                        activeTab === 'badges' 
-                        ? 'bg-gradient-to-br from-pink-500 to-rose-500 shadow-rose-500/30' 
-                        : 'bg-gradient-to-br from-yellow-400 to-orange-500 shadow-yellow-500/30'
-                    }`}
-                >
-                    {activeTab === 'badges' ? '🏆' : '⭐'}
-                </div>
                 <div className="flex flex-col gap-1">
-                    <h1 className="text-4xl md:text-6xl font-black tracking-tighter bg-gradient-to-r from-white via-slate-400 to-slate-500 bg-clip-text text-transparent" style={{color:'orange'}}>
+                    <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-slate-900" style={{color:'black', marginLeft: '1rem'}}>
                         {activeTab === 'badges' ? badgesLabel : challengesLabel}
                     </h1>
-                    <div className={`h-1.5 w-24 rounded-full bg-gradient-to-r ${
-                        activeTab === 'badges' ? 'from-rose-500' : 'from-yellow-500'
-                    } to-transparent opacity-50`} />
                 </div>
             </div>
 
             {/* Navigation Tabs */}
             <div 
-                className="flex flex-col sm:flex-row items-center p-1.5 bg-white backdrop-blur-xl border border-slate-200 rounded-full w-full sm:w-fit gap-1 shadow-2xl overflow-hidden"
-                style={{ marginTop: '20px',padding:10}}
+                className="flex flex-col sm:flex-row items-center p-2 bg-white backdrop-blur-xl border border-slate-200 rounded-full w-full sm:w-fit gap-2 shadow-2xl overflow-hidden"
+                style={{ marginTop: '20px', padding: 12 }}
             >
                 <Link href={badgesPath} className="w-full sm:w-auto">
                     <Button

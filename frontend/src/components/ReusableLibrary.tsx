@@ -77,9 +77,8 @@ export default function ReusableLibrary() {
         <div className="flex flex-col gap-10">
             <div className="flex flex-col lg:flex-row justify-between items-end gap-6">
                 <div className="flex flex-col gap-1">
-                    <span className="text-[12px] font-bold text-orange-500 uppercase tracking-[0.2em] mb-2">Global Repository</span>
-                    <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase shrink-0">Question Bank</h3>
-                    <p className="text-sm font-bold text-orange-400 mt-2" style={{color:'darkorange'}} >Reusable questions that can be imported into any topic.</p>
+                    <span className="text-[12px] font-bold text-slate-900 uppercase tracking-[0.2em] mb-1" style={{color:'black'}}>Global Repository</span>
+                    <p className="text-sm font-bold text-slate-600 mt-1" style={{color:'black'}} >Reusable questions that can be imported into any topic.</p>
                 </div>
                 <Button 
                     onClick={() => setShowForm(true)}
@@ -117,14 +116,12 @@ export default function ReusableLibrary() {
                     paginatedQuestions.map(q => (
                         <div
                             key={q._id}
-                            className="group hover:shadow-2xl transition-all duration-300 rounded-[2.5rem] flex flex-col bg-white border border-slate-100 relative overflow-hidden"
-                            style={{ padding: '30px', minHeight: (typeof window !== 'undefined' && window.innerWidth < 768) ? 'auto' : '320px', marginTop: '10px', marginBottom: '10px' }}
+                            className="bg-white rounded-[2rem] flex flex-col gap-4 border border-slate-100 hover:border-slate-200 transition-all group relative overflow-hidden shadow-sm hover:shadow-xl"
+                            style={{ padding: '20px', minHeight: (typeof window !== 'undefined' && window.innerWidth < 768) ? 'auto' : '230px', marginTop: '10px', marginBottom: '10px' }}
                         >
-                            {/* Accent line */}
-                            <div className="absolute top-0 left-0 w-full h-1 bg-orange-500/10 group-hover:bg-orange-500 transition-colors" />
 
                             <div className="flex flex-col h-full">
-                                <div className="flex justify-between items-start gap-4 mb-6">
+                                <div className="flex justify-between items-start gap-4 mb-4">
                                     <div className="flex flex-col gap-1.5">
                                         <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 bg-orange-50 rounded text-orange-500 w-fit" >
                                             {q.type.replace('_', ' ')}
@@ -143,13 +140,13 @@ export default function ReusableLibrary() {
                                     </button>
                                 </div>
 
-                                <div className="flex-1 mb-8">
-                                    <p className="text-xl font-black text-slate-900 leading-tight uppercase tracking-tight" style={{color:'black',marginTop:40}}>
-                                        {q.content?.text}
+                                <div className="flex-1 mb-4">
+                                    <p className="text-xl font-black text-slate-900 leading-tight" style={{color:'black',marginTop:20}}>
+                                        {q.content?.text ? (q.content.text.charAt(0).toUpperCase() + q.content.text.slice(1).toLowerCase()) : ''}
                                     </p>
                                 </div>
 
-                                <div className="mt-auto pt-6 border-t border-slate-50 flex justify-between items-center">
+                                <div className="mt-auto pt-4 border-t border-slate-50 flex justify-between items-center">
                                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-300"style={{color:'green'}}>Global Library</span>
                                     <FaGlobe className="text-orange-500 opacity-30 group-hover:opacity-100 transition-opacity" size={16} style={{color:'darkgreen'}} />
                                 </div>
