@@ -305,7 +305,7 @@ export default function TopicManagement() {
             {/* HEADER */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
                 <div className="flex flex-col">
-                    <h1 className="text-3xl md:text-5xl font-black text-[#f97316] tracking-tighter shrink-0" style={{color:'black'}}>
+                    <h1 className="text-3xl md:text-5xl font-black text-[#4f46e5] tracking-tighter shrink-0" style={{color:'black'}}>
                         Manage Topics
                     </h1>
                 </div>
@@ -316,16 +316,16 @@ export default function TopicManagement() {
                 {view === 'categories' ? (
                     <Button
                         onClick={() => setShowCategoryModal(true)}
-                        className="flex items-center justify-center gap-2 h-12 px-6 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-xs shadow-lg transition-all w-full sm:w-auto"
-                        style={{ background: '#f97316', color: 'white' }}
+                        className="flex items-center justify-center gap-2 h-12 px-6 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-xs shadow-lg transition-all w-full sm:w-auto"
+                        style={{ background: '#4f46e5', color: 'white' }}
                     >
                         <FaPlus size={12} /> Create Category
                     </Button>
                 ) : (
                     <Button
                         onClick={() => setShowTopicModal(true)}
-                        className="flex items-center justify-center gap-2 h-12 px-6 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-xs shadow-lg transition-all w-full sm:w-auto"
-                        style={{ background: '#f97316', color: 'white' }}
+                        className="flex items-center justify-center gap-2 h-12 px-6 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-xs shadow-lg transition-all w-full sm:w-auto"
+                        style={{ background: '#4f46e5', color: 'white' }}
                     >
                         <FaPlus size={12} /> Create Topic
                     </Button>
@@ -338,14 +338,14 @@ export default function TopicManagement() {
                         <Button 
                             variant="primary" 
                             onClick={goBackToCategories}
-                            className="px-6 h-12 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black flex items-center gap-2 shadow-xl shadow-orange-500/10 border-none transition-all active:scale-95"
-                            style={{ background: '#f97316', color: 'white' }}
+                            className="px-6 h-12 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black flex items-center gap-2 shadow-xl shadow-indigo-500/10 border-none transition-all active:scale-95"
+                            style={{ background: '#4f46e5', color: 'white' }}
                         >
                             <FaChevronLeft /> Back
                         </Button>
                         <div className="h-6 w-[1px] bg-slate-100 mx-2" />
-                        <h3 className="text-2xl font-black flex items-center gap-3 text-slate-900 tracking-tight relative"  style={{color:'orange'}}>
-                            <span className="text-orange-500" style={{color:'orange'}}><FaFolder /></span>
+                        <h3 className="text-2xl font-black flex items-center gap-3 text-slate-900 tracking-tight relative"  style={{color:'#4f46e5'}}>
+                            <span className="text-indigo-500" style={{color:'#4f46e5'}}><FaFolder /></span>
                             {currentCategory.name}
                         </h3>
                     </div>
@@ -366,12 +366,12 @@ export default function TopicManagement() {
                             >
                                 {/* Card Header */}
                                 <div className="flex justify-between items-center relative">
-                                    <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md bg-orange-500/10 text-orange-500">
+                                    <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md bg-indigo-500/10 text-indigo-500">
                                         Category
                                     </span>
                                     <div 
                                         onClick={() => openEditModal(item, 'category')}
-                                        className="text-slate-400 hover:text-orange-500 transition-colors cursor-pointer p-1"
+                                        className="text-slate-400 hover:text-indigo-500 transition-colors cursor-pointer p-1"
                                         title="Edit"
                                         style={{ position: 'absolute', top: 0, right: 0 }}
                                     >
@@ -381,7 +381,7 @@ export default function TopicManagement() {
 
                                 {/* Title & Description */}
                                 <div className="flex flex-col gap-2">
-                                    <h3 className="font-bold text-2xl text-[#0f172a] tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors uppercase" style={{color:'black'}}>
+                                    <h3 className="font-bold text-2xl text-[#0f172a] tracking-tight line-clamp-1 group-hover:text-indigo-500 transition-colors uppercase" style={{color:'black'}}>
                                         {item.name}
                                     </h3>
                                     <p className="text-sm font-bold text-slate-600 leading-relaxed line-clamp-2 min-h-[40px]" style={{color:'black'}}>
@@ -396,8 +396,8 @@ export default function TopicManagement() {
                                             <Button 
                                                 variant="primary" 
                                                 onClick={() => manageCategory(item)}
-                                                className="h-10 px-6 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all"
-                                                style={{ background: '#f97316' }}
+                                                className="h-10 px-6 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-tight text-[10px] transition-all"
+                                                style={{ background: '#4f46e5' }}
                                             >
                                                 Manage
                                             </Button>
@@ -435,7 +435,7 @@ export default function TopicManagement() {
                                     </span>
                                     <div 
                                         onClick={() => openEditModal(topic, 'topic')}
-                                        className="text-slate-400 hover:text-orange-500 transition-colors cursor-pointer p-1"
+                                        className="text-slate-400 hover:text-indigo-500 transition-colors cursor-pointer p-1"
                                         title="Edit"
                                         style={{ position: 'absolute', top: 0, right: 0 }}
                                     >
@@ -445,7 +445,7 @@ export default function TopicManagement() {
 
                                 {/* Title & Description */}
                                 <div className="flex flex-col gap-2">
-                                    <h3 className="font-bold text-2xl text-[#0f172a] tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors uppercase" style={{color:'black'}}>
+                                    <h3 className="font-bold text-2xl text-[#0f172a] tracking-tight line-clamp-1 group-hover:text-indigo-500 transition-colors uppercase" style={{color:'black'}}>
                                         {topic.name}
                                     </h3>
                                     <p className="text-sm font-bold text-slate-600 leading-relaxed line-clamp-2 min-h-[40px]" style={{color:'black'}}>
@@ -455,19 +455,19 @@ export default function TopicManagement() {
 
                                 {/* Stats Column */}
                                 <div className="flex flex-wrap gap-4">
-                                    <div className="flex items-center gap-2 text-[11px] font-black text-slate-900 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                                        <FaClock className="text-orange-500" /> {topic.timeLimit}S
+                                    <div className="flex items-center gap-2 text-[11px] font-black text-slate-900 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100" style={{padding:5}}>
+                                        <FaClock className="text-indigo-500" /> {topic.timeLimit}S
                                     </div>
-                                    <div className="flex items-center gap-2 text-[11px] font-black text-slate-900 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                                        <FaStar className="text-orange-400" /> {topic.passingMarks} PTS
+                                    <div className="flex items-center gap-2 text-[11px] font-black text-slate-900 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100" style={{padding:5}}>
+                                        <FaStar className="text-indigo-400" /> {topic.passingMarks} PTS
                                     </div>
                                     {topic.negativeMarking > 0 && (
-                                        <div className="flex items-center gap-2 text-[11px] font-black text-red-500 bg-red-50 px-3 py-1.5 rounded-lg border border-red-100">
+                                        <div className="flex items-center gap-2 text-[11px] font-black text-red-500 bg-red-50 px-3 py-1.5 rounded-lg border border-red-100" style={{padding:5}}>
                                             <FaMinusCircle /> -{topic.negativeMarking}
                                         </div>
                                     )}
                                     {topic.timeBasedScoring && (
-                                        <div className="flex items-center gap-2 text-[11px] font-black text-orange-500 bg-orange-50 px-3 py-1.5 rounded-lg border border-orange-100">
+                                        <div className="flex items-center gap-2 text-[11px] font-black text-indigo-500 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100" style={{padding:5}}>
                                             <FaBolt /> TS ENABLED
                                         </div>
                                     )}
@@ -480,8 +480,8 @@ export default function TopicManagement() {
                                             <Link href={`/users/topic/${topic._id}`}>
                                                 <Button 
                                                     variant="primary" 
-                                                    className="h-10 px-6 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-tight text-[10px] transition-all"
-                                                    style={{ background: '#f97316' }}
+                                                    className="h-10 px-6 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-tight text-[10px] transition-all"
+                                                    style={{ background: '#4f46e5' }}
                                                 >
                                                     View
                                                 </Button>
@@ -527,15 +527,16 @@ export default function TopicManagement() {
 
             {/* CREATE TOPIC MODAL */}
             {showTopicModal && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-                    <Card className="w-full max-w-[500px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-col gap-6" style={{ padding: '30px',margin:'1rem 1rem 1rem 1rem' }}>
-                        <div className="flex justify-between items-center">
-                            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">New Topic</h2>
+                <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm overflow-y-auto px-4 py-12 animate-in fade-in duration-300" onClick={() => setShowTopicModal(false)}>
+                    <div className="min-h-full flex justify-center items-start">
+                        <Card className="w-full max-w-[500px] rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-col gap-6 mx-auto" style={{ background: 'white', color: 'black', padding: '30px', margin: '1rem auto', width: 'calc(100% - 2rem)', maxWidth: '500px' }} onClick={e => e.stopPropagation()}>
+                        <div className="flex justify-between items-center text-black">
+                            <h2 className="text-2xl font-black uppercase tracking-tight" style={{ color: 'black' }}>New Topic</h2>
                             <button onClick={() => setShowTopicModal(false)} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all"><FaTimes size={18} /></button>
                         </div>
                         <div className="flex flex-col gap-5">
                             <label className="flex flex-col gap-2">
-                                <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Topic Name <span className="text-red-500">*</span></span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Topic Name <span className="text-red-500">*</span></span>
                                 <Input
                                     value={newTopic.name}
                                     onChange={e => setNewTopic({ ...newTopic, name: e.target.value })}
@@ -546,10 +547,10 @@ export default function TopicManagement() {
                             
                             {!currentCategory && (
                                 <label className="flex flex-col gap-2">
-                                    <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Category</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Category</span>
                                     <div className="relative">
                                         <select 
-                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 outline-none focus:border-orange-500 transition-all font-bold appearance-none cursor-pointer"
+                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 outline-none focus:border-indigo-500 transition-all font-bold appearance-none cursor-pointer"
                                             value={newTopic.categoryId}
                                             onChange={e => setNewTopic({ ...newTopic, categoryId: e.target.value })}
                                         >
@@ -566,7 +567,7 @@ export default function TopicManagement() {
                             )}
 
                             <label className="flex flex-col gap-2">
-                                <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Description <span className="text-red-500">*</span></span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Description <span className="text-red-500">*</span></span>
                                 <TextArea
                                     value={newTopic.description}
                                     onChange={e => setNewTopic({ ...newTopic, description: e.target.value })}
@@ -577,7 +578,7 @@ export default function TopicManagement() {
                             
                             <div className="grid grid-cols-2 gap-4">
                                 <label className="flex flex-col gap-2">
-                                    <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Time (s)</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Time (s)</span>
                                     <Input
                                         type="number"
                                         min="0"
@@ -588,7 +589,7 @@ export default function TopicManagement() {
                                     />
                                 </label>
                                 <label className="flex flex-col gap-2">
-                                    <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Passing Pts <span className="text-red-500">*</span></span>
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Passing Pts <span className="text-red-500">*</span></span>
                                     <Input
                                         type="number"
                                         min="0"
@@ -602,7 +603,7 @@ export default function TopicManagement() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <label className="flex flex-col gap-2">
-                                    <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Negative Marking</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Negative Marking</span>
                                     <Input
                                         type="number"
                                         step="0.1"
@@ -615,42 +616,44 @@ export default function TopicManagement() {
                                     />
                                 </label>
                                 <div className="flex flex-col gap-2">
-                                    <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Scoring Mode</span>
-                                    <label className="flex items-center gap-4 bg-white cursor-pointer hover:border-orange-500 transition-all shadow-sm" style={{ padding: '0.875rem 1.5rem', background: 'white', border: '1px solid #cbd5e1', borderRadius: '0.5rem', height: '100%' }}>
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Scoring Mode</span>
+                                    <label className="flex items-center gap-4 bg-white cursor-pointer hover:border-indigo-500 transition-all shadow-sm" style={{ padding: '0.875rem 1.5rem', background: 'white', border: '1px solid #cbd5e1', borderRadius: '0.5rem', height: '100%' }}>
                                         <input 
                                             type="checkbox" 
-                                            className="w-5 h-5 accent-orange-500 rounded border-slate-300 cursor-pointer"
+                                            className="w-5 h-5 accent-indigo-500 rounded border-slate-300 cursor-pointer"
                                             checked={newTopic.timeBasedScoring}
                                             onChange={e => setNewTopic({ ...newTopic, timeBasedScoring: e.target.checked })}
                                         />
                                         <div className="flex flex-col" >
-                                            <span className="text-[11px] font-black text-slate-900 uppercase tracking-tight">Enable Time Bonus</span>
-                                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Award extra points for speed</span>
+                                            <span className="text-[11px] font-black uppercase tracking-tight" style={{ color: 'black' }}>Enable Time Bonus</span>
+                                            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Award extra points for speed</span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             
-                            <div className="flex gap-4 mt-4">
-                                <Button variant="ghost" className="flex-1 h-12 text-slate-400 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowTopicModal(false)}>Cancel</Button>
-                                <Button className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 uppercase font-black tracking-widest text-[11px]" onClick={createTopic} disabled={!(newTopic.name.trim() && newTopic.description.trim() && newTopic.passingMarks !== '')}>Create Topic</Button>
+                            <div className="flex flex-col sm:flex-row gap-4 mt-4">
+                                <Button variant="ghost" className="flex-1 h-12 text-slate-500 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowTopicModal(false)}>Cancel</Button>
+                                <Button className="flex-1 h-12 bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 uppercase font-black text-[11px]" onClick={createTopic} disabled={!(newTopic.name.trim() && newTopic.description.trim() && newTopic.passingMarks !== '')}>Create Topic</Button>
                             </div>
                         </div>
                     </Card>
                 </div>
+            </div>
             )}
 
             {/* CREATE CATEGORY MODAL */}
             {showCategoryModal && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-                    <Card className="w-full max-w-[420px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-col gap-6" style={{ padding: '30px',margin:'1rem 1rem 1rem 1rem' }}>
-                        <div className="flex justify-between items-center">
-                            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">New Category</h2>
+                <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm overflow-y-auto px-4 py-12 animate-in fade-in duration-300" onClick={() => setShowCategoryModal(false)}>
+                    <div className="min-h-full flex justify-center items-start">
+                        <Card className="w-full max-w-[420px] rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-col gap-6 mx-auto" style={{ background: 'white', color: 'black', padding: '30px', margin: '1rem auto', width: 'calc(100% - 2rem)', maxWidth: '420px' }} onClick={e => e.stopPropagation()}>
+                        <div className="flex justify-between items-center text-black">
+                            <h2 className="text-2xl font-black uppercase tracking-tight" style={{ color: 'black' }}>New Category</h2>
                             <button onClick={() => setShowCategoryModal(false)} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all"><FaTimes size={18} /></button>
                         </div>
                         <div className="flex flex-col gap-6">
                             <label className="flex flex-col gap-3">
-                                <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Category Name <span className="text-red-500">*</span></span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Category Name <span className="text-red-500">*</span></span>
                                 <Input
                                     value={newCategory.name}
                                     onChange={e => setNewCategory({ ...newCategory, name: e.target.value })}
@@ -658,26 +661,28 @@ export default function TopicManagement() {
                                     style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                 />
                             </label>
-                            <div className="flex gap-4 mt-2">
-                                <Button variant="ghost" className="flex-1 h-12 text-slate-400 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowCategoryModal(false)}>Cancel</Button>
-                                <Button className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 uppercase font-black tracking-widest text-[11px]" onClick={createCategory} disabled={!newCategory.name.trim()}>Create Category</Button>
+                            <div className="flex flex-col sm:flex-row gap-4 mt-2">
+                                <Button variant="ghost" className="flex-1 h-12 text-slate-500 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowCategoryModal(false)}>Cancel</Button>
+                                <Button className="flex-1 h-12 bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 uppercase font-black text-[11px]" onClick={createCategory} disabled={!newCategory.name.trim()}>Create Category</Button>
                             </div>
                         </div>
                     </Card>
                 </div>
+            </div>
             )}
 
             {/* EDIT MODAL */}
             {showEditModal && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-                    <Card className="w-full max-w-[420px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-col gap-6" style={{ padding: '30px', margin: '1rem' }}>
-                        <div className="flex justify-between items-center">
-                            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Rename {editType === 'category' ? 'Category' : 'Topic'}</h2>
+                <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm overflow-y-auto px-4 py-12 animate-in fade-in duration-300" onClick={() => setShowEditModal(false)}>
+                    <div className="min-h-full flex justify-center items-start">
+                        <Card className="w-full max-w-[420px] rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-col gap-6 mx-auto" style={{ background: 'white', color: 'black', padding: '30px', margin: '1rem auto', width: 'calc(100% - 2rem)', maxWidth: '420px' }} onClick={e => e.stopPropagation()}>
+                        <div className="flex justify-between items-center text-black">
+                            <h2 className="text-2xl font-black uppercase tracking-tight" style={{ color: 'black' }}>Rename {editType === 'category' ? 'Category' : 'Topic'}</h2>
                             <button onClick={() => setShowEditModal(false)} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all"><FaTimes size={18} /></button>
                         </div>
                         <div className="flex flex-col gap-6">
                             <label className="flex flex-col gap-3">
-                                <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">New Name <span className="text-red-500">*</span></span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>New Name <span className="text-red-500">*</span></span>
                                 <Input
                                     value={editName}
                                     onChange={e => setEditName(e.target.value)}
@@ -686,13 +691,14 @@ export default function TopicManagement() {
                                     autoFocus
                                 />
                             </label>
-                            <div className="flex gap-4 mt-2">
-                                <Button variant="ghost" className="flex-1 h-12 text-slate-400 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowEditModal(false)}>Cancel</Button>
-                                <Button className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 uppercase font-black tracking-widest text-[11px]" onClick={handleEditSave} disabled={!editName.trim()}>Save Changes</Button>
+                            <div className="flex flex-col sm:flex-row gap-4 mt-2">
+                                <Button variant="ghost" className="flex-1 h-12 text-slate-500 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowEditModal(false)}>Cancel</Button>
+                                <Button className="flex-1 h-12 bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 uppercase font-black text-[11px]" onClick={handleEditSave} disabled={!editName.trim()}>Save Changes</Button>
                             </div>
                         </div>
                     </Card>
                 </div>
+            </div>
             )}
             <ConfirmModal
                 isOpen={confirmModal.isOpen}

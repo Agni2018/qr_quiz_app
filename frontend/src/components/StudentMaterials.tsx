@@ -108,7 +108,7 @@ export default function StudentMaterials() {
                         >
                             {/* Card Header */}
                             <div className="flex justify-between items-center mb-2">
-                                <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md bg-orange-500/10 text-orange-500">
+                                <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md bg-indigo-500/10 text-indigo-500">
                                     Topic
                                 </span>
                                 <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md bg-slate-100 text-slate-500 border border-slate-200/50">

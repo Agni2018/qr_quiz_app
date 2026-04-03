@@ -65,7 +65,7 @@ export default function ReusableLibrary() {
 
     if (loading) return (
         <div className="flex justify-center items-center py-20">
-            <div className="w-10 h-10 border-4 border-slate-100 border-t-orange-500 rounded-full animate-spin" />
+            <div className="w-10 h-10 border-4 border-slate-100 border-t-indigo-500 rounded-full animate-spin" />
         </div>
     );
 
@@ -82,16 +82,16 @@ export default function ReusableLibrary() {
                 </div>
                 <Button 
                     onClick={() => setShowForm(true)}
-                    className="h-14 px-8 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-xs shadow-lg shadow-orange-500/20 active:scale-95 transition-all"
-                    style={{ background: '#f97316' }}
+                    className="h-14 px-8 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
+                    style={{ background: '#4f46e5' }}
                 >
                     <FaPlus className="mr-2" /> New Bank Question
                 </Button>
             </div>
 
             {showForm && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
-                    <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[2.5rem] shadow-2xl bg-white">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300" >
+                    <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[2.5rem] shadow-2xl bg-white" style={{margin:'1rem 1rem 1rem 1rem'}}>
                         <QuestionForm
                             topicId={undefined}
                             onQuestionAdded={() => {
@@ -123,7 +123,7 @@ export default function ReusableLibrary() {
                             <div className="flex flex-col h-full">
                                 <div className="flex justify-between items-start gap-4 mb-4">
                                     <div className="flex flex-col gap-1.5">
-                                        <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 bg-orange-50 rounded text-orange-500 w-fit" >
+                                        <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 bg-indigo-50 rounded text-indigo-500 w-fit" >
                                             {q.type.replace('_', ' ')}
                                         </span>
                                         <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400" style={{color:'black'}}>
@@ -148,7 +148,7 @@ export default function ReusableLibrary() {
 
                                 <div className="mt-auto pt-4 border-t border-slate-50 flex justify-between items-center">
                                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-300"style={{color:'green'}}>Global Library</span>
-                                    <FaGlobe className="text-orange-500 opacity-30 group-hover:opacity-100 transition-opacity" size={16} style={{color:'darkgreen'}} />
+                                    <FaGlobe className="text-indigo-500 opacity-30 group-hover:opacity-100 transition-opacity" size={16} style={{color:'darkgreen'}} />
                                 </div>
                             </div>
                         </div>

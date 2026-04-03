@@ -136,7 +136,7 @@ export default function StudentExplore() {
                             {/* Stats Section */}
                             <div className="flex flex-wrap gap-3 mb-2 mt-auto">
                                 <div className="flex items-center gap-1.5 text-[11px] font-black text-black" style={{ color: '#111' }}>
-                                    <FaClock className="text-orange-500" /> {quiz.timeLimit}S
+                                    <FaClock className="text-indigo-500" /> {quiz.timeLimit}S
                                 </div>
                                 <div className="flex items-center gap-1.5 text-[11px] font-black text-black" style={{ color: '#111' }}>
                                     <FaMinusCircle className="text-red-400" /> {quiz.negativeMarking} NEG
@@ -146,7 +146,7 @@ export default function StudentExplore() {
                                 </div>
                                 {quiz.timeBasedScoring && (
                                     <div className="flex items-center gap-1.5 text-[11px] font-black text-black" style={{ color: '#111' }}>
-                                        <FaBolt className="text-orange-500" /> TS
+                                        <FaBolt className="text-indigo-500" /> TS
                                     </div>
                                 )}
                             </div>

@@ -163,12 +163,11 @@ export default function QuizLanding({
                 {/* Background accent */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
-                {/* Topic Header */}
-                <div className="text-center mb-20 leading-relaxed">
-                    <div className="w-16 h-16 rounded-2xl bg-slate-100/50 flex items-center justify-center text-3xl mx-auto mb-8 border border-slate-200 shadow-sm">
+                <div className="text-center mb-8 leading-relaxed">
+                    <div className="w-14 h-14 rounded-2xl bg-slate-100/50 flex items-center justify-center text-2xl mx-auto mb-4 border border-slate-200 shadow-sm">
                         🎯
                     </div>
-                    <h1 className="text-3xl font-black text-slate-900 leading-tight mb-3">
+                    <h1 className="text-2xl font-black text-slate-900 leading-tight mb-2">
                         {topic.name}
                     </h1>
                     <p className="text-slate-500 font-medium leading-relaxed" style={{marginBottom:30}}>
@@ -191,9 +190,9 @@ export default function QuizLanding({
                     /* User Details Form */
                     <form
                         onSubmit={handleStart}
-                        className="flex flex-col gap-10"
+                        className="flex flex-col gap-6"
                     >
-                        <div className="flex flex-col gap-8">
+                        <div className="flex flex-col gap-4">
                             <Input
                                 label={<>Full Name <span style={{ color: '#ef4444' }}>*</span></>}
                                 value={user.name}
@@ -236,7 +235,7 @@ export default function QuizLanding({
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full mt-10 py-6 rounded-2xl text-xl font-black shadow-2xl shadow-primary/40 bg-primary text-white hover:scale-[1.02] active:scale-[0.98] transition-all"
+                            className="w-full mt-6 py-4 rounded-xl text-lg font-black shadow-2xl shadow-primary/40 bg-primary text-white hover:scale-[1.02] active:scale-[0.98] transition-all"
                         >
                             {loading ? 'Preparing Session...' : '🚀 Start Quiz Challenge'}
                         </Button>

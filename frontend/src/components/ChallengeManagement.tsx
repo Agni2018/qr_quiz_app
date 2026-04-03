@@ -87,7 +87,7 @@ export default function ChallengeManagement() {
                                             placeholder="e.g. Quiz Enthusiast"
                                             className="!px-10 h-[80px] !rounded-2xl bg-white text-2xl font-black placeholder:opacity-40 transition-all !text-black"
                                             style={{ background: '#ffffff', color: '#000000', border: '2px solid #cbd5e1', outline: 'none' }}
-                                            onFocus={(e: React.FocusEvent<HTMLInputElement>) => (e.currentTarget.style.border = '2px solid #f97316')}
+                                            onFocus={(e: React.FocusEvent<HTMLInputElement>) => (e.currentTarget.style.border = '2px solid #4f46e5')}
                                             onBlur={(e: React.FocusEvent<HTMLInputElement>) => (e.currentTarget.style.border = '2px solid #cbd5e1')}
                                             required
                                         />
@@ -102,7 +102,7 @@ export default function ChallengeManagement() {
                                             placeholder="Detail the requirements, constraints, and objective for this elite challenge..."
                                             className="!p-10 !rounded-[2.5rem] bg-white !min-h-[250px] text-lg font-medium leading-relaxed !text-black transition-all"
                                             style={{ background: '#ffffff', color: '#000000', border: '2px solid #cbd5e1', outline: 'none' }}
-                                            onFocus={(e: React.FocusEvent<HTMLTextAreaElement>) => (e.currentTarget.style.border = '2px solid #f97316')}
+                                            onFocus={(e: React.FocusEvent<HTMLTextAreaElement>) => (e.currentTarget.style.border = '2px solid #4f46e5')}
                                             onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => (e.currentTarget.style.border = '2px solid #cbd5e1')}
                                             required
                                         />
@@ -122,7 +122,14 @@ export default function ChallengeManagement() {
                                             <select
                                                 value={formData.type}
                                                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                                                className="w-full h-[80px] p-4 px-10 rounded-2xl bg-white border border-slate-200 text-black outline-none appearance-none cursor-pointer focus:border-emerald-500/50 font-black text-xl shadow-inner transition-all"
+                                                className="w-full h-14 rounded-[var(--radius)] bg-white border border-slate-300 text-black outline-none appearance-none cursor-pointer focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 font-bold transition-all hover:border-indigo-400 shadow-sm"
+                                                style={{ 
+                                                    paddingLeft: '1.5rem', 
+                                                    paddingRight: '3rem',
+                                                    textIndent: '0.01px',
+                                                    WebkitAppearance: 'none',
+                                                    MozAppearance: 'none'
+                                                }}
                                             >
                                                 <option value="quiz_count" className="bg-white text-black py-4">Quiz Count</option>
                                                 <option value="points_earned" className="bg-white text-black py-4">Points Earned</option>
@@ -148,8 +155,8 @@ export default function ChallengeManagement() {
                                             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                                                 if (e.key === '-' || e.key === 'e' || e.key === 'E' || e.key === '+') e.preventDefault();
                                             }}
-                                            className="!px-10 h-[80px] !rounded-2xl border-slate-200 bg-white font-black text-3xl text-emerald-600 shadow-inner"
-                                            style={{ background: '#ffffff', color: '#000000' }}
+                                            className="!px-6 h-14 !rounded-[var(--radius)] border-slate-300 bg-white font-bold text-xl text-indigo-600 shadow-sm"
+                                            style={{ background: '#ffffff', color: '#000000', border: '1px solid #cbd5e1' }}
                                             required
                                         />
                                     </div>
@@ -167,8 +174,8 @@ export default function ChallengeManagement() {
                                         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                                             if (e.key === '-' || e.key === 'e' || e.key === 'E' || e.key === '+') e.preventDefault();
                                         }}
-                                        className="!px-10 h-[80px] !rounded-2xl border-slate-200 bg-white font-black text-4xl text-yellow-600 shadow-inner"
-                                        style={{ background: '#ffffff', color: '#000000' }}
+                                        className="!px-6 h-14 !rounded-[var(--radius)] border-slate-300 bg-white font-bold text-xl text-yellow-600 shadow-sm"
+                                        style={{ background: '#ffffff', color: '#000000', border: '1px solid #cbd5e1' }}
                                         required
                                     />
                                 </div>
@@ -184,8 +191,8 @@ export default function ChallengeManagement() {
                                             type="date"
                                             value={formData.startDate}
                                             onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                                            className="!px-8 h-[80px] !rounded-2xl border-slate-200 bg-white font-black text-black tracking-widest"
-                                            style={{ background: '#ffffff', color: '#000000' }}
+                                            className="!px-6 h-14 !rounded-[var(--radius)] border-slate-300 bg-white font-bold text-black tracking-normal shadow-sm"
+                                            style={{ background: '#ffffff', color: '#000000', border: '1px solid #cbd5e1' }}
                                             required
                                         />
                                     </div>
@@ -195,8 +202,8 @@ export default function ChallengeManagement() {
                                             type="date"
                                             value={formData.endDate}
                                             onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                                            className="!px-8 h-[80px] !rounded-2xl border-slate-200 bg-white font-black text-black tracking-widest"
-                                            style={{ background: '#ffffff', color: '#000000' }}
+                                            className="!px-6 h-14 !rounded-[var(--radius)] border-slate-300 bg-white font-bold text-black tracking-normal shadow-sm"
+                                            style={{ background: '#ffffff', color: '#000000', border: '1px solid #cbd5e1' }}
                                             required
                                         />
                                     </div>
@@ -209,9 +216,9 @@ export default function ChallengeManagement() {
                                         disabled={loading || !isFormValid}
                                         className="w-full h-16 rounded-2xl text-xl font-black text-white transition-all flex items-center justify-center gap-4 group"
                                         style={{
-                                            background: loading || !isFormValid ? '#d1d5db' : '#f97316',
+                                            background: loading || !isFormValid ? '#d1d5db' : '#4f46e5',
                                             cursor: loading || !isFormValid ? 'not-allowed' : 'pointer',
-                                            boxShadow: loading || !isFormValid ? 'none' : '0 20px 50px rgba(249,115,22,0.2)',
+                                            boxShadow: loading || !isFormValid ? 'none' : '0 20px 50px rgba(79,70,229,0.2)',
                                         }}
                                     >
                                         {loading ? 'INITIALIZING...' : (

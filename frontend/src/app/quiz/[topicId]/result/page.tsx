@@ -82,7 +82,7 @@ function QuizResultContent({ topicId }: { topicId: string }) {
                                 <div className="flex gap-6 items-center">
                                     <span className={`w-10 h-10 flex items-center justify-center rounded-xl font-black text-sm ${index === 0 ? 'bg-amber-500 text-black' :
                                         index === 1 ? 'bg-slate-300 text-black' :
-                                            index === 2 ? 'bg-orange-600 text-white' :
+                                            index === 2 ? 'bg-indigo-600 text-white' :
                                                 'bg-white/10 text-slate-400'
                                         }`}>
                                         {index + 1}

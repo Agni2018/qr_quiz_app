@@ -20,7 +20,7 @@ export default function QuestionForm({
 }) {
     const [type, setType] = useState('single_choice');
     const [content, setContent] = useState('');
-    const [marks, setMarks] = useState(1);
+    const [marks, setMarks] = useState<number | string>('');
     const [isReusable, setIsReusable] = useState(!topicId);
     const [options, setOptions] = useState<string[]>(['', '']);
     const [correctAnswer, setCorrectAnswer] = useState<any>('');
@@ -95,7 +95,7 @@ export default function QuestionForm({
     const handleImportQuestion = (q: any) => {
         setType(q.type);
         setContent(q.content?.text || '');
-        setMarks(q.marks || 1);
+        setMarks(q.marks || '');
         setIsReusable(false);
 
         if (q.type === 'match') {
@@ -134,7 +134,7 @@ export default function QuestionForm({
             topicId: topicId || null,
             type,
             content: { text: content },
-            marks,
+            marks: Number(marks) || 0,
             isReusable
         };
 
@@ -162,7 +162,8 @@ export default function QuestionForm({
     };
 
     return (
-        <Card className="p-4 sm:p-8 md:p-12 rounded-[32px] border border-slate-200 shadow-2xl overflow-hidden relative" style={{ background: '#ffffff' }}>
+        <Card className="rounded-[2.5rem] border border-slate-300 shadow-2xl overflow-hidden relative" style={{ background: '#ffffff',margin:'1rem 1rem 1rem 1rem' }}>
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="flex flex-col p-4 sm:p-8 md:p-12">
 
             {showBankModal && (
                 <QuestionBankModal
@@ -205,19 +206,26 @@ export default function QuestionForm({
                             <label className="text-[11px] font-black uppercase tracking-[0.25em] text-black px-1">
                                 Question Type <span className="text-red-500">*</span>
                             </label>
-                            <div className="relative">
+                            <div className="relative group/select">
                                 <select
                                     value={type}
                                     onChange={e => handleTypeChange(e.target.value)}
-                                    className="w-full h-[64px] p-4 px-8 rounded-2xl bg-white border-2 border-slate-200 text-black focus:border-violet-500/50 transition-all outline-none appearance-none cursor-pointer shadow-inner font-bold"
+                                    className="w-full h-14 rounded-[var(--radius)] bg-white border border-slate-300 text-black outline-none appearance-none cursor-pointer focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 font-bold transition-all hover:border-indigo-400 shadow-sm"
+                                    style={{ 
+                                        paddingLeft: '1.5rem', 
+                                        paddingRight: '3rem',
+                                        textIndent: '0.01px',
+                                        WebkitAppearance: 'none',
+                                        MozAppearance: 'none'
+                                    }}
                                 >
                                     {questionTypes.map(t => (
-                                        <option key={t.value} value={t.value} className="bg-white text-black">
+                                        <option key={t.value} value={t.value} className="bg-white text-black py-2">
                                             {t.label}
                                         </option>
                                     ))}
                                 </select>
-                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover/select:text-indigo-500 transition-colors">
                                     <FaChevronDown size={14} />
                                 </div>
                             </div>
@@ -229,11 +237,18 @@ export default function QuestionForm({
                             </label>
                             <Input
                                 type="number"
+                                min={0}
                                 value={marks}
-                                onChange={e => setMarks(Number(e.target.value))}
+                                onChange={e => {
+                                    const val = e.target.value;
+                                    if (val === '' || Number(val) >= 0) setMarks(val);
+                                }}
+                                onKeyDown={e => {
+                                    if (e.key === '-' || e.key === 'e' || e.key === 'E' || e.key === '+') e.preventDefault();
+                                }}
                                 containerClassName="!mb-0"
-                                className="!p-4 !px-8 !rounded-2xl !border-2 !border-slate-200 focus:!border-violet-500/50 h-[64px] shadow-inner !font-bold"
-                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                className="!px-6 h-14 !rounded-[var(--radius)] !border-slate-300 bg-white font-bold text-black shadow-sm"
+                                style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                             />
                         </div>
 
@@ -266,8 +281,8 @@ export default function QuestionForm({
                             value={content}
                             onChange={e => setContent(e.target.value)}
                             placeholder="Write your question here..."
-                            className="!p-8 !px-10 !rounded-3xl border-2 border-slate-200 !min-h-[180px]"
-                            style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                            className="!p-6 !px-8 !rounded-[var(--radius)] border-slate-300 !min-h-[180px] shadow-sm"
+                            style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                         />
                     </div>
                 </div>
@@ -301,8 +316,8 @@ export default function QuestionForm({
                                                 value={opt}
                                                 onChange={e => handleOptionChange(idx, e.target.value)}
                                                 placeholder={`Choice ${idx + 1}`}
-                                                className="!mb-0 !p-4 sm:!p-5 !px-6 sm:!px-8 border-slate-200 rounded-2xl"
-                                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                                className="!mb-0 h-14 !px-6 border-slate-300 rounded-[var(--radius)]"
+                                                style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                             />
                                         </div>
                                         <Button
@@ -349,8 +364,8 @@ export default function QuestionForm({
                                                 value={pair.left}
                                                 onChange={e => handleMatchPairChange(idx, 'left', e.target.value)}
                                                 placeholder="Term"
-                                                className="w-full !mb-0 flex-1 !p-4 sm:!p-5 !px-6 sm:!px-8 border-slate-200 rounded-2xl"
-                                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                                className="w-full !mb-0 flex-1 h-14 !px-6 border-slate-300 rounded-[var(--radius)]"
+                                                style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                             />
                                             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 flex items-center justify-center shrink-0 border border-slate-300 rotate-90 sm:rotate-0">
                                                 <span className="text-black text-sm sm:text-lg font-bold">↔</span>
@@ -359,8 +374,8 @@ export default function QuestionForm({
                                                 value={pair.right}
                                                 onChange={e => handleMatchPairChange(idx, 'right', e.target.value)}
                                                 placeholder="Definition"
-                                                className="w-full !mb-0 flex-1 !p-4 sm:!p-5 !px-6 sm:!px-8 border-slate-200 rounded-2xl"
-                                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                                className="w-full !mb-0 flex-1 h-14 !px-6 border-slate-300 rounded-[var(--radius)]"
+                                                style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                                             />
                                         </div>
                                         <Button
@@ -388,12 +403,12 @@ export default function QuestionForm({
                     <div className="p-6 md:p-10 rounded-[32px] border border-slate-200 shadow-inner" style={{ background: '#f8f7ff' }}>
 
                         {type === 'fill_blank' && (
-                            <Input
+                             <Input
                                 value={correctAnswer}
                                 onChange={e => setCorrectAnswer(e.target.value)}
                                 placeholder="Enter the exact correct answer"
-                                className="!p-6 !px-10 border-2 border-slate-200 text-lg rounded-[24px]"
-                                style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
+                                className="h-14 !px-6 border-slate-300 rounded-[var(--radius)]"
+                                style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
                             />
                         )}
 
@@ -472,7 +487,8 @@ export default function QuestionForm({
                     </button>
                 </div>
 
-            </div>
+                </div>
+            </form>
         </Card>
     );
 }

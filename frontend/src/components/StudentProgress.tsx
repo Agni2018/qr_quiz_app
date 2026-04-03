@@ -129,7 +129,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                                 <div className="flex items-center gap-2">
                                     <span className="text-2xl font-black" style={{ color: '#000' }}>{attempt.score} <span className="text-xs font-bold ml-1" style={{ color: '#777' }}>PTS</span></span>
                                     {attempt.topicId?.timeBasedScoring && (
-                                        <FaBolt className="text-orange-500" title="Time-based Scoring" size={14} />
+                                        <FaBolt className="text-indigo-500" title="Time-based Scoring" size={14} />
                                     )}
                                 </div>
                             </div>

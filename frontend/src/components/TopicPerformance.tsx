@@ -164,7 +164,7 @@ export default function TopicPerformance() {
     if (loading) {
         return (
             <div style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '3rem', height: '3rem', border: '4px solid #f1f5f9', borderTopColor: '#f97316', borderRadius: '50%' }} className="animate-spin" />
+                <div style={{ width: '3rem', height: '3rem', border: '4px solid #f1f5f9', borderTopColor: '#4f46e5', borderRadius: '50%' }} className="animate-spin" />
             </div>
         );
     }
@@ -225,17 +225,17 @@ export default function TopicPerformance() {
                         width: '56px', 
                         height: '56px', 
                         borderRadius: '16px', 
-                        backgroundColor: '#fff7ed', 
+                        backgroundColor: '#eef2ff', 
                         display: 'flex', 
                         alignItems: 'center', 
                         justifyContent: 'center', 
-                        color: '#f97316',
-                        border: '1px solid #ffedd5'
+                        color: '#4f46e5',
+                        border: '1px solid #e0e7ff'
                     }}>
                         <FaChartLine size={24} />
                     </div>
                     {/* Decorative Gradient Line */}
-                    <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '4px', backgroundColor: '#f97316' }}></div>
+                    <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '4px', backgroundColor: '#4f46e5' }}></div>
                 </div>
             </div>
 
@@ -262,7 +262,7 @@ export default function TopicPerformance() {
                                 
                                 {/* Admin Status Badge in Card */}
                                 <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
-                                    <FaUser className="text-orange-500 text-[10px]" />
+                                    <FaUser className="text-indigo-500 text-[10px]" />
                                     <span className="text-[9px] font-black text-white uppercase tracking-[0.1em]" >Admin authenticated</span>
                                 </div>
 
@@ -285,7 +285,7 @@ export default function TopicPerformance() {
                                         {/* Progress Line */}
                                         <div className="h-[6px] w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
                                             <div 
-                                                className="h-full bg-orange-500 transition-all duration-1000 ease-out" 
+                                                className="h-full bg-indigo-500 transition-all duration-1000 ease-out" 
                                                 style={{ width: `${Math.min(100, (stat.participantCount / 50) * 100)}%` }}
                                             ></div>
                                         </div>
@@ -296,7 +296,7 @@ export default function TopicPerformance() {
                                 <div className="mt-auto flex items-center gap-3" style={{ marginTop: '25px' }}>
                                     <button
                                         onClick={() => handleOpenCertify(stat.topicId, stat.topicName)}
-                                        className="flex-1 h-11 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[10px] transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-lg shadow-orange-500/10"
+                                        className="flex-1 h-11 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-[10px] transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-lg shadow-indigo-500/10"
                                     >
                                         Certify
                                     </button>
@@ -350,8 +350,8 @@ export default function TopicPerformance() {
                                 style={{ padding: isMobile ? '20px' : '30px' }}
                             >
                             <div className="flex flex-col gap-1">
-                                <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest leading-none">Performance Review</span>
-                                <h2 className="font-bold text-2xl md:text-3xl text-[#0f172a] tracking-tight uppercase leading-none" style={{color:'black'}}>{selectedTopicName}</h2>
+                                <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-none">Performance Review</span>
+                                <h2 className="font-bold text-2xl md:text-3xl text-[#0f172a] tracking-tight capitalize leading-none" style={{color:'black'}}>{selectedTopicName}</h2>
                             </div>
                             <button
                                 onClick={() => setShowParticipantsModal(false)}
@@ -367,7 +367,7 @@ export default function TopicPerformance() {
                         >
                             {loadingParticipants ? (
                                 <div className="flex flex-col items-center justify-center py-20 gap-4">
-                                    <div className="w-10 h-10 border-3 border-slate-100 border-t-orange-500 rounded-full animate-spin" />
+                                    <div className="w-10 h-10 border-3 border-slate-100 border-t-indigo-500 rounded-full animate-spin" />
                                     <p className="font-bold text-slate-400 uppercase tracking-widest text-xs">Fetching records</p>
                                 </div>
                             ) : participants.length === 0 ? (
@@ -379,18 +379,18 @@ export default function TopicPerformance() {
                                     {participants.map((p, idx) => (
                                         <React.Fragment key={p.id || idx}>
                                             <div 
-                                                className="rounded-[2.5rem] border border-slate-100 flex items-center justify-between group hover:border-orange-500/10 hover:bg-slate-50 transition-all duration-300 shadow-sm overflow-hidden"
+                                                className="rounded-[2.5rem] border border-slate-100 flex items-center justify-between group hover:border-indigo-500/10 hover:bg-slate-50 transition-all duration-300 shadow-sm overflow-hidden"
                                                 style={{ padding: isMobile ? '15px 20px' : '30px', backgroundColor: '#ffffff' }}
                                             >
                                                 <div className="flex items-center gap-3 md:gap-4 min-w-0 flex-1">
-                                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-orange-500 flex-shrink-0 flex items-center justify-center text-white font-black text-lg md:text-xl shadow-lg shadow-orange-500/20">
+                                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-indigo-500 flex-shrink-0 flex items-center justify-center text-white font-black text-lg md:text-xl shadow-lg shadow-indigo-500/20">
                                                         {p.name.charAt(0).toUpperCase()}
                                                     </div>
                                                     <div className="flex flex-col min-w-0">
                                                         <div className="flex items-center gap-2">
                                                             <span className="font-bold text-slate-900 tracking-tight truncate text-sm md:text-base">{p.name}</span>
                                                             {messageSuccessTo === String(p.id) && (
-                                                                <FaCheckCircle className="text-orange-500 animate-blink-three flex-shrink-0" size={14} />
+                                                                <FaCheckCircle className="text-indigo-500 animate-blink-three flex-shrink-0" size={14} />
                                                             )}
                                                         </div>
                                                         <span className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 truncate">{p.email || p.phone}</span>
@@ -404,7 +404,7 @@ export default function TopicPerformance() {
                                                     {p.userId && (
                                                         <button
                                                             onClick={() => setSendingMessageTo(sendingMessageTo === p.id ? null : p.id)}
-                                                            className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:border-orange-500/20 transition-all cursor-pointer flex-shrink-0"
+                                                            className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-500 hover:border-indigo-500/20 transition-all cursor-pointer flex-shrink-0"
                                                         >
                                                             <FaEnvelope size={isMobile ? 14 : 18} />
                                                         </button>
@@ -413,9 +413,9 @@ export default function TopicPerformance() {
                                             </div>
                                             {p.userId && sendingMessageTo === p.id && (
                                                 <div className="col-span-full mt-2 animate-in slide-in-from-top-2 duration-300">
-                                                    <div className="bg-slate-50 rounded-2xl border border-orange-500/10 p-6 flex flex-col gap-4">
+                                                    <div className="bg-slate-50 rounded-2xl border border-indigo-500/10 p-6 flex flex-col gap-4">
                                                          <TextArea
-                                                            className="w-full !p-6 !bg-white !text-slate-900 border border-slate-200 !min-h-[120px] rounded-2xl focus:border-orange-500 transition-all font-bold text-sm shadow-inner"
+                                                            className="w-full !p-6 !bg-white !text-slate-900 border border-slate-200 !min-h-[120px] rounded-2xl focus:border-indigo-500 transition-all font-bold text-sm shadow-inner"
                                                             style={{ backgroundColor: '#ffffff', color: '#0f172a', padding: '24px', border: '1px solid #e2e8f0' }}
                                                             placeholder={`Direct message to ${p.name}...`}
                                                             value={messageText}
@@ -425,7 +425,7 @@ export default function TopicPerformance() {
                                                             <button className="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors" onClick={() => setSendingMessageTo(null)}>Cancel</button>
                                                             <button 
                                                                 style={{padding:5,marginRight:5,marginBottom:5}}
-                                                                className="h-10 px-6 rounded-lg bg-orange-500 text-white text-[11px] font-bold uppercase tracking-widest disabled:opacity-50 transition-all hover:bg-orange-600 shadow-md shadow-orange-500/10"
+                                                                className="h-10 px-6 rounded-lg bg-indigo-500 text-white text-[11px] font-bold uppercase tracking-widest disabled:opacity-50 transition-all hover:bg-indigo-600 shadow-md shadow-indigo-500/10"
                                                                 onClick={() => handleSendMessage(String(p.userId), String(p.id))}
                                                                 disabled={isSendingMessage || !messageText.trim()}
                                                             >
@@ -462,8 +462,8 @@ export default function TopicPerformance() {
                                     <FaAward size={isMobile ? 22 : 28} />
                                 </div>
                                 <div className="flex flex-col gap-0.5 md:gap-1">
-                                    <span className="text-[9px] md:text-[10px] font-black text-orange-500 uppercase tracking-widest leading-none">Credential Authority</span>
-                                    <h2 className="font-bold text-[#0f172a] text-xl md:text-2xl tracking-tight uppercase leading-none" style={{color:'black'}}>Certify Students</h2>
+                                    <span className="text-[9px] md:text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-none">Credential Authority</span>
+                                    <h2 className="font-bold text-[#0f172a] text-xl md:text-2xl tracking-tight capitalize leading-none" style={{color:'black'}}>Certify Students</h2>
                                 </div>
                             </div>
                             <button onClick={() => setShowCertifyModal(false)} className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 cursor-pointer transition-all">
@@ -483,7 +483,7 @@ export default function TopicPerformance() {
                             {participants.filter(p => !p.isCertified && p.isQualified).length > 0 && (
                                 <div className="flex flex-wrap gap-2 md:gap-4 lg:gap-6" style={{ marginTop: '15px', marginBottom: '20px' }}>
                                     <button 
-                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'one' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'one' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                                         onClick={() => {
                                             setSelectedCertifyOption('one');
                                             setSelectedParticipantIds([]);
@@ -493,7 +493,7 @@ export default function TopicPerformance() {
                                         Select One
                                     </button>
                                     <button 
-                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'few' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'few' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                                         onClick={() => {
                                             setSelectedCertifyOption('few');
                                             setSelectedParticipantIds([]);
@@ -503,7 +503,7 @@ export default function TopicPerformance() {
                                         Select Few
                                     </button>
                                     <button 
-                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'all' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'all' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                                         onClick={() => {
                                             setSelectedCertifyOption('all');
                                             setSelectedParticipantIds(
@@ -519,18 +519,18 @@ export default function TopicPerformance() {
 
                             {loadingParticipants ? (
                                 <div className="flex flex-col items-center justify-center py-10 gap-3">
-                                    <div className="w-8 h-8 border-3 border-slate-100 border-t-orange-500 rounded-full animate-spin" />
+                                    <div className="w-8 h-8 border-3 border-slate-100 border-t-indigo-500 rounded-full animate-spin" />
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Validating benchmarks</p>
                                 </div>
                             ) : (
                                 <div className="flex flex-col gap-3">
                                     {participants.filter(p => !p.isCertified && p.isQualified).map((p, idx) => (
-                                        <div key={idx} className="flex items-center justify-between bg-white border border-slate-100 rounded-2xl hover:border-orange-500/20 transition-all group shadow-sm" style={{ padding: '20px 30px', marginBottom: '12px' }}>
+                                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-100 rounded-2xl hover:border-indigo-500/20 transition-all group shadow-sm" style={{ padding: '20px 30px', marginBottom: '12px' }}>
                                             <div className="flex items-center gap-3 md:gap-4">
                                                 {(selectedCertifyOption === 'one' || selectedCertifyOption === 'few') && (
                                                     <input 
                                                         type="checkbox"
-                                                        className="w-5 h-5 md:w-6 md:h-6 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer accent-orange-500 transition-all hover:scale-110"
+                                                        className="w-5 h-5 md:w-6 md:h-6 rounded border-slate-300 text-indigo-500 focus:ring-indigo-500 cursor-pointer accent-indigo-500 transition-all hover:scale-110"
                                                         style={{ marginRight: '10px' }}
                                                         checked={selectedParticipantIds.includes(p.id)}
                                                         onChange={(e) => {
@@ -544,12 +544,12 @@ export default function TopicPerformance() {
                                                         }}
                                                     />
                                                 )}
-                                                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm md:text-md">
+                                                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm md:text-md">
                                                     {p.name.charAt(0).toUpperCase()}
                                                 </div>
                                                 <span className="font-bold text-slate-900 text-sm tracking-tight">{p.name}</span>
                                             </div>
-                                            <span className="text-xs font-black text-orange-500 uppercase tracking-widest">{p.score} Points</span>
+                                            <span className="text-xs font-black text-indigo-500 uppercase tracking-widest">{p.score} Points</span>
                                         </div>
                                     ))}
                                 </div>
@@ -558,7 +558,7 @@ export default function TopicPerformance() {
 
                         <div className="border-t border-slate-100 flex gap-4 md:gap-6" style={{ padding: isMobile ? '20px' : '30px' }}>
                             <button
-                                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[12px] disabled:opacity-40 transition-all shadow-xl shadow-orange-500/20 active:scale-95 disabled:cursor-not-allowed"
+                                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[12px] disabled:opacity-40 transition-all shadow-xl shadow-indigo-500/20 active:scale-95 disabled:cursor-not-allowed"
                                                 onClick={handleGenerateCertificates}
                                                 disabled={certifying || participants.filter(p => !p.isCertified && p.isQualified).length === 0 || !selectedCertifyOption || selectedParticipantIds.length === 0}
                                             >

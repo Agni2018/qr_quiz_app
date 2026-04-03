@@ -125,7 +125,7 @@ export default function Home() {
                 boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
             }}>
                 <span style={{
-                    color: '#f97316',
+                    color: '#4f46e5',
                     fontWeight: 900,
                     fontSize: '1rem',
                     letterSpacing: '0.15em',
@@ -135,10 +135,10 @@ export default function Home() {
                     QR Quiz Platform
                 </span>
 
-                {/* Orange question mark icon — right side */}
+                {/* Indigo question mark icon — right side */}
                 <FaQuestionCircle
                     style={{
-                        color: '#f97316',
+                        color: '#4f46e5',
                         fontSize: 'clamp(1.25rem, 4vw, 1.6rem)',
                         flexShrink: 0
                     }}
@@ -158,7 +158,7 @@ export default function Home() {
                         <h1
                             className="text-2xl md:text-[3rem] font-black mb-4 leading-tight"
                             style={{
-                                backgroundImage: 'linear-gradient(to right, #f97316, #fb923c)',
+                                backgroundImage: 'linear-gradient(to right, #4f46e5, #6366f1)',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 backgroundClip: 'text',

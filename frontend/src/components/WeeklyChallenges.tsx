@@ -89,7 +89,7 @@ export default function WeeklyChallenges() {
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row items-start gap-4 relative z-10 pt-2 sm:pt-0">
-                                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-lg shrink-0 transition-transform group-hover:scale-110 duration-500 ${challenge.isCompleted ? 'bg-emerald-500/20 text-emerald-500' : 'bg-orange-50 text-orange-500'}`} style={!challenge.isCompleted ? { color: '#f97316' } : {}}>
+                                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-lg shrink-0 transition-transform group-hover:scale-110 duration-500 ${challenge.isCompleted ? 'bg-emerald-500/20 text-emerald-500' : 'bg-indigo-50 text-indigo-500'}`} style={!challenge.isCompleted ? { color: '#4f46e5' } : {}}>
                                         {challenge.isCompleted ? <FaCheckCircle /> : <FaStar className="animate-pulse" />}
                                     </div>
 

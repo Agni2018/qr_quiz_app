@@ -125,7 +125,7 @@ function UsersDashboardContent({
             {isMobile && (
                 <>
                     <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60, height: '70px', borderBottom: '1px solid #f1f5f9', backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-                        <h1 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#f97316', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>QR QUIZ</h1>
+                        <h1 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#4f46e5', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>QR QUIZ</h1>
                         <button onClick={() => setSidebarOpen(true)} style={{ padding: '0.5rem', color: '#0f172a', background: 'none', border: 'none', cursor: 'pointer' }}>
                             <FaBars size={24} />
                         </button>
@@ -225,13 +225,13 @@ function UsersDashboardContent({
                             alignItems: 'center', 
                             justifyContent: 'center', 
                             boxShadow: '0 8px 16px rgba(0,0,0,0.06)',
-                            border: '3px solid #f97316',
+                            border: '3px solid #4f46e5',
                             padding: '4px',
                             marginBottom: '0.75rem',
                             position: 'relative'
                         }}>
                             <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', backgroundColor: '#f1f5f9', display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
-                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f97316' }}>
+                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4f46e5' }}>
                                     <FaUser size={32} />
                                 </div>
                             </div>
@@ -242,7 +242,7 @@ function UsersDashboardContent({
                                 <h2 style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a', letterSpacing: '-0.02em', textTransform: 'lowercase', margin: 0 }}>
                                     {user?.username || 'admin'}
                                 </h2>
-                                <p style={{ fontSize: '10px', fontWeight: 800, color: '#f97316', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+                                <p style={{ fontSize: '10px', fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
                                     Authenticated as Admin
                                 </p>
                             </div>
@@ -276,11 +276,11 @@ function UsersDashboardContent({
                                             padding: '0.75rem 1.25rem',
                                             transition: 'all 0.3s ease',
                                             textDecoration: 'none',
-                                            backgroundColor: active ? '#f97316' : 'transparent',
+                                            backgroundColor: active ? '#4f46e5' : 'transparent',
                                             color: active ? '#ffffff' : '#475569',
                                             whiteSpace: 'normal',
                                             borderRadius: '12px',
-                                            boxShadow: active ? '0 10px 15px -3px rgba(249, 115, 22, 0.3)' : 'none'
+                                            boxShadow: active ? '0 10px 15px -3px rgba(79, 70, 229, 0.3)' : 'none'
                                         }}
                                         onClick={() => setSidebarOpen(false)}
                                     >
@@ -375,7 +375,7 @@ function UsersDashboardContent({
                         <div style={{ height: '70px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4rem', paddingRight: '4rem', backgroundColor: '#ffffff' }}>
                             {/* App Heading */}
                             <div style={{ display: 'flex', alignItems: 'center', minWidth: '240px' }}>
-                                <span style={{ color: '#f97316', fontWeight: 950, fontSize: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>QR Quiz Platform</span>
+                                <span style={{ color: '#4f46e5', fontWeight: 950, fontSize: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>QR Quiz Platform</span>
                             </div>
 
                             {/* Global Search Bar */}
@@ -448,7 +448,7 @@ function AdminTopBarButtons() {
                         window.dispatchEvent(new CustomEvent('open-create-category-modal'));
                     }}
                     title="Create Category"
-                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-[#f97316] hover:bg-[#ea580c] shadow-lg shadow-orange-500/10 flex items-center gap-2 whitespace-nowrap text-white font-bold"
+                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-[#4f46e5] hover:bg-[#4338ca] shadow-lg shadow-indigo-500/10 flex items-center gap-2 whitespace-nowrap text-white font-bold"
                 >
                     <FaPlus className="text-xs md:text-sm" />
                     <span className="hidden sm:inline text-[10px] md:text-xs">Create Category</span>
@@ -461,7 +461,7 @@ function AdminTopBarButtons() {
                         window.dispatchEvent(new CustomEvent('open-create-topic-modal'));
                     }}
                     title="Create Topic"
-                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-[#f97316] hover:bg-[#ea580c] shadow-lg shadow-orange-500/10 flex items-center gap-2 whitespace-nowrap text-white"
+                    className="rounded-xl px-3 md:px-6 h-10 md:h-11 bg-[#4f46e5] hover:bg-[#4338ca] shadow-lg shadow-indigo-500/10 flex items-center gap-2 whitespace-nowrap text-white"
                 >
                     <FaPlus /> <span className="hidden sm:inline">Create Topic</span>
                 </Button>

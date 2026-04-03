@@ -263,12 +263,12 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                     </div>
                 )}
 
-                <div className="flex items-center gap-4">
-                    <button className="flex items-center gap-4 bg-white/5 px-6 py-2.5 rounded-full border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
-                        <div className="w-8 h-8 rounded-full bg-slate-700/50 flex items-center justify-center ring-1 ring-white/10">
+                <div className="flex items-center gap-4" style={{ marginRight: '10px' }}>
+                    <button className="flex items-center gap-2 sm:gap-4 bg-white/5 px-4 sm:px-6 py-2.5 rounded-full border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
+                        <div className="w-8 h-8 rounded-full bg-slate-700/50 flex items-center justify-center ring-1 ring-white/10 shrink-0">
                             <MdPersonOutline className="text-xl text-slate-200" />
                         </div>
-                        <span className="text-sm font-bold text-slate-100 hidden lg:inline tracking-wide">{user?.name || 'Student Name'}</span>
+                        <span className="text-sm font-bold text-slate-100 tracking-wide max-w-[80px] sm:max-w-xs truncate">{user?.name || 'Student'}</span>
                     </button>
                 </div>
             </header>
@@ -288,16 +288,16 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                             exit={{ opacity: 0, scale: 0.99, y: -10 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <Card className="p-10 md:p-12 bg-[#1a1631]/80 backdrop-blur-sm border-white/5 rounded-[48px] shadow-3xl relative overflow-hidden flex flex-col min-h-[450px]">
+                            <Card className="p-10 md:p-12 bg-[#1a1631]/80 backdrop-blur-sm border-white/5 rounded-[48px] shadow-3xl relative overflow-hidden flex flex-col min-h-[450px]" style={{ margin: '15px', padding: '30px' }}>
                                 <div className="flex items-start justify-between mb-8 relative z-10">
-                                    <div className="flex flex-col gap-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_5px_rgba(139,92,246,0.5)]" />
-                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Choose the Correct Answer</span>
+                                    <div className="flex flex-col gap-2 pr-4 min-w-0">
+                                        <div className="flex items-start sm:items-center gap-3">
+                                            <div className="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_5px_rgba(139,92,246,0.5)] shrink-0 mt-1 sm:mt-0" />
+                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 leading-relaxed">Choose the Correct Answer</span>
                                         </div>
                                     </div>
-                                    <div className="px-5 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
-                                        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">+{currentQ?.marks || 1}.0 Points</span>
+                                    <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl shrink-0 flex items-center justify-center mb-auto">
+                                        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest whitespace-nowrap">+{currentQ?.marks || 1}.0 Points</span>
                                     </div>
                                 </div>
 
@@ -431,7 +431,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
 
                 {/* Sidebar Palette Area */}
                 <div className="lg:col-span-4 flex flex-col gap-14">
-                    <Card className="p-8 bg-[#1a1631]/50 border-white/5 rounded-[48px] shadow-3xl flex flex-col min-h-[500px]">
+                    <Card className="p-8 bg-[#1a1631]/50 border-white/5 rounded-[48px] shadow-3xl flex flex-col min-h-[500px]" style={{ margin: '15px', padding: '30px' }}>
                         <div className="flex justify-between items-center mb-10">
                             <div>
                                 <h3 className="text-base font-black uppercase tracking-[0.4em] text-white leading-none mb-2">Question Palette</h3>
@@ -491,6 +491,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                         onClick={() => submitQuiz()}
                         disabled={submitting}
                         className="group w-full p-6 bg-[#1a1631]/80 hover:bg-violet-600 border border-white/10 rounded-[28px] flex items-center justify-center gap-4 transition-all duration-500 hover:shadow-2xl hover:shadow-violet-600/20"
+                        style={{ margin: '15px', width: 'calc(100% - 30px)' }}
                     >
                         <MdSend className="text-xl text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
                         <span className="text-sm font-black uppercase tracking-[0.4em] text-white">Submit Assessment</span>
@@ -523,9 +524,9 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="max-w-xl w-full bg-[#1a1631] p-16 rounded-[60px] border border-orange-500/40 flex flex-col items-center text-center gap-10 shadow-[0_0_100px_rgba(249,115,22,0.2)]"
+                        className="max-w-xl w-full bg-[#1a1631] p-16 rounded-[60px] border border-indigo-500/40 flex flex-col items-center text-center gap-10 shadow-[0_0_100px_rgba(79,70,229,0.2)]"
                     >
-                        <div className="w-32 h-32 rounded-full bg-orange-500/10 flex items-center justify-center text-8xl shadow-2xl shadow-orange-500/20">⚠️</div>
+                        <div className="w-32 h-32 rounded-full bg-indigo-500/10 flex items-center justify-center text-8xl shadow-2xl shadow-indigo-500/20">⚠️</div>
                         <div>
                             <h2 className="text-3xl font-black text-white uppercase tracking-[0.2em] mb-6">Already Submitted</h2>
                             <p className="text-lg text-slate-400 font-bold leading-relaxed max-w-sm mx-auto">This assessment has already been completed by your account.</p>

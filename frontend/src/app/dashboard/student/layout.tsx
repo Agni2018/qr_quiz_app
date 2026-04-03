@@ -205,7 +205,7 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
             {isMobile && (
                 <>
                     <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60, height: '60px', borderBottom: '1px solid #f1f5f9', backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-                        <h1 style={{ fontSize: '1.125rem', fontWeight: 900, color: '#f97316', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>QR QUIZ</h1>
+                        <h1 style={{ fontSize: '1.125rem', fontWeight: 900, color: '#4f46e5', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>QR QUIZ</h1>
                         <button onClick={() => setSidebarOpen(true)} style={{ padding: '0.5rem', color: '#0f172a', background: 'none', border: 'none', cursor: 'pointer' }}>
                             <FaBars size={24} />
                         </button>
@@ -308,13 +308,13 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                             alignItems: 'center', 
                             justifyContent: 'center', 
                             boxShadow: '0 10px 20px rgba(0,0,0,0.06)',
-                            border: '3px solid #f97316',
+                            border: '3px solid #4f46e5',
                             padding: '3px',
                             marginBottom: '0.5rem',
                             position: 'relative'
                         }}>
                             <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', backgroundColor: '#f1f5f9', display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
-                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f97316' }}>
+                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4f46e5' }}>
                                     <FaUser size={32} />
                                 </div>
                             </div>
@@ -356,11 +356,11 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                                             padding: '0.625rem 1.25rem',
                                             transition: 'all 0.3s ease',
                                             textDecoration: 'none',
-                                            backgroundColor: active ? '#f97316' : 'transparent',
+                                            backgroundColor: active ? '#4f46e5' : 'transparent',
                                             color: active ? '#ffffff' : '#475569',
                                             whiteSpace: 'nowrap',
                                             borderRadius: '12px',
-                                            boxShadow: active ? '0 10px 15px -3px rgba(249, 115, 22, 0.3)' : 'none',
+                                            boxShadow: active ? '0 10px 15px -3px rgba(79, 70, 229, 0.3)' : 'none',
                                             position: 'relative'
                                         }}
                                         onClick={() => setSidebarOpen(false)}
@@ -375,7 +375,7 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                                                     <span style={{ 
                                                         marginLeft: '8px', 
                                                         backgroundColor: active ? '#ffffff' : '#ef4444', 
-                                                        color: active ? '#f97316' : '#ffffff', 
+                                                        color: active ? '#4f46e5' : '#ffffff', 
                                                         fontSize: '10px', 
                                                         padding: '2px 6px', 
                                                         borderRadius: '10px' 
@@ -466,7 +466,7 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                         <div style={{ height: '70px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '2.5rem', paddingRight: '2.5rem', backgroundColor: '#ffffff' }}>
                             {/* App Heading */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', minWidth: 'max-content' }}>
-                                <span style={{ color: '#f97316', fontWeight: 950, fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>QR Quiz Platform</span>
+                                <span style={{ color: '#4f46e5', fontWeight: 950, fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>QR Quiz Platform</span>
                             </div>
 
                             {/* Global Search Bar */}
@@ -501,14 +501,14 @@ function StudentDashboardContent({ children }: { children: React.ReactNode }) {
                                 <div style={{ background: '#ffffff', border: '1px solid #f1f5f9', borderRadius: '0.75rem', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
                                     <span style={{ fontSize: '1rem' }}>🔥</span>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span style={{ fontSize: '8px', fontWeight: 800, color: '#f97316', textTransform: 'uppercase' }}>Streak</span>
+                                        <span style={{ fontSize: '8px', fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase' }}>Streak</span>
                                         <span style={{ fontSize: '12px', fontWeight: 900, color: '#0f172a' }}>{user?.loginStreak || 0} days</span>
                                     </div>
                                 </div>
                                 <div style={{ background: '#ffffff', border: '1px solid #f1f5f9', borderRadius: '0.75rem', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
                                     <FaTrophy style={{ color: '#f59e0b', fontSize: '1rem' }} />
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span style={{ fontSize: '8px', fontWeight: 800, color: '#f97316', textTransform: 'uppercase' }}>Points</span>
+                                        <span style={{ fontSize: '8px', fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase' }}>Points</span>
                                         <span style={{ fontSize: '12px', fontWeight: 900, color: '#0f172a' }}>{user?.points || 0}</span>
                                     </div>
                                 </div>
@@ -606,7 +606,7 @@ function LevelCardWhite({ points }: { points: number }) {
                     <FaStar style={{ color: '#3b82f6', fontSize: '0.85rem' }} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ fontSize: '9px', fontWeight: 800, color: '#f97316', textTransform: 'uppercase' }}>Level</span>
+                    <span style={{ fontSize: '9px', fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase' }}>Level</span>
                     <span style={{ fontSize: '13px', fontWeight: 900, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         {currentLevel} {isOpen ? <FaChevronUp size={8} /> : <FaChevronDown size={8} />}
                     </span>

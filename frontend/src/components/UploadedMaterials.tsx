@@ -107,7 +107,7 @@ export default function UploadedMaterials() {
     if (loading) {
         return (
             <div className="flex justify-center items-center py-20">
-                <div className="w-10 h-10 border-4 border-slate-100 border-t-orange-500 rounded-full animate-spin" />
+                <div className="w-10 h-10 border-4 border-slate-100 border-t-indigo-500 rounded-full animate-spin" />
             </div>
         );
     }
@@ -149,7 +149,7 @@ export default function UploadedMaterials() {
                                     style={{ padding: '20px', minHeight: '240px' }}
                                 >
                                     <div className="flex justify-between items-center mb-4">
-                                        <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-orange-50 text-orange-500 rounded-md">
+                                        <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-indigo-50 text-indigo-500 rounded-md">
                                             Topic Folder
                                         </span>
                                         <div className="flex items-center gap-2 text-slate-400">
@@ -158,7 +158,7 @@ export default function UploadedMaterials() {
                                     </div>
 
                                     <div className="flex flex-col gap-3 flex-1">
-                                        <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight uppercase group-hover:text-orange-500 transition-colors" style={{marginTop:10,color:'black'}}>
+                                        <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight uppercase group-hover:text-indigo-500 transition-colors" style={{marginTop:10,color:'black'}}>
                                             {topic.name}
                                         </h3>
                                         <p className="text-sm font-bold text-slate-400 line-clamp-3 leading-relaxed" style={{color:'black'}}>
@@ -205,8 +205,8 @@ export default function UploadedMaterials() {
                     <Card className="max-w-4xl w-full p-0 bg-white shadow-2xl rounded-[3rem] overflow-hidden border border-slate-100 flex flex-col gap-0" onClick={(e) => e.stopPropagation()} style={{margin:'1rem 1rem 1rem 1rem'}}>
                         <div className="border-b border-slate-50 bg-white flex justify-between items-center" style={{ padding: '24px 32px' }}>
                             <div className="flex flex-col gap-1">
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Asset Management</span>
-                                <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight" style={{color:'darkorange'}}>{selectedTopicName}</h3>
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500">Asset Management</span>
+                                <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight" style={{color:'#4f46e5'}}>{selectedTopicName}</h3>
                             </div>
                             <button onClick={() => setShowAdminMaterialsModal(false)} className="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full transition-all text-slate-400 flex items-center justify-center shadow-sm">
                                 <FaTimes size={20} />
@@ -218,9 +218,9 @@ export default function UploadedMaterials() {
                                 <p className="text-center py-20 text-slate-400 font-bold italic">This folder is currently empty.</p>
                             ) : (
                                 selectedTopicMaterials.map((m) => (
-                                    <div key={m._id} className="rounded-3xl bg-white border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-orange-500/20 group transition-all" style={{ padding: '24px' }}>
+                                    <div key={m._id} className="rounded-3xl bg-white border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-indigo-500/20 group transition-all" style={{ padding: '24px' }}>
                                         <div className="flex items-center gap-6 min-w-0 flex-1">
-                                            <div className="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                                            <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
                                                 {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
                                             </div>
                                             <div className="flex flex-col gap-1 min-w-0">

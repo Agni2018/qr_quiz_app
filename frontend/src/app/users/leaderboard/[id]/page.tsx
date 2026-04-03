@@ -62,27 +62,27 @@ export default function UserLeaderboard({ params }: { params: Promise<{ id: stri
                     <Button 
                         variant="primary" 
                         onClick={() => router.push(`/users/topic/${id}`)}
-                        className="px-6 h-12 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black flex items-center gap-2 shadow-xl shadow-orange-500/10 border-none transition-all active:scale-95 shrink-0"
-                        style={{ background: '#f97316', color: 'white' }}
+                        className="px-6 h-12 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black flex items-center gap-2 shadow-xl shadow-indigo-500/10 border-none transition-all active:scale-95 shrink-0"
+                        style={{ background: '#4f46e5', color: 'white' }}
                     >
                         <FaChevronLeft /> Back
                     </Button>
                     <div className="h-6 w-[1px] bg-slate-200 mx-1 sm:mx-2 shrink-0" />
-                    <h3 className="text-xl sm:text-2xl font-black flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-3 text-slate-900 tracking-tight whitespace-nowrap sm:whitespace-normal" style={{color:'orange'}}>
-                        <Link href="/users/manage-topics" className="hover:text-orange-600 transition-colors">Manage Topics</Link>
+                    <h3 className="text-xl sm:text-2xl font-black flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-3 text-slate-900 tracking-tight whitespace-nowrap sm:whitespace-normal" style={{color:'#4f46e5'}}>
+                        <Link href="/users/manage-topics" className="hover:text-indigo-600 transition-colors">Manage Topics</Link>
                         
                         {topic?.categoryId && (
                             <>
                                 <span className="text-slate-300 mx-1">/</span>
-                                <Link href={`/users/manage-topics?category=${topic.categoryId._id}`} className="flex items-center gap-2 hover:text-orange-600 transition-colors">
-                                    <span className="text-orange-500" style={{color:'orange'}}><FaFolder /></span>
+                                <Link href={`/users/manage-topics?category=${topic.categoryId._id}`} className="flex items-center gap-2 hover:text-indigo-600 transition-colors">
+                                    <span className="text-indigo-500" style={{color:'#4f46e5'}}><FaFolder /></span>
                                     {topic.categoryId.name}
                                 </Link>
                             </>
                         )}
                         
                         <span className="text-slate-300 mx-1">/</span>
-                        <Link href={`/users/topic/${id}`} className="flex items-center gap-2 hover:text-orange-600 transition-colors" style={{color: '#333'}}>
+                        <Link href={`/users/topic/${id}`} className="flex items-center gap-2 hover:text-indigo-600 transition-colors" style={{color: '#333'}}>
                             {topic?.name}
                         </Link>
                         
@@ -119,7 +119,7 @@ export default function UserLeaderboard({ params }: { params: Promise<{ id: stri
                             <div className="flex gap-4 md:gap-6 items-center">
                                 <span className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl font-black text-lg transition-transform group-hover:scale-110 shadow-lg shrink-0 ${index === 0 ? 'bg-amber-500 text-black shadow-amber-500/20' :
                                     index === 1 ? 'bg-slate-300 text-black shadow-slate-300/20' :
-                                        index === 2 ? 'bg-orange-600 text-white shadow-orange-600/20' :
+                                        index === 2 ? 'bg-indigo-600 text-white shadow-indigo-600/20' :
                                             'bg-white/10 text-slate-400'
                                     }`}>
                                     {index + 1}

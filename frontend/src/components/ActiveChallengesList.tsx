@@ -91,7 +91,7 @@ export default function ActiveChallengesList() {
                                         <div className="px-3 py-1.5 rounded-lg bg-yellow-50 text-yellow-600 text-[10px] font-black uppercase tracking-widest border border-yellow-200 flex items-center gap-2" style={{padding:5,fontSize:12}}>
                                             <FaStar size={10} className="text-yellow-500" /> <span className="text-yellow-600">+{c.rewardPoints} <span className="text-yellow-600/80">pts</span></span>
                                         </div>
-                                        <div className="px-3 py-1.5 rounded-lg bg-orange-50 text-slate-500 text-[10px] font-black uppercase tracking-widest border border-slate-200 flex items-center gap-2" style={{padding:6,fontSize:12}}>
+                                        <div className="px-3 py-1.5 rounded-lg bg-indigo-50 text-slate-500 text-[10px] font-black uppercase tracking-widest border border-slate-200 flex items-center gap-2" style={{padding:6,fontSize:12}}>
                                             <FaCalendarAlt size={10} className="text-emerald-500/50" />
                                             <span>{new Date(c.startDate).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit' })} - {new Date(c.endDate).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit' })}</span>
                                         </div>

@@ -14,21 +14,21 @@
   --glass-bg: rgba(26, 31, 46, 0.95);
   --glass-border: rgba(255, 255, 255, 0.1);
 
-  /* Primary Colors - Orange */
-  --primary: #f97316;
-  --primary-rgb: 249, 115, 22;
-  --primary-hover: #ea580c;
-  --primary-light: #fb923c;
-  --primary-dark: #c2410c;
+  /* Primary Colors - Indigo Blue */
+  --primary: #4f46e5;
+  --primary-rgb: 79, 70, 229;
+  --primary-hover: #4338ca;
+  --primary-light: #6366f1;
+  --primary-dark: #3730a3;
 
-  /* Secondary Colors - Orange (Matching Primary for consistency) */
-  --secondary: #f97316;
-  --secondary-rgb: 249, 115, 22;
-  --secondary-hover: #ea580c;
+  /* Secondary Colors - Indigo (Matching Primary for consistency) */
+  --secondary: #4f46e5;
+  --secondary-rgb: 79, 70, 229;
+  --secondary-hover: #4338ca;
 
-  /* Accent Colors - Vibrant Orange */
-  --accent: #f97316;
-  --accent-hover: #fb923c;
+  /* Accent Colors - Vibrant Indigo */
+  --accent: #4f46e5;
+  --accent-hover: #6366f1;
 
   /* Neutral Colors - High Contrast for White Background */
   --text-primary: #0f172a;
@@ -43,7 +43,7 @@
   --error: #dc2626;
   --info: #2563eb;
 
-  /* Primary Foreground (Text on primary background - Orange) */
+  /* Primary Foreground (Text on primary background - Indigo Blue) */
   --primary-foreground: #ffffff;
 
   /* Shadows - More pronounced for light theme */
@@ -70,9 +70,9 @@
   --glass-bg: rgba(15, 23, 42, 0.5);
   --glass-border: rgba(255, 255, 255, 0.1);
 
-  --primary: #f97316;
-  --primary-rgb: 249, 115, 22;
-  --primary-hover: #ea580c;
+  --primary: #4f46e5;
+  --primary-rgb: 79, 70, 229;
+  --primary-hover: #4338ca;
 
   --text-primary: #f8fafc;
   --text-secondary: #cbd5e1;

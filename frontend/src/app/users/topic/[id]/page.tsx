@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 
 export default function TopicDetails({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
-    const ITEMS_PER_PAGE = 10;
+    const ITEMS_PER_PAGE = 4;
     const [topic, setTopic] = useState<any>(null);
     const [questions, setQuestions] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -94,20 +94,20 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                     <Button 
                         variant="primary" 
                         onClick={() => router.push(topic?.categoryId ? `/users/manage-topics?category=${topic.categoryId._id}` : '/users/manage-topics')}
-                        className="px-6 h-12 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black flex items-center gap-2 shadow-xl shadow-orange-500/10 border-none transition-all active:scale-95 shrink-0"
-                        style={{ background: '#f97316', color: 'white' }}
+                        className="px-6 h-12 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black flex items-center gap-2 shadow-xl shadow-indigo-500/10 border-none transition-all active:scale-95 shrink-0"
+                        style={{ background: '#4f46e5', color: 'white' }}
                     >
                         <FaChevronLeft /> Back
                     </Button>
                     <div className="h-6 w-[1px] bg-slate-200 mx-1 sm:mx-2 shrink-0" />
-                    <h3 className="text-xl sm:text-2xl font-black flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-3 text-slate-900 tracking-tight whitespace-nowrap sm:whitespace-normal" style={{color:'orange'}}>
-                        <Link href="/users/manage-topics" className="hover:text-orange-600 transition-colors">Manage Topics</Link>
+                    <h3 className="text-xl sm:text-2xl font-black flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-3 text-slate-900 tracking-tight whitespace-nowrap sm:whitespace-normal" style={{color:'#4f46e5'}}>
+                        <Link href="/users/manage-topics" className="hover:text-indigo-600 transition-colors">Manage Topics</Link>
                         
                         {topic?.categoryId && (
                             <>
                                 <span className="text-slate-300 mx-1">/</span>
-                                <Link href={`/users/manage-topics?category=${topic.categoryId._id}`} className="flex items-center gap-2 hover:text-orange-600 transition-colors">
-                                    <span className="text-orange-500" style={{color:'orange'}}><FaFolder /></span>
+                                <Link href={`/users/manage-topics?category=${topic.categoryId._id}`} className="flex items-center gap-2 hover:text-indigo-600 transition-colors">
+                                    <span className="text-indigo-500" style={{color:'#4f46e5'}}><FaFolder /></span>
                                     {topic.categoryId.name}
                                 </Link>
                             </>
@@ -130,7 +130,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
 
                         {/* Header + Add Button */}
                         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
-                            <h2 className="text-3xl font-bold" style={{color:'orange'}}>Questions ({questions.length})</h2>
+                            <h2 className="text-3xl font-bold" style={{color:'#4f46e5'}}>Questions ({questions.length})</h2>
                             <Button onClick={() => setShowAddForm(true)} disabled={showAddForm}>Add Question</Button>
                         </div>
 
@@ -158,105 +158,105 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                         )}
 
                         {/* Questions List */}
-                        {questions.length === 0 ? (
-                            <p className="text-slate-400 text-sm">No questions created yet.</p>
-                        ) : (
-                            <>
-                                {questions
-                                    .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
-                                    .map((q, i) => (
-                                        <Card key={q._id} className="p-6 border border-slate-200 hover:border-slate-300 transition-all flex flex-col gap-4" style={{ background: 'white', padding: 10 }}>
-                                            <div className="flex justify-between items-start mb-4 gap-3">
-                                                <h4 className="text-base sm:text-xl font-bold text-black" style={{ color: '#000' }}>Q{(currentPage - 1) * ITEMS_PER_PAGE + i + 1}. {q.content.text}</h4>
-                                                <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100 shrink-0">{q.marks} Marks</span>
-                                            </div>
-                                            <div className="flex flex-wrap gap-4 sm:gap-6">
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Type</span>
-                                                    <span className="text-sm font-medium text-slate-700 capitalize">{q.type.replace('_', ' ')}</span>
+                        <div className="bg-white border border-slate-200 rounded-2xl flex flex-col gap-4 lg:mr-4" style={{ paddingInline: 20, paddingBlock: 12 }}>
+                            {questions.length === 0 ? (
+                                <p className="text-slate-400 text-sm">No questions created yet.</p>
+                            ) : (
+                                <>
+                                    {questions
+                                        .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+                                        .map((q, i) => (
+                                            <Card key={q._id} className="p-6 border border-slate-200 hover:border-slate-300 transition-all flex flex-col gap-2" style={{ background: 'white', paddingInline: 12, paddingBlock: 8 }}>
+                                                <div className="flex justify-between items-start gap-3">
+                                                    <h4 className="text-base sm:text-lg font-bold text-black" style={{ color: '#000' }}>Q{(currentPage - 1) * ITEMS_PER_PAGE + i + 1}. {q.content.text}</h4>
+                                                    <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100 shrink-0">{q.marks} Marks</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Answer</span>
-                                                    <span className="text-sm font-medium text-emerald-600">{String(q.correctAnswer)}</span>
+                                                <div className="flex flex-wrap gap-3 sm:gap-4">
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="text-[0.55rem] font-black uppercase tracking-widest text-slate-500">Type</span>
+                                                        <span className="text-xs font-medium text-slate-700 capitalize">{q.type.replace('_', ' ')}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="text-[0.55rem] font-black uppercase tracking-widest text-slate-500">Answer</span>
+                                                        <span className="text-xs font-medium text-emerald-600">{String(q.correctAnswer)}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Card>
-                                    ))
-                                }
+                                            </Card>
+                                        ))
+                                    }
+                                </>
+                            )}
 
-                                {/* Pagination — only shown when there are more than 10 questions */}
-                                {questions.length > ITEMS_PER_PAGE && (
-                                    <div className="flex justify-center sm:justify-start mt-2">
-                                        <Pagination
-                                            currentPage={currentPage}
-                                            totalItems={questions.length}
-                                            itemsPerPage={ITEMS_PER_PAGE}
-                                            onPageChange={(page) => {
-                                                setCurrentPage(page);
-                                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                                            }}
-                                            isMobile={false}
-                                            style={{ width: '100%', maxWidth: '100%', minWidth: 0 }}
-                                        />
-                                    </div>
-                                )}
-                            </>
-                        )}
+                            {/* Pagination — shown regardless of the number of questions */}
+                            <div className="flex justify-center sm:justify-start mt-4">
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalItems={questions.length}
+                                    itemsPerPage={ITEMS_PER_PAGE}
+                                    onPageChange={(page) => {
+                                        setCurrentPage(page);
+                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }}
+                                    isMobile={false}
+                                    style={{ width: '100%', maxWidth: '100%', minWidth: 0 }}
+                                />
+                            </div>
+                        </div>
 
                     </div>
                 </div>
 
                 {/* Right Column: QR & Info */}
-                <div className="flex flex-col gap-10" >
-                    <Card className="flex flex-col items-center text-center p-9 border border-slate-200" style={{padding:30,background: 'white'}}>
-                        <h3 className="text-xl font-bold mb-6 text-black" style={{ color: '#000' }}>Share Quiz</h3>
+                <div className="flex flex-col gap-3" >
+                    <Card className="flex flex-col items-center text-center p-9 border border-slate-200" style={{ paddingInline: 30, paddingBlock: 20, background: 'white' }}>
+                        <h3 className="text-lg font-bold mb-3 text-black" style={{ color: '#000' }}>Share Quiz</h3>
                         {questions.length === 0 ? (
                             <p className="text-slate-500 text-sm">Create questions to receive the quiz link and QR code.</p>
                         ) : (
                             <>
-                                <div className="bg-white p-6 rounded-2xl border border-slate-100 mb-6">
-                                    <QRCode value={quizLink} size={160} />
+                                <div className="bg-white p-4 rounded-2xl border border-slate-100 mb-3">
+                                    <QRCode value={quizLink} size={140} />
                                 </div>
-                                <div className="w-full flex flex-col gap-3">
-                                    <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Direct Link</p>
-                                    <div className="bg-slate-50 p-4 rounded-xl break-all text-[0.85rem] text-emerald-600 font-mono border border-slate-200">
-                                        <a href={quizLink} target="_blank" className="hover:underline">{quizLink}</a>
+                                <div className="w-full flex flex-col gap-2">
+                                    <p className="text-[0.65rem] text-slate-500 font-bold uppercase tracking-wider"style={{color:'black'}}>Direct Link</p>
+                                    <div className="bg-slate-50 p-3 rounded-xl break-all text-[0.8rem] text-emerald-600 font-mono border border-slate-200" style={{padding:8}}>
+                                        <a href={quizLink} target="_blank" className="hover:underline" style={{padding:10}}>{quizLink}</a>
                                     </div>
                                 </div>
                             </>
                         )}
                     </Card>
 
-                    <Card className="flex flex-col gap-6 p-9 border border-slate-200" style={{padding:30,background: 'white'}}>
-                        <h3 className="text-xl font-bold mb-2 text-black" style={{ color: '#000' }}>Quiz Settings</h3>
+                    <Card className="flex flex-col gap-3 p-9 border border-slate-200" style={{ paddingInline: 30, paddingBlock: 20, background: 'white' }}>
+                        <h3 className="text-lg font-bold mb-1 text-black" style={{ color: '#000' }}>Quiz Settings</h3>
 
-                        <div className="flex items-center justify-between py-3 border-b border-slate-200">
-                            <span className="text-slate-600 font-medium">Topic Status</span>
+                        <div className="flex items-center justify-between py-1 border-b border-slate-200">
+                            <span className="text-sm font-medium text-slate-600">Topic Status</span>
                             <label className="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" className="sr-only peer" checked={topic.status === 'active'} onChange={handleToggleStatus} />
-                                <div className="w-14 h-7 bg-red-500/30 peer-checked:bg-emerald-500/30 rounded-full peer peer-focus:ring-2 peer-focus:ring-purple-400 transition-colors"></div>
-                                <span className={`absolute left-1 top-1 w-5 h-5 bg-red-500 peer-checked:bg-emerald-500 rounded-full transition-transform peer-checked:translate-x-7`}></span>
+                                <div className="w-11 h-6 bg-red-500/30 peer-checked:bg-emerald-500/30 rounded-full peer peer-focus:ring-2 peer-focus:ring-purple-400 transition-colors"></div>
+                                <span className={`absolute left-1 top-1 w-4 h-4 bg-red-500 peer-checked:bg-emerald-500 rounded-full transition-transform peer-checked:translate-x-5`}></span>
                             </label>
                         </div>
 
-                        <div className="flex flex-col gap-4 mt-4">
+                        <div className="flex flex-col gap-2 mt-1">
                             <Link href={`/users/leaderboard/${id}`} className="w-full">
-                                <Button variant="primary" className="w-full py-4 rounded-2xl border-2 border-white/5 font-bold">View Leaderboard</Button>
+                                <Button variant="primary" className="w-full py-3 text-sm rounded-xl border-2 border-white/5 font-bold">View Leaderboard</Button>
                             </Link>
                         </div>
                     </Card>
 
-                    <Card className="flex flex-col gap-6 p-9 relative overflow-hidden group border border-slate-200" style={{padding:30,background: 'white'}}>
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 blur-2xl rounded-full translate-x-8 -translate-y-8 group-hover:bg-orange-500/10 transition-colors" />
-                        <h3 className="text-xl font-bold mb-2 text-black" style={{ color: '#000' }}>Study Materials</h3>
-                        <p className="text-slate-500 text-sm leading-relaxed" style={{ color: '#000' }}>
+                    <Card className="flex flex-col gap-3 p-9 relative overflow-hidden group border border-slate-200" style={{ paddingInline: 30, paddingBlock: 20, background: 'white' }}>
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 blur-2xl rounded-full translate-x-8 -translate-y-8 group-hover:bg-indigo-500/10 transition-colors" />
+                        <h3 className="text-lg font-bold mb-1 text-black" style={{ color: '#000' }}>Study Materials</h3>
+                        <p className="text-slate-500 text-xs leading-relaxed" style={{ color: '#000' }}>
                             Upload PDFs, videos, or documents to help students prepare for this quiz.
                         </p>
                         <Button
                             onClick={() => setShowUploadModal(true)}
-                            className="w-full py-4 rounded-2xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 font-bold flex items-center justify-center gap-2"
+                            className="w-full py-3 text-sm rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 font-bold flex items-center justify-center gap-2"
                         >
-                            <span className="text-xl">📤</span> Upload Materials
+                            <span className="text-lg">📤</span> Upload Materials
                         </Button>
                     </Card>
                 </div>

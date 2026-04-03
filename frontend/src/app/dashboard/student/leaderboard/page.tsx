@@ -61,7 +61,7 @@ export default function LeaderboardPage() {
                     {/* Left Column: Leaderboard Rows */}
                     <div className="flex-1 w-full order-2 lg:order-1">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-start gap-5 mb-8" style={{marginBottom:20}}>
-                            <h3 className="text-2xl font-bold flex items-center gap-3 text-slate-500 uppercase tracking-widest pl-2 m-0" style={{color:'orange'}}>
+                            <h3 className="text-2xl font-bold flex items-center gap-3 text-slate-500 uppercase tracking-widest pl-2 m-0" style={{color:'#4f46e5'}}>
                                 <FaTrophy className="text-yellow-500" /> Top Performers
                             </h3>
                         </div>
@@ -72,7 +72,7 @@ export default function LeaderboardPage() {
                                     key={i}
                                     className={`
                                         p-6 flex items-center justify-between rounded-[1.5rem] transition-all hover:-translate-y-1 duration-300 border
-                                        ${i === 0 ? 'bg-gradient-to-r from-yellow-500/5 to-orange-500/5 border-yellow-500/30' :
+                                        ${i === 0 ? 'bg-gradient-to-r from-yellow-500/5 to-indigo-500/5 border-yellow-500/30' :
                                             i === 1 ? 'border-slate-200 hover:bg-slate-50' :
                                             i === 2 ? 'border-slate-200 hover:bg-slate-50' :
                                                 'border-slate-100 hover:bg-slate-50'}

@@ -5,38 +5,31 @@ import ActiveChallengesList from '@/components/ActiveChallengesList';
 import ChallengeManagement from '@/components/ChallengeManagement';
 import Button from '@/components/Button';
 import { FaPlus, FaTimes } from 'react-icons/fa';
+import BadgeChallengeHeader from '@/components/BadgeChallengeHeader';
 
 export default function AdminChallengesPage() {
     const [modalOpen, setModalOpen] = useState(false);
 
     return (
         <div className="animate-fade-in mb-24">
+            <BadgeChallengeHeader type="admin" activeTab="challenges" />
+            
             {/* Page Header */}
             <div
-                className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8"
-                style={{ paddingLeft: '20px', paddingRight: '20px', paddingTop: '48px', marginBottom: '40px', maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto' }}
+                className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6"
+                style={{ paddingLeft: '20px', paddingRight: '20px', marginBottom: '24px', maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto' }}
             >
-                <div className="flex flex-col gap-2">
-                    <h2
-                        className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none"
-                        style={{ color: 'black' }}
-                    >
-                        Active <span className="text-orange-600" style={{color:'black'}}>Challenges</span>
-                    </h2>
-                    <p className="text-slate-500 font-medium text-lg max-w-xl mt-2" style={{ color: 'black' }}>
-                        Define the parameters of elite achievement. Architect your prestige through tactical weekly objectives.
-                    </p>
+                <div className="flex flex-col gap-1">
+                    <h3 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter" style={{color:'black'}}>System Challenges</h3>
                 </div>
 
-                <div className="w-full md:w-auto flex justify-end">
-                    <Button
-                        onClick={() => setModalOpen(true)}
-                        className="h-14 px-8 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black transition-all shadow-[0_10px_30px_rgba(249,115,22,0.2)] group flex items-center gap-3"
-                    >
-                        <FaPlus className="group-hover:rotate-90 transition-transform duration-300" />
-                        <span className="text-xs tracking-widest uppercase">Create Challenge</span>
-                    </Button>
-                </div>
+                <Button
+                    onClick={() => setModalOpen(true)}
+                    className="h-14 px-8 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
+                    style={{ background: '#4f46e5' }}
+                >
+                    <FaPlus className="mr-2" /> Create Challenge
+                </Button>
             </div>
 
             {/* Active Challenges List */}
@@ -101,10 +94,10 @@ export default function AdminChallengesPage() {
 
                         {/* Modal title */}
                         <div style={{ paddingLeft: '20px', paddingRight: '20px', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
-                            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter" style={{ color: 'orange' }}>
-                                Challenge <span className="text-orange-600">Creator</span>
+                            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter" style={{ color: '#4f46e5' }}>
+                                Challenge <span className="text-indigo-600">Creator</span>
                             </h2>
-                            <p className="text-slate-500 font-medium mt-1" style={{ color: 'orange' }}>
+                            <p className="text-slate-500 font-medium mt-1" style={{ color: '#4f46e5' }}>
                                 Define the parameters of elite achievement.
                             </p>
                         </div>

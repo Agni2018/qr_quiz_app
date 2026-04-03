@@ -115,7 +115,7 @@ export default function BadgeManagement() {
 
     if (loading) return (
         <div className="flex justify-center items-center py-20">
-            <div className="w-10 h-10 border-4 border-slate-100 border-t-orange-500 rounded-full animate-spin" />
+            <div className="w-10 h-10 border-4 border-slate-100 border-t-indigo-500 rounded-full animate-spin" />
         </div>
     );
 
@@ -125,7 +125,7 @@ export default function BadgeManagement() {
 
     return (
         <div className="flex flex-col gap-10">
-            <div className="flex flex-col lg:flex-row justify-between items-end gap-6">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
                 <div className="flex flex-col gap-1">
                    
                     <h3 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter" style={{color:'black'}}>System Badges</h3>
@@ -133,8 +133,8 @@ export default function BadgeManagement() {
                 </div>
                 <Button
                     onClick={() => setShowForm(true)}
-                    className="h-14 px-8 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-xs shadow-lg shadow-orange-500/20 active:scale-95 transition-all"
-                    style={{ background: '#f97316' }}
+                    className="h-14 px-8 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
+                    style={{ background: '#4f46e5' }}
                 >
                     <FaPlus className="mr-2" /> Create Badge
                 </Button>
@@ -168,23 +168,41 @@ export default function BadgeManagement() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <label className="flex flex-col gap-2">
                                     <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Tracking Metric <span className="text-red-500">*</span></span>
-                                    <div className="relative">
+                                    <div className="relative group/select">
                                         <select
-                                            className="w-full h-14 p-4 pr-12 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 outline-none appearance-none cursor-pointer focus:border-orange-500 font-bold"
+                                            className="w-full h-14 rounded-[var(--radius)] bg-white border border-slate-200 text-black outline-none appearance-none cursor-pointer focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 font-bold transition-all hover:border-indigo-400 shadow-sm"
+                                            style={{ 
+                                                paddingLeft: '1.5rem', 
+                                                paddingRight: '3rem',
+                                                textIndent: '0.01px',
+                                                WebkitAppearance: 'none',
+                                                MozAppearance: 'none'
+                                            }}
                                             value={newBadge.type}
                                             onChange={e => setNewBadge({ ...newBadge, type: e.target.value })}
                                         >
-                                            {types.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                                            {types.map(t => <option key={t.value} value={t.value} className="py-2 text-slate-900">{t.label}</option>)}
                                         </select>
-                                        <FaChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={14} />
+                                        <FaChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-hover/select:text-indigo-500 transition-colors" size={14} />
                                     </div>
                                 </label>
                                 <label className="flex flex-col gap-2">
                                     <span className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] pl-1">Threshold Value <span className="text-red-500">*</span></span>
                                     <Input
                                         type="number"
+                                        min={0}
                                         value={newBadge.threshold}
-                                        onChange={e => setNewBadge({ ...newBadge, threshold: e.target.value })}
+                                        onChange={e => {
+                                            const val = e.target.value;
+                                            if (val === '' || Number(val) >= 0) {
+                                                setNewBadge({ ...newBadge, threshold: val });
+                                            }
+                                        }}
+                                        onKeyDown={e => {
+                                            if (e.key === '-' || e.key === 'e' || e.key === 'E' || e.key === '+') {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                         style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                     />
                                 </label>
@@ -196,7 +214,7 @@ export default function BadgeManagement() {
                                     value={newBadge.description}
                                     onChange={e => setNewBadge({ ...newBadge, description: e.target.value })}
                                     placeholder="Explain how this badge is earned..."
-                                    style={{ background: 'white', color: '#1e293b', border: '1px solid #e2e8f0' }}
+                                    style={{ background: 'white', color: 'black', border: '1px solid #e2e8f0' }}
                                 />
                             </label>
 
@@ -208,7 +226,7 @@ export default function BadgeManagement() {
                                             key={icon.name}
                                             onClick={() => setNewBadge({ ...newBadge, icon: icon.name })}
                                             className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-all border ${newBadge.icon === icon.name
-                                                ? 'bg-orange-500 border-orange-500 text-white scale-110 shadow-lg shadow-orange-500/20'
+                                                ? 'bg-indigo-500 border-indigo-500 text-white scale-110 shadow-lg shadow-indigo-500/20'
                                                 : 'bg-slate-50 text-slate-400 border-slate-100 hover:border-slate-200'}`}
                                         >
                                             {icon.icon}
@@ -220,7 +238,13 @@ export default function BadgeManagement() {
 
                         <div className="pt-6 border-t border-slate-100 flex gap-4">
                             <Button variant="ghost" className="flex-1 h-12 text-slate-400 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowForm(false)}>Cancel</Button>
-                            <Button className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 uppercase font-black tracking-widest text-[11px]" onClick={handleSubmit}>Save Definition</Button>
+                            <Button 
+                                className="flex-1 h-12 bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 uppercase font-black tracking-widest text-[11px]" 
+                                onClick={handleSubmit}
+                                disabled={!newBadge.name || !newBadge.description || !newBadge.threshold}
+                            >
+                                Save Definition
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -234,7 +258,7 @@ export default function BadgeManagement() {
                         style={{ padding: '20px', minHeight: '260px' }}
                     >
                         <div className="flex justify-between items-start mb-4">
-                            <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-2xl text-orange-500 group-hover:scale-110 transition-transform" style={{ marginBottom: 6 }}>
+                            <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-2xl text-indigo-500 group-hover:scale-110 transition-transform" style={{ marginBottom: 6 }}>
                                 {icons.find(i => i.name === badge.icon)?.icon || <FaAward />}
                             </div>
                             <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-slate-50 text-slate-400 rounded-md" style={{ color: 'green' }}>
@@ -243,7 +267,7 @@ export default function BadgeManagement() {
                         </div>
 
                         <div className="flex flex-col gap-3 flex-1">
-                            <h4 className="text-2xl font-black text-slate-900 uppercase tracking-tight leading-tight group-hover:text-orange-500 transition-colors" style={{ color: 'black' }}>{badge.name}</h4>
+                            <h4 className="text-2xl font-black text-slate-900 uppercase tracking-tight leading-tight group-hover:text-indigo-500 transition-colors" style={{ color: 'black' }}>{badge.name}</h4>
                             <p className="text-sm font-bold text-slate-400 line-clamp-3 leading-relaxed" style={{ color: 'black' }}>{badge.description}</p>
                         </div>
 

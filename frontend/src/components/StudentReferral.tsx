@@ -208,7 +208,7 @@ export default function StudentReferral() {
                                             </div>
                                             <div className="ml-auto flex flex-col items-end gap-2 shrink-0">
                                                 <div 
-                                                    className={`text-[0.65rem] font-black uppercase tracking-widest rounded-xl ${ref.status === 'completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-orange-100 text-orange-800 border border-orange-200'}`}
+                                                    className={`text-[0.65rem] font-black uppercase tracking-widest rounded-xl ${ref.status === 'completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-indigo-100 text-indigo-800 border border-indigo-200'}`}
                                                     style={{ padding: '8px 12px' }}
                                                 >
                                                     {ref.status}
