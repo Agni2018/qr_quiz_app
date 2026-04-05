@@ -8,7 +8,7 @@ import { FaTrash, FaStar, FaCalendarAlt, FaTrophy } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
 
-export default function ActiveChallengesList() {
+export default function ActiveChallengesList({ refreshKey = 0 }: { refreshKey?: number }) {
     const [challenges, setChallenges] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
@@ -37,7 +37,7 @@ export default function ActiveChallengesList() {
 
     useEffect(() => {
         fetchChallenges();
-    }, []);
+    }, [refreshKey]);
 
     const handleDelete = async (id: string) => {
         setConfirmModal({

@@ -98,8 +98,8 @@ export default function StudentReferral() {
                                                 value={username}
                                                 onChange={(e) => setUsername(e.target.value)}
                                                 required
-                                                className="border-slate-200 focus:border-primary/50 h-12 rounded-xl text-base transition-all text-black placeholder:text-black"
-                                                style={{ background: 'white', color: 'black' }}
+                                                className="border-slate-300 focus:border-primary/50 h-12 rounded-xl text-base transition-all text-black placeholder:text-slate-400 shadow-sm"
+                                                style={{ background: 'white', color: 'black', border: '1.5px solid #cbd5e1' }}
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -110,8 +110,8 @@ export default function StudentReferral() {
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 required
-                                                className="border-slate-200 focus:border-primary/50 h-12 rounded-xl text-base transition-all text-black placeholder:text-black"
-                                                style={{ background: 'white', color: 'black' }}
+                                                className="border-slate-300 focus:border-primary/50 h-12 rounded-xl text-base transition-all text-black placeholder:text-slate-400 shadow-sm"
+                                                style={{ background: 'white', color: 'black', border: '1.5px solid #cbd5e1' }}
                                             />
                                         </div>
                                     </div>

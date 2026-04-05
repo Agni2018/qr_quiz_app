@@ -9,7 +9,7 @@ import TextArea from './TextArea';
 import { FaPlus, FaChevronDown } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
 
-export default function ChallengeManagement() {
+export default function ChallengeManagement({ onSuccess }: { onSuccess?: () => void }) {
     const [loading, setLoading] = useState(false);
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
     const [formData, setFormData] = useState({
@@ -240,7 +240,10 @@ export default function ChallengeManagement() {
 
             <AlertModal
                 isOpen={alertModal.isOpen}
-                onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+                onClose={() => {
+                    if (alertModal.type === 'success') onSuccess?.();
+                    setAlertModal({ ...alertModal, isOpen: false });
+                }}
                 message={alertModal.message}
                 type={alertModal.type}
             />

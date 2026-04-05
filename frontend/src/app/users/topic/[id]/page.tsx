@@ -9,8 +9,9 @@ import QuestionForm from '@/components/QuestionForm';
 import UploadMaterialModal from '@/components/UploadMaterialModal';
 import Link from 'next/link';
 import AlertModal from '@/components/AlertModal';
+import ConfirmModal from '@/components/ConfirmModal';
 import Pagination from '@/components/Pagination';
-import { FaChevronLeft, FaFolder, FaFileAlt, FaTimes } from 'react-icons/fa';
+import { FaChevronLeft, FaFolder, FaFileAlt, FaTimes, FaPen, FaTrash } from 'react-icons/fa';
 
 import { useRouter } from 'next/navigation';
 
@@ -22,9 +23,12 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
     const [currentPage, setCurrentPage] = useState(1);
     const [showAddForm, setShowAddForm] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editingQuestion, setEditingQuestion] = useState<any>(null);
     const [authLoading, setAuthLoading] = useState(true);
     const [quizLink, setQuizLink] = useState('');
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
+    const [confirmDelete, setConfirmDelete] = useState<{ isOpen: boolean; questionId: string | null }>({ isOpen: false, questionId: null });
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -71,6 +75,17 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
             fetchData();
         } catch (err) {
             console.error('Failed to update status', err);
+        }
+    };
+
+    const handleDeleteQuestion = async (qId: string) => {
+        try {
+            await api.delete(`/questions/${qId}`);
+            fetchData();
+            setAlertModal({ isOpen: true, message: 'Question deleted successfully!', type: 'success' });
+        } catch (err) {
+            console.error('Failed to delete question', err);
+            setAlertModal({ isOpen: true, message: 'Failed to delete question', type: 'error' });
         }
     };
 
@@ -131,7 +146,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                         {/* Header + Add Button */}
                         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
                             <h2 className="text-3xl font-bold" style={{color:'#4f46e5'}}>Questions ({questions.length})</h2>
-                            <Button onClick={() => setShowAddForm(true)} disabled={showAddForm}>Add Question</Button>
+                            <Button onClick={() => { setEditingQuestion(null); setShowAddForm(true); }} disabled={showAddForm}>Add Question</Button>
                         </div>
 
                         {/* Question Form */}
@@ -146,19 +161,40 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                                     </button>
                                     <QuestionForm
                                         topicId={id}
+                                        existingQuestion={editingQuestion}
                                         onQuestionAdded={() => { 
                                             setShowAddForm(false); 
+                                            setEditingQuestion(null);
                                             fetchData(); 
-                                            setAlertModal({ isOpen: true, message: 'Question created successfully!', type: 'success' });
+                                            setAlertModal({ isOpen: true, message: editingQuestion ? 'Question updated successfully!' : 'Question created successfully!', type: 'success' });
                                         }}
-                                        onCancel={() => setShowAddForm(false)}
+                                        onCancel={() => { setShowAddForm(false); setEditingQuestion(null); }}
                                     />
                                 </div>
                             </div>
                         )}
 
                         {/* Questions List */}
-                        <div className="bg-white border border-slate-200 rounded-2xl flex flex-col gap-4 lg:mr-4" style={{ paddingInline: 20, paddingBlock: 12 }}>
+                        <div className="bg-white border border-slate-200 rounded-2xl flex flex-col gap-8 lg:mr-4" style={{ paddingInline: 24, paddingBlock: 24 }}>
+                            
+                            {/* View / Edit Mode Toggles */}
+                            <div className="flex flex-wrap gap-4 pt-2 mb-8">
+                                <Button 
+                                    onClick={() => setIsEditMode(false)}
+                                    className={`flex-1 sm:flex-none uppercase tracking-widest text-xs font-bold transition-all duration-300 ${!isEditMode ? '!scale-105 shadow-xl shadow-indigo-500/20' : ''}`}
+                                    style={{ opacity: isEditMode ? 0.6 : 1 }}
+                                >
+                                    View Mode
+                                </Button>
+                                <Button 
+                                    onClick={() => setIsEditMode(true)}
+                                    className={`flex-1 sm:flex-none uppercase tracking-widest text-xs font-bold transition-all duration-300 ${isEditMode ? '!scale-105 shadow-xl shadow-indigo-500/20' : ''}`}
+                                    style={{ opacity: !isEditMode ? 0.6 : 1 }}
+                                >
+                                    Edit Mode
+                                </Button>
+                            </div>
+
                             {questions.length === 0 ? (
                                 <p className="text-slate-400 text-sm">No questions created yet.</p>
                             ) : (
@@ -168,8 +204,27 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                                         .map((q, i) => (
                                             <Card key={q._id} className="p-6 border border-slate-200 hover:border-slate-300 transition-all flex flex-col gap-2" style={{ background: 'white', paddingInline: 12, paddingBlock: 8 }}>
                                                 <div className="flex justify-between items-start gap-3">
-                                                    <h4 className="text-base sm:text-lg font-bold text-black" style={{ color: '#000' }}>Q{(currentPage - 1) * ITEMS_PER_PAGE + i + 1}. {q.content.text}</h4>
-                                                    <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100 shrink-0">{q.marks} Marks</span>
+                                                    <h4 className="text-base sm:text-lg font-bold text-black break-words flex-1" style={{ color: '#000' }}>Q{(currentPage - 1) * ITEMS_PER_PAGE + i + 1}. {q.content.text}</h4>
+                                                    <div className="flex items-center gap-2 shrink-0">
+                                                        {isEditMode ? (
+                                                            <>
+                                                                <button 
+                                                                    onClick={() => { setEditingQuestion(q); setShowAddForm(true); }}
+                                                                    className="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 flex items-center justify-center transition-colors border border-slate-200"
+                                                                >
+                                                                    <FaPen size={10} />
+                                                                </button>
+                                                                <button 
+                                                                     onClick={() => setConfirmDelete({ isOpen: true, questionId: q._id })}
+                                                                    className="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:bg-red-50 hover:text-red-600 flex items-center justify-center transition-colors border border-slate-200"
+                                                                >
+                                                                    <FaTrash size={10} />
+                                                                </button>
+                                                            </>
+                                                        ) : (
+                                                            <span className="text-[0.65rem] font-black uppercase tracking-[0.2em] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100">{q.marks} Marks</span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                                 <div className="flex flex-wrap gap-3 sm:gap-4">
                                                     <div className="flex flex-col gap-1">
@@ -188,7 +243,7 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                             )}
 
                             {/* Pagination — shown regardless of the number of questions */}
-                            <div className="flex justify-center sm:justify-start mt-4">
+                            <div className="flex justify-center sm:justify-start mt-12">
                                 <Pagination
                                     currentPage={currentPage}
                                     totalItems={questions.length}
@@ -274,6 +329,20 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                     }}
                 />
             )}
+
+            <ConfirmModal
+                isOpen={confirmDelete.isOpen}
+                onClose={() => setConfirmDelete({ isOpen: false, questionId: null })}
+                onConfirm={() => {
+                    if (confirmDelete.questionId) handleDeleteQuestion(confirmDelete.questionId);
+                    setConfirmDelete({ isOpen: false, questionId: null });
+                }}
+                title="Delete Question"
+                message="Are you sure you want to delete this question? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                isDanger={true}
+            />
 
             <AlertModal
                 isOpen={alertModal.isOpen}

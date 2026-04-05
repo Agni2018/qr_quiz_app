@@ -75,7 +75,7 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
     const paginatedAttempts = filteredAttempts.slice(indexOfFirst, indexOfLast);
 
     return (
-        <div className="flex flex-col gap-10 md:gap-16">
+        <div className="flex flex-col gap-4 md:gap-8">
             {/* SEARCH BAR & HEADER */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pl-4 pr-10 md:pr-14 w-full">
                 {titleComponent && (

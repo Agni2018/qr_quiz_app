@@ -10,36 +10,61 @@ exports.getOverview = async (req, res) => {
 
         const topicStats = await UserAttempt.aggregate([
             {
-                $group: {
-                    _id: '$topicId',
-                    participantCount: { $sum: 1 }
-                }
-            },
-            {
                 $lookup: {
                     from: 'topics',
-                    localField: '_id',
+                    localField: 'topicId',
                     foreignField: '_id',
-                    as: 'topicInfo'
+                    as: 'topic'
                 }
             },
+            { $unwind: '$topic' },
             {
-                $unwind: '$topicInfo'
+                $project: {
+                    topicId: 1,
+                    isCertified: 1,
+                    score: 1,
+                    passingMarks: { $ifNull: ['$topic.passingMarks', 0] },
+                    topicName: '$topic.name',
+                    categoryId: '$topic.categoryId'
+                }
             },
             {
                 $lookup: {
                     from: 'categories',
-                    localField: 'topicInfo.categoryId',
+                    localField: 'categoryId',
                     foreignField: '_id',
-                    as: 'categoryInfo'
+                    as: 'category'
+                }
+            },
+            {
+                $group: {
+                    _id: '$topicId',
+                    topicName: { $first: '$topicName' },
+                    categoryName: { $first: { $arrayElemAt: ['$category.name', 0] } },
+                    participantCount: { $sum: 1 },
+                    pendingCount: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $ne: ['$isCertified', true] },
+                                        { $gte: ['$score', '$passingMarks'] }
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    }
                 }
             },
             {
                 $project: {
                     topicId: '$_id',
-                    topicName: '$topicInfo.name',
-                    categoryName: { $arrayElemAt: ['$categoryInfo.name', 0] },
+                    topicName: 1,
+                    categoryName: 1,
                     participantCount: 1,
+                    pendingCount: 1,
                     _id: 0
                 }
             },

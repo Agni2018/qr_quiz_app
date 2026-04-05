@@ -68,6 +68,14 @@ export default function TopicManagement() {
     const [editItem, setEditItem] = useState<any>(null);
     const [editType, setEditType] = useState<'category' | 'topic'>('category');
     const [editName, setEditName] = useState('');
+    const [editTopicData, setEditTopicData] = useState({
+        name: '',
+        description: '',
+        timeLimit: '',
+        negativeMarking: '',
+        timeBasedScoring: false,
+        passingMarks: ''
+    });
 
     const fetchData = async () => {
         setLoading(true);
@@ -245,19 +253,44 @@ export default function TopicManagement() {
         setEditItem(item);
         setEditType(type);
         setEditName(item.name || '');
+        if (type === 'topic') {
+            setEditTopicData({
+                name: item.name || '',
+                description: item.description || '',
+                timeLimit: item.timeLimit != null ? String(item.timeLimit) : '',
+                negativeMarking: item.negativeMarking != null ? String(item.negativeMarking) : '',
+                timeBasedScoring: item.timeBasedScoring || false,
+                passingMarks: item.passingMarks != null ? String(item.passingMarks) : ''
+            });
+        }
         setShowEditModal(true);
     };
 
     const handleEditSave = async () => {
-        if (!editName.trim() || !editItem) return;
+        if (!editItem) return;
         try {
             const endpoint = editType === 'category' ? `/categories/${editItem._id}` : `/topics/${editItem._id}`;
-            await api.put(endpoint, { name: editName });
+            let payload: any;
+            if (editType === 'category') {
+                if (!editName.trim()) return;
+                payload = { name: editName };
+            } else {
+                if (!editTopicData.name.trim()) return;
+                payload = {
+                    name: editTopicData.name,
+                    description: editTopicData.description,
+                    timeLimit: Number(editTopicData.timeLimit) || 0,
+                    negativeMarking: Number(editTopicData.negativeMarking) || 0,
+                    passingMarks: Number(editTopicData.passingMarks) || 0,
+                    timeBasedScoring: editTopicData.timeBasedScoring
+                };
+            }
+            await api.put(endpoint, payload);
             setShowEditModal(false);
-            setAlertModal({ isOpen: true, message: `${editType === 'category' ? 'Category' : 'Topic'} renamed successfully`, type: 'success' });
+            setAlertModal({ isOpen: true, message: `${editType === 'category' ? 'Category' : 'Topic'} updated successfully`, type: 'success' });
             fetchData();
         } catch (err: any) {
-            setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Failed to rename', type: 'error' });
+            setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Failed to update', type: 'error' });
         }
     };
 
@@ -675,30 +708,131 @@ export default function TopicManagement() {
             {showEditModal && (
                 <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm overflow-y-auto px-4 py-12 animate-in fade-in duration-300" onClick={() => setShowEditModal(false)}>
                     <div className="min-h-full flex justify-center items-start">
-                        <Card className="w-full max-w-[420px] rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-col gap-6 mx-auto" style={{ background: 'white', color: 'black', padding: '30px', margin: '1rem auto', width: 'calc(100% - 2rem)', maxWidth: '420px' }} onClick={e => e.stopPropagation()}>
-                        <div className="flex justify-between items-center text-black">
-                            <h2 className="text-2xl font-black uppercase tracking-tight" style={{ color: 'black' }}>Rename {editType === 'category' ? 'Category' : 'Topic'}</h2>
-                            <button onClick={() => setShowEditModal(false)} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all"><FaTimes size={18} /></button>
-                        </div>
-                        <div className="flex flex-col gap-6">
-                            <label className="flex flex-col gap-3">
-                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>New Name <span className="text-red-500">*</span></span>
-                                <Input
-                                    value={editName}
-                                    onChange={e => setEditName(e.target.value)}
-                                    placeholder={`Enter new ${editType} name...`}
-                                    style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
-                                    autoFocus
-                                />
-                            </label>
-                            <div className="flex flex-col sm:flex-row gap-4 mt-2">
-                                <Button variant="ghost" className="flex-1 h-12 text-slate-500 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowEditModal(false)}>Cancel</Button>
-                                <Button className="flex-1 h-12 bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 uppercase font-black text-[11px]" onClick={handleEditSave} disabled={!editName.trim()}>Save Changes</Button>
+                        <Card
+                            className="w-full rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-col gap-6 mx-auto"
+                            style={{ background: 'white', color: 'black', padding: '30px', margin: '1rem auto', width: 'calc(100% - 2rem)', maxWidth: editType === 'topic' ? '500px' : '420px' }}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="flex justify-between items-center text-black">
+                                <h2 className="text-2xl font-black uppercase tracking-tight" style={{ color: 'black' }}>
+                                    {editType === 'category' ? 'Rename Category' : 'Edit Topic'}
+                                </h2>
+                                <button onClick={() => setShowEditModal(false)} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all"><FaTimes size={18} /></button>
                             </div>
-                        </div>
-                    </Card>
+
+                            {editType === 'category' ? (
+                                // CATEGORY: rename only
+                                <div className="flex flex-col gap-6">
+                                    <label className="flex flex-col gap-3">
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>New Name <span className="text-red-500">*</span></span>
+                                        <Input
+                                            value={editName}
+                                            onChange={e => setEditName(e.target.value)}
+                                            placeholder="Enter new category name..."
+                                            style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
+                                            autoFocus
+                                        />
+                                    </label>
+                                    <div className="flex flex-col sm:flex-row gap-4 mt-2">
+                                        <Button variant="ghost" className="flex-1 h-12 text-slate-500 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowEditModal(false)}>Cancel</Button>
+                                        <Button className="flex-1 h-12 bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 uppercase font-black text-[11px]" onClick={handleEditSave} disabled={!editName.trim()}>Save Changes</Button>
+                                    </div>
+                                </div>
+                            ) : (
+                                // TOPIC: full edit form
+                                <div className="flex flex-col gap-5">
+                                    <label className="flex flex-col gap-2">
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Topic Name <span className="text-red-500">*</span></span>
+                                        <Input
+                                            value={editTopicData.name}
+                                            onChange={e => setEditTopicData({ ...editTopicData, name: e.target.value })}
+                                            placeholder="e.g. Modern Web Architecture"
+                                            style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
+                                            autoFocus
+                                        />
+                                    </label>
+
+                                    <label className="flex flex-col gap-2">
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Description</span>
+                                        <TextArea
+                                            value={editTopicData.description}
+                                            onChange={e => setEditTopicData({ ...editTopicData, description: e.target.value })}
+                                            placeholder="Describe the quiz scope..."
+                                            style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
+                                        />
+                                    </label>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <label className="flex flex-col gap-2">
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Time (s)</span>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                onKeyDown={e => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
+                                                value={editTopicData.timeLimit}
+                                                onChange={e => setEditTopicData({ ...editTopicData, timeLimit: e.target.value })}
+                                                style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
+                                            />
+                                        </label>
+                                        <label className="flex flex-col gap-2">
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Passing Pts <span className="text-red-500">*</span></span>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                onKeyDown={e => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
+                                                value={editTopicData.passingMarks}
+                                                onChange={e => setEditTopicData({ ...editTopicData, passingMarks: e.target.value })}
+                                                style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <label className="flex flex-col gap-2">
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Negative Marking</span>
+                                            <Input
+                                                type="number"
+                                                step="0.1"
+                                                min="0"
+                                                onKeyDown={e => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
+                                                value={editTopicData.negativeMarking}
+                                                onChange={e => setEditTopicData({ ...editTopicData, negativeMarking: e.target.value })}
+                                                placeholder="e.g. 0.25"
+                                                style={{ background: 'white', color: 'black', border: '1px solid #cbd5e1' }}
+                                            />
+                                        </label>
+                                        <div className="flex flex-col gap-2">
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] pl-1" style={{ color: 'black' }}>Scoring Mode</span>
+                                            <label className="flex items-center gap-4 bg-white cursor-pointer hover:border-indigo-500 transition-all shadow-sm" style={{ padding: '0.875rem 1.5rem', background: 'white', border: '1px solid #cbd5e1', borderRadius: '0.5rem', height: '100%' }}>
+                                                <input
+                                                    type="checkbox"
+                                                    className="w-5 h-5 accent-indigo-500 rounded border-slate-300 cursor-pointer"
+                                                    checked={editTopicData.timeBasedScoring}
+                                                    onChange={e => setEditTopicData({ ...editTopicData, timeBasedScoring: e.target.checked })}
+                                                />
+                                                <div className="flex flex-col">
+                                                    <span className="text-[11px] font-black uppercase tracking-tight" style={{ color: 'black' }}>Enable Time Bonus</span>
+                                                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Award extra points for speed</span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row gap-4 mt-4">
+                                        <Button variant="ghost" className="flex-1 h-12 text-slate-500 uppercase font-black tracking-widest text-[11px]" onClick={() => setShowEditModal(false)}>Cancel</Button>
+                                        <Button
+                                            className="flex-1 h-12 bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 uppercase font-black text-[11px]"
+                                            onClick={handleEditSave}
+                                            disabled={!editTopicData.name.trim() || editTopicData.passingMarks === ''}
+                                        >
+                                            Save Changes
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </Card>
+                    </div>
                 </div>
-            </div>
             )}
             <ConfirmModal
                 isOpen={confirmModal.isOpen}

@@ -53,6 +53,12 @@ export default function TopicPerformance() {
 
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
 
+    // Pending Modal States
+    const [showPendingModal, setShowPendingModal] = useState(false);
+    const [pendingSearchTerm, setPendingSearchTerm] = useState('');
+    const [pendingCurrentPage, setPendingCurrentPage] = useState(1);
+    const pendingItemsPerPage = 10;
+
     const fetchData = async () => {
         try {
             const [t, a] = await Promise.all([
@@ -201,42 +207,85 @@ export default function TopicPerformance() {
                     </h1>
                 </div>
 
-                {/* Active Topics Summary Card */}
-                <div 
-                    className="bg-white rounded-3xl flex items-center justify-between relative overflow-hidden"
-                    style={{ 
-                        padding: '1.5rem 2rem',
-                        minWidth: '320px',
-                        height: '110px',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.03)',
-                        border: '1px solid #f1f5f9'
-                    }}
-                >
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-slate-400 mb-1">Active Intelligence</span>
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-4xl font-black text-slate-900 leading-none">
-                                {analytics?.activeTopics || topics.length}
-                            </span>
-                            <span className="text-[10px] font-bold uppercase text-slate-400">Total Active Topics</span>
+                <div className="flex flex-col md:flex-row items-center gap-4 lg:gap-6">
+                    {/* Active Intelligence Card - RESTORED */}
+                    <div 
+                        className="bg-white rounded-3xl flex items-center justify-between relative overflow-hidden"
+                        style={{ 
+                            padding: '1.5rem 2rem',
+                            minWidth: isMobile ? '100%' : '320px',
+                            height: '110px',
+                            boxShadow: '0 20px 40px rgba(0,0,0,0.03)',
+                            border: '1px solid #f1f5f9'
+                        }}
+                    >
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-slate-400 mb-1">Active Intelligence</span>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-4xl font-black text-slate-900 leading-none">
+                                    {analytics?.activeTopics || topics.length}
+                                </span>
+                                <span className="text-[10px] font-bold uppercase text-slate-400">Total Active Topics</span>
+                            </div>
                         </div>
+                        <div style={{ 
+                            width: '56px', 
+                            height: '56px', 
+                            borderRadius: '16px', 
+                            backgroundColor: '#eef2ff', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            color: '#4f46e5',
+                            border: '1px solid #e0e7ff'
+                        }}>
+                            <FaChartLine size={24} />
+                        </div>
+                        {/* Decorative Gradient Line */}
+                        <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '4px', backgroundColor: '#4f46e5' }}></div>
                     </div>
-                    <div style={{ 
-                        width: '56px', 
-                        height: '56px', 
-                        borderRadius: '16px', 
-                        backgroundColor: '#eef2ff', 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center', 
-                        color: '#4f46e5',
-                        border: '1px solid #e0e7ff'
-                    }}>
-                        <FaChartLine size={24} />
-                    </div>
-                    {/* Decorative Gradient Line */}
-                    <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '4px', backgroundColor: '#4f46e5' }}></div>
+
+                    {/* Pending Button - NEW */}
+                    <button 
+                        onClick={() => {
+                            fetchData();
+                            setShowPendingModal(true);
+                        }}
+                        className="bg-indigo-500 rounded-3xl flex items-center justify-center gap-4 relative overflow-hidden transition-all hover:bg-indigo-600 hover:scale-[1.02] active:scale-95 cursor-pointer shadow-xl shadow-indigo-500/20"
+                        style={{ 
+                            padding: '1.5rem 2.5rem',
+                            minWidth: isMobile ? '100%' : '240px',
+                            height: '110px'
+                        }}
+                    >
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                            <span className="text-[10px] font-black text-indigo-100 uppercase tracking-widest leading-none mb-2">Certification</span>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-4xl font-black text-white leading-none">
+                                    {analytics?.topicStats?.reduce((acc: number, curr: any) => acc + (curr.pendingCount || 0), 0) || 0}
+                                </span>
+                                <span className="text-[12px] font-bold uppercase text-indigo-100 tracking-widest">Pending</span>
+                            </div>
+                        </div>
+                        <div style={{ 
+                            width: '50px', 
+                            height: '50px', 
+                            borderRadius: '16px', 
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            color: 'white',
+                            backdropFilter: 'blur(10px)',
+                            border: '1px solid rgba(255, 255, 255, 0.2)'
+                        }}>
+                            <FaAward size={22} />
+                        </div>
+                    </button>
                 </div>
+
+
+
             </div>
 
             {/* Topic Performance Grid Container */}
@@ -422,10 +471,10 @@ export default function TopicPerformance() {
                                                             onChange={e => setMessageText(e.target.value)}
                                                         />
                                                         <div className="flex items-center justify-end gap-3">
-                                                            <button className="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors" onClick={() => setSendingMessageTo(null)}>Cancel</button>
+                                                            <button className="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors cursor-pointer" onClick={() => setSendingMessageTo(null)}>Cancel</button>
                                                             <button 
                                                                 style={{padding:5,marginRight:5,marginBottom:5}}
-                                                                className="h-10 px-6 rounded-lg bg-indigo-500 text-white text-[11px] font-bold uppercase tracking-widest disabled:opacity-50 transition-all hover:bg-indigo-600 shadow-md shadow-indigo-500/10"
+                                                                className="h-10 px-6 rounded-lg bg-indigo-500 text-white text-[11px] font-bold uppercase tracking-widest disabled:opacity-50 transition-all hover:bg-indigo-600 shadow-md shadow-indigo-500/10 cursor-pointer"
                                                                 onClick={() => handleSendMessage(String(p.userId), String(p.id))}
                                                                 disabled={isSendingMessage || !messageText.trim()}
                                                             >
@@ -558,17 +607,137 @@ export default function TopicPerformance() {
 
                         <div className="border-t border-slate-100 flex gap-4 md:gap-6" style={{ padding: isMobile ? '20px' : '30px' }}>
                             <button
-                                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[12px] disabled:opacity-40 transition-all shadow-xl shadow-indigo-500/20 active:scale-95 disabled:cursor-not-allowed"
+                                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[12px] disabled:opacity-40 transition-all shadow-xl shadow-indigo-500/20 active:scale-95 disabled:cursor-not-allowed cursor-pointer"
                                                 onClick={handleGenerateCertificates}
                                                 disabled={certifying || participants.filter(p => !p.isCertified && p.isQualified).length === 0 || !selectedCertifyOption || selectedParticipantIds.length === 0}
                                             >
                                                 {certifying ? 'Transmitting...' : 'Authorize'}
                                             </button>
                             <button
-                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-slate-100 hover:bg-slate-200 text-slate-900 font-black uppercase tracking-widest text-[10px] md:text-[12px] border border-slate-200 transition-all active:scale-95"
+                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-slate-100 hover:bg-slate-200 text-slate-900 font-black uppercase tracking-widest text-[10px] md:text-[12px] border border-slate-200 transition-all active:scale-95 cursor-pointer"
                                 onClick={() => setShowCertifyModal(false)}
                             >
                                 Dismiss
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* PENDING CERTIFICATIONS MODAL */}
+            {showPendingModal && (
+                <div
+                    className="fixed inset-0 z-[100] backdrop-blur-md flex items-start md:items-center justify-center px-4 pt-20 md:pt-0"
+                    style={{ background: 'rgba(15, 23, 42, 0.8)' }}
+                    onClick={() => setShowPendingModal(false)}
+                >
+                    <div
+                        className="w-full max-w-2xl mx-auto rounded-[2.5rem] bg-white overflow-hidden flex flex-col shadow-2xl border border-slate-200 animate-in fade-in zoom-in duration-300"
+                        style={{ width: isMobile ? 'calc(100% - 1rem)' : '100%', maxHeight: '90vh' }}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Modal Header */}
+                        <div className="border-b border-slate-50 flex items-center justify-between" style={{ padding: isMobile ? '20px' : '30px' }}>
+                            <div className="flex items-center gap-4 md:gap-6">
+                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-[1.5rem] bg-[#0f172a] flex items-center justify-center text-white shadow-2xl">
+                                    <FaAward size={isMobile ? 22 : 28} />
+                                </div>
+                                <div className="flex flex-col gap-0.5 md:gap-1">
+                                    <span className="text-[9px] md:text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-none">Certification Status</span>
+                                    <h2 className="font-bold text-[#0f172a] text-xl md:text-2xl tracking-tight capitalize leading-none" style={{color:'black'}}>Pending Reviews</h2>
+                                </div>
+                            </div>
+                            <button onClick={() => setShowPendingModal(false)} className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 cursor-pointer transition-all">
+                                <FaTimes size={isMobile ? 16 : 20} />
+                            </button>
+                        </div>
+
+                        {/* Search Bar */}
+                        <div style={{ padding: isMobile ? '20px 20px 0' : '30px 30px 0' }}>
+                            <div className="relative group">
+                                <input 
+                                    type="text"
+                                    placeholder="Search Quizzes..."
+                                    className="w-full h-14 pl-6 pr-14 rounded-2xl bg-slate-50 border border-slate-100 focus:bg-white focus:border-indigo-500/20 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-bold placeholder:text-slate-400 outline-none"
+                                    value={pendingSearchTerm}
+                                    onChange={(e) => {
+                                        setPendingSearchTerm(e.target.value);
+                                        setPendingCurrentPage(1);
+                                    }}
+                                />
+                                <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={16} />
+                            </div>
+                        </div>
+
+                        {/* Modal Body / Quiz List */}
+                        <div className="overflow-y-auto flex-grow custom-scrollbar" style={{ padding: isMobile ? '20px' : '30px' }}>
+                            {(() => {
+                                const filteredPending = analytics?.topicStats?.filter((stat: any) => 
+                                    stat.topicName.toLowerCase().includes(pendingSearchTerm.toLowerCase())
+                                ) || [];
+                                
+                                const indexOfLast = pendingCurrentPage * pendingItemsPerPage;
+                                const indexOfFirst = indexOfLast - pendingItemsPerPage;
+                                const currentPending = filteredPending.slice(indexOfFirst, indexOfLast);
+                                const totalPendingPages = Math.ceil(filteredPending.length / pendingItemsPerPage) || 1;
+
+                                if (filteredPending.length === 0) {
+                                    return (
+                                        <div className="py-20 text-center bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                                            <p className="text-slate-400 font-bold italic">No matching quizzes discovered.</p>
+                                        </div>
+                                    );
+                                }
+
+                                return (
+                                    <div className="flex flex-col gap-3">
+                                        {currentPending.map((stat: any, idx: number) => (
+                                            <div 
+                                                key={stat.topicId || idx} 
+                                                className="flex items-center justify-between bg-white border border-slate-100 rounded-2xl hover:border-indigo-500/20 transition-all group shadow-sm" 
+                                                style={{ padding: isMobile ? '15px 20px' : '20px 30px' }}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-50 transition-all">
+                                                        <FaBook size={18} />
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="font-bold text-slate-900 text-sm md:text-base tracking-tight">{stat.topicName}</span>
+                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.categoryName || 'General Analytics'}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${stat.pendingCount > 0 ? 'bg-amber-100 text-amber-600 shadow-sm shadow-amber-500/10' : 'bg-slate-100 text-slate-400'}`}>
+                                                        {stat.pendingCount} Pending
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        {/* Pagination for Modal */}
+                                        {filteredPending.length > pendingItemsPerPage && (
+                                            <div className="flex justify-center mt-6">
+                                                <Pagination 
+                                                    currentPage={pendingCurrentPage}
+                                                    totalItems={filteredPending.length}
+                                                    itemsPerPage={pendingItemsPerPage}
+                                                    onPageChange={setPendingCurrentPage}
+                                                    isMobile={isMobile}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })()}
+                        </div>
+
+                        {/* Modal Footer */}
+                        <div className="border-t border-slate-100 flex gap-4 md:gap-6" style={{ padding: isMobile ? '20px' : '30px' }}>
+                            <button
+                                className="w-full h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-[#0f172a] hover:bg-slate-800 text-white font-black uppercase tracking-widest text-[10px] md:text-[12px] transition-all shadow-xl active:scale-95 cursor-pointer"
+                                onClick={() => setShowPendingModal(false)}
+                            >
+                                Close Overview
                             </button>
                         </div>
                     </div>

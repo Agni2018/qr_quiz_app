@@ -245,7 +245,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                     </div>
                     <div className="h-10 w-[1px] bg-white/10 hidden sm:block mx-1" />
                     <div className="flex flex-col hidden sm:flex">
-                        <h1 className="text-xl md:text-2xl font-black uppercase tracking-widest text-white leading-tight">Quizmaster Pro</h1>
+                        <h1 className="text-xl md:text-2xl font-black uppercase tracking-widest text-white leading-tight">Qr Quiz</h1>
                         <span className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">{topic?.category || 'General Knowledge'} Assessment</span>
                     </div>
                 </div>
@@ -264,7 +264,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                 )}
 
                 <div className="flex items-center gap-4" style={{ marginRight: '10px' }}>
-                    <button className="flex items-center gap-2 sm:gap-4 bg-white/5 px-4 sm:px-6 py-2.5 rounded-full border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
+                    <button className="flex items-center gap-2 sm:gap-4 bg-white/5 px-4 sm:px-6 py-2.5 rounded-full border border-white/10 hover:bg-white/10 transition-all cursor-pointer" style={{padding:5}}>
                         <div className="w-8 h-8 rounded-full bg-slate-700/50 flex items-center justify-center ring-1 ring-white/10 shrink-0">
                             <MdPersonOutline className="text-xl text-slate-200" />
                         </div>
@@ -301,7 +301,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                                     </div>
                                 </div>
 
-                                <h3 className="relative z-10 text-3xl font-black text-white leading-tight mb-[100px] tracking-tight" style={{ marginBottom: '100px' }}>
+                                <h3 className="relative z-10 text-3xl font-black text-white leading-tight mb-[100px] tracking-tight" style={{ marginBottom: '100px',marginTop:10 }}>
                                     {currentQ?.content.text}
                                 </h3>
 
@@ -417,6 +417,7 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                                     <button
                                         onClick={nextQuestion}
                                         className="group flex items-center gap-2 bg-violet-600 text-white px-10 py-4 rounded-2xl shadow-xl shadow-violet-600/20 hover:scale-105 active:scale-95 transition-all"
+                                        style={{padding:5}}
                                     >
                                         <span className="font-black uppercase tracking-[0.3em] text-[10px]">
                                             {currentQIndex === questions.length - 1 ? (submitting ? 'Submitting...' : 'Next Question') : 'Next Question'}
@@ -437,12 +438,12 @@ export default function QuizPlay({ params }: { params: Promise<{ topicId: string
                                 <h3 className="text-base font-black uppercase tracking-[0.4em] text-white leading-none mb-2">Question Palette</h3>
                                 <span className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Quick navigation grid</span>
                             </div>
-                            <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
+                            <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl" style={{padding:5}}>
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{questions.length} Total</span>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 mb-10">
+                        <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 mb-10" style={{marginTop:10}}>
                             {questions.map((q, i) => {
                                 const active = i === currentQIndex;
                                 const answered = isAnswered(q._id);

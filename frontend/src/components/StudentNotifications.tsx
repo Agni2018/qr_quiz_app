@@ -46,8 +46,8 @@ export default function StudentNotifications() {
                 style={{ margin: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', background: 'white', padding: 30 }}
             >
                 <div className="w-16 h-16 bg-slate-100 rounded-[1.25rem] flex items-center justify-center mx-auto mb-6 text-3xl">📭</div>
-                <h3 className="text-2xl font-black mb-2 text-black">No notifications yet</h3>
-                <p className="text-slate-500 max-w-sm mx-auto text-sm leading-relaxed">You'll receive updates here when admins message you about your performance.</p>
+                <h3 className="text-2xl font-black mb-2 text-black" style={{color:'black'}}>No notifications yet</h3>
+                <p className="text-slate-500 max-w-sm mx-auto text-sm leading-relaxed" style={{color:'black'}}>You'll receive updates here when admins message you about your performance.</p>
             </Card>
         );
     }

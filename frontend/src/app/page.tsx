@@ -5,10 +5,14 @@ import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
-import Input from "@/components/Input";
 import { FaLock, FaUser, FaEnvelope, FaEye, FaEyeSlash, FaQuestionCircle } from 'react-icons/fa';
+import QRCode from 'react-qr-code';
 
 export default function Home() {
+    /* ── Landing vs Auth view ── */
+    const [showLanding, setShowLanding] = useState(true);
+
+    /* ── Existing auth states (unchanged) ── */
     const [mode, setMode] = useState<'login' | 'register'>('login');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -23,17 +27,14 @@ export default function Home() {
 
     useEffect(() => {
         // 1. HISTORY TRAP: Prevent the user from going back into the dashboard after logout.
-        // We push a state and listen for popstate to lock them here.
         window.history.pushState(null, '', window.location.href);
         const handlePopState = () => {
             window.history.pushState(null, '', window.location.href);
-            // Optionally force a reload to re-run all checks if they try to go back
             window.location.reload();
         };
         window.addEventListener('popstate', handlePopState);
 
-        // 2. REINFORCE REDIRECT: Even if accessed via back-button, check if we have a valid session
-        // and redirect away from the login page immediately.
+        // 2. REINFORCE REDIRECT
         const checkAuth = async () => {
             try {
                 const res = await api.get('/auth/status');
@@ -104,47 +105,319 @@ export default function Home() {
         }
     };
 
+    /* ── Shared header ── */
+    const Header = () => (
+        <header style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 100,
+            background: '#000000',
+            width: '100%',
+            padding: '0 1.5rem',
+            height: '56px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
+        }}>
+            <span style={{
+                color: '#4f46e5',
+                fontWeight: 900,
+                fontSize: '1rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                fontFamily: 'inherit'
+            }}>
+                QR Quiz Platform
+            </span>
+            <FaQuestionCircle
+                style={{
+                    color: '#4f46e5',
+                    fontSize: 'clamp(1.25rem, 4vw, 1.6rem)',
+                    flexShrink: 0
+                }}
+                aria-label="Help"
+            />
+        </header>
+    );
+
+    /* ── Shared footer ── */
+    const Footer = () => (
+        <div
+            className="text-center py-10 border-t border-white/10"
+            style={{
+                color: '#64748b',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                width: '100%'
+            }}
+        >
+            &copy; 2026 Quiz Platform Pro. Secure Dashboard Portal.
+        </div>
+    );
+
+    /* ══════════════════════════════════════════
+       LANDING VIEW
+    ══════════════════════════════════════════ */
+    if (showLanding) {
+        return (
+            <main
+                className="min-h-screen flex flex-col"
+                style={{
+                    background: 'linear-gradient(150deg, #f8f9ff 0%, #edeaff 45%, #f5f0ff 100%)',
+                }}
+            >
+                <Header />
+
+                {/* Hero Section */}
+                <div
+                    className="flex flex-1"
+                    style={{
+                        padding: 'clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 6vw, 5rem)',
+                        gap: 'clamp(2rem, 4vw, 4rem)',
+                        flexWrap: 'wrap',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    {/* LEFT — Hero text */}
+                    <div
+                        className="animate-fade-in"
+                        style={{
+                            flex: '1 1 300px',
+                            minWidth: '260px',
+                            maxWidth: '500px',
+                        }}
+                    >
+                        {/* Pill badge */}
+                        <span style={{
+                            display: 'inline-block',
+                            background: 'rgba(79,70,229,0.08)',
+                            border: '1px solid rgba(79,70,229,0.22)',
+                            color: '#4f46e5',
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.13em',
+                            textTransform: 'uppercase',
+                            borderRadius: '9999px',
+                            padding: '0.35rem 1rem',
+                            marginBottom: '1.4rem',
+                        }}>
+                            New Experience
+                        </span>
+
+                        {/* Headline */}
+                        <h1 style={{
+                            fontSize: 'clamp(2.6rem, 6.5vw, 4.25rem)',
+                            fontWeight: 900,
+                            lineHeight: 1.08,
+                            color: '#0f172a',
+                            marginBottom: '1.25rem',
+                            letterSpacing: '-0.03em',
+                        }}>
+                            Create a{' '}
+                            <em style={{
+                                fontStyle: 'italic',
+                                color: '#4f46e5',
+                                fontFamily: 'Georgia, "Times New Roman", serif',
+                            }}>Quiz</em>
+                        </h1>
+
+                        {/* Subtitle */}
+                        <p style={{
+                            color: '#475569',
+                            fontSize: 'clamp(0.9rem, 2vw, 1.05rem)',
+                            lineHeight: 1.65,
+                            marginBottom: '2.5rem',
+                            maxWidth: '390px',
+                            fontWeight: 400,
+                        }}>
+                            Transform your engagement strategy with high-end,
+                            scannable experiences. Bridge the physical and digital
+                            worlds instantly.
+                        </p>
+
+                        {/* CTA Buttons */}
+                        <div style={{
+                            display: 'flex',
+                            gap: '1rem',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                        }}>
+                            <button
+                                id="get-started-btn"
+                                onClick={() => setShowLanding(false)}
+                                style={{
+                                    background: '#4f46e5',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    borderRadius: '9999px',
+                                    padding: '0.875rem 2.25rem',
+                                    fontSize: '1rem',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    boxShadow: '0 8px 28px rgba(79,70,229,0.38)',
+                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                    letterSpacing: '0.01em',
+                                    whiteSpace: 'nowrap',
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 12px 36px rgba(79,70,229,0.45)';
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 8px 28px rgba(79,70,229,0.38)';
+                                }}
+                            >
+                                Get Started
+                            </button>
+
+
+                        </div>
+                    </div>
+
+                    {/* RIGHT — QR Card Visual */}
+                    <div
+                        className="animate-fade-in"
+                        style={{
+                            flex: '1 1 280px',
+                            minWidth: '250px',
+                            maxWidth: '400px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            position: 'relative',
+                            paddingBottom: '2rem',
+                        }}
+                    >
+                        {/* Outer white card */}
+                        <div style={{
+                            background: '#ffffff',
+                            borderRadius: '1.75rem',
+                            padding: '1.75rem 1.75rem 1.5rem',
+                            boxShadow: '0 24px 72px rgba(79,70,229,0.12), 0 8px 24px rgba(0,0,0,0.06)',
+                            width: '100%',
+                            maxWidth: '360px',
+                        }}>
+                            {/* Dark inner card */}
+                            <div style={{
+                                background: 'linear-gradient(145deg, #111827 0%, #1e1b4b 100%)',
+                                borderRadius: '1.25rem',
+                                padding: '1.5rem',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                marginBottom: '1.25rem',
+                            }}>
+                                {/* White QR holder */}
+                                <div style={{
+                                    background: '#ffffff',
+                                    borderRadius: '0.875rem',
+                                    padding: '1rem 1rem 0.75rem',
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                }}>
+                                    <QRCode
+                                        value="https://qrquizplatform.io/preview"
+                                        size={170}
+                                        style={{ height: 'auto', maxWidth: '100%', width: '170px' }}
+                                        fgColor="#0f172a"
+                                        bgColor="#ffffff"
+                                    />
+                                    <p style={{
+                                        color: '#94a3b8',
+                                        fontSize: '0.62rem',
+                                        marginTop: '0.625rem',
+                                        textAlign: 'center',
+                                        letterSpacing: '0.05em',
+                                        lineHeight: 1.5,
+                                    }}>
+                                        Professional<br />Safe &middot; Secure &middot; Work
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Scan label */}
+                            <p style={{
+                                textAlign: 'center',
+                                fontSize: '0.68rem',
+                                fontWeight: 700,
+                                letterSpacing: '0.15em',
+                                textTransform: 'uppercase',
+                                color: '#64748b',
+                                marginBottom: '0.75rem',
+                            }}>
+                                Scan to Preview
+                            </p>
+
+                            {/* Dot indicators */}
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.4rem' }}>
+                                {[0, 1, 2].map(i => (
+                                    <div key={i} style={{
+                                        width: '7px',
+                                        height: '7px',
+                                        borderRadius: '50%',
+                                        background: i === 0 ? '#4f46e5' : '#e2e8f0',
+                                        transition: 'background 0.2s',
+                                    }} />
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Dynamic Generation floating badge */}
+                        <div style={{
+                            position: 'absolute',
+                            bottom: '0.25rem',
+                            left: '0',
+                            background: '#ffffff',
+                            borderRadius: '9999px',
+                            padding: '0.55rem 1rem 0.55rem 0.55rem',
+                            boxShadow: '0 8px 28px rgba(0,0,0,0.1)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.6rem',
+                        }}>
+                            <div style={{
+                                width: '30px',
+                                height: '30px',
+                                borderRadius: '50%',
+                                background: 'linear-gradient(135deg, #4f46e5, #818cf8)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '0.85rem',
+                                color: '#fff',
+                                flexShrink: 0,
+                            }}>✦</div>
+                            <div>
+                                <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0f172a', margin: 0, lineHeight: 1.2 }}>
+                                    Dynamic Generation
+                                </p>
+                                <p style={{ fontSize: '0.65rem', color: '#64748b', margin: 0 }}>
+                                    Update content in real-time
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <Footer />
+            </main>
+        );
+    }
+
+    /* ══════════════════════════════════════════
+       AUTH VIEW  — existing card, zero changes
+    ══════════════════════════════════════════ */
     return (
         <main
             className="min-h-screen flex flex-col"
             style={{ background: '#f1f5f9' }}
         >
-
-            {/* ===== BLACK HEADER ===== */}
-            <header style={{
-                position: 'sticky',
-                top: 0,
-                zIndex: 100,
-                background: '#000000',
-                width: '100%',
-                padding: '0 1.5rem',
-                height: '56px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
-            }}>
-                <span style={{
-                    color: '#4f46e5',
-                    fontWeight: 900,
-                    fontSize: '1rem',
-                    letterSpacing: '0.15em',
-                    textTransform: 'uppercase',
-                    fontFamily: 'inherit'
-                }}>
-                    QR Quiz Platform
-                </span>
-
-                {/* Indigo question mark icon — right side */}
-                <FaQuestionCircle
-                    style={{
-                        color: '#4f46e5',
-                        fontSize: 'clamp(1.25rem, 4vw, 1.6rem)',
-                        flexShrink: 0
-                    }}
-                    aria-label="Help"
-                />
-            </header>
+            <Header />
 
             {/* PAGE CONTENT */}
             <div
@@ -179,7 +452,7 @@ export default function Home() {
                     <Card
                         className="overflow-hidden"
                         style={{
-                            padding: '1.75rem 1.75rem',
+                            padding: '1.5rem 1.5rem',
                             margin:'1rem 1rem 1rem 1rem',
                             borderRadius: '1.25rem',
                             maxWidth: '480px',
@@ -190,7 +463,7 @@ export default function Home() {
                             marginBottom: '1rem',
                         }}
                     >
-                        <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-10">
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-6 md:gap-8">
 
                             {/* ---------- MESSAGE ---------- */}
                             {error && (
@@ -224,14 +497,13 @@ export default function Home() {
                                 </div>
                             )}
 
-                            <div className="flex flex-col gap-6">
+                            <div className="flex flex-col gap-5">
 
                                 {/* USERNAME */}
                                 <div className="relative group">
                                     <label style={{
                                         display: 'block',
-                                        marginBottom: '1rem',
-                                        marginTop: '1rem',
+                                        marginBottom: '0.75rem',
                                         fontSize: '0.75rem',
                                         fontWeight: 800,
                                         color: '#475569',
@@ -248,8 +520,8 @@ export default function Home() {
                                                 width: '100%',
                                                 paddingRight: '3.5rem',
                                                 paddingLeft: '1.5rem',
-                                                paddingTop: '1rem',
-                                                paddingBottom: '1rem',
+                                                paddingTop: '0.875rem',
+                                                paddingBottom: '0.875rem',
                                                 borderRadius: 'var(--radius-lg)',
                                                 border: '1px solid var(--border-color)',
                                                 background: '#f8fafc',
@@ -290,7 +562,7 @@ export default function Home() {
                                     <div className="relative group animate-fade-in">
                                         <label style={{
                                             display: 'block',
-                                            marginBottom: '1rem',
+                                            marginBottom: '0.75rem',
                                             fontSize: '0.75rem',
                                             fontWeight: 800,
                                             color: '#475569',
@@ -307,8 +579,8 @@ export default function Home() {
                                                     width: '100%',
                                                     paddingRight: '3.5rem',
                                                     paddingLeft: '1.5rem',
-                                                    paddingTop: '1rem',
-                                                    paddingBottom: '1rem',
+                                                    paddingTop: '0.875rem',
+                                                    paddingBottom: '0.875rem',
                                                     borderRadius: 'var(--radius-lg)',
                                                     border: '1px solid var(--border-color)',
                                                     background: '#f8fafc',
@@ -347,7 +619,7 @@ export default function Home() {
                                 <div className="relative group">
                                     <label style={{
                                         display: 'block',
-                                        marginBottom: '1rem',
+                                        marginBottom: '0.75rem',
                                         fontSize: '0.75rem',
                                         fontWeight: 800,
                                         color: '#475569',
@@ -364,8 +636,8 @@ export default function Home() {
                                                 width: '100%',
                                                 paddingRight: '5.5rem',
                                                 paddingLeft: '1.5rem',
-                                                paddingTop: '1rem',
-                                                paddingBottom: '1rem',
+                                                paddingTop: '0.875rem',
+                                                paddingBottom: '0.875rem',
                                                 borderRadius: 'var(--radius-lg)',
                                                 border: '1px solid var(--border-color)',
                                                 background: '#f8fafc',
@@ -415,7 +687,7 @@ export default function Home() {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 {mode === 'register' && (
                                     <div className="animate-fade-in">
                                         {!showReferralInput ? (
@@ -431,7 +703,7 @@ export default function Home() {
                                             <div className="relative group animate-fade-in">
                                                 <label style={{
                                                     display: 'block',
-                                                    marginBottom: '1rem',
+                                                    marginBottom: '0.75rem',
                                                     fontSize: '0.75rem',
                                                     fontWeight: 800,
                                                     color: '#475569',
@@ -447,8 +719,8 @@ export default function Home() {
                                                             width: '100%',
                                                             paddingRight: '3.5rem',
                                                             paddingLeft: '1.5rem',
-                                                            paddingTop: '1rem',
-                                                            paddingBottom: '1rem',
+                                                            paddingTop: '0.875rem',
+                                                            paddingBottom: '0.875rem',
                                                             borderRadius: 'var(--radius-lg)',
                                                             border: '1px solid var(--border-color)',
                                                             background: '#f8fafc',
@@ -463,7 +735,7 @@ export default function Home() {
                                                         value={referralCode}
                                                         onChange={(e) => setReferralCode(e.target.value)}
                                                     />
-                                                    <button 
+                                                    <button
                                                         type="button"
                                                         onClick={() => {setShowReferralInput(false); setReferralCode('');}}
                                                         className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
@@ -521,17 +793,7 @@ export default function Home() {
             </div>
 
             {/* FOOTER */}
-            <div
-                className="text-center py-10 border-t border-white/10"
-                style={{
-                    color: '#64748b',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    width: '100%'
-                }}
-            >
-                &copy; 2026 Quiz Platform Pro. Secure Dashboard Portal.
-            </div>
+            <Footer />
 
         </main>
     );

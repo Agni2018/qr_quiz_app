@@ -9,6 +9,12 @@ import BadgeChallengeHeader from '@/components/BadgeChallengeHeader';
 
 export default function AdminChallengesPage() {
     const [modalOpen, setModalOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
+
+    const handleChallengeCreated = () => {
+        setRefreshKey(k => k + 1);
+        setModalOpen(false);
+    };
 
     return (
         <div className="animate-fade-in mb-24">
@@ -34,7 +40,7 @@ export default function AdminChallengesPage() {
 
             {/* Active Challenges List */}
             <div style={{ paddingLeft: '20px', paddingRight: '20px', maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto' }}>
-                <ActiveChallengesList />
+                <ActiveChallengesList refreshKey={refreshKey} />
             </div>
 
             {/* Create Challenge Modal */}
@@ -102,7 +108,7 @@ export default function AdminChallengesPage() {
                             </p>
                         </div>
 
-                        <ChallengeManagement />
+                        <ChallengeManagement onSuccess={handleChallengeCreated} />
                     </div>
                 </div>
             )}

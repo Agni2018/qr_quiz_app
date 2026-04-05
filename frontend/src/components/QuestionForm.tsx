@@ -11,23 +11,30 @@ import QuestionBankModal from './QuestionBankModal';
 
 export default function QuestionForm({
     topicId,
+    existingQuestion,
     onQuestionAdded,
     onCancel
 }: {
     topicId?: string;
+    existingQuestion?: any;
     onQuestionAdded: () => void;
     onCancel: () => void;
 }) {
-    const [type, setType] = useState('single_choice');
-    const [content, setContent] = useState('');
-    const [marks, setMarks] = useState<number | string>('');
-    const [isReusable, setIsReusable] = useState(!topicId);
-    const [options, setOptions] = useState<string[]>(['', '']);
-    const [correctAnswer, setCorrectAnswer] = useState<any>('');
-    const [matchPairs, setMatchPairs] = useState<Array<{ left: string; right: string }>>([
-        { left: '', right: '' },
-        { left: '', right: '' }
-    ]);
+    const [type, setType] = useState(existingQuestion?.type || 'single_choice');
+    const [content, setContent] = useState(existingQuestion?.content?.text || '');
+    const [marks, setMarks] = useState<number | string>(existingQuestion?.marks || '');
+    const [isReusable, setIsReusable] = useState(existingQuestion ? existingQuestion.isReusable : !topicId);
+    const [options, setOptions] = useState<string[]>(
+        existingQuestion?.type !== 'match' && existingQuestion?.options?.length > 0 
+        ? existingQuestion.options 
+        : ['', '']
+    );
+    const [correctAnswer, setCorrectAnswer] = useState<any>(existingQuestion?.correctAnswer || '');
+    const [matchPairs, setMatchPairs] = useState<Array<{ left: string; right: string }>>(
+        existingQuestion?.type === 'match' && existingQuestion?.options?.length > 0
+        ? existingQuestion.options
+        : [{ left: '', right: '' }, { left: '', right: '' }]
+    );
     const [showBankModal, setShowBankModal] = useState(false);
 
     const questionTypes = [
@@ -153,11 +160,15 @@ export default function QuestionForm({
         }
 
         try {
-            await api.post('/questions', payload);
+            if (existingQuestion) {
+                await api.put(`/questions/${existingQuestion._id}`, payload);
+            } else {
+                await api.post('/questions', payload);
+            }
             onQuestionAdded();
         } catch (error) {
             console.error(error);
-            alert('Failed to add question');
+            alert(`Failed to ${existingQuestion ? 'update' : 'add'} question`);
         }
     };
 
@@ -475,7 +486,7 @@ export default function QuestionForm({
 
                 <div className="flex flex-col md:flex-row gap-8 pt-12 border-t border-slate-200 px-4 sm:px-8 md:px-12 mt-4" style={{ padding: '30px 15px' }}>
                     <Button onClick={handleSubmit} className="flex-[2] py-6 rounded-[32px] text-2xl font-black shadow-2xl shadow-violet-500/40 hover:scale-[1.02] transition-transform">
-                        ✨ Save Question
+                        ✨ {existingQuestion ? 'Update Question' : 'Save Question'}
                     </Button>
                     <button
                         type="button"
