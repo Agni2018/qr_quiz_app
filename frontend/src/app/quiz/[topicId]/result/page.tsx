@@ -41,7 +41,7 @@ function QuizResultContent({ topicId }: { topicId: string }) {
 
             {/* Score Card */}
             {attempt && (
-                <Card className="text-center p-16 border border-emerald-500/30 bg-slate-900/40 backdrop-blur-3xl rounded-[40px] shadow-3xl relative overflow-hidden">
+                <Card className="text-center p-16 border border-emerald-500/30 bg-slate-900/40 backdrop-blur-3xl rounded-[40px] shadow-3xl relative overflow-hidden" style={{padding:10}}>
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-emerald-600/10 rounded-full blur-3xl -mt-32"></div>
 
                     <div className="relative z-10">
@@ -51,7 +51,7 @@ function QuizResultContent({ topicId }: { topicId: string }) {
                         </div>
                         <p className="text-slate-400 font-bold text-lg uppercase tracking-widest mb-10">Challenge Completed</p>
 
-                        <div className="py-8 px-10 rounded-3xl bg-white/5 border border-white/5 inline-block">
+                        <div className="py-8 px-10 rounded-3xl bg-white/5 border border-white/5 inline-block" style={{padding:10,marginTop:10,marginBottom:10}}>
                             <h3 className="text-3xl font-black text-white/90 mb-2">✨ Great job, {attempt.user.name}!</h3>
                             <p className="text-slate-400 font-medium">Your performance was recorded on the global records.</p>
                         </div>
@@ -66,7 +66,7 @@ function QuizResultContent({ topicId }: { topicId: string }) {
                     <h2 className="text-3xl font-black tracking-tight text-white/95">Global Leaderboard</h2>
                 </div>
 
-                <Card className="p-10 border border-white/5 bg-slate-900/40 backdrop-blur-xl rounded-[32px]">
+                <Card className="p-10 border border-white/5 bg-slate-900/40 backdrop-blur-xl rounded-[32px]" style={{padding:10}}>
                     <div className="flex flex-col gap-5">
                         {leaderboard.length === 0 && (
                             <div className="py-12 text-center text-slate-500 font-medium">No records found.</div>
@@ -78,6 +78,7 @@ function QuizResultContent({ topicId }: { topicId: string }) {
                                     ? 'bg-emerald-500/20 border-2 border-emerald-500 shadow-lg shadow-emerald-500/10'
                                     : 'bg-white/[0.03] border-2 border-transparent hover:bg-white/[0.05]'
                                     }`}
+                                    style={{padding:5}}
                             >
                                 <div className="flex gap-6 items-center">
                                     <span className={`w-10 h-10 flex items-center justify-center rounded-xl font-black text-sm ${index === 0 ? 'bg-amber-500 text-black' :
