@@ -333,14 +333,14 @@ export default function TopicPerformance() {
                     {currentItems.map((stat: any) => (
                         <div
                             key={stat.topicId}
-                            className="bg-white rounded-[2.5rem] flex flex-col group relative overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_40px_80px_rgba(79,70,229,0.06)] transition-all duration-500 border border-slate-100 mx-auto w-full"
+                            className="bg-white rounded-[2.5rem] flex flex-col group relative overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_40px_80px_rgba(79,70,229,0.06)] transition-all duration-500 border border-slate-100 w-full"
                             style={{ 
                                 minHeight: '280px',
-                                maxWidth: '330px' 
+                                maxWidth: '350px' 
                             }}
                         >
                             {/* Card Header Area (Redesigned) */}
-                            <div className="flex justify-between items-start" style={{ padding: '24px 24px 0 24px' }}>
+                            <div className="flex justify-between items-start" style={{ padding: '24px 24px 8px 24px' }}>
                                 <div className="flex flex-col gap-1.5">
                                      <div className="flex items-center gap-2">
                                          <div className="w-1.5 h-1.5 rounded-full bg-[#4f46e5]"></div>
@@ -350,15 +350,15 @@ export default function TopicPerformance() {
                                          {stat.topicName}
                                      </h3>
                                 </div>
-                                <div className="w-11 h-11 rounded-xl bg-[#eef2ff] border border-[#e0e7ff] flex items-center justify-center text-[#4f46e5] shadow-sm transform group-hover:scale-110 transition-all duration-500">
-                                    <FaBook size={18} />
+                                <div className="w-10 h-10 rounded-xl bg-[#eef2ff] border border-[#e0e7ff] flex items-center justify-center text-[#4f46e5] shadow-sm transform group-hover:scale-110 transition-all duration-500">
+                                    <FaBook size={16} />
                                 </div>
                             </div>
 
                             <div className="flex-1 flex flex-col" style={{ padding: '24px' }}>
                                 {/* Stats Section */}
                                 <div className="flex flex-col gap-4 mb-6">
-                                    <div className="flex flex-col gap-3">
+                                    <div className="flex flex-col gap-2.5">
                                         <div className="flex flex-col gap-1">
                                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Participant Engagement</span>
                                             <span className="text-lg font-black text-slate-900 tracking-tight">{stat.participantCount} Participants</span>
