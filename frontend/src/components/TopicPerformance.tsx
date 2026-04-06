@@ -59,6 +59,14 @@ export default function TopicPerformance() {
     const [pendingCurrentPage, setPendingCurrentPage] = useState(1);
     const pendingItemsPerPage = 10;
 
+    // Participants Modal States
+    const [participantsSearchTerm, setParticipantsSearchTerm] = useState('');
+    const [participantsCurrentPage, setParticipantsCurrentPage] = useState(1);
+
+    // Certify Modal States
+    const [certifySearchTerm, setCertifySearchTerm] = useState('');
+    const [certifyCurrentPage, setCertifyCurrentPage] = useState(1);
+
     const fetchData = async () => {
         try {
             const [t, a] = await Promise.all([
@@ -85,6 +93,8 @@ export default function TopicPerformance() {
     const handleViewParticipants = async (topicId: string, topicName: string) => {
         setSelectedTopicId(topicId);
         setSelectedTopicName(topicName);
+        setParticipantsSearchTerm('');
+        setParticipantsCurrentPage(1);
         setShowParticipantsModal(true);
         setLoadingParticipants(true);
         setSendingMessageTo(null);
@@ -104,6 +114,8 @@ export default function TopicPerformance() {
     const handleOpenCertify = async (topicId: string, topicName: string) => {
         setSelectedTopicId(topicId);
         setSelectedTopicName(topicName);
+        setCertifySearchTerm('');
+        setCertifyCurrentPage(1);
         setShowCertifyModal(true);
         setLoadingParticipants(true);
         setSelectedCertifyOption('');
@@ -185,11 +197,30 @@ export default function TopicPerformance() {
     const currentItems = filteredStats.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(filteredStats.length / itemsPerPage) || 1;
 
+    // Participants Modal Logic
+    const filteredParticipants = participants.filter(p => 
+        p.name.toLowerCase().includes(participantsSearchTerm.trim().toLowerCase()) ||
+        (p.email && p.email.toLowerCase().includes(participantsSearchTerm.trim().toLowerCase())) ||
+        (p.phone && p.phone.toLowerCase().includes(participantsSearchTerm.trim().toLowerCase()))
+    );
+    const participantsIndexOfLast = participantsCurrentPage * 10;
+    const participantsIndexOfFirst = participantsIndexOfLast - 10;
+    const currentParticipants = filteredParticipants.slice(participantsIndexOfFirst, participantsIndexOfLast);
+
+    // Certify Modal Logic
+    const qualifiedParticipants = participants.filter(p => !p.isCertified && p.isQualified);
+    const filteredCertifyParticipants = qualifiedParticipants.filter(p => 
+        p.name.toLowerCase().includes(certifySearchTerm.trim().toLowerCase())
+    );
+    const certifyIndexOfLast = certifyCurrentPage * 10;
+    const certifyIndexOfFirst = certifyIndexOfLast - 10;
+    const currentCertifyParticipants = filteredCertifyParticipants.slice(certifyIndexOfFirst, certifyIndexOfLast);
+
     return (
         <div 
             className="flex flex-col"
             style={{ 
-                gap: isMobile ? '1.5rem' : '2.5rem',
+                gap: isMobile ? '1rem' : '1.25rem',
                 paddingBottom: '4rem'
             }}
         >
@@ -302,56 +333,58 @@ export default function TopicPerformance() {
                     {currentItems.map((stat: any) => (
                         <div
                             key={stat.topicId}
-                            className="bg-white rounded-3xl flex flex-col group relative overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100"
-                            style={{ minHeight: '300px' }}
+                            className="bg-white rounded-[2.5rem] flex flex-col group relative overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_40px_80px_rgba(79,70,229,0.06)] transition-all duration-500 border border-slate-100 mx-auto w-full"
+                            style={{ 
+                                minHeight: '280px',
+                                maxWidth: '330px' 
+                            }}
                         >
-                            {/* Card Header Area (Dark with Book Icon) */}
-                            <div className="relative h-44 w-full flex flex-col items-center justify-center p-6 overflow-hidden bg-[#0f172a]">
-                                <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-                                
-                                {/* Admin Status Badge in Card */}
-                                <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
-                                    <FaUser className="text-indigo-500 text-[10px]" />
-                                    <span className="text-[9px] font-black text-white uppercase tracking-[0.1em]" >Admin authenticated</span>
+                            {/* Card Header Area (Redesigned) */}
+                            <div className="flex justify-between items-start" style={{ padding: '24px 24px 0 24px' }}>
+                                <div className="flex flex-col gap-1.5">
+                                     <div className="flex items-center gap-2">
+                                         <div className="w-1.5 h-1.5 rounded-full bg-[#4f46e5]"></div>
+                                         <span className="text-[10px] font-bold text-[#4f46e5] uppercase tracking-widest opacity-80">Admin authenticated</span>
+                                     </div>
+                                     <h3 className="text-xl font-black uppercase tracking-tight leading-none transition-transform duration-500 origin-left" style={{ color: 'black' }}>
+                                         {stat.topicName}
+                                     </h3>
                                 </div>
-
-                                <div className="relative z-10 w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-3 group-hover:scale-110 transition-transform duration-500 shadow-xl" style={{marginBottom:17,marginTop:30}}>
-                                    <FaBook size={24} />
+                                <div className="w-11 h-11 rounded-xl bg-[#eef2ff] border border-[#e0e7ff] flex items-center justify-center text-[#4f46e5] shadow-sm transform group-hover:scale-110 transition-all duration-500">
+                                    <FaBook size={18} />
                                 </div>
-                                <h3 className="relative z-10 text-center font-bold text-xl text-white uppercase tracking-tight leading-tight max-w-[200px]">
-                                    {stat.topicName}
-                                </h3>
                             </div>
 
-                            <div className="flex-1 flex flex-col" style={{ padding: '27px' }}>
+                            <div className="flex-1 flex flex-col" style={{ padding: '24px' }}>
                                 {/* Stats Section */}
                                 <div className="flex flex-col gap-4 mb-6">
                                     <div className="flex flex-col gap-3">
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Participant Engagement</span>
-                                            <span className="text-lg font-bold text-slate-900 tracking-tight">{stat.participantCount} Participants</span>
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Participant Engagement</span>
+                                            <span className="text-lg font-black text-slate-900 tracking-tight">{stat.participantCount} Participants</span>
                                         </div>
                                         {/* Progress Line */}
-                                        <div className="h-[6px] w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                                        <div className="h-[4px] w-full bg-slate-100 rounded-full overflow-hidden">
                                             <div 
-                                                className="h-full bg-indigo-500 transition-all duration-1000 ease-out" 
+                                                className="h-full bg-[#4f46e5] transition-all duration-1000 ease-out" 
                                                 style={{ width: `${Math.min(100, (stat.participantCount / 50) * 100)}%` }}
-                                            ></div>
+                                            >
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Action Buttons */}
-                                <div className="mt-auto flex items-center gap-3" style={{ marginTop: '25px' }}>
+                                <div className="mt-auto flex items-center gap-3" style={{ marginTop: '20px' }}>
                                     <button
                                         onClick={() => handleOpenCertify(stat.topicId, stat.topicName)}
-                                        className="flex-1 h-11 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-[10px] transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-lg shadow-indigo-500/10"
+                                        className="flex-1 h-11 rounded-xl bg-[#4f46e5] hover:bg-[#4338ca] text-white font-black uppercase tracking-[0.1em] text-[10px] transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-md shadow-indigo-500/10"
                                     >
                                         Certify
                                     </button>
                                     <button
                                         onClick={() => handleViewParticipants(stat.topicId, stat.topicName)}
-                                        className="flex-1 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all active:scale-95 cursor-pointer flex items-center justify-center border border-slate-200"
+                                        className="flex-1 h-11 rounded-xl bg-[#f8fafc] hover:bg-slate-100 text-slate-600 font-black uppercase tracking-[0.1em] text-[10px] transition-all active:scale-95 cursor-pointer flex items-center justify-center border border-slate-200"
                                     >
                                         Details
                                     </button>
@@ -410,6 +443,23 @@ export default function TopicPerformance() {
                             </button>
                         </div>
 
+                        {/* Search Bar - Participants Modal */}
+                        <div style={{ padding: '24px 30px 0', backgroundColor: '#ffffff' }}>
+                            <div className="relative group">
+                                <input 
+                                    type="text"
+                                    placeholder="Filter records by name, email or phone..."
+                                    className="w-full h-14 pl-6 pr-14 rounded-2xl bg-slate-50 border-2 border-slate-100/50 focus:bg-white focus:border-indigo-500/30 focus:shadow-lg focus:shadow-indigo-500/5 transition-all text-sm font-bold text-slate-900 placeholder:text-slate-400 outline-none"
+                                    value={participantsSearchTerm}
+                                    onChange={(e) => {
+                                        setParticipantsSearchTerm(e.target.value);
+                                        setParticipantsCurrentPage(1);
+                                    }}
+                                />
+                                <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+                            </div>
+                        </div>
+
                         <div 
                             className="flex-grow overflow-y-auto custom-scrollbar"
                             style={{ padding: isMobile ? '15px' : '30px' }}
@@ -419,13 +469,14 @@ export default function TopicPerformance() {
                                     <div className="w-10 h-10 border-3 border-slate-100 border-t-indigo-500 rounded-full animate-spin" />
                                     <p className="font-bold text-slate-400 uppercase tracking-widest text-xs">Fetching records</p>
                                 </div>
-                            ) : participants.length === 0 ? (
-                                <div className="text-center py-10">
-                                    <p className="text-slate-400 font-bold italic">No records discovered for this topic.</p>
+                            ) : filteredParticipants.length === 0 ? (
+                                <div className="text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                                    <p className="text-slate-400 font-bold italic">No participants found matching your search.</p>
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {participants.map((p, idx) => (
+                                <div className="flex flex-col gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {currentParticipants.map((p, idx) => (
                                         <React.Fragment key={p.id || idx}>
                                             <div 
                                                 className="rounded-[2.5rem] border border-slate-100 flex items-center justify-between group hover:border-indigo-500/10 hover:bg-slate-50 transition-all duration-300 shadow-sm overflow-hidden"
@@ -487,6 +538,20 @@ export default function TopicPerformance() {
                                         </React.Fragment>
                                     ))}
                                 </div>
+
+                                {/* Pagination */}
+                                {filteredParticipants.length > 10 && (
+                                    <div className="flex justify-center mt-8">
+                                        <Pagination 
+                                            currentPage={participantsCurrentPage}
+                                            totalItems={filteredParticipants.length}
+                                            itemsPerPage={10}
+                                            onPageChange={setParticipantsCurrentPage}
+                                            isMobile={isMobile}
+                                        />
+                                    </div>
+                                )}
+                                </div>
                             )}
                         </div>
                     </div>
@@ -505,7 +570,7 @@ export default function TopicPerformance() {
                         style={{ width: isMobile ? 'calc(100% - 1rem)' : '100%' }}
                         onClick={e => e.stopPropagation()}
                     >
-                        <div className="border-b border-slate-50 flex items-center justify-between" style={{ padding: isMobile ? '20px' : '30px' }}>
+                        <div className="border-b border-slate-100 flex items-center justify-between" style={{ padding: isMobile ? '20px' : '30px' }}>
                             <div className="flex items-center gap-4 md:gap-6">
                                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-[1.5rem] bg-[#0f172a] flex items-center justify-center text-white shadow-2xl">
                                     <FaAward size={isMobile ? 22 : 28} />
@@ -523,46 +588,63 @@ export default function TopicPerformance() {
                         <div className="overflow-y-auto max-h-[60vh] custom-scrollbar" style={{ padding: isMobile ? '20px' : '30px' }}>
                             <div className="bg-slate-50 rounded-2xl p-4 md:p-6 mb-6 md:mb-8 border border-slate-100" style={{marginBottom:10}}>
                                 <p className="text-xs md:text-sm font-bold text-slate-900 leading-relaxed uppercase" style={{color:'black',padding:5}}>
-                                    {participants.filter(p => !p.isCertified && p.isQualified).length > 0
+                                    {qualifiedParticipants.length > 0
                                         ? `You are about to authorize certifications for all qualified participants who haven't received them yet.`
                                         : `Everything's up to date. No new qualified participants discovered for this topic.`}
                                 </p>
                             </div>
 
-                            {participants.filter(p => !p.isCertified && p.isQualified).length > 0 && (
-                                <div className="flex flex-wrap gap-2 md:gap-4 lg:gap-6" style={{ marginTop: '15px', marginBottom: '20px' }}>
-                                    <button 
-                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'one' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                                        onClick={() => {
-                                            setSelectedCertifyOption('one');
-                                            setSelectedParticipantIds([]);
-                                        }}
-                                        style={{ padding: '0 10px' }}
-                                    >
-                                        Select One
-                                    </button>
-                                    <button 
-                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'few' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                                        onClick={() => {
-                                            setSelectedCertifyOption('few');
-                                            setSelectedParticipantIds([]);
-                                        }}
-                                        style={{ padding: '0 10px' }}
-                                    >
-                                        Select Few
-                                    </button>
-                                    <button 
-                                        className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'all' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                                        onClick={() => {
-                                            setSelectedCertifyOption('all');
-                                            setSelectedParticipantIds(
-                                                participants.filter(p => !p.isCertified && p.isQualified).map(p => p.id)
-                                            );
-                                        }}
-                                        style={{ padding: '0 10px' }}
-                                    >
-                                        Select All
-                                    </button>
+                            {qualifiedParticipants.length > 0 && (
+                                <div className="flex flex-col gap-6" style={{ marginBottom: '20px' }}>
+                                    {/* Search Bar - Certify Modal */}
+                                    <div className="relative group">
+                                        <input 
+                                            type="text"
+                                            placeholder="Identify qualified students..."
+                                            className="w-full h-14 pl-6 pr-14 rounded-2xl bg-slate-50 border-2 border-slate-100/50 focus:bg-white focus:border-indigo-500/30 focus:shadow-lg focus:shadow-indigo-500/5 transition-all text-sm font-bold text-slate-900 placeholder:text-slate-400 outline-none"
+                                            value={certifySearchTerm}
+                                            onChange={(e) => {
+                                                setCertifySearchTerm(e.target.value);
+                                                setCertifyCurrentPage(1);
+                                            }}
+                                        />
+                                        <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-2 md:gap-4 lg:gap-6" style={{ marginTop: '5px' }}>
+                                        <button 
+                                            className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'one' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                            onClick={() => {
+                                                setSelectedCertifyOption('one');
+                                                setSelectedParticipantIds([]);
+                                            }}
+                                            style={{ padding: '0 10px' }}
+                                        >
+                                            Select One
+                                        </button>
+                                        <button 
+                                            className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'few' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                            onClick={() => {
+                                                setSelectedCertifyOption('few');
+                                                setSelectedParticipantIds([]);
+                                            }}
+                                            style={{ padding: '0 10px' }}
+                                        >
+                                            Select Few
+                                        </button>
+                                        <button 
+                                            className={`flex-1 min-w-[100px] h-14 rounded-2xl md:rounded-[2rem] text-[10px] md:text-[12px] font-black uppercase tracking-widest transition-all shadow-sm ${selectedCertifyOption === 'all' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500 ring-offset-2' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                            onClick={() => {
+                                                setSelectedCertifyOption('all');
+                                                setSelectedParticipantIds(
+                                                    qualifiedParticipants.map(p => p.id)
+                                                );
+                                            }}
+                                            style={{ padding: '0 10px' }}
+                                        >
+                                            Select All
+                                        </button>
+                                    </div>
                                 </div>
                             )}
 
@@ -571,10 +653,14 @@ export default function TopicPerformance() {
                                     <div className="w-8 h-8 border-3 border-slate-100 border-t-indigo-500 rounded-full animate-spin" />
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Validating benchmarks</p>
                                 </div>
+                            ) : filteredCertifyParticipants.length === 0 ? (
+                                <div className="text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                                    <p className="text-slate-400 font-bold italic">No qualified students found matching your search.</p>
+                                </div>
                             ) : (
                                 <div className="flex flex-col gap-3">
-                                    {participants.filter(p => !p.isCertified && p.isQualified).map((p, idx) => (
-                                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-100 rounded-2xl hover:border-indigo-500/20 transition-all group shadow-sm" style={{ padding: '20px 30px', marginBottom: '12px' }}>
+                                    {currentCertifyParticipants.map((p, idx) => (
+                                        <div key={idx} className="flex items-center justify-between bg-white border border-slate-100 rounded-2xl hover:border-indigo-500/20 transition-all group shadow-sm" style={{ padding: '20px 30px', marginBottom: '12px' }}>
                                             <div className="flex items-center gap-3 md:gap-4">
                                                 {(selectedCertifyOption === 'one' || selectedCertifyOption === 'few') && (
                                                     <input 
@@ -601,18 +687,31 @@ export default function TopicPerformance() {
                                             <span className="text-xs font-black text-indigo-500 uppercase tracking-widest">{p.score} Points</span>
                                         </div>
                                     ))}
+
+                                    {/* Pagination for Certify Modal */}
+                                    {filteredCertifyParticipants.length > 10 && (
+                                        <div className="flex justify-center mt-6">
+                                            <Pagination 
+                                                currentPage={certifyCurrentPage}
+                                                totalItems={filteredCertifyParticipants.length}
+                                                itemsPerPage={10}
+                                                onPageChange={setCertifyCurrentPage}
+                                                isMobile={isMobile}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
 
                         <div className="border-t border-slate-100 flex gap-4 md:gap-6" style={{ padding: isMobile ? '20px' : '30px' }}>
                             <button
-                                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[12px] disabled:opacity-40 transition-all shadow-xl shadow-indigo-500/20 active:scale-95 disabled:cursor-not-allowed cursor-pointer"
-                                                onClick={handleGenerateCertificates}
-                                                disabled={certifying || participants.filter(p => !p.isCertified && p.isQualified).length === 0 || !selectedCertifyOption || selectedParticipantIds.length === 0}
-                                            >
-                                                {certifying ? 'Transmitting...' : 'Authorize'}
-                                            </button>
+                                className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[12px] disabled:opacity-40 transition-all shadow-xl shadow-indigo-500/20 active:scale-95 disabled:cursor-not-allowed cursor-pointer"
+                                onClick={handleGenerateCertificates}
+                                disabled={certifying || qualifiedParticipants.length === 0 || !selectedCertifyOption || selectedParticipantIds.length === 0}
+                            >
+                                {certifying ? 'Transmitting...' : 'Authorize'}
+                            </button>
                             <button
                                 className="flex-1 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-slate-100 hover:bg-slate-200 text-slate-900 font-black uppercase tracking-widest text-[10px] md:text-[12px] border border-slate-200 transition-all active:scale-95 cursor-pointer"
                                 onClick={() => setShowCertifyModal(false)}
@@ -652,20 +751,20 @@ export default function TopicPerformance() {
                             </button>
                         </div>
 
-                        {/* Search Bar */}
-                        <div style={{ padding: isMobile ? '20px 20px 0' : '30px 30px 0' }}>
+                        {/* Search Bar - Pending Reviews Modal */}
+                        <div style={{ padding: '24px 30px 0', backgroundColor: '#ffffff' }}>
                             <div className="relative group">
                                 <input 
                                     type="text"
-                                    placeholder="Search Quizzes..."
-                                    className="w-full h-14 pl-6 pr-14 rounded-2xl bg-slate-50 border border-slate-100 focus:bg-white focus:border-indigo-500/20 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-bold placeholder:text-slate-400 outline-none"
+                                    placeholder="Search through pending quiz reviews..."
+                                    className="w-full h-14 pl-6 pr-14 rounded-2xl bg-slate-50 border-2 border-slate-100/50 focus:bg-white focus:border-indigo-500/30 focus:shadow-lg focus:shadow-indigo-500/5 transition-all text-sm font-bold text-slate-900 placeholder:text-slate-400 outline-none"
                                     value={pendingSearchTerm}
                                     onChange={(e) => {
                                         setPendingSearchTerm(e.target.value);
                                         setPendingCurrentPage(1);
                                     }}
                                 />
-                                <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={16} />
+                                <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
                             </div>
                         </div>
 

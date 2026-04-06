@@ -55,7 +55,7 @@ export default function QuestionBankModal({ onSelect, onClose }: QuestionBankMod
                     <h3 className="text-2xl font-black text-white leading-normal">Question Bank</h3>
                     <button
                         onClick={onClose}
-                        className="absolute right-8 md:right-16 p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-colors text-slate-400 hover:text-white shrink-0"
+                        className="absolute right-8 md:right-16 p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-colors text-slate-400 hover:text-white shrink-0 cursor-pointer"
                     >
                         <FaTimes size={18} />
                     </button>

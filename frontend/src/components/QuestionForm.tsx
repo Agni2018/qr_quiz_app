@@ -491,7 +491,7 @@ export default function QuestionForm({
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="flex-1 py-6 rounded-[32px] font-black text-lg transition-all hover:scale-105 active:scale-95"
+                        className="flex-1 py-6 rounded-[32px] font-black text-lg transition-all hover:scale-105 active:scale-95 cursor-pointer"
                         style={{ border: '2px solid #475569', color: '#1e293b', background: '#f1f5f9' }}
                     >
                         Discard

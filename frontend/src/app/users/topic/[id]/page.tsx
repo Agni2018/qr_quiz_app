@@ -181,15 +181,23 @@ export default function TopicDetails({ params }: { params: Promise<{ id: string 
                             <div className="flex flex-wrap gap-4 pt-2 mb-8">
                                 <Button 
                                     onClick={() => setIsEditMode(false)}
-                                    className={`flex-1 sm:flex-none uppercase tracking-widest text-xs font-bold transition-all duration-300 ${!isEditMode ? '!scale-105 shadow-xl shadow-indigo-500/20' : ''}`}
-                                    style={{ opacity: isEditMode ? 0.6 : 1 }}
+                                    className={`flex-1 sm:flex-none uppercase tracking-[0.15em] text-[10px] font-black transition-all duration-300 ${!isEditMode ? '!scale-105 shadow-xl shadow-indigo-500/20' : ''}`}
+                                    style={{ 
+                                        opacity: isEditMode ? 0.6 : 1,
+                                        padding: '8px 24px',
+                                        borderRadius: '12px'
+                                    }}
                                 >
                                     View Mode
                                 </Button>
                                 <Button 
                                     onClick={() => setIsEditMode(true)}
-                                    className={`flex-1 sm:flex-none uppercase tracking-widest text-xs font-bold transition-all duration-300 ${isEditMode ? '!scale-105 shadow-xl shadow-indigo-500/20' : ''}`}
-                                    style={{ opacity: !isEditMode ? 0.6 : 1 }}
+                                    className={`flex-1 sm:flex-none uppercase tracking-[0.15em] text-[10px] font-black transition-all duration-300 ${isEditMode ? '!scale-105 shadow-xl shadow-indigo-500/20' : ''}`}
+                                    style={{ 
+                                        opacity: !isEditMode ? 0.6 : 1,
+                                        padding: '8px 24px',
+                                        borderRadius: '12px'
+                                    }}
                                 >
                                     Edit Mode
                                 </Button>

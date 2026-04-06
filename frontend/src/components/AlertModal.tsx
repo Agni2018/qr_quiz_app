@@ -35,7 +35,7 @@ export default function AlertModal({ isOpen, onClose, title, message, type = 'in
     return (
         <div className="fixed inset-0 z-[500] backdrop-blur-sm flex items-center justify-center px-4" style={{ background: 'rgba(0, 0, 0, 0.6)' }}>
             <Card className="w-full max-w-sm p-0 rounded-[2rem] overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-200" style={{ background: 'var(--background)',padding:30,margin:'1rem 2rem 2rem 2rem', borderColor: 'var(--border-color)' }} onClick={e => e.stopPropagation()}>
-                <button onClick={onClose} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors z-10">
+                <button onClick={onClose} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors z-10 cursor-pointer">
                     <FaTimes />
                 </button>
                 <div className="flex flex-col items-center text-center p-8">

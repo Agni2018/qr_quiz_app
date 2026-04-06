@@ -12,7 +12,8 @@ import {
     FaTimes,
     FaFolderOpen,
     FaChevronRight,
-    FaChevronLeft
+    FaChevronLeft,
+    FaSearch
 } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
@@ -45,6 +46,9 @@ export default function UploadedMaterials() {
     const [selectedTopicId, setSelectedTopicId] = useState('');
     const [selectedTopicName, setSelectedTopicName] = useState('');
     const [selectedTopicMaterials, setSelectedTopicMaterials] = useState<any[]>([]);
+    const [modalSearchTerm, setModalSearchTerm] = useState('');
+    const [modalCurrentPage, setModalCurrentPage] = useState(1);
+    const MODAL_ITEMS_PER_PAGE = 6;
 
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', onConfirm: () => {} });
@@ -77,6 +81,8 @@ export default function UploadedMaterials() {
         setSelectedTopicId(topicId);
         setSelectedTopicName(topicName);
         setSelectedTopicMaterials(topicMaterials);
+        setModalSearchTerm('');
+        setModalCurrentPage(1);
         setShowAdminMaterialsModal(true);
     };
 
@@ -122,6 +128,15 @@ export default function UploadedMaterials() {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const currentTopics = filteredTopics.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
+    const filteredModalMaterials = selectedTopicMaterials.filter(m => 
+        m.name.toLowerCase().includes(modalSearchTerm.trim().toLowerCase()) ||
+        (m.fileType && m.fileType.toLowerCase().includes(modalSearchTerm.trim().toLowerCase()))
+    );
+
+    const modalIndexOfLastItem = modalCurrentPage * MODAL_ITEMS_PER_PAGE;
+    const modalIndexOfFirstItem = modalIndexOfLastItem - MODAL_ITEMS_PER_PAGE;
+    const paginatedModalMaterials = filteredModalMaterials.slice(modalIndexOfFirstItem, modalIndexOfLastItem);
+
     return (
         <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-1">
@@ -138,7 +153,7 @@ export default function UploadedMaterials() {
                 </div>
             ) : (
                 <div className="flex flex-col gap-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {currentTopics.map((topic) => {
                             const topicMaterials = materials.filter(m => (m.topicId?._id || m.topicId) === topic._id);
                             const itemCount = topicMaterials.length;
@@ -146,15 +161,15 @@ export default function UploadedMaterials() {
                                 <div
                                     key={topic._id}
                                     className="bg-white rounded-[2.5rem] flex flex-col group relative overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100"
-                                    style={{ padding: '20px', minHeight: '240px' }}
+                                    style={{ padding: '20px', minHeight: '260px' }}
                                 >
-                                    <div className="flex justify-between items-center mb-4">
-                                        <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-indigo-50 text-indigo-500 rounded-md">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-2xl text-indigo-500 group-hover:scale-110 transition-transform" style={{ marginBottom: 6 }}>
+                                            <FaFolderOpen />
+                                        </div>
+                                        <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-slate-50 text-slate-400 rounded-md" style={{ color: 'green' }}>
                                             Topic Folder
                                         </span>
-                                        <div className="flex items-center gap-2 text-slate-400">
-                                            <span className="text-[10px] font-black uppercase tracking-widest">{itemCount} FILES</span>
-                                        </div>
                                     </div>
 
                                     <div className="flex flex-col gap-3 flex-1">
@@ -166,11 +181,16 @@ export default function UploadedMaterials() {
                                         </p>
                                     </div>
 
-                                    <div className="mt-4 pt-4 border-t border-slate-50" style={{marginTop: 6}}>
+                                    <div className="mt-4 pt-4 border-t border-slate-50 flex flex-col gap-4" style={{marginTop: 6}}>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest" style={{ color: 'black' }}>Total Assets</span>
+                                            <span className="text-lg font-black text-slate-900 tracking-tighter">
+                                                {itemCount}
+                                            </span>
+                                        </div>
                                         <button
                                             onClick={() => handleViewMaterials(topic._id, topic.name)}
-                                            className="w-full h-12 rounded-2xl bg-slate-900 hover:bg-black text-white font-black uppercase tracking-widest text-[11px] transition-all flex items-center justify-center gap-3 active:scale-95 shadow-lg shadow-slate-900/10"
-                                            
+                                            className="w-full h-12 rounded-2xl bg-[#4f46e5] hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-[11px] transition-all flex items-center justify-center gap-3 active:scale-95 shadow-lg shadow-indigo-500/10 cursor-pointer"
                                         >
                                             View Folder <FaChevronRight size={10} />
                                         </button>
@@ -208,16 +228,35 @@ export default function UploadedMaterials() {
                                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500">Asset Management</span>
                                 <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight" style={{color:'#4f46e5'}}>{selectedTopicName}</h3>
                             </div>
-                            <button onClick={() => setShowAdminMaterialsModal(false)} className="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full transition-all text-slate-400 flex items-center justify-center shadow-sm">
+                            <button onClick={() => setShowAdminMaterialsModal(false)} className="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full transition-all text-slate-400 flex items-center justify-center shadow-sm cursor-pointer">
                                 <FaTimes size={20} />
                             </button>
                         </div>
 
-                        <div className="max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-4" style={{ padding: '24px 32px' }}>
-                            {selectedTopicMaterials.length === 0 ? (
-                                <p className="text-center py-20 text-slate-400 font-bold italic">This folder is currently empty.</p>
+                        {/* Search Bar Area */}
+                        <div style={{ padding: '24px 32px 0', backgroundColor: '#ffffff' }}>
+                            <div className="relative group">
+                                <input 
+                                    type="text"
+                                    placeholder="Execute search across materials..."
+                                    className="w-full h-14 pl-6 pr-14 rounded-2xl bg-slate-50 border-2 border-slate-100/50 focus:bg-white focus:border-indigo-500/30 focus:shadow-lg focus:shadow-indigo-500/5 transition-all text-sm font-bold text-slate-900 placeholder:text-slate-400 outline-none"
+                                    value={modalSearchTerm}
+                                    onChange={(e) => {
+                                        setModalSearchTerm(e.target.value);
+                                        setModalCurrentPage(1);
+                                    }}
+                                />
+                                <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+                            </div>
+                        </div>
+
+                        <div className="max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-4 bg-white" style={{ padding: '24px 32px' }}>
+                            {filteredModalMaterials.length === 0 ? (
+                                <div className="text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                                    <p className="text-slate-400 font-bold italic">No records discovered matching your search.</p>
+                                </div>
                             ) : (
-                                selectedTopicMaterials.map((m) => (
+                                paginatedModalMaterials.map((m) => (
                                     <div key={m._id} className="rounded-3xl bg-white border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-indigo-500/20 group transition-all" style={{ padding: '24px' }}>
                                         <div className="flex items-center gap-6 min-w-0 flex-1">
                                             <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
@@ -232,7 +271,7 @@ export default function UploadedMaterials() {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3 shrink-0" >
-                                            <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="h-12 px-6 rounded-xl bg-slate-900 hover:bg-black text-white font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-md" style={{padding:5}}>
+                                            <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="h-12 px-6 rounded-xl bg-white border-2 border-indigo-500 hover:bg-indigo-50 text-indigo-600 font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm" style={{padding:12}}>
                                                 Download
                                             </a>
                                             <button
@@ -245,13 +284,22 @@ export default function UploadedMaterials() {
                                     </div>
                                 ))
                             )}
+
+                            {/* Pagination */}
+                            {filteredModalMaterials.length > MODAL_ITEMS_PER_PAGE && (
+                                <div className="flex justify-center mt-6">
+                                    <Pagination 
+                                        currentPage={modalCurrentPage}
+                                        totalItems={filteredModalMaterials.length}
+                                        itemsPerPage={MODAL_ITEMS_PER_PAGE}
+                                        onPageChange={setModalCurrentPage}
+                                        isMobile={isMobile}
+                                    />
+                                </div>
+                            )}
                         </div>
 
-                        <div className="p-8 bg-slate-50 border-t border-slate-100 flex justify-center">
-                            <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.1em] text-center">
-                                Use the main dashboard to upload new materials for this topic.
-                            </p>
-                        </div>
+
                     </Card>
                 </div>
             )}
