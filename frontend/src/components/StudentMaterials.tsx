@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import { FaBookOpen, FaFileAlt, FaVideo, FaTimes, FaBook } from 'react-icons/fa';
+import { FaBookOpen, FaFileAlt, FaVideo, FaTimes, FaBook, FaSearch } from 'react-icons/fa';
 import Pagination from '@/components/Pagination';
 import { useSearch } from '@/contexts/SearchContext';
 
@@ -19,6 +19,9 @@ export default function StudentMaterials() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+    const [modalSearchTerm, setModalSearchTerm] = useState('');
+    const [modalCurrentPage, setModalCurrentPage] = useState(1);
+    const MODAL_ITEMS_PER_PAGE = 6;
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
@@ -50,6 +53,8 @@ export default function StudentMaterials() {
         const topicMaterials = materials.filter(m => (m.topicId?._id || m.topicId) === topicId);
         setSelectedTopicMaterials(topicMaterials);
         setViewingTopicName(topicName);
+        setModalSearchTerm('');
+        setModalCurrentPage(1);
         setShowMaterialsModal(true);
     };
 
@@ -70,6 +75,15 @@ export default function StudentMaterials() {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
         return `${baseUrl}${url}`;
     };
+
+    const filteredModalMaterials = selectedTopicMaterials.filter(m =>
+        m.name.toLowerCase().includes(modalSearchTerm.trim().toLowerCase()) ||
+        (m.fileType && m.fileType.toLowerCase().includes(modalSearchTerm.trim().toLowerCase()))
+    );
+
+    const modalIndexOfLastItem = modalCurrentPage * MODAL_ITEMS_PER_PAGE;
+    const modalIndexOfFirstItem = modalIndexOfLastItem - MODAL_ITEMS_PER_PAGE;
+    const paginatedModalMaterials = filteredModalMaterials.slice(modalIndexOfFirstItem, modalIndexOfLastItem);
 
     if (loading) {
         return (
@@ -161,36 +175,76 @@ export default function StudentMaterials() {
 
             {/* MATERIALS MODAL */}
             {showMaterialsModal && (
-                <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl animate-fade-in" onClick={() => setShowMaterialsModal(false)} style={{ padding: '2rem' }}>
-                    <Card className="max-w-4xl w-full p-0 bg-slate-950 border-white/10 shadow-3xl rounded-[1.5rem] overflow-hidden" onClick={e => e.stopPropagation()} style={{ padding: '0', margin: '1rem' }}>
-                        <div className="p-6 border-b border-white/5 bg-slate-900/40 flex justify-between items-center max-md:!p-4" style={{ padding: '1.5rem', marginBottom: '0' }}>
-                            <div>
-                                <h3 className="text-xl font-black text-white">{viewingTopicName}</h3>
-                                <p className="text-primary font-bold text-xs mt-0.5 uppercase tracking-widest leading-relaxed">Study Resources</p>
+                <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-md animate-fade-in" onClick={() => setShowMaterialsModal(false)} style={{ padding: '2rem' }}>
+                    <Card className="max-w-4xl w-full p-0 bg-white shadow-2xl rounded-[3rem] overflow-hidden border border-slate-100 flex flex-col gap-0" onClick={e => e.stopPropagation()} style={{ padding: '0', margin: '1rem' }}>
+                        <div className="border-b border-slate-50 bg-white flex justify-between items-center" style={{ padding: '24px 32px' }}>
+                            <div className="flex flex-col gap-1">
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500">Study Resources</span>
+                                <h3 className="text-2xl font-black uppercase tracking-tight" style={{ color: '#4f46e5' }}>{viewingTopicName}</h3>
                             </div>
-                            <button onClick={() => setShowMaterialsModal(false)} className="p-3 bg-white/5 hover:bg-red-500/20 hover:text-red-500 rounded-xl transition-all text-slate-400">
+                            <button onClick={() => setShowMaterialsModal(false)} className="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full transition-all text-slate-400 flex items-center justify-center shadow-sm cursor-pointer">
                                 <FaTimes size={20} />
                             </button>
                         </div>
-                        <div className="p-6 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-4 max-md:p-4" style={{ padding: '1.5rem' }}>
-                            {selectedTopicMaterials.map((m) => (
-                                <div key={m._id} className="rounded-[1.25rem] bg-white/5 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 hover:bg-white/10 transition-all group" style={{ padding: '1.25rem' }}>
-                                    <div className="flex items-center gap-6 min-w-0" style={{ padding: '0' }}>
-                                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-2xl border border-primary/20 shrink-0">
-                                            {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
-                                        </div>
-                                        <div className="flex flex-col gap-1 min-w-0">
-                                            <h4 className="text-lg font-black text-white group-hover:text-primary transition-colors uppercase tracking-tight break-all md:break-words">{m.name}</h4>
-                                            {m.description && <p className="text-slate-400 text-xs italic leading-relaxed">"{m.description}"</p>}
-                                        </div>
-                                    </div>
-                                    <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
-                                        <Button className="w-full md:px-10 py-5 rounded-2xl bg-primary text-white font-black border-none uppercase tracking-widest text-xs flex items-center gap-3" style={{ margin: '0' }}>
-                                            Open Resource
-                                        </Button>
-                                    </a>
+
+                        {/* Search Bar Area */}
+                        <div style={{ padding: '24px 32px 0', backgroundColor: '#ffffff' }}>
+                            <div className="relative group">
+                                <input 
+                                    type="text"
+                                    placeholder="Search study materials..."
+                                    className="w-full h-14 pl-6 pr-14 rounded-2xl bg-slate-50 border-2 border-slate-100/50 focus:bg-white focus:border-indigo-500/30 focus:shadow-lg focus:shadow-indigo-500/5 transition-all text-sm font-bold text-slate-900 placeholder:text-slate-400 outline-none"
+                                    value={modalSearchTerm}
+                                    onChange={(e) => {
+                                        setModalSearchTerm(e.target.value);
+                                        setModalCurrentPage(1);
+                                    }}
+                                />
+                                <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+                            </div>
+                        </div>
+
+                        <div className="max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-4 bg-white" style={{ padding: '24px 32px' }}>
+                            {filteredModalMaterials.length === 0 ? (
+                                <div className="text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                                    <p className="text-slate-400 font-bold italic" style={{ color: 'black' }}>No materials found matching your search.</p>
                                 </div>
-                            ))}
+                            ) : (
+                                paginatedModalMaterials.map((m) => (
+                                    <div key={m._id} className="rounded-3xl bg-white border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-indigo-500/20 group transition-all" style={{ padding: '24px' }}>
+                                        <div className="flex items-center gap-6 min-w-0 flex-1">
+                                            <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                                                {m.fileType?.startsWith('video/') ? <FaVideo /> : <FaFileAlt />}
+                                            </div>
+                                            <div className="flex flex-col gap-1 min-w-0">
+                                                <h4 className="text-lg font-black uppercase tracking-tight break-words" style={{ color: 'black' }}>{m.name}</h4>
+                                                {m.description && <p className="text-slate-400 text-xs font-bold leading-relaxed line-clamp-1" style={{ color: 'black' }}>{m.description}</p>}
+                                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-300 mt-1" style={{ color: 'black' }}>
+                                                    {m.fileType?.split('/')[1]?.toUpperCase() || 'FILE'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <a href={getFileUrl(m.fileUrl)} target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
+                                            <Button className="w-full md:px-10 py-5 rounded-2xl bg-primary text-white font-black border-none uppercase tracking-widest text-xs flex items-center gap-3" style={{ margin: '0' }}>
+                                                Open Resource
+                                            </Button>
+                                        </a>
+                                    </div>
+                                ))
+                            )}
+
+                            {/* Pagination */}
+                            {filteredModalMaterials.length > MODAL_ITEMS_PER_PAGE && (
+                                <div className="flex justify-center mt-6">
+                                    <Pagination 
+                                        currentPage={modalCurrentPage}
+                                        totalItems={filteredModalMaterials.length}
+                                        itemsPerPage={MODAL_ITEMS_PER_PAGE}
+                                        onPageChange={setModalCurrentPage}
+                                        isMobile={isMobile}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </Card>
                 </div>

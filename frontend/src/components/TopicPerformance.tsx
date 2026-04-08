@@ -9,12 +9,15 @@ import {
     FaArrowRight,
     FaBars,
     FaTimes,
+    FaCheck,
     FaCheckCircle,
     FaAward,
     FaEnvelope,
     FaSearch,
     FaChartLine,
     FaChevronRight,
+    FaChevronDown,
+    FaCaretDown,
     FaUsers,
     FaBook,
     FaUser
@@ -46,6 +49,12 @@ export default function TopicPerformance() {
     const [messageSuccessTo, setMessageSuccessTo] = useState<string | null>(null);
     const [messageText, setMessageText] = useState('');
     const [isSendingMessage, setIsSendingMessage] = useState(false);
+    const [sendingEmailTo, setSendingEmailTo] = useState<string | null>(null);
+    const [emailSuccessTo, setEmailSuccessTo] = useState<string | null>(null);
+    const [emailSubject, setEmailSubject] = useState('');
+    const [emailText, setEmailText] = useState('');
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
     // Certify States
     const [selectedCertifyOption, setSelectedCertifyOption] = useState<'' | 'one' | 'few' | 'all'>('');
@@ -164,6 +173,38 @@ export default function TopicPerformance() {
             setAlertModal({ isOpen: true, message: err.response?.data?.message || 'Failed to send message', type: 'error' });
         } finally {
             setIsSendingMessage(false);
+        }
+    };
+
+    const handleSendEmail = async (email: string, participantId: string, topicName: string) => {
+        if (!emailText.trim()) return;
+        setIsSendingEmail(true);
+        try {
+            const formData = new FormData();
+            formData.append('subject', emailSubject || `Update on ${topicName}`);
+            formData.append('message', emailText);
+            formData.append('_captcha', 'false'); // Disable captcha for AJAX
+            formData.append('_template', 'table');
+
+            const response = await fetch(`https://formsubmit.co/ajax/${email}`, {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                setSendingEmailTo(null);
+                setEmailText('');
+                setEmailSubject('');
+                setEmailSuccessTo(participantId);
+                setTimeout(() => setEmailSuccessTo(null), 3000);
+            } else {
+                throw new Error('Failed to send email');
+            }
+        } catch (err: any) {
+            console.error('Failed to send email:', err);
+            setAlertModal({ isOpen: true, message: 'Failed to send email. Ensure the user exists and your connection is active.', type: 'error' });
+        } finally {
+            setIsSendingEmail(false);
         }
     };
 
@@ -489,8 +530,12 @@ export default function TopicPerformance() {
                                                     <div className="flex flex-col min-w-0">
                                                         <div className="flex items-center gap-2">
                                                             <span className="font-bold text-slate-900 tracking-tight truncate text-sm md:text-base">{p.name}</span>
-                                                            {messageSuccessTo === String(p.id) && (
-                                                                <FaCheckCircle className="text-indigo-500 animate-blink-three flex-shrink-0" size={14} />
+                                                            {(messageSuccessTo === String(p.id) || emailSuccessTo === String(p.id)) && (
+                                                                <div className="flex items-center -gap-0.5 animate-in fade-in zoom-in duration-300">
+                                                                    <FaCheck className="text-indigo-500 animate-blink-three" size={10} style={{ animationDelay: '0s' }} />
+                                                                    <FaCheck className="text-indigo-500 animate-blink-three" size={10} style={{ animationDelay: '0.1s' }} />
+                                                                    <FaCheck className="text-indigo-500 animate-blink-three" size={10} style={{ animationDelay: '0.2s' }} />
+                                                                </div>
                                                             )}
                                                         </div>
                                                         <span className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 truncate">{p.email || p.phone}</span>
@@ -502,12 +547,48 @@ export default function TopicPerformance() {
                                                         <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">Points</span>
                                                     </div>
                                                     {p.userId && (
-                                                        <button
-                                                            onClick={() => setSendingMessageTo(sendingMessageTo === p.id ? null : p.id)}
-                                                            className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-500 hover:border-indigo-500/20 transition-all cursor-pointer flex-shrink-0"
-                                                        >
-                                                            <FaEnvelope size={isMobile ? 14 : 18} />
-                                                        </button>
+                                                        <div className="relative flex items-center gap-1">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setSendingMessageTo(sendingMessageTo === p.id ? null : p.id);
+                                                                    setSendingEmailTo(null);
+                                                                    setActiveDropdown(null);
+                                                                }}
+                                                                className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-500 hover:border-indigo-500/20 transition-all cursor-pointer flex-shrink-0"
+                                                                title="Send Message"
+                                                            >
+                                                                <FaEnvelope size={isMobile ? 14 : 18} />
+                                                            </button>
+                                                            
+                                                            <div className="relative">
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setActiveDropdown(activeDropdown === p.id ? null : p.id);
+                                                                    }}
+                                                                    className="w-6 h-9 md:h-10 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-500 transition-all cursor-pointer"
+                                                                >
+                                                                    <FaCaretDown size={12} />
+                                                                </button>
+                                                                
+                                                                {activeDropdown === p.id && (
+                                                                    <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-2xl shadow-xl border border-slate-100 z-[110] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                                                                        <button 
+                                                                            className="w-full px-5 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest text-slate-600 hover:bg-indigo-50 hover:text-indigo-500 transition-colors flex items-center gap-3"
+                                                                            onClick={() => {
+                                                                                setSendingEmailTo(sendingEmailTo === p.id ? null : p.id);
+                                                                                setSendingMessageTo(null);
+                                                                                setActiveDropdown(null);
+                                                                                setEmailSubject(`Feedback on ${selectedTopicName}`);
+                                                                            }}
+                                                                        >
+                                                                            <div className="w-2 h-2 rounded-full bg-indigo-500"></div>
+                                                                            Send Email
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
                                                     )}
                                                 </div>
                                             </div>
@@ -530,6 +611,53 @@ export default function TopicPerformance() {
                                                                 disabled={isSendingMessage || !messageText.trim()}
                                                             >
                                                                 {isSendingMessage ? 'Sending...' : 'Send Message'}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {p.email && sendingEmailTo === p.id && (
+                                                <div className="col-span-full mt-2 animate-in slide-in-from-top-2 duration-300">
+                                                    <div 
+                                                        className="bg-indigo-50 rounded-[2rem] border border-indigo-100/50 flex flex-col gap-6 shadow-inner"
+                                                        style={{ paddingInline: '40px', paddingBlock: '32px' }}
+                                                    >
+                                                        <div className="flex flex-col gap-2.5">
+                                                            <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest" style={{ paddingInline: '12px' }}>Email Subject</span>
+                                                            <input
+                                                                type="text"
+                                                                className="w-full h-14 rounded-2xl bg-white border border-slate-200 focus:border-indigo-500 focus:shadow-md outline-none font-bold text-sm text-slate-900 transition-all placeholder:text-slate-300"
+                                                                style={{ paddingInline: '40px' }}
+                                                                placeholder="Enter subject..."
+                                                                value={emailSubject}
+                                                                onChange={e => setEmailSubject(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="flex flex-col gap-2.5">
+                                                            <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest" style={{ paddingInline: '12px' }}>Message Body</span>
+                                                            <TextArea
+                                                                className="w-full !bg-white !text-slate-900 border border-slate-200 !min-h-[180px] rounded-2xl focus:border-indigo-500 transition-all font-bold text-sm shadow-inner"
+                                                                style={{ backgroundColor: '#ffffff', color: '#0f172a', paddingInline: '40px', paddingBlock: '32px', border: '1px solid #e2e8f0' }}
+                                                                placeholder={`Write your email to ${p.name}...`}
+                                                                value={emailText}
+                                                                onChange={e => setEmailText(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="flex items-center justify-end gap-6 mt-4" style={{ paddingInline: '16px' }}>
+                                                            <button 
+                                                                className="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors cursor-pointer" 
+                                                                onClick={() => setSendingEmailTo(null)}
+                                                            >
+                                                                Cancel
+                                                            </button>
+                                                            <button 
+                                                                className="h-12 rounded-xl bg-indigo-500 text-white text-[11px] font-bold uppercase tracking-widest disabled:opacity-50 transition-all hover:bg-indigo-600 hover:scale-105 active:scale-95 shadow-xl shadow-indigo-500/30 cursor-pointer flex items-center justify-center gap-3"
+                                                                style={{ paddingInline: '40px' }}
+                                                                onClick={() => handleSendEmail(p.email, String(p.id), selectedTopicName)}
+                                                                disabled={isSendingEmail || !emailText.trim()}
+                                                            >
+                                                                {isSendingEmail ? 'Transmitting...' : 'Send Email'}
                                                             </button>
                                                         </div>
                                                     </div>
