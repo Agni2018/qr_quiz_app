@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Card from './Card';
 import Button from './Button';
-import { FaTrash, FaPlus, FaRegClone, FaGlobe } from 'react-icons/fa';
+import { FaTrash, FaPlus, FaRegClone, FaGlobe, FaPen } from 'react-icons/fa';
 import QuestionForm from './QuestionForm';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
@@ -19,6 +19,7 @@ export default function ReusableLibrary() {
     const [showForm, setShowForm] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const { searchTerm } = useSearch();
+    const [editingQuestion, setEditingQuestion] = useState<any>(null);
     const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: '', isDanger: false, onConfirm: () => {} });
 
@@ -81,7 +82,10 @@ export default function ReusableLibrary() {
                     <p className="text-sm font-bold text-slate-600 mt-1" style={{color:'black'}} >Reusable questions that can be imported into any topic.</p>
                 </div>
                 <Button 
-                    onClick={() => setShowForm(true)}
+                    onClick={() => {
+                        setEditingQuestion(null);
+                        setShowForm(true);
+                    }}
                     className="h-14 px-8 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
                     style={{ background: '#4f46e5' }}
                 >
@@ -94,12 +98,18 @@ export default function ReusableLibrary() {
                     <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[2.5rem] shadow-2xl bg-white" style={{margin:'1rem 1rem 1rem 1rem'}}>
                         <QuestionForm
                             topicId={undefined}
+                            existingQuestion={editingQuestion}
                             onQuestionAdded={() => {
+                                const action = editingQuestion ? 'updated' : 'created in library';
                                 setShowForm(false);
+                                setEditingQuestion(null);
                                 fetchQuestions();
-                                setAlertModal({ isOpen: true, message: 'Question created in library successfully!', type: 'success' });
+                                setAlertModal({ isOpen: true, message: `${action} successfully!`, type: 'success' });
                             }}
-                            onCancel={() => setShowForm(false)}
+                            onCancel={() => {
+                                setShowForm(false);
+                                setEditingQuestion(null);
+                            }}
                         />
                     </div>
                 </div>
@@ -130,14 +140,26 @@ export default function ReusableLibrary() {
                                             {q.marks} PTS{Array.isArray(q.options) && q.options.length > 0 ? ` • ${q.options.length} OPTIONS` : ''}
                                         </span>
                                     </div>
-                                    <button
-                                        onClick={() => deleteQuestion(q._id)}
-                                        className="text-slate-300 hover:text-red-500 transition-all p-2 rounded-xl"
-                                        title="Delete from library"
-                                        style={{color:'red'}}
-                                    >
-                                        <FaTrash size={14} />
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => {
+                                                setEditingQuestion(q);
+                                                setShowForm(true);
+                                            }}
+                                            className="text-slate-300 hover:text-indigo-500 transition-all p-2 rounded-xl"
+                                            title="Edit question"
+                                        >
+                                            <FaPen size={14} />
+                                        </button>
+                                        <button
+                                            onClick={() => deleteQuestion(q._id)}
+                                            className="text-slate-300 hover:text-red-500 transition-all p-2 rounded-xl"
+                                            title="Delete from library"
+                                            style={{color:'red'}}
+                                        >
+                                            <FaTrash size={14} />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="flex-1 mb-4">

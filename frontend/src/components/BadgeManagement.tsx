@@ -6,7 +6,7 @@ import Card from './Card';
 import Button from './Button';
 import Input from './Input';
 import TextArea from './TextArea';
-import { FaTrash, FaPlus, FaAward, FaTrophy, FaStar, FaBolt, FaUsers, FaChevronDown, FaTimes } from 'react-icons/fa';
+import { FaTrash, FaPlus, FaAward, FaTrophy, FaStar, FaBolt, FaUsers, FaChevronDown, FaTimes, FaPen } from 'react-icons/fa';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
 import Pagination from './Pagination';
@@ -33,6 +33,7 @@ export default function BadgeManagement() {
 
     const isMobile = windowWidth < 768;
 
+    const [editingBadge, setEditingBadge] = useState<any>(null);
     const [newBadge, setNewBadge] = useState<any>({
         name: '',
         description: '',
@@ -82,14 +83,34 @@ export default function BadgeManagement() {
         if (!newBadge.name) return setAlertModal({ isOpen: true, message: 'Name is required', type: 'error' });
         try {
             const payload = { ...newBadge, threshold: Number(newBadge.threshold) || 0 };
-            await api.post('/badges', payload);
+            
+            if (editingBadge) {
+                await api.put(`/badges/${editingBadge._id}`, payload);
+                setAlertModal({ isOpen: true, message: 'updated successfully', type: 'success' });
+            } else {
+                await api.post('/badges', payload);
+                setAlertModal({ isOpen: true, message: 'Badge created successfully', type: 'success' });
+            }
+            
             setShowForm(false);
+            setEditingBadge(null);
             setNewBadge({ name: '', description: '', icon: 'FaAward', type: 'points', threshold: '' });
-            setAlertModal({ isOpen: true, message: 'Badge created successfully', type: 'success' });
             fetchBadges();
         } catch (err) {
-            setAlertModal({ isOpen: true, message: 'Failed to create badge', type: 'error' });
+            setAlertModal({ isOpen: true, message: `Failed to ${editingBadge ? 'update' : 'create'} badge`, type: 'error' });
         }
+    };
+
+    const handleEdit = (badge: any) => {
+        setEditingBadge(badge);
+        setNewBadge({
+            name: badge.name,
+            description: badge.description,
+            icon: badge.icon,
+            type: badge.type,
+            threshold: badge.threshold
+        });
+        setShowForm(true);
     };
 
     const deleteBadge = (id: string) => {
@@ -132,7 +153,11 @@ export default function BadgeManagement() {
                    
                 </div>
                 <Button
-                    onClick={() => setShowForm(true)}
+                    onClick={() => {
+                        setEditingBadge(null);
+                        setNewBadge({ name: '', description: '', icon: 'FaAward', type: 'points', threshold: '' });
+                        setShowForm(true);
+                    }}
                     className="h-14 px-8 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
                     style={{ background: '#4f46e5' }}
                 >
@@ -144,7 +169,7 @@ export default function BadgeManagement() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300" >
                     <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[2rem] shadow-2xl bg-white p-8 mb-4 flex flex-col gap-8" style={{ padding: '24px 32px', margin: '1rem 1rem 1rem 1rem' }}>
                         <div className="flex justify-between items-center">
-                            <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight" style={{color:'black'}}>New Badge Definition</h3>
+                            <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight" style={{color:'black'}}>{editingBadge ? 'Edit Badge' : 'New Badge Definition'}</h3>
                             <button
                                 onClick={() => setShowForm(false)}
                                 className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-white hover:bg-red-500 transition-all shadow-sm"
@@ -261,9 +286,18 @@ export default function BadgeManagement() {
                             <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-2xl text-indigo-500 group-hover:scale-110 transition-transform" style={{ marginBottom: 6 }}>
                                 {icons.find(i => i.name === badge.icon)?.icon || <FaAward />}
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-slate-50 text-slate-400 rounded-md" style={{ color: 'green' }}>
-                                {badge.type.replace('_', ' ')}
-                            </span>
+                            <div className="flex items-center gap-2">
+                                <div 
+                                    onClick={() => handleEdit(badge)}
+                                    className="p-2 bg-slate-50 text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 rounded-lg transition-all cursor-pointer"
+                                    title="Edit Badge"
+                                >
+                                    <FaPen size={14} />
+                                </div>
+                                <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-slate-50 text-slate-400 rounded-md" style={{ color: 'green' }}>
+                                    {badge.type.replace('_', ' ')}
+                                </span>
+                            </div>
                         </div>
 
                         <div className="flex flex-col gap-3 flex-1">
