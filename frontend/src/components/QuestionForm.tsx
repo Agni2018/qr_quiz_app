@@ -332,6 +332,7 @@ export default function QuestionForm({
                                             />
                                         </div>
                                         <Button
+                                            type="button"
                                             variant="danger"
                                             onClick={() => handleRemoveOption(idx)}
                                             className="p-4 sm:p-5 rounded-2xl opacity-40 group-hover:opacity-100 transition-opacity bg-red-500/10 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white shrink-0"
@@ -390,6 +391,7 @@ export default function QuestionForm({
                                             />
                                         </div>
                                         <Button
+                                            type="button"
                                             variant="danger"
                                             onClick={() => handleRemoveMatchPair(idx)}
                                             className="w-full sm:w-auto p-4 sm:p-5 rounded-2xl opacity-40 group-hover:opacity-100 transition-opacity bg-red-500/10 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white shrink-0"
@@ -427,6 +429,7 @@ export default function QuestionForm({
                             <div className="flex gap-8">
                                 {['True', 'False'].map(option => (
                                     <button
+                                        type="button"
                                         key={option}
                                         onClick={() => handleSingleChoiceSelect(option)}
                                         className={`flex-1 py-6 rounded-[24px] font-bold transition-all border-2 text-xl ${correctAnswer === option
@@ -444,6 +447,7 @@ export default function QuestionForm({
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {options.filter(o => o.trim()).map((option, idx) => (
                                     <button
+                                        type="button"
                                         key={idx}
                                         onClick={() =>
                                             type === 'single_choice'
@@ -485,7 +489,7 @@ export default function QuestionForm({
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8 pt-12 border-t border-slate-200 px-4 sm:px-8 md:px-12 mt-4" style={{ padding: '30px 15px' }}>
-                    <Button onClick={handleSubmit} className="flex-[2] py-6 rounded-[32px] text-2xl font-black shadow-2xl shadow-violet-500/40 hover:scale-[1.02] transition-transform">
+                    <Button type="submit" className="flex-[2] py-6 rounded-[32px] text-2xl font-black shadow-2xl shadow-violet-500/40 hover:scale-[1.02] transition-transform">
                         ✨ {existingQuestion ? 'Update Question' : 'Save Question'}
                     </Button>
                     <button
