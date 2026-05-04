@@ -1,4 +1,6 @@
 const Question = require('../models/Question');
+const Activity = require('../models/Activity');
+const Topic = require('../models/Topic');
 
 // GET questions for a topic
 exports.getQuestionsByTopic = async (req, res) => {
@@ -40,6 +42,33 @@ exports.createQuestion = async (req, res) => {
         });
 
         const newQuestion = await question.save();
+
+        if (newQuestion.isReusable) {
+            Activity.create({
+                userId: req.user.id,
+                role: 'admin',
+                actionTitle: 'Reusable Question Added',
+                actionDescription: `Added a reusable question to the question bank`,
+                metadata: { questionId: newQuestion._id }
+            }).catch(err => console.error('Activity log error:', err));
+        } else if (newQuestion.topicId) {
+            try {
+                const topic = await Topic.findById(newQuestion.topicId);
+                if (topic) {
+                    const truncatedContent = newQuestion.content.length > 40 ? newQuestion.content.substring(0, 40) + '...' : newQuestion.content;
+                    Activity.create({
+                        userId: req.user.id,
+                        role: 'admin',
+                        actionTitle: 'Question Added',
+                        actionDescription: `Added question "${truncatedContent}" in topic "${topic.name}"`,
+                        metadata: { questionId: newQuestion._id, topicId: topic._id }
+                    }).catch(err => console.error('Activity log error:', err));
+                }
+            } catch (err) {
+                console.error('Topic fetch error for activity log:', err);
+            }
+        }
+
         res.status(201).json(newQuestion);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -55,6 +84,33 @@ exports.updateQuestion = async (req, res) => {
         Object.assign(question, req.body);
 
         const updatedQuestion = await question.save();
+
+        if (updatedQuestion.isReusable) {
+            Activity.create({
+                userId: req.user.id,
+                role: 'admin',
+                actionTitle: 'Reusable Question Updated',
+                actionDescription: `Updated a reusable question in the question bank`,
+                metadata: { questionId: updatedQuestion._id }
+            }).catch(err => console.error('Activity log error:', err));
+        } else if (updatedQuestion.topicId) {
+            try {
+                const topic = await Topic.findById(updatedQuestion.topicId);
+                if (topic) {
+                    const truncatedContent = updatedQuestion.content.length > 40 ? updatedQuestion.content.substring(0, 40) + '...' : updatedQuestion.content;
+                    Activity.create({
+                        userId: req.user.id,
+                        role: 'admin',
+                        actionTitle: 'Question Updated',
+                        actionDescription: `Updated question "${truncatedContent}" in topic "${topic.name}"`,
+                        metadata: { questionId: updatedQuestion._id, topicId: topic._id }
+                    }).catch(err => console.error('Activity log error:', err));
+                }
+            } catch (err) {
+                console.error('Topic fetch error for activity log:', err);
+            }
+        }
+
         res.json(updatedQuestion);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -68,6 +124,33 @@ exports.deleteQuestion = async (req, res) => {
         if (!question) return res.status(404).json({ message: 'Question not found' });
 
         await question.deleteOne();
+
+        if (question.isReusable) {
+            Activity.create({
+                userId: req.user.id,
+                role: 'admin',
+                actionTitle: 'Reusable Question Deleted',
+                actionDescription: `Deleted a reusable question from the question bank`,
+                metadata: { questionId: question._id }
+            }).catch(err => console.error('Activity log error:', err));
+        } else if (question.topicId) {
+            try {
+                const topic = await Topic.findById(question.topicId);
+                if (topic) {
+                    const truncatedContent = question.content.length > 40 ? question.content.substring(0, 40) + '...' : question.content;
+                    Activity.create({
+                        userId: req.user.id,
+                        role: 'admin',
+                        actionTitle: 'Question Deleted',
+                        actionDescription: `Deleted question "${truncatedContent}" from topic "${topic.name}"`,
+                        metadata: { questionId: question._id, topicId: topic._id }
+                    }).catch(err => console.error('Activity log error:', err));
+                }
+            } catch (err) {
+                console.error('Topic fetch error for activity log:', err);
+            }
+        }
+
         res.json({ message: 'Question deleted' });
     } catch (err) {
         res.status(500).json({ message: err.message });

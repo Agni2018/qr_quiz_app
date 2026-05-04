@@ -26,6 +26,7 @@ import AlertModal from '@/components/AlertModal';
 import Pagination from './Pagination';
 import { usePathname } from 'next/navigation';
 import { useSearch } from '@/contexts/SearchContext';
+import ActivityFeed from '@/components/ActivityFeed';
 
 export default function TopicPerformance() {
     const [topics, setTopics] = useState<any[]>([]);
@@ -977,6 +978,10 @@ export default function TopicPerformance() {
                 message={alertModal.message}
                 type={alertModal.type}
             />
+
+            <div style={{ padding: '0 1.5rem', margin: '2rem 0', width: '100%' }}>
+                <ActivityFeed />
+            </div>
         </div>
     );
 }

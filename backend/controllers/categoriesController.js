@@ -1,6 +1,7 @@
 const Category = require('../models/Category');
 const Topic = require('../models/Topic');
 const Question = require('../models/Question');
+const Activity = require('../models/Activity');
 
 // GET all categories
 exports.getAllCategories = async (req, res) => {
@@ -21,6 +22,15 @@ exports.createCategory = async (req, res) => {
 
     try {
         const newCategory = await category.save();
+
+        Activity.create({
+            userId: req.user.id,
+            role: 'admin',
+            actionTitle: 'Category Created',
+            actionDescription: `Created category "${name}"`,
+            metadata: { categoryId: newCategory._id }
+        }).catch(err => console.error('Activity log error:', err));
+
         res.status(201).json(newCategory);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -33,10 +43,18 @@ exports.deleteCategory = async (req, res) => {
         const category = await Category.findById(req.params.id);
         if (!category) return res.status(404).json({ message: 'Category not found' });
 
-        // Nullify categoryId for all topics in this category
         await Topic.updateMany({ categoryId: req.params.id }, { $set: { categoryId: null } });
         
         await category.deleteOne();
+
+        Activity.create({
+            userId: req.user.id,
+            role: 'admin',
+            actionTitle: 'Category Deleted',
+            actionDescription: `Deleted category "${category.name}"`,
+            metadata: { categoryId: category._id }
+        }).catch(err => console.error('Activity log error:', err));
+
         res.json({ message: 'Category deleted' });
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -54,6 +72,15 @@ exports.updateCategory = async (req, res) => {
         }
 
         const updatedCategory = await category.save();
+
+        Activity.create({
+            userId: req.user.id,
+            role: 'admin',
+            actionTitle: 'Category Updated',
+            actionDescription: `Updated category "${updatedCategory.name}"`,
+            metadata: { categoryId: updatedCategory._id }
+        }).catch(err => console.error('Activity log error:', err));
+
         res.json(updatedCategory);
     } catch (err) {
         res.status(400).json({ message: err.message });

@@ -5,6 +5,7 @@ const UserAttempt = require('../models/UserAttempt');
 const User = require('../models/User');
 const challengeController = require('./challengeController');
 const Badge = require('../models/Badge');
+const Activity = require('../models/Activity');
 
 // Check eligibility to start quiz
 exports.startQuiz = async (req, res) => {
@@ -269,6 +270,16 @@ exports.submitQuiz = async (req, res) => {
                     // ---------------------------------------
                 }
             }
+        }
+
+        if (finalUserId) {
+            Activity.create({
+                userId: finalUserId,
+                role: 'student',
+                actionTitle: 'Quiz Completed',
+                actionDescription: `Completed quiz "${topic.name}" with score ${totalScore}`,
+                metadata: { topicId, attemptId: attempt._id, score: totalScore }
+            }).catch(err => console.error('Activity log error:', err));
         }
 
         res.json({

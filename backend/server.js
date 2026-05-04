@@ -97,6 +97,8 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/categories', categoryRoutes);
 const challengeRoutes = require('./routes/challenges');
 app.use('/api/challenges', challengeRoutes);
+const activityRoutes = require('./routes/activities');
+app.use('/api/activities', activityRoutes);
 app.get('/api/test', (req, res) => res.json({ ok: true }));
 
 // Ensure uploads directory exists on startup

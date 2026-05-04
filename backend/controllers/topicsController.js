@@ -1,5 +1,7 @@
 const Topic = require('../models/Topic');
 const Question = require('../models/Question');
+const Activity = require('../models/Activity');
+const Category = require('../models/Category');
 
 // GET all topics
 exports.getAllTopics = async (req, res) => {
@@ -57,6 +59,27 @@ exports.createTopic = async (req, res) => {
 
     try {
         const newTopic = await topic.save();
+        
+        let actionDesc = `Created new topic "${name}"`;
+        if (categoryId) {
+            try {
+                const category = await Category.findById(categoryId);
+                if (category) {
+                    actionDesc = `Created new topic "${name}" at category "${category.name}"`;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        Activity.create({
+            userId: req.user.id,
+            role: 'admin',
+            actionTitle: 'Topic Created',
+            actionDescription: actionDesc,
+            metadata: { topicId: newTopic._id }
+        }).catch(err => console.error('Activity log error:', err));
+
         res.status(201).json(newTopic);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -77,6 +100,15 @@ exports.updateTopic = async (req, res) => {
         });
 
         const updatedTopic = await topic.save();
+
+        Activity.create({
+            userId: req.user.id,
+            role: 'admin',
+            actionTitle: 'Topic Updated',
+            actionDescription: `Updated topic "${updatedTopic.name}"`,
+            metadata: { topicId: updatedTopic._id }
+        }).catch(err => console.error('Activity log error:', err));
+
         res.json(updatedTopic);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -90,6 +122,15 @@ exports.deleteTopic = async (req, res) => {
         if (!topic) return res.status(404).json({ message: 'Topic not found' });
 
         await topic.deleteOne();
+
+        Activity.create({
+            userId: req.user.id,
+            role: 'admin',
+            actionTitle: 'Topic Deleted',
+            actionDescription: `Deleted topic "${topic.name}"`,
+            metadata: { topicId: topic._id }
+        }).catch(err => console.error('Activity log error:', err));
+
         res.json({ message: 'Topic deleted' });
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -129,6 +170,14 @@ exports.copyTopic = async (req, res) => {
             }));
             await Question.insertMany(newQuestions);
         }
+
+        Activity.create({
+            userId: req.user.id,
+            role: 'admin',
+            actionTitle: 'Topic Duplicated',
+            actionDescription: `Duplicated topic "${sourceTopic.name}"`,
+            metadata: { topicId: newTopic._id }
+        }).catch(err => console.error('Activity log error:', err));
 
         res.status(201).json(newTopic);
     } catch (err) {

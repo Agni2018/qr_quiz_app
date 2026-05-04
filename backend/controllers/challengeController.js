@@ -2,6 +2,7 @@ const Challenge = require('../models/Challenge');
 const UserChallenge = require('../models/UserChallenge');
 const User = require('../models/User');
 const Message = require('../models/Message');
+const Activity = require('../models/Activity');
 
 // Get My Challenges
 exports.getMyChallenges = async (req, res) => {
@@ -62,6 +63,15 @@ exports.createChallenge = async (req, res) => {
             endDate
         });
         await challenge.save();
+
+        Activity.create({
+            userId: req.user.id,
+            role: 'admin',
+            actionTitle: 'Challenge Created',
+            actionDescription: `Created challenge "${name}"`,
+            metadata: { challengeId: challenge._id }
+        }).catch(err => console.error('Activity log error:', err));
+
         res.status(201).json(challenge);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -71,9 +81,20 @@ exports.createChallenge = async (req, res) => {
 // Delete Challenge (Admin)
 exports.deleteChallenge = async (req, res) => {
     try {
-        await Challenge.findByIdAndDelete(req.params.id);
+        const challenge = await Challenge.findByIdAndDelete(req.params.id);
         // Also delete user progress for this challenge
         await UserChallenge.deleteMany({ challengeId: req.params.id });
+
+        if (challenge) {
+            Activity.create({
+                userId: req.user.id,
+                role: 'admin',
+                actionTitle: 'Challenge Deleted',
+                actionDescription: `Deleted challenge "${challenge.name}"`,
+                metadata: { challengeId: challenge._id }
+            }).catch(err => console.error('Activity log error:', err));
+        }
+
         res.json({ message: 'Challenge deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });

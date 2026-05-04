@@ -8,6 +8,7 @@ import Button from '@/components/Button';
 import Pagination from '@/components/Pagination';
 import { FaCheckCircle, FaSearch, FaBolt } from 'react-icons/fa';
 import { useSearch } from '@/contexts/SearchContext';
+import ActivityFeed from '@/components/ActivityFeed';
 
 export default function StudentProgress({ titleComponent }: { titleComponent?: React.ReactNode }) {
     const [attempts, setAttempts] = useState<any[]>([]);
@@ -173,6 +174,10 @@ export default function StudentProgress({ titleComponent }: { titleComponent?: R
                     />
                 </div>
             )}
+
+            <div style={{ padding: '1rem', margin: '2rem auto', maxWidth: '1200px', width: '100%' }}>
+                <ActivityFeed />
+            </div>
         </div>
     );
 }

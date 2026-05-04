@@ -2,6 +2,7 @@ const Badge = require('../models/Badge');
 const User = require('../models/User');
 const UserAttempt = require('../models/UserAttempt');
 const Question = require('../models/Question');
+const Activity = require('../models/Activity');
 
 exports.getBadges = async (req, res) => {
     try {
@@ -22,6 +23,15 @@ exports.createBadge = async (req, res) => {
     const badge = new Badge({ name, description, icon, type, threshold });
     try {
         const newBadge = await badge.save();
+
+        Activity.create({
+            userId: req.user.id,
+            role: 'admin',
+            actionTitle: 'Badge Created',
+            actionDescription: `Created new badge "${name}"`,
+            metadata: { badgeId: newBadge._id }
+        }).catch(err => console.error('Activity log error:', err));
+
         res.status(201).json(newBadge);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -39,7 +49,16 @@ exports.updateBadge = async (req, res) => {
 
 exports.deleteBadge = async (req, res) => {
     try {
-        await Badge.findByIdAndDelete(req.params.id);
+        const badge = await Badge.findByIdAndDelete(req.params.id);
+        if (badge) {
+            Activity.create({
+                userId: req.user.id,
+                role: 'admin',
+                actionTitle: 'Badge Deleted',
+                actionDescription: `Deleted badge "${badge.name}"`,
+                metadata: { badgeId: badge._id }
+            }).catch(err => console.error('Activity log error:', err));
+        }
         res.json({ message: 'Badge deleted' });
     } catch (err) {
         res.status(400).json({ message: err.message });
